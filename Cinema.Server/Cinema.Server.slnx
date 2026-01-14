@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="Cinema.API/Cinema.API.csproj" />
+  <Project Path="Cinema.Application/Cinema.Application.csproj" />
+  <Project Path="Cinema.Domain/Cinema.Domain.csproj" />
+  <Project Path="Cinema.Persistence/Cinema.Persistence.csproj" />
+</Solution>
