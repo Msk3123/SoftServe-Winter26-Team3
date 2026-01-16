@@ -8,6 +8,11 @@ namespace Cinema.Domain.Entities
 {
     public class Ticket
     {
+        public enum TicketType {
+            Adult,
+            Child,
+            Student
+        }
         [Key]
         public int ticket_id { get; set; }
         public int order_id { get; set; }
@@ -15,6 +20,10 @@ namespace Cinema.Domain.Entities
         public virtual Order Order { get; set; }
         public int seat_id { get; set; }
         [ForeignKey("seat_id")]
+
+        public TicketType ticket_type { get; set; }
         public virtual Seat Seat { get; set; } = null!;
+
+        
     }
 }

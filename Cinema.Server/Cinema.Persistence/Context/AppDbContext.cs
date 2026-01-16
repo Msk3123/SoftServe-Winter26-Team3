@@ -14,7 +14,7 @@ namespace Cinema.Persistence.Context
         public DbSet<Hall> Halls => Set<Hall>();
         public DbSet<Seat> Seats => Set<Seat>();
         public DbSet<Session> Sessions => Set<Session>();
-        public DbSet<Customer> Customers => Set<Customer>();
+        public DbSet<User> Customers => Set<User>();
         public DbSet<Order> Orders => Set<Order>();
         public DbSet<Ticket> Tickets => Set<Ticket>();
         public DbSet<Payment> Payments => Set<Payment>();

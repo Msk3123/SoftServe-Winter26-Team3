@@ -18,4 +18,5 @@ namespace Cinema.Domain.Entities
         [ForeignKey("order_id")]
         public virtual Order Order { get; set; }
     }
+
 }
