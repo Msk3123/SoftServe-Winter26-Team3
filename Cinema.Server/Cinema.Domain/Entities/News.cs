@@ -12,7 +12,7 @@ namespace Cinema.Domain.Entities
         public int news_id { get; set; }
         [Required]
         public string title { get; set; }
-        public string content { get; set; }
+        public string news_content { get; set; }
         public string image_url { get; set; }
         public DateTime published_date { get; set; }
         public bool is_active { get; set; }

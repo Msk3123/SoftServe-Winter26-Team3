@@ -15,7 +15,5 @@ namespace Cinema.Domain.Entities
         public int hall_id { get; set; }
         [ForeignKey("hall_id")]
         public virtual Hall Hall { get; set; }
-
-        public virtual ICollection<Ticket> Tickets { get; set; }
     }
 }

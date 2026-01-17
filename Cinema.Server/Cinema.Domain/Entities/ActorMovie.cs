@@ -10,6 +10,7 @@ namespace Cinema.Domain.Entities
     {
         [Key]
         public int actor_movie_id { get; set; }
+
         public int movie_id { get; set; }
         [ForeignKey("movie_id")]
         public virtual Movie Movie { get; set; }

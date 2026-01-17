@@ -14,11 +14,15 @@ namespace Cinema.Persistence.Context
         public DbSet<Hall> Halls => Set<Hall>();
         public DbSet<Seat> Seats => Set<Seat>();
         public DbSet<Session> Sessions => Set<Session>();
-        public DbSet<User> Customers => Set<User>();
+        public DbSet<Role> Roles => Set<Role>();
+        public DbSet<User> Users => Set<User>();
         public DbSet<Order> Orders => Set<Order>();
         public DbSet<Ticket> Tickets => Set<Ticket>();
         public DbSet<Payment> Payments => Set<Payment>();
         public DbSet<News> News => Set<News>();
+        public DbSet<Actor> Actors => Set<Actor>();
+        public DbSet<ActorMovie> ActorMovies => Set<ActorMovie>();
+        public DbSet<SessionSeat> SessionSeats => Set<SessionSeat>();
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -29,20 +33,67 @@ namespace Cinema.Persistence.Context
         {
             base.OnModelCreating(modelBuilder);
 
-            // Вимикаємо каскадне видалення для зв'язку Seat -> Ticket
-            modelBuilder.Entity<Ticket>()
-                .HasOne(t => t.Seat)
-                .WithMany(s => s.Tickets)
-                .HasForeignKey(t => t.seat_id)
-                .OnDelete(DeleteBehavior.Restrict); // Або ClientSetNull
+            // --- Налаштування зв'язків Many-to-Many
 
-            // Також рекомендується зробити це для зв'язку Booking -> Ticket, 
-            // якщо помилка повториться для іншого шляху
+            // Movie <-> Genre
+            modelBuilder.Entity<GenreMovie>()
+                .HasKey(gm => gm.genre_movie_id);
+            modelBuilder.Entity<GenreMovie>()
+                .HasOne(gm => gm.Movie)
+                .WithMany(m => m.GenreMovies)
+                .HasForeignKey(gm => gm.movie_id);
+            modelBuilder.Entity<GenreMovie>()
+                .HasOne(gm => gm.Genre)
+                .WithMany(g => g.GenreMovies)
+                .HasForeignKey(gm => gm.genre_id);
+
+            // Movie <-> Actor
+            modelBuilder.Entity<ActorMovie>()
+                .HasKey(am => am.actor_movie_id);
+            modelBuilder.Entity<ActorMovie>()
+                .HasOne(am => am.Movie)
+                .WithMany(m => m.ActorMovies)
+                .HasForeignKey(am => am.movie_id);
+            modelBuilder.Entity<ActorMovie>()
+                .HasOne(am => am.Actor)
+                .WithMany(a => a.ActorMovies)
+                .HasForeignKey(am => am.actor_id);
+
+            // --- Налаштування бронювання
+            modelBuilder.Entity<SessionSeat>()
+                .HasOne(ss => ss.Session)
+                .WithMany(s => s.SessionSeats)
+                .HasForeignKey(ss => ss.session_id)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
+            modelBuilder.Entity<SessionSeat>()
+                .HasOne(ss => ss.User)
+                .WithMany()
+                .HasForeignKey(ss => ss.locked_by_user_id)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            // Ticket <-> SessionSeat (One-to-One)
+            modelBuilder.Entity<Ticket>()
+                .HasOne(t => t.SessionSeat)
+                .WithOne(ss => ss.Ticket)
+                .HasForeignKey<Ticket>(t => t.session_seat_id)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Order <-> Ticket
             modelBuilder.Entity<Ticket>()
                 .HasOne(t => t.Order)
-                .WithMany(b => b.Tickets)
+                .WithMany(o => o.Tickets)
                 .HasForeignKey(t => t.order_id)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Order <-> User
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.User)
+                .WithMany(u => u.Orders)
+                .HasForeignKey(o => o.user_id)
+                .OnDelete(DeleteBehavior.Restrict);
+
         }
     }
 }

@@ -12,9 +12,7 @@ namespace Cinema.Domain.Entities
         public string first_name { get; set; }
         public string last_name { get; set; }
         public string biography { get; set; }
-
         public DateOnly birthday { get; set; }
-
         public string photo_url { get; set; }
 
         public virtual ICollection<ActorMovie> ActorMovies { get; set; }
