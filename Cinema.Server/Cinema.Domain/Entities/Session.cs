@@ -22,6 +22,7 @@ namespace Cinema.Domain.Entities
         public virtual Hall Hall { get; set; }
 
         public virtual ICollection<Order> Orders { get; set; }
+        public virtual ICollection<SessionSeat> SessionSeats { get; set; }
 
     }
 }

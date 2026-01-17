@@ -6,18 +6,17 @@ using System.Text;
 
 namespace Cinema.Domain.Entities
 {
-    public class News
+    public class ActorMovie
     {
         [Key]
-        public int news_id { get; set; }
-        [Required]
-        public string title { get; set; }
-        public string news_content { get; set; }
-        public string image_url { get; set; }
-        public DateTime published_date { get; set; }
-        public bool is_active { get; set; }
+        public int actor_movie_id { get; set; }
+
         public int movie_id { get; set; }
         [ForeignKey("movie_id")]
         public virtual Movie Movie { get; set; }
+
+        public int actor_id { get; set; }
+        [ForeignKey("actor_id")]
+        public virtual Actor Actor { get; set; }
     }
 }
