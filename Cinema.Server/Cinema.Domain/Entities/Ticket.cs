@@ -14,15 +14,14 @@ namespace Cinema.Domain.Entities
             Student
         }
         [Key]
-        public int ticket_id { get; set; }
-        public int order_id { get; set; }
-        [ForeignKey("order_id")]
+        public int TicketId { get; set; }
+        public int OrderId { get; set; }
+        [ForeignKey("OrderId")]
         public virtual Order Order { get; set; }
-        public int session_seat_id { get; set; }
-        [ForeignKey("session_seat_id")]
+        public int SessionSeatId { get; set; }
+        [ForeignKey("SessionSeatId ")]
         public virtual SessionSeat SessionSeat { get; set; } = null!;
 
-        public TicketType ticket_type { get; set; }
-     
+        public TicketType TicketTypes { get; set; }
     }
 }
