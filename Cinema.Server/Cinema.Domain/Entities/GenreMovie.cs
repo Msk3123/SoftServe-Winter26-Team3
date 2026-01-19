@@ -9,13 +9,13 @@ namespace Cinema.Domain.Entities
     public class GenreMovie
     {
         [Key]
-        public int genre_movie_id { get; set; }
-        public int genre_id { get; set; }
-        [ForeignKey("genre_id")]
+        public int GenreMovieId { get; set; }
+        public int GenreId { get; set; }
+        [ForeignKey("GenreId")]
         public virtual Genre Genre { get; set; }
 
-        public int movie_id { get; set; }
-        [ForeignKey("movie_id")]
+        public int MovieId { get; set; }
+        [ForeignKey("MovieId")]
         public virtual Movie Movie { get; set; }
     }
 }

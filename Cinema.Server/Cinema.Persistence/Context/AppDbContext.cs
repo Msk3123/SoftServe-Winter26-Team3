@@ -19,6 +19,7 @@ namespace Cinema.Persistence.Context
         public DbSet<Order> Orders => Set<Order>();
         public DbSet<Ticket> Tickets => Set<Ticket>();
         public DbSet<Payment> Payments => Set<Payment>();
+        public DbSet<Tag> Tags => Set<Tag>();
         public DbSet<News> News => Set<News>();
         public DbSet<Actor> Actors => Set<Actor>();
         public DbSet<ActorMovie> ActorMovies => Set<ActorMovie>();
@@ -37,61 +38,61 @@ namespace Cinema.Persistence.Context
 
             // Movie <-> Genre
             modelBuilder.Entity<GenreMovie>()
-                .HasKey(gm => gm.genre_movie_id);
+                .HasKey(gm => gm.GenreMovieId);
             modelBuilder.Entity<GenreMovie>()
                 .HasOne(gm => gm.Movie)
                 .WithMany(m => m.GenreMovies)
-                .HasForeignKey(gm => gm.movie_id);
+                .HasForeignKey(gm => gm.MovieId);
             modelBuilder.Entity<GenreMovie>()
                 .HasOne(gm => gm.Genre)
                 .WithMany(g => g.GenreMovies)
-                .HasForeignKey(gm => gm.genre_id);
+                .HasForeignKey(gm => gm.GenreId);
 
             // Movie <-> Actor
             modelBuilder.Entity<ActorMovie>()
-                .HasKey(am => am.actor_movie_id);
+                .HasKey(am => am.ActorMovieId);
             modelBuilder.Entity<ActorMovie>()
                 .HasOne(am => am.Movie)
                 .WithMany(m => m.ActorMovies)
-                .HasForeignKey(am => am.movie_id);
+                .HasForeignKey(am => am.MovieId);
             modelBuilder.Entity<ActorMovie>()
                 .HasOne(am => am.Actor)
                 .WithMany(a => a.ActorMovies)
-                .HasForeignKey(am => am.actor_id);
+                .HasForeignKey(am => am.ActorId);
 
             // --- Налаштування бронювання
             modelBuilder.Entity<SessionSeat>()
                 .HasOne(ss => ss.Session)
                 .WithMany(s => s.SessionSeats)
-                .HasForeignKey(ss => ss.session_id)
+                .HasForeignKey(ss => ss.SessionId)
                 .OnDelete(DeleteBehavior.Restrict);
 
 
             modelBuilder.Entity<SessionSeat>()
                 .HasOne(ss => ss.User)
                 .WithMany()
-                .HasForeignKey(ss => ss.locked_by_user_id)
+                .HasForeignKey(ss => ss.LockedByUserId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             // Ticket <-> SessionSeat (One-to-One)
             modelBuilder.Entity<Ticket>()
                 .HasOne(t => t.SessionSeat)
                 .WithOne(ss => ss.Ticket)
-                .HasForeignKey<Ticket>(t => t.session_seat_id)
+                .HasForeignKey<Ticket>(t => t.SessionSeatId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             // Order <-> Ticket
             modelBuilder.Entity<Ticket>()
                 .HasOne(t => t.Order)
                 .WithMany(o => o.Tickets)
-                .HasForeignKey(t => t.order_id)
+                .HasForeignKey(t => t.OrderId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             // Order <-> User
             modelBuilder.Entity<Order>()
                 .HasOne(o => o.User)
                 .WithMany(u => u.Orders)
-                .HasForeignKey(o => o.user_id)
+                .HasForeignKey(o => o.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
         }
