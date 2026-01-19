@@ -23,21 +23,21 @@ namespace Cinema.API.Controllers
         {
             var movies = await _context.Movies
                 .Select(m => new MovieDto(
-                    m.movie_id,
-                    m.title,
-                    m.duration,
-                    m.rating,
-                    m.poster_url,
-                    m.trailer_url,
-                    m.language,
-                    m.description,
-                    m.release_date,
-                    m.GenreMovies.Select(gm => new GenreDto(gm.Genre.genre_id, gm.Genre.name)).ToList(),
+                    m.MovieId,
+                    m.Title,
+                    m.Duration,
+                    m.Rating,
+                    m.PosterUrl,
+                    m.TrailerUrl,
+                    m.Language,
+                    m.Description,
+                    m.ReleaseDate,
+                    m.GenreMovies.Select(gm => new GenreDto(gm.Genre.GenreId, gm.Genre.GenreName)).ToList(),
                     m.ActorMovies.Select(am => new ActorDto(
-                        am.Actor.actor_id,
-                        am.Actor.first_name,
-                        am.Actor.last_name,
-                        am.Actor.photo_url
+                        am.Actor.ActorId,
+                        am.Actor.FirstName,
+                        am.Actor.LastName,
+                        am.Actor.PhotoUrl
                     )).ToList()
                 ))
                 .ToListAsync();
@@ -49,23 +49,23 @@ namespace Cinema.API.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             var movie = await _context.Movies
-                .Where(m => m.movie_id == id)
+                .Where(m => m.MovieId == id)
                 .Select(m => new MovieDto(
-                    m.movie_id,
-                    m.title,
-                    m.duration,
-                    m.rating,
-                    m.poster_url,
-                    m.trailer_url,
-                    m.language,
-                    m.description,
-                    m.release_date,
-                    m.GenreMovies.Select(gm => new GenreDto(gm.Genre.genre_id, gm.Genre.name)).ToList(),
+                    m.MovieId,
+                    m.Title,
+                    m.Duration,
+                    m.Rating,
+                    m.PosterUrl,
+                    m.TrailerUrl,
+                    m.Language,
+                    m.Description,
+                    m.ReleaseDate,
+                    m.GenreMovies.Select(gm => new GenreDto(gm.Genre.GenreId, gm.Genre.GenreName)).ToList(),
                     m.ActorMovies.Select(am => new ActorDto(
-                        am.Actor.actor_id,
-                        am.Actor.first_name,
-                        am.Actor.last_name,
-                        am.Actor.photo_url
+                        am.Actor.ActorId,
+                        am.Actor.FirstName,
+                        am.Actor.LastName,
+                        am.Actor.PhotoUrl
                     )).ToList()
                 ))
                 .FirstOrDefaultAsync();
@@ -83,16 +83,16 @@ namespace Cinema.API.Controllers
         {
             var movie = new Movie
             {
-                title = dto.Title,
-                duration = dto.Duration,
-                description = dto.Description,
-                poster_url = dto.PosterUrl,
-                trailer_url = dto.TrailerUrl,
-                language = dto.Language,
-                release_date = dto.ReleaseDate,
-                start_date = dto.StartDate,
-                end_date = dto.EndDate,
-                rating = 0
+                Title = dto.Title,
+                Duration = dto.Duration,
+                Description = dto.Description,
+                PosterUrl = dto.PosterUrl,
+                TrailerUrl = dto.TrailerUrl,
+                Language = dto.Language,
+                ReleaseDate = dto.ReleaseDate,
+                StartDate = dto.StartDate,
+                EndDate = dto.EndDate,
+                Rating = 0
             };
 
             // Many-to-Many
@@ -100,7 +100,7 @@ namespace Cinema.API.Controllers
             {
                 movie.GenreMovies = dto.GenreIds.Select(gId => new GenreMovie
                 {
-                    genre_id = gId
+                    GenreId = gId
                 }).ToList();
             }
 
@@ -108,14 +108,14 @@ namespace Cinema.API.Controllers
             {
                 movie.ActorMovies = dto.ActorIds.Select(aId => new ActorMovie
                 {
-                    actor_id = aId
+                    ActorId = aId
                 }).ToList();
             }
 
             _context.Movies.Add(movie);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetById), new { id = movie.movie_id }, new { id = movie.movie_id, title = movie.title });
+            return CreatedAtAction(nameof(GetById), new { id = movie.MovieId }, new { id = movie.MovieId, title = movie.Title });
         }
 
         // PUT: api/movies/{id}
@@ -125,25 +125,25 @@ namespace Cinema.API.Controllers
             var movie = await _context.Movies
                 .Include(m => m.GenreMovies)
                 .Include(m => m.ActorMovies)
-                .FirstOrDefaultAsync(m => m.movie_id == id);
+                .FirstOrDefaultAsync(m => m.MovieId == id);
 
             if (movie == null) return NotFound();
 
             
-            movie.title = dto.Title;
-            movie.duration = dto.Duration;
-            movie.description = dto.Description;
-            movie.poster_url = dto.PosterUrl;
-            movie.trailer_url = dto.TrailerUrl;
-            movie.language = dto.Language;
-            movie.release_date = dto.ReleaseDate;
-            movie.start_date = dto.StartDate;
-            movie.end_date = dto.EndDate;
+            movie.Title = dto.Title;
+            movie.Duration = dto.Duration;
+            movie.Description = dto.Description;
+            movie.PosterUrl = dto.PosterUrl;
+            movie.TrailerUrl = dto.TrailerUrl;
+            movie.Language = dto.Language;
+            movie.ReleaseDate = dto.ReleaseDate;
+            movie.StartDate = dto.StartDate;
+            movie.EndDate = dto.EndDate;
 
-            var currentGenreIds = movie.GenreMovies.Select(gm => gm.genre_id).ToList();
+            var currentGenreIds = movie.GenreMovies.Select(gm => gm.GenreId).ToList();
 
             var genresToRemove = movie.GenreMovies
-                .Where(gm => !dto.GenreIds.Contains(gm.genre_id)).ToList();
+                .Where(gm => !dto.GenreIds.Contains(gm.GenreId)).ToList();
 
             var genreIdsToAdd = dto.GenreIds.Except(currentGenreIds).ToList();
 
@@ -154,13 +154,13 @@ namespace Cinema.API.Controllers
 
             foreach (var gid in genreIdsToAdd)
             {
-                movie.GenreMovies.Add(new GenreMovie { genre_id = gid });
+                movie.GenreMovies.Add(new GenreMovie { GenreId = gid });
             }
 
-            var currentActorIds = movie.ActorMovies.Select(am => am.actor_id).ToList();
+            var currentActorIds = movie.ActorMovies.Select(am => am.ActorId).ToList();
 
             var actorsToRemove = movie.ActorMovies
-                .Where(am => !dto.ActorIds.Contains(am.actor_id)).ToList();
+                .Where(am => !dto.ActorIds.Contains(am.ActorId)).ToList();
             var actorIdsToAdd = dto.ActorIds.Except(currentActorIds).ToList();
             
             foreach (var am in actorsToRemove)
@@ -170,7 +170,7 @@ namespace Cinema.API.Controllers
 
             foreach (var aid in actorIdsToAdd)
             {
-                movie.ActorMovies.Add(new ActorMovie { actor_id = aid });
+                movie.ActorMovies.Add(new ActorMovie { ActorId = aid });
             }
             
             await _context.SaveChangesAsync();
@@ -185,42 +185,42 @@ namespace Cinema.API.Controllers
             var movie = await _context.Movies
                 .Include(m => m.GenreMovies)
                 .Include(m => m.ActorMovies)
-                .FirstOrDefaultAsync(m => m.movie_id == id);
+                .FirstOrDefaultAsync(m => m.MovieId == id);
 
             if (movie == null) return NotFound();
 
 
             if (dto.Title != null)
-                movie.title = dto.Title;
+                movie.Title = dto.Title;
 
             if (dto.Duration.HasValue)
-                movie.duration = dto.Duration.Value;
+                movie.Duration = dto.Duration.Value;
 
             if (dto.Description != null)
-                movie.description = dto.Description;
+                movie.Description = dto.Description;
 
             if (dto.PosterUrl != null)
-                movie.poster_url = dto.PosterUrl;
+                movie.PosterUrl = dto.PosterUrl;
 
             if (dto.TrailerUrl != null)
-                movie.trailer_url = dto.TrailerUrl;
+                movie.TrailerUrl = dto.TrailerUrl;
 
             if (dto.Language != null)
-                movie.language = dto.Language;
+                movie.Language = dto.Language;
 
             if (dto.ReleaseDate.HasValue)
-                movie.release_date = dto.ReleaseDate.Value;
+                movie.ReleaseDate = dto.ReleaseDate.Value;
 
             if (dto.GenreIds != null)
             {
                 movie.GenreMovies.Clear();
-                movie.GenreMovies = dto.GenreIds.Select(id => new GenreMovie { genre_id = id }).ToList();
+                movie.GenreMovies = dto.GenreIds.Select(id => new GenreMovie { GenreId = id }).ToList();
             }
 
             if (dto.ActorIds != null)
             {
                 movie.ActorMovies.Clear();
-                movie.ActorMovies = dto.ActorIds.Select(id => new ActorMovie { actor_id = id }).ToList();
+                movie.ActorMovies = dto.ActorIds.Select(id => new ActorMovie { ActorId = id }).ToList();
             }
 
             await _context.SaveChangesAsync();
@@ -232,7 +232,7 @@ namespace Cinema.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var movie = await _context.Movies.FirstOrDefaultAsync(m => m.movie_id == id);
+            var movie = await _context.Movies.FirstOrDefaultAsync(m => m.MovieId == id);
             if (movie == null)
             {
                 return NotFound();

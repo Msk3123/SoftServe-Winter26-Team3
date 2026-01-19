@@ -9,14 +9,14 @@ namespace Cinema.Domain.Entities
     public class ActorMovie
     {
         [Key]
-        public int actor_movie_id { get; set; }
+        public int ActorMovieId { get; set; }
 
-        public int movie_id { get; set; }
-        [ForeignKey("movie_id")]
+        public int MovieId { get; set; }
+        [ForeignKey("MovieId")]
         public virtual Movie Movie { get; set; }
 
-        public int actor_id { get; set; }
-        [ForeignKey("actor_id")]
+        public int ActorId { get; set; }
+        [ForeignKey("ActorId")]
         public virtual Actor Actor { get; set; }
     }
 }

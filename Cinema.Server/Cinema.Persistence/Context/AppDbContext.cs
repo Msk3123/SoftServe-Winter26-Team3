@@ -37,27 +37,27 @@ namespace Cinema.Persistence.Context
 
             // Movie <-> Genre
             modelBuilder.Entity<GenreMovie>()
-                .HasKey(gm => gm.genre_movie_id);
+                .HasKey(gm => gm.GenreMovieId);
             modelBuilder.Entity<GenreMovie>()
                 .HasOne(gm => gm.Movie)
                 .WithMany(m => m.GenreMovies)
-                .HasForeignKey(gm => gm.movie_id);
+                .HasForeignKey(gm => gm.MovieId);
             modelBuilder.Entity<GenreMovie>()
                 .HasOne(gm => gm.Genre)
                 .WithMany(g => g.GenreMovies)
-                .HasForeignKey(gm => gm.genre_id);
+                .HasForeignKey(gm => gm.GenreId);
 
             // Movie <-> Actor
             modelBuilder.Entity<ActorMovie>()
-                .HasKey(am => am.actor_movie_id);
+                .HasKey(am => am.ActorMovieId);
             modelBuilder.Entity<ActorMovie>()
                 .HasOne(am => am.Movie)
                 .WithMany(m => m.ActorMovies)
-                .HasForeignKey(am => am.movie_id);
+                .HasForeignKey(am => am.MovieId);
             modelBuilder.Entity<ActorMovie>()
                 .HasOne(am => am.Actor)
                 .WithMany(a => a.ActorMovies)
-                .HasForeignKey(am => am.actor_id);
+                .HasForeignKey(am => am.ActorId);
 
             // --- Налаштування бронювання
             modelBuilder.Entity<SessionSeat>()
