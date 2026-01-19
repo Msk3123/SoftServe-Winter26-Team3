@@ -11,6 +11,27 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  --color-primary: #1DE782;
+  --color-primary-weak: #BDF0C1;
+  --color-danger: #DC0000;
+  --bg-main: #FFFFFF;
+  --bg-dark: #020700;
+  --text-main: #FFFFFF;
+  --text-main-dark: #101012;
+  --text-secondary: #5A5A5D;
+  --text-dark: #000000;
+  --ui-border: #BEBEBF;
+  --ui-disabled: #A1D9BE;
+  --button-save: #007BFF;
+  --button-cancel: #6C757D;
+  --font-main: 'Poppins', sans-serif;
+  --font-secondary: 'Roboto', sans-serif;
+  --fw-light: 300;
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-bold: 700;
+  --fw-heavy: 900;
 }
 
 a {
