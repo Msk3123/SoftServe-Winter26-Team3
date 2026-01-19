@@ -31,7 +31,7 @@ namespace Cinema.Domain.Entities
         public string Description { get; set; }
         public virtual ICollection<Session> Sessions { get; set; }
         public virtual ICollection<GenreMovie> GenreMovies { get; set; }
-        public virtual ICollection<News> News { get; set; }
         public virtual ICollection<ActorMovie> ActorMovies { get; set; }
+        public virtual ICollection<News> News { get; set; }
     }
 }

@@ -5,6 +5,9 @@ GET {{Cinema.API_HostAddress}}/api/movies
 Accept: application/json
 
 ###
+GET {{Cinema.API_HostAddress}}/api/movies/1
+Accept: application/json
+###
 POST {{Cinema.API_HostAddress}}/api/movies
 Content-Type: application/json
 
@@ -18,8 +21,34 @@ Content-Type: application/json
   "releaseDate": "2024-03-01",
   "startDate": "2024-03-01",
   "endDate": "2024-04-15",
-  "genreIds": [1],
+  "genreIds": [1,2,3],
   "actorIds": []
 }
 
 ###
+PUT {{Cinema.API_HostAddress}}/api/movies/1
+Content-Type: application/json
+{
+  "id": 1,
+  "title": "Dune: Part Two - Updated",
+  "duration": 9960,
+  "description": "Paul Atreides unites with Chani and the Fremen while on a warpath of revenge against the conspirators who destroyed his family. Updated description.",
+  "posterUrl": "https://m.media-amazon.com/images/M/MV5BN2QyZGU4ZDctOWMzMy00NTc5LThlOGQtODhmNDI1NmY5YzAwXkEyXkFqcGdeQXVyMDM2NDM2MQ@@._V1_.jpg",
+  "trailerUrl": "https://www.youtube.com/watch?v=Way9Dexny3w",
+  "language": "en",
+  "releaseDate": "2024-03-01",
+  "startDate": "2024-03-01",
+  "endDate": "2024-04-15",
+  "genreIds": [1,3,4],
+  "actorIds": []
+}
+###
+PATCH {{Cinema.API_HostAddress}}/api/movies/1
+Content-Type: application/json
+{
+  "description": "Dune : Patch edited"
+}
+###
+DELETE {{Cinema.API_HostAddress}}/api/movies/10
+Accept: application/json
+

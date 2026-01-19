@@ -43,4 +43,17 @@ namespace Cinema.Application.DTOs
         List<int> GenreIds,
         List<int> ActorIds
     );
+    //PATCH запити
+    public class UpdateMovieDto
+    {
+        public string? Title { get; set; }
+        public int? Duration { get; set; }
+        public string? Description { get; set; }
+        public string? PosterUrl { get; set; }
+        public string? TrailerUrl { get; set; }
+        public string? Language { get; set; }
+        public DateOnly? ReleaseDate { get; set; }
+        public List<int>? GenreIds { get; set; }
+        public List<int>? ActorIds { get; set; }
+    }
 }
