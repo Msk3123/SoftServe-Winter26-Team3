@@ -10,7 +10,8 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 builder.Services.AddDbContext<AppDbContext>();
-
+//mapper
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 // Allow CORS for React frontend
 builder.Services.AddCors(options =>
 {
