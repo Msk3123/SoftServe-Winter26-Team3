@@ -8,8 +8,8 @@ namespace Cinema.Domain.Entities
     public class Role
     {
         [Key]
-        public int role_id { get; set; }
-        public string role_name { get; set; }
+        public int RoleId { get; set; }
+        public string RoleName { get; set; }
 
         public virtual ICollection<User> Users { get; set; }
     }

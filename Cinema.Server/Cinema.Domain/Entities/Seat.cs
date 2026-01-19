@@ -9,11 +9,11 @@ namespace Cinema.Domain.Entities
     public class Seat
     {
         [Key]
-        public int seat_id { get; set; }
-        public int seat_no { get; set; }
-        public int seat_type { get; set; }
-        public int hall_id { get; set; }
-        [ForeignKey("hall_id")]
+        public int SeatId { get; set; }
+        public int SeatNo { get; set; }
+        public int SeatType { get; set; }
+        public int HallId { get; set; }
+        [ForeignKey("HallId")]
         public virtual Hall Hall { get; set; }
     }
 }

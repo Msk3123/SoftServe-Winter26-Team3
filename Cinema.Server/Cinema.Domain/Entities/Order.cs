@@ -18,17 +18,17 @@ namespace Cinema.Domain.Entities
             Refunded
         }
         [Key]
-        public int order_id { get; set; }
-        public DateTime order_date { get; set; }
+        public int OrderIid { get; set; }
+        public DateTime OrderDate { get; set; }
         [Column(TypeName = "decimal(18,2)")]
-        public decimal total_amount { get; set; }
-        public int user_id { get; set; }
-        [ForeignKey("user_id")]
+        public decimal TotalAmount { get; set; }
+        public int UserId { get; set; }
+        [ForeignKey("UserId")]
         public virtual User User { get; set; }
-        public int session_id { get; set; }
-        [ForeignKey("session_id")]
+        public int SessionId { get; set; }
+        [ForeignKey("SessionId")]
         public virtual Session Session { get; set; }
-        public OrderStatus status { get; set; }
+        public OrderStatus OrderStatuses { get; set; }
 
         public virtual ICollection<Ticket> Tickets { get; set; }
     }

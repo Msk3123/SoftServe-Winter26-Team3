@@ -8,13 +8,14 @@ namespace Cinema.Domain.Entities
     public class Actor
     {
         [Key]
-        public int actor_id { get; set; }
-        public string first_name { get; set; }
-        public string last_name { get; set; }
-        public string biography { get; set; }
-        public DateOnly birthday { get; set; }
-        public string photo_url { get; set; }
+        public int ActorId { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Biography { get; set; }
+        public DateOnly Birthday { get; set; }
+        public string PhotoUrl { get; set; }
 
         public virtual ICollection<ActorMovie> ActorMovies { get; set; }
+        public virtual ICollection<News> News { get; set; }
     }
 }

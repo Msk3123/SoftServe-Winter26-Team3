@@ -9,22 +9,22 @@ namespace Cinema.Domain.Entities
     public class User
     {
         [Key]
-        public int user_id { get; set; }
+        public int UserId { get; set; }
         
-        public int role_id { get; set; }
-        [ForeignKey("role_id")]
+        public int RoleId { get; set; }
+        [ForeignKey("RoleId")]
         public virtual Role Role { get; set; }
         [Required]
-        public string full_name { get; set; }
-        public string phone { get; set; }
-        public string email { get; set; }
-        public DateTime created_at { get; set; } = DateTime.UtcNow;
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Phone { get; set; }
+        public string Email { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         [Required]
-        public string password_hash { get; set; }
-        public string refresh_token { get; set; } = string.Empty;
-        public DateTime expires_at { get; set; }
+        public string PasswordHash { get; set; }
+        public string RefreshToken { get; set; } = string.Empty;
+        public DateTime ExpiresAt { get; set; }
 
         public virtual ICollection<Order> Orders { get; set; }
     }
-
 }

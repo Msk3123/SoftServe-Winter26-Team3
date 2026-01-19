@@ -23,14 +23,14 @@ namespace Cinema.Domain.Entities
             Cancelled
         }
         [Key]
-        public int payment_id { get; set; }
-        public DateTime payment_date { get; set; }
+        public int PaymentId { get; set; }
+        public DateTime PaymentDate { get; set; }
         [Column(TypeName = "decimal(18,2)")]
-        public decimal amount { get; set; }
-        public PaymentMethod payment_method { get; set; }
-        public PaymentStatus payment_status { get; set; }
-        public int order_id { get; set; }
-        [ForeignKey("order_id")]
+        public decimal Amount { get; set; }
+        public PaymentMethod PaymentMethods { get; set; }
+        public PaymentStatus PaymentStatuses { get; set; }
+        public int OrderId { get; set; }
+        [ForeignKey("OrderId")]
         public virtual Order Order { get; set; }
     }
 

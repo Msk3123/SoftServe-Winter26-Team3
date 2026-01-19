@@ -25,21 +25,21 @@ namespace Cinema.API.Controllers
                 .Include(m => m.GenreMovies).ThenInclude(gm => gm.Genre)
                 .Include(m => m.ActorMovies).ThenInclude(am => am.Actor)
                 .Select(m => new MovieDto(
-                    m.movie_id,
-                    m.title,
-                    m.duration,
-                    m.rating,
-                    m.poster_url,
-                    m.trailer_url,
-                    m.language,
-                    m.description,
-                    m.release_date,
-                    m.GenreMovies.Select(gm => new GenreDto(gm.Genre.genre_id, gm.Genre.name)).ToList(),
+                    m.MovieId,
+                    m.Title,
+                    m.Duration,
+                    m.Rating,
+                    m.PosterUrl,
+                    m.TrailerUrl,
+                    m.Language,
+                    m.Description,
+                    m.ReleaseDate,
+                    m.GenreMovies.Select(gm => new GenreDto(gm.Genre.GenreId, gm.Genre.GenreName)).ToList(),
                     m.ActorMovies.Select(am => new ActorDto(
-                        am.Actor.actor_id,
-                        am.Actor.first_name,
-                        am.Actor.last_name,
-                        am.Actor.photo_url
+                        am.Actor.ActorId,
+                        am.Actor.FirstName,
+                        am.Actor.LastName,
+                        am.Actor.PhotoUrl
                     )).ToList()
                 ))
                 .ToListAsync();
@@ -53,16 +53,16 @@ namespace Cinema.API.Controllers
         {
             var movie = new Movie
             {
-                title = dto.Title,
-                duration = dto.Duration,
-                description = dto.Description,
-                poster_url = dto.PosterUrl,
-                trailer_url = dto.TrailerUrl,
-                language = dto.Language,
-                release_date = dto.ReleaseDate,
-                start_date = dto.StartDate,
-                end_date = dto.EndDate,
-                rating = 0
+                Title = dto.Title,
+                Duration = dto.Duration,
+                Description = dto.Description,
+                PosterUrl = dto.PosterUrl,
+                TrailerUrl = dto.TrailerUrl,
+                Language = dto.Language,
+                ReleaseDate = dto.ReleaseDate,
+                StartDate = dto.StartDate,
+                EndDate = dto.EndDate,
+                Rating = 0
             };
 
             // Many-to-Many
@@ -70,7 +70,7 @@ namespace Cinema.API.Controllers
             {
                 movie.GenreMovies = dto.GenreIds.Select(gId => new GenreMovie
                 {
-                    genre_id = gId
+                    GenreId = gId
                 }).ToList();
             }
 
@@ -78,14 +78,14 @@ namespace Cinema.API.Controllers
             {
                 movie.ActorMovies = dto.ActorIds.Select(aId => new ActorMovie
                 {
-                    actor_id = aId
+                    ActorId = aId
                 }).ToList();
             }
 
             _context.Movies.Add(movie);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetAll), new { id = movie.movie_id }, new { id = movie.movie_id, title = movie.title });
+            return CreatedAtAction(nameof(GetAll), new { id = movie.MovieId }, new { id = movie.MovieId, title = movie.Title });
         }
     }
 }
