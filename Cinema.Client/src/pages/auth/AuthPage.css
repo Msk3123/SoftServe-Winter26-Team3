@@ -1,0 +1,158 @@
+/* Загальний контейнер (батько) */
+.auth-wrapper {
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+    background: #FFFFFF;
+}
+
+/* Лівий банер */
+.auth-banner {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+    padding: 40px 50px;
+    flex: 1;
+    min-height: 100vh;
+    background: linear-gradient(180deg, #009a1f 0%, #000000 100%);
+    color: #FFFFFF;
+}
+
+.auth-banner h1 {
+    font-size: 48px;
+    line-height: 1.2;
+    font-weight: 400;
+    margin: 0;
+}
+
+/* Правий контейнер для форми */
+.auth-form-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    max-width: 400px;
+    padding: 40px;
+    background: #FFFFFF;
+    border-radius: 12px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.input-group label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+}
+
+.auth-form input {
+    padding: 12px 16px;
+    font-size: 14px;
+    border: 1px solid #E0E0E0;
+    border-radius: 8px;
+    width: 100%;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.auth-form input:focus {
+    border-color: #013D24;
+}
+
+/* Поле з іконкою ока */
+.password-field {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-field input {
+    width: 100%;
+    padding-right: 45px;
+}
+
+.eye-icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #666;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease;
+}
+
+.eye-icon:hover {
+    color: #013D24;
+}
+
+/* Кнопка submit */
+.submit-btn {
+    padding: 14px 20px;
+    font-size: 16px;
+    width: 100%;
+    font-weight: 600;
+    color: #FFFFFF;
+    background: #013D24;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    margin-top: 10px;
+}
+
+.submit-btn:hover {
+    background: #025c37;
+}
+
+/* Текст внизу форми */
+.footer-text {
+    text-align: center;
+    font-size: 14px;
+    color: #666666;
+    margin: 10px 0 0 0;
+}
+
+.footer-text a {
+    color: #013D24;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.footer-text a:hover {
+    text-decoration: underline;
+}
+
+/* Адаптивність */
+@media (max-width: 768px) {
+    .auth-wrapper {
+        flex-direction: column;
+    }
+
+    .auth-banner h1 {
+        font-size: 32px;
+    }
+
+    .auth-form {
+        max-width: 100%;
+        padding: 30px 20px;
+    }
+}

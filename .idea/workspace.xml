@@ -5,10 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="82b801f7-87d1-46fa-a82c-3d693261e5d9" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Cinema.Client/src/pages/auth/AuthPage.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Cinema.Client/src/pages/auth/AuthPage.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Cinema.Server/Cinema.Domain/Entities/User.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cinema.Client/src/pages/auth/ui/AuthPage.css" beforeDir="false" afterPath="$PROJECT_DIR$/Cinema.Client/src/pages/auth/ui/AuthPage.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cinema.Client/src/pages/auth/ui/AuthPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Cinema.Client/src/pages/auth/ui/AuthPage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cinema.Client/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Cinema.Client/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cinema.Client/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/Cinema.Client/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cinema.Client/src/app/router/routes.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Cinema.Client/src/app/router/routes.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cinema.Client/src/pages/auth/ui/AuthPage.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cinema.Client/src/pages/auth/ui/AuthPage.tsx" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,7 +29,7 @@
     </persistenceIdMap>
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="54" />
+    <option name="cachedIndexableFilesCount" value="51" />
     <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="FileTemplateManagerImpl">
@@ -52,6 +57,10 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/Cinema.Server/Cinema.Domain/Entities/Customer.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Cinema.Server/Cinema.Domain/Entities/Genre.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Cinema.Server/Cinema.Domain/Entities/GenreMovie.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Cinema.Server/Cinema.Domain/Entities/User.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Cinema.Server/Cinema.Persistence/Context/AppDbContext.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Cinema.Server/Cinema.Persistence/Migrations/20260115185137_init.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
@@ -95,6 +104,9 @@
     <option name="endsOfQuotaMs" value="1771506011865" />
     <option name="spentUsd" value="0.015216" />
   </component>
+  <component name="RecapUselessUpdatesCounter">
+    <option name="suspendCountdown" value="9" />
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="82b801f7-87d1-46fa-a82c-3d693261e5d9" name="Changes" comment="" />
@@ -103,7 +115,7 @@
       <option name="presentableId" value="Default" />
       <updated>1768748867696</updated>
       <workItem from="1768748870547" duration="8985000" />
-      <workItem from="1768913118239" duration="7046000" />
+      <workItem from="1768913118239" duration="12504000" />
     </task>
     <task id="LOCAL-00001" summary="first desain auth page with basic">
       <option name="closed" value="true" />
@@ -113,7 +125,15 @@
       <option name="project" value="LOCAL" />
       <updated>1768918563573</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="enhance auth page: add form structure and styles">
+      <option name="closed" value="true" />
+      <created>1768920293251</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1768920293251</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -124,7 +144,8 @@
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
     <MESSAGE value="first desain auth page with basic" />
-    <option name="LAST_COMMIT_MESSAGE" value="first desain auth page with basic" />
+    <MESSAGE value="enhance auth page: add form structure and styles" />
+    <option name="LAST_COMMIT_MESSAGE" value="enhance auth page: add form structure and styles" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
