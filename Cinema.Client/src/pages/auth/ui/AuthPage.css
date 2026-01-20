@@ -1,0 +1,49 @@
+/* Загальний контейнер (батько) */
+.auth-wrapper {
+    display: flex;
+    min-height: 100vh; /* Займає всю висоту екрану */
+    width: 100%; /* Адаптивна ширина */
+    background: #FFFFFF;
+}
+
+/* Лівий банер (ліва половина) */
+.auth-banner {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Логотип вгору, текст вниз */
+    align-items: flex-start;
+    padding: 40px 50px;
+
+    flex: 1; /* Займає 50% ширини */
+    min-height: 100vh; /* Мінімальна висота = висота екрану */
+
+    background: linear-gradient(180deg, #013D24 0%, #000000 100%);
+    color: #FFFFFF;
+}
+
+.auth-banner h1 {
+    font-size: 48px;
+    line-height: 1.2;
+    font-weight: 400;
+    margin: 0; /* Прибираємо відступи браузера */
+}
+
+/* Правий контейнер для форми (права половина) */
+.auth-form-container {
+    flex: 1; /* Займає 50% ширини */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+}
+
+/* Адаптивність для планшетів і телефонів */
+@media (max-width: 768px) {
+    .auth-wrapper {
+        flex-direction: column; /* Розташовуємо банер і форму вертикально */
+    }
+
+    .auth-banner h1 {
+        font-size: 32px; /* Зменшуємо розмір тексту на мобілках */
+    }
+}
