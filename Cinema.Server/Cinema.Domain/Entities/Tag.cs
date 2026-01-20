@@ -5,13 +5,13 @@ using System.Text;
 
 namespace Cinema.Domain.Entities
 {
-    public class Genre
+    public class Tag
     {
         [Key]
-        public int GenreId { get; set; }
+        public int TagId { get; set; }
         [Required]
-        public string GenreName { get; set; }
+        public string TagName { get; set; }
 
-        public virtual ICollection<GenreMovie> GenreMovies { get; set; }
+        public virtual ICollection<News> News { get; set; }
     }
 }

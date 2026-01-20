@@ -5,15 +5,52 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="82b801f7-87d1-46fa-a82c-3d693261e5d9" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Cinema.Client/src/pages/auth/AuthPage.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Cinema.Client/src/pages/auth/AuthPage.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Cinema.Server/Cinema.Domain/Entities/User.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Cinema.Client/src/index.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Cinema.Server/.gitkeep" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Cinema.Server/Cinema.API/Controllers/MoviesController.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Cinema.Server/Cinema.Application/DTOs/ActorDto.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Cinema.Server/Cinema.Application/DTOs/GenreDto.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Cinema.Server/Cinema.Application/DTOs/MovieDto.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Cinema.Server/Cinema.Application/Helpers/.gitkeep" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Cinema.Server/Cinema.Application/Interfaces/IRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Cinema.Server/Cinema.Application/Mappings/.gitkeep" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Cinema.Server/Cinema.Application/Services/.gitkeep" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Cinema.Server/Cinema.Application/Validators/.gitkeep" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Cinema.Server/Cinema.Application/mappings/MappingProfile.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Cinema.Server/Cinema.Domain/Entities/Actor.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Cinema.Server/Cinema.Domain/Entities/ActorMovie.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Cinema.Server/Cinema.Domain/Entities/Role.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Cinema.Server/Cinema.Domain/Entities/SessionSeat.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Cinema.Server/Cinema.Domain/Entities/Tag.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Cinema.Server/Cinema.Persistence/Migrations/20260117171115_large_update.Designer.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Cinema.Server/Cinema.Persistence/Migrations/20260117171115_large_update.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Cinema.Server/Cinema.Persistence/Migrations/20260119183637_ChangeNames.Designer.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Cinema.Server/Cinema.Persistence/Migrations/20260119183637_ChangeNames.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Cinema.Server/Cinema.Persistence/Repositories/Repository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Cinema.Client/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Cinema.Client/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Cinema.Client/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/Cinema.Client/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cinema.Client/src/app/router/routes.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Cinema.Client/src/app/router/routes.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cinema.Client/src/pages/auth/ui/AuthPage.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cinema.Client/src/pages/auth/ui/AuthPage.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cinema.Client/src/main.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Cinema.Client/src/main.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cinema.Server/Cinema.API/Cinema.API.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Cinema.Server/Cinema.API/Cinema.API.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cinema.Server/Cinema.API/Cinema.API.http" beforeDir="false" afterPath="$PROJECT_DIR$/Cinema.Server/Cinema.API/Cinema.API.http" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cinema.Server/Cinema.API/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Cinema.Server/Cinema.API/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cinema.Server/Cinema.API/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/Cinema.Server/Cinema.API/appsettings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cinema.Server/Cinema.Application/Cinema.Application.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Cinema.Server/Cinema.Application/Cinema.Application.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cinema.Server/Cinema.Application/Class1.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cinema.Server/Cinema.Domain/Entities/Customer.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cinema.Server/Cinema.Domain/Entities/Genre.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Cinema.Server/Cinema.Domain/Entities/Genre.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cinema.Server/Cinema.Domain/Entities/GenreMovie.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Cinema.Server/Cinema.Domain/Entities/GenreMovie.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cinema.Server/Cinema.Domain/Entities/Hall.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Cinema.Server/Cinema.Domain/Entities/Hall.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cinema.Server/Cinema.Domain/Entities/Movie.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Cinema.Server/Cinema.Domain/Entities/Movie.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cinema.Server/Cinema.Domain/Entities/News.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Cinema.Server/Cinema.Domain/Entities/News.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cinema.Server/Cinema.Domain/Entities/Order.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Cinema.Server/Cinema.Domain/Entities/Order.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cinema.Server/Cinema.Domain/Entities/Payment.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Cinema.Server/Cinema.Domain/Entities/Payment.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cinema.Server/Cinema.Domain/Entities/Seat.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Cinema.Server/Cinema.Domain/Entities/Seat.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cinema.Server/Cinema.Domain/Entities/Session.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Cinema.Server/Cinema.Domain/Entities/Session.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cinema.Server/Cinema.Domain/Entities/Ticket.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Cinema.Server/Cinema.Domain/Entities/Ticket.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cinema.Server/Cinema.Domain/Entities/User.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Cinema.Server/Cinema.Domain/Entities/User.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cinema.Server/Cinema.Persistence/Context/AppDbContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Cinema.Server/Cinema.Persistence/Context/AppDbContext.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cinema.Server/Cinema.Persistence/Migrations/AppDbContextModelSnapshot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Cinema.Server/Cinema.Persistence/Migrations/AppDbContextModelSnapshot.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,6 +80,7 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="ROOT_SYNC" value="DONT_SYNC" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
@@ -57,7 +95,7 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/Cinema.Server/Cinema.Domain/Entities/Customer.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Cinema.Client/package-lock.json" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Cinema.Server/Cinema.Domain/Entities/Genre.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Cinema.Server/Cinema.Domain/Entities/GenreMovie.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Cinema.Server/Cinema.Domain/Entities/User.cs" root0="SKIP_HIGHLIGHTING" />
@@ -86,7 +124,7 @@
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "feat-auth",
+    "git-widget-placeholder": "Merging feat-auth",
     "junie.onboarding.icon.badge.shown": "true",
     "list.type.of.created.stylesheet": "CSS",
     "node.js.detected.package.eslint": "true",
@@ -102,10 +140,10 @@
 }]]></component>
   <component name="RecapSpentCounter">
     <option name="endsOfQuotaMs" value="1771506011865" />
-    <option name="spentUsd" value="0.015216" />
+    <option name="spentUsd" value="0.0320348" />
   </component>
   <component name="RecapUselessUpdatesCounter">
-    <option name="suspendCountdown" value="9" />
+    <option name="suspendCountdown" value="8" />
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -115,7 +153,7 @@
       <option name="presentableId" value="Default" />
       <updated>1768748867696</updated>
       <workItem from="1768748870547" duration="8985000" />
-      <workItem from="1768913118239" duration="12504000" />
+      <workItem from="1768913118239" duration="13304000" />
     </task>
     <task id="LOCAL-00001" summary="first desain auth page with basic">
       <option name="closed" value="true" />
@@ -141,6 +179,17 @@
   </component>
   <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
     <MESSAGE value="first desain auth page with basic" />

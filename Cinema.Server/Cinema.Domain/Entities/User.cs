@@ -1,6 +1,7 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace Cinema.Domain.Entities
@@ -8,28 +9,22 @@ namespace Cinema.Domain.Entities
     public class User
     {
         [Key]
-        public int user_id { get; set; }
-
+        public int UserId { get; set; }
+        
+        public int RoleId { get; set; }
+        [ForeignKey("RoleId")]
+        public virtual Role Role { get; set; }
         [Required]
-        [EmailAddress]
-        [MaxLength(100)]
-        public string email { get; set; }
-
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Phone { get; set; }
+        public string Email { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         [Required]
-        [MaxLength(255)]
-        public string password_hash { get; set; } // ⚠️ НЕ зберігай пароль у plain text!
+        public string PasswordHash { get; set; }
+        public string RefreshToken { get; set; } = string.Empty;
+        public DateTime ExpiresAt { get; set; }
 
-        [MaxLength(50)]
-        public string? first_name { get; set; }
-
-        [MaxLength(50)]
-        public string? last_name { get; set; }
-
-        public DateTime created_at { get; set; } = DateTime.UtcNow;
-
-        public bool is_active { get; set; } = true;
-
-        // Навігаційні властивості (якщо потрібно)
         public virtual ICollection<Order> Orders { get; set; }
     }
 }

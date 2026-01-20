@@ -9,19 +9,20 @@ namespace Cinema.Domain.Entities
     public class Session
     {
         [Key]
-        public int session_id { get; set; }
+        public int SessionId { get; set; }
         [Required]
-        public DateTime session_date { get; set; }
+        public DateTime SessionDate { get; set; }
         [Required]
-        public TimeSpan session_time { get; set; }
-        public int movie_id { get; set; }
-        [ForeignKey("movie_id")]
+        public TimeSpan SessionTime { get; set; }
+        public int MovieId { get; set; }
+        [ForeignKey("MovieId")]
         public virtual Movie Movie { get; set; }
-        public int hall_id { get; set; }
-        [ForeignKey("hall_id")]
+        public int HallId { get; set; }
+        [ForeignKey("HallId")]
         public virtual Hall Hall { get; set; }
 
         public virtual ICollection<Order> Orders { get; set; }
+        public virtual ICollection<SessionSeat> SessionSeats { get; set; }
 
     }
 }
