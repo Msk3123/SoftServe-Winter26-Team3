@@ -4,13 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="82b801f7-87d1-46fa-a82c-3d693261e5d9" name="Changes" comment="" />
+    <list default="true" id="82b801f7-87d1-46fa-a82c-3d693261e5d9" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cinema.Client/src/pages/auth/ui/AuthPage.css" beforeDir="false" afterPath="$PROJECT_DIR$/Cinema.Client/src/pages/auth/ui/AuthPage.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cinema.Client/src/pages/auth/ui/AuthPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Cinema.Client/src/pages/auth/ui/AuthPage.tsx" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ChangesViewManager" show_ignored="true" />
+  <component name="ChangesViewManager">
+    <option name="groupingKeys" />
+  </component>
   <component name="CopilotPersistence">
     <persistenceIdMap>
       <entry key="_D:/Programiring/SoftServe-Winter26-Team3" value="38R45ZtPhCQDpocaURH984yJ3op" />
@@ -30,7 +37,7 @@
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.git" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
@@ -70,7 +77,7 @@
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "master",
+    "git-widget-placeholder": "feat-auth",
     "junie.onboarding.icon.badge.shown": "true",
     "list.type.of.created.stylesheet": "CSS",
     "node.js.detected.package.eslint": "true",
@@ -96,8 +103,17 @@
       <option name="presentableId" value="Default" />
       <updated>1768748867696</updated>
       <workItem from="1768748870547" duration="8985000" />
-      <workItem from="1768913118239" duration="5418000" />
+      <workItem from="1768913118239" duration="7046000" />
     </task>
+    <task id="LOCAL-00001" summary="first desain auth page with basic">
+      <option name="closed" value="true" />
+      <created>1768918563573</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1768918563573</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -107,6 +123,8 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+    <MESSAGE value="first desain auth page with basic" />
+    <option name="LAST_COMMIT_MESSAGE" value="first desain auth page with basic" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
