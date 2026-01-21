@@ -18,5 +18,5 @@
 
 .contentWrapper{
     padding: 1em 4em;
-    flex: 1;
+    flex-grow: 1;
 }
