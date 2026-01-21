@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cinema.Domain.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,11 +9,6 @@ namespace Cinema.Domain.Entities
 {
     public class Ticket
     {
-        public enum TicketType {
-            Adult,
-            Child,
-            Student
-        }
         [Key]
         public int TicketId { get; set; }
         public int OrderId { get; set; }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cinema.Domain.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,20 +9,6 @@ namespace Cinema.Domain.Entities
 {
     public class Payment
     {
-        public enum PaymentMethod
-        {
-            Terminal,
-            Online,
-            Cash
-        }
-        public enum PaymentStatus
-        {
-            Pending,
-            Completed,
-            Failed,
-            Refunded,
-            Cancelled
-        }
         [Key]
         public int PaymentId { get; set; }
         public DateTime PaymentDate { get; set; }
