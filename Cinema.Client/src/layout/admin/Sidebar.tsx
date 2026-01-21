@@ -1,5 +1,5 @@
 import { NavLink } from "react-router";
-import styles from "./AdminPageLayout.module.css";
+import styles from "./Sidebar.module.css";
 
 const navItems = [
         { label: "Movies", path: "/admin/movies" },
