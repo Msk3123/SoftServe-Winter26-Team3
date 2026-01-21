@@ -1,0 +1,27 @@
+.sidebar{
+    border-right:1px var(--text-secondary) solid;
+    font-size: 1.2rem;
+    min-width: 200px;
+    padding:0;
+}
+.navList{
+    margin: 0;
+    list-style: none;
+    padding:0;
+}
+.navItem{
+    padding: 0.6em 0 0.6em 1em;
+    transition: all 300ms ease-in-out;
+}
+.navItem:hover{
+    background-color: var(--color-primary-weak);
+}
+.link{
+    display: inline-block;
+    width: 100%;
+}
+
+.navItem:has(.activeLink){
+    background-color: var(--color-primary-weak);
+    text-decoration: underline;
+}
