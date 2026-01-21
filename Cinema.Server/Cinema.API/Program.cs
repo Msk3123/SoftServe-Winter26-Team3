@@ -1,4 +1,7 @@
+using Cinema.Application.Interfaces;
+using Cinema.Application.mappings;
 using Cinema.Persistence.Context;
+using Cinema.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,7 +14,10 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddDbContext<AppDbContext>();
 //mapper
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddAutoMapper(typeof(MappingProfile));
+//repo
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped<ISessionRepository, SessionRepository>();
 // Allow CORS for React frontend
 builder.Services.AddCors(options =>
 {
