@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cinema.Domain.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,13 +9,6 @@ namespace Cinema.Domain.Entities
 {
     public class SessionSeat
     {
-        public enum SeatStatus
-        {
-            Available,
-            Reserved,
-            Sold,
-            Blocked
-        }
         [Key]
         public int SessionSeatId { get; set; }
         public int SessionId { get; set; }

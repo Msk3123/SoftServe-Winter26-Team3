@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cinema.Domain.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,15 +9,6 @@ namespace Cinema.Domain.Entities
 {
     public class Order
     {
-        public enum OrderStatus
-        {
-            Created,
-            Reserved,
-            Confirmed,
-            Cancelled,
-            Completed,
-            Refunded
-        }
         [Key]
         public int OrderIid { get; set; }
         public DateTime OrderDate { get; set; }
