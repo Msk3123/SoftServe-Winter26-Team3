@@ -1,4 +1,5 @@
 ﻿using Cinema.Application.DTOs;
+using Cinema.Application.DTOs;
 using Cinema.Domain.Entities;
 using Cinema.Persistence.Context;
 using Microsoft.AspNetCore.Mvc;
