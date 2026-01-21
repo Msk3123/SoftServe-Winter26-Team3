@@ -1,0 +1,85 @@
+.container {
+  padding: 20px 0;
+  color: var(--text-main);
+}
+.content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 64px;
+  font-weight: var(--fw-bold);
+  text-decoration: underline var(--text-main) 2px solid;
+}
+/* media queries, wider screen, more posters */
+.movieList {
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  gap: 50px;
+}
+.movieItem{
+    width: 250px; 
+  
+  /* Це допоможе уникнути глюків з флексами */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.arrow{
+    margin: -50px 50px 0 50px;
+}
+.poster {
+  width: 250px;
+  height: 375px;
+  flex-shrink: 0;
+  object-fit: cover;
+  border-radius: 20px;
+}
+.title{
+    font-size: 20px;
+    font-weight: var(--fw-medium);
+    height: 50px;
+  max-width: 100%;
+}
+.headerOff {
+    text-align: center;
+  margin-top: 30px;
+  font-size: 48px;
+  font-weight: var(--fw-bold);
+  opacity: 0.4;
+}
+.headerNews{
+    text-align: center;
+  /* margin-bottom: 30px; */
+  font-size: 64px;
+  font-style: italic;
+  font-weight: var(--fw-bold);
+}
+.newsContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+.newsSection{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: auto;
+    border-radius: 41px;
+    background-color: var(--bg-news);
+}
+.newsImage{
+    border-radius: 41px;
+    object-fit: cover;
+    height: 272px;
+    width: 272px;
+}
