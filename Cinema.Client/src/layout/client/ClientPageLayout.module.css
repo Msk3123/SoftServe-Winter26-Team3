@@ -1,0 +1,22 @@
+.layoutContainer {
+    background-color: var(--bg-dark);
+    background-image:
+        radial-gradient(circle at 100% 10%, color-mix(in srgb, var(--color-primary), black 84%) 0%, transparent 36%),
+        radial-gradient(circle at 0% 90%, color-mix(in srgb, var(--color-primary), black 84%) 0%, transparent 36%);
+    
+    background-attachment: fixed;
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    font-weight: var(--fw-medium);
+    display: flex;
+    flex-direction: column;
+}
+
+.contentWrapper{
+    padding: 1em 4em;
+    flex: 1;
+}

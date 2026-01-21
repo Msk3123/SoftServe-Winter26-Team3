@@ -15,7 +15,16 @@ interface Props{
 const Logo: React.FC<Props> = ({size="regular"})=>{
     const {width,height} = dimensions[size]
     return(
-        <img src={logoUrl} alt="cinema logo" width={width} height={height} />
+        <img
+            src={logoUrl}
+            alt="cinema logo"
+            width={width}
+            height={height}
+            style={{
+                width: 'clamp(40px, 15vw, 120px)',
+                height: 'auto'
+            }}
+            />
     )
 }
 

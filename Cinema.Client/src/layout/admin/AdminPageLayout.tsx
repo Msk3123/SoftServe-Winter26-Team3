@@ -5,7 +5,7 @@ import AdminHeader from "./AdminHeader";
 
 const AdminPageLayout: React.FC = ()=>{
     return(
-        <div className={styles.layoutContainer}>
+        <div className={`${styles.layoutContainer} admin`}>
             <AdminHeader />
             <div className={styles.contentWrapper}>
                 <Sidebar/>

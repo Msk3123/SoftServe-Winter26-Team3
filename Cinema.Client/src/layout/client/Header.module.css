@@ -1,11 +1,137 @@
-.header{
+.header {
     display: flex;
-    padding: 2em 0;
     justify-content: space-between;
+    align-items: center;
+    padding: 0.5em 2em;
+    color: var(--text-main);
+    position: relative;
+    z-index: 50;
+}
+
+.logoContainer {
+    z-index: 51;
+}
+
+.burger {
+    display: none;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 2rem;
+    height: 2rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 51;
+}
+
+.burger span {
+    width: 2rem;
+    height: 0.25rem;
+    background: var(--text-main);
+    border-radius: 10px;
+    transition: all 0.3s linear;
+    position: relative;
+    transform-origin: 1px;
+}
+
+/* --- НАВІГАЦІЯ (Desktop) --- */
+.nav {
+    display: flex;
     align-items: center;
 }
 
-.navList{
+.navList {
     display: flex;
-    gap: 1em;
+    align-items: center;
+    gap: 1.5em;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.authButtons {
+    display: flex;
+    align-items: center;
+    gap: 1.5em;
+}
+
+.navlink {
+    border: none;
+    text-decoration: none;
+    color: var(--text-main);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all linear 300ms;
+}
+
+.navlink:hover{
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+.active {
+    border-bottom: 1px var(--text-main) solid;
+}
+
+@media (max-width: 768px) {
+    .burger {
+        display: flex;
+    }
+
+    .burgerActive span:first-child {
+        transform: rotate(45deg);
+    }
+    .burgerActive span:nth-child(2) {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    .burgerActive span:nth-child(3) {
+        transform: rotate(-45deg);
+    }
+
+    .nav {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 100%;
+        max-width: 300px;
+        height: 100vh;
+        background-color: var(--bg-dark);
+        padding-top: 6em;
+        transition: right 0.3s ease-in-out;
+        box-shadow: -5px 0 15px rgba(0,0,0,0.5);
+        flex-direction: column;
+        align-items: center;
+        z-index: 50;
+    }
+
+    .navOpen {
+        right: 0;
+    }
+
+    .navList {
+        flex-direction: column;
+        align-items: center;
+        gap: 2em;
+        width: 100%;
+    }
+
+    .authButtons {
+        flex-direction: column;
+        gap: 1.5em;
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 40;
+        backdrop-filter: blur(2px);
+    }
 }

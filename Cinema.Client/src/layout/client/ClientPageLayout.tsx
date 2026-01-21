@@ -1,14 +1,16 @@
 import { Outlet } from "react-router";
 import styles from "./ClientPageLayout.module.css"
 import Header from "./Header";
+import Footer from "./Footer";
 
 const ClientPageLayout: React.FC = ()=>{
     return(
-        <div className={styles.layoutContainer}>
+        <div className={`${styles.layoutContainer} client`}>
             <Header />
-            <main>
+            <main className={styles.contentWrapper}>
                 <Outlet></Outlet>
             </main>
+            <Footer />
         </div>
     )
 }
