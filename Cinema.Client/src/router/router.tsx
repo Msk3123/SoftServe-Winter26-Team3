@@ -20,6 +20,7 @@ import AdminNewsPage from "../pages/Admin/News/AdminNewsPage";
 import AdminUsersPage from "../pages/Admin/Users/AdminUsersPage";
 import Modal from "../components/Modal";
 import AdminOrderPage from "../pages/Admin/Orders/AdminOrdersPage";
+import TicketsPage from "../pages/Client/Tickets/TicketsPage";
 
 export const router = createBrowserRouter([
   {
@@ -61,6 +62,10 @@ export const router = createBrowserRouter([
       {
         path: "checkout",
         element: <CheckoutPage />,
+      },
+      {
+        path: "tickets/:userId",
+        element: <TicketsPage />,
       },
     ],
   },
