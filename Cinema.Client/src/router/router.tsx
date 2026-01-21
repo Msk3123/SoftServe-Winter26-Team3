@@ -21,6 +21,8 @@ import AdminUsersPage from "../pages/Admin/Users/AdminUsersPage";
 import Modal from "../components/Modal";
 import AdminOrderPage from "../pages/Admin/Orders/AdminOrdersPage";
 import TicketsPage from "../pages/Client/Tickets/TicketsPage";
+import PageNotFound from "../pages/Client/PageNotFound/PageNotFound";
+import AdminPageNotFound from "../pages/Admin/PageNotFound/AdminPageNotFound";
 
 export const router = createBrowserRouter([
   {
@@ -66,6 +68,10 @@ export const router = createBrowserRouter([
       {
         path: "tickets/:userId",
         element: <TicketsPage />,
+      },
+      {
+        path: "*",
+        element: <PageNotFound />,
       },
     ],
   },
@@ -153,6 +159,10 @@ export const router = createBrowserRouter([
         children: [
             { path: ":orderId", element: <Modal>order view</Modal>}
         ]
+      },
+      {
+        path: "*",
+        element: <AdminPageNotFound />,
       },
     ],
   },
