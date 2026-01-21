@@ -24,3 +24,20 @@
   --fw-heavy: 900;
 }
 
+body{
+  padding: 0;
+  margin: 0;
+  font-size: 14px;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.client{
+  color: var(--text-main);
+}
+.admin{
+  color: var(--text-main-dark);
+}
