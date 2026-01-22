@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Cinema.Application.DTOs
 {
-    public record ActorDto(
+    public record ActorShortDto(
         int Id,
         string FirstName,
         string LastName,

@@ -1,5 +1,6 @@
 ﻿using Cinema.Application.DTOs;
 using Cinema.Application.DTOs;
+using Cinema.Application.DTOs.MovieDtos;
 using Cinema.Domain.Entities;
 using Cinema.Persistence.Context;
 using Microsoft.AspNetCore.Mvc;
@@ -23,24 +24,12 @@ namespace Cinema.API.Controllers
         public async Task<IActionResult> GetAll()
         {
             var movies = await _context.Movies
-                .Select(m => new MovieDto(
+                .Select(m => new MovieShortDto(
                     m.MovieId,
                     m.Title,
-                    m.Duration,
-                    m.Rating,
                     m.PosterUrl,
-                    m.TrailerUrl,
-                    m.Language,
-                    m.Description,
-                    m.ReleaseDate,
-                    m.GenreMovies.Select(gm => new GenreDto(gm.Genre.GenreId, gm.Genre.GenreName)).ToList(),
-                    m.ActorMovies.Select(am => new ActorDto(
-                        am.Actor.ActorId,
-                        am.Actor.FirstName,
-                        am.Actor.LastName,
-                        am.Actor.PhotoUrl
-                    )).ToList()
-                ))
+                    m.ReleaseDate
+                 ))
                 .ToListAsync();
 
             return Ok(movies);
@@ -51,7 +40,7 @@ namespace Cinema.API.Controllers
         {
             var movie = await _context.Movies
                 .Where(m => m.MovieId == id)
-                .Select(m => new MovieDto(
+                .Select(m => new MovieDetailsDto(
                     m.MovieId,
                     m.Title,
                     m.Duration,
@@ -62,7 +51,7 @@ namespace Cinema.API.Controllers
                     m.Description,
                     m.ReleaseDate,
                     m.GenreMovies.Select(gm => new GenreDto(gm.Genre.GenreId, gm.Genre.GenreName)).ToList(),
-                    m.ActorMovies.Select(am => new ActorDto(
+                    m.ActorMovies.Select(am => new ActorShortDto(
                         am.Actor.ActorId,
                         am.Actor.FirstName,
                         am.Actor.LastName,
@@ -80,7 +69,7 @@ namespace Cinema.API.Controllers
 
         // POST: api/movies
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateMovieDto dto)
+        public async Task<IActionResult> Create([FromBody] MovieCreateDto dto)
         {
             var movie = new Movie
             {
@@ -121,7 +110,7 @@ namespace Cinema.API.Controllers
 
         // PUT: api/movies/{id}
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] CreateMovieDto dto)
+        public async Task<IActionResult> Update(int id, [FromBody] MovieCreateDto dto)
         {
             var movie = await _context.Movies
                 .Include(m => m.GenreMovies)
@@ -181,7 +170,7 @@ namespace Cinema.API.Controllers
 
         // PATCH: api/movies/{id}
         [HttpPatch("{id}")]
-        public async Task<IActionResult> Patch(int id, [FromBody] UpdateMovieDto dto)
+        public async Task<IActionResult> Patch(int id, [FromBody] MoviePatchDto dto)
         {
             var movie = await _context.Movies
                 .Include(m => m.GenreMovies)
