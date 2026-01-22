@@ -13,7 +13,7 @@ const PageNotFound : React.FC = ()=>{
                     This session has already ended, and the lights in the hall have faded to black.
                     Don't worry, we still have many interesting premieres on our {' '}
                     <Button to="/" variant="outline">
-                        home page
+                        Home page
                     </Button>
                 </p>
             </div>
