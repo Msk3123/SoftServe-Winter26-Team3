@@ -12,7 +12,7 @@ namespace Cinema.Application.Mappings
     {
         public ActorMapper()
         {
-            CreateMap<Actor, ActorShortDto>(); // Автоматично змапить однакові назви полів
+            CreateMap<Actor, ActorShortDto>(); 
 
             CreateMap<Actor, ActorDetailsDto>()
                 .ForMember(dest => dest.Movies, opt => opt.MapFrom(src =>
