@@ -18,6 +18,8 @@ builder.Services.AddAutoMapper(typeof(SessionMapper).Assembly);
 //repo
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<ISessionRepository, SessionRepository>();
+builder.Services.AddScoped<IActorRepository, ActorRepository>();
+
 // Allow CORS for React frontend
 builder.Services.AddCors(options =>
 {
