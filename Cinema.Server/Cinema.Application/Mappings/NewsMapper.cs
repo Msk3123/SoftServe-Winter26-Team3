@@ -22,8 +22,10 @@ namespace Cinema.Application.Mappings
                     $"{src.Actor.FirstName} {src.Actor.LastName}"));
 
             CreateMap<NewsPatchDto, News>()
-                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-
+            .ForAllMembers(opts => opts.Condition((src, dest, srcMember) =>
+            srcMember != null &&
+                (!(srcMember is int) || (int)srcMember != 0) 
+                ));
             CreateMap<NewsCreateDto, News>()
                 .ForMember(dest => dest.PublishedDate, opt => opt.MapFrom(src =>
                     src.PublishedDate == default ? DateTime.Now : src.PublishedDate));
