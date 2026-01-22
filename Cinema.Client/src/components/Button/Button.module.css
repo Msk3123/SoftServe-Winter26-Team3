@@ -21,16 +21,13 @@
 }
 
 .outline {
-    background-color: transparent !important;
+    background-color: transparent;
     border-opacity: 0.7;
 }
 
 .textOnly {
-    background-color: transparent !important;
-    border-color: transparent !important;
+    background-color: transparent;
+    border-color: transparent;
     padding-left: 0;
     padding-right: 0;
-}
-.textOnly:hover {
-    text-decoration: underline;
 }

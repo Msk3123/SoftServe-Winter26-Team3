@@ -16,7 +16,7 @@ const AdminPageNotFound : React.FC = ()=>{
                 </p>
 
                 <div className={styles.actions}>
-                    <Button to="/admin/" variant="outline">
+                    <Button to="/admin/" variant="text-only" className={styles.dashboardBtn} color="var(--text-dark)">
                         Back to Dashboard
                     </Button>
                 </div>
