@@ -1,14 +1,14 @@
 @Cinema.API_HostAddress = https://localhost:7249
 
 ###
-GET {{Cinema.API_HostAddress}}/api/movies
+GET {{Cinema.API_HostAddress}}/api/movie
 Accept: application/json
 
 ###
-GET {{Cinema.API_HostAddress}}/api/movies/1
+GET {{Cinema.API_HostAddress}}/api/movie/1
 Accept: application/json
 ###
-POST {{Cinema.API_HostAddress}}/api/movies
+POST {{Cinema.API_HostAddress}}/api/movie
 Content-Type: application/json
 
 {
@@ -26,7 +26,7 @@ Content-Type: application/json
 }
 
 ###
-PUT {{Cinema.API_HostAddress}}/api/movies/1
+PUT {{Cinema.API_HostAddress}}/api/movie/1
 Content-Type: application/json
 {
   "id": 1,
@@ -43,12 +43,12 @@ Content-Type: application/json
   "actorIds": []
 }
 ###
-PATCH {{Cinema.API_HostAddress}}/api/movies/1
+PATCH {{Cinema.API_HostAddress}}/api/movie/1
 Content-Type: application/json
 {
   "description": "Dune : Patch edited"
 }
 ###
-DELETE {{Cinema.API_HostAddress}}/api/movies/10
+DELETE {{Cinema.API_HostAddress}}/api/movie/10
 Accept: application/json
 

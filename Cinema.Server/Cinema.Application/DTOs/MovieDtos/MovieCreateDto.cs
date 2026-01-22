@@ -11,6 +11,8 @@ namespace Cinema.Application.DTOs.MovieDtos
 
         [Range(1, int.MaxValue, ErrorMessage = "Duration must be positive")]
         int Duration,
+        [Range(0.0, 10.0, ErrorMessage = "Rating must be between 0.0 and 10.0")]
+        decimal Rating,
 
         string Description,
 

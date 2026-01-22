@@ -6,6 +6,7 @@ namespace Cinema.Application.DTOs.MovieDtos
     (
         string? Title = null,
         int? Duration = null ,
+        decimal? Rating = null,
         string? Description = null,
         string? PosterUrl = null,
         string? TrailerUrl = null,

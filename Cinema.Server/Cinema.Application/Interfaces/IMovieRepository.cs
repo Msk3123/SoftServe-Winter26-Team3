@@ -7,8 +7,14 @@ namespace Cinema.Application.Interfaces
 {
     public interface IMovieRepository:IRepository<Movie>
     {
-        Task<IEnumerable<Movie>> GetAllWithGenresAsync();
+        Task<IEnumerable<Movie>> GetAllWithDetailsAsync();
         Task<Movie?> GetByIdWithDetailsAsync(int id);
-        Task<IEnumerable<Movie>> SearchByTitleAsync(string title);
+
+        Task<IEnumerable<Movie>> GetByGenreIdAsync(int genreId);
+        Task<IEnumerable<Movie>> GetByActorIdAsync(int actorId);
+
+        Task<IEnumerable<Movie>> GetUpcomingMoviesAsync();
+        Task<IEnumerable<Movie>> GetNowShowingMoviesAsync();
+        Task<(IEnumerable<Movie> Items, int TotalCount)> GetPagedAsync(int pageNumber, int pageSize);
     }
 }
