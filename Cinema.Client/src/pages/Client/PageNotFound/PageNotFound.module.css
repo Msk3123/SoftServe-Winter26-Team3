@@ -1,0 +1,48 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    background-color: #121212;
+    color: #ffffff;
+    text-align: center;
+}
+
+.content {
+    max-width: 650px;
+    padding: 20px;
+}
+
+.errorCode {
+    font-size: 8rem;
+    color: #e50914; /* Червоний колір кінотеатру */
+    margin: 0;
+    font-weight: 900;
+}
+
+.divider {
+    width: 60px;
+    height: 4px;
+    background-color: #e50914;
+    margin: 20px auto;
+}
+
+.title {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+}
+
+.text {
+    font-size: 1.2rem;
+    color: #b3b3b3;
+    line-height: 1.8;
+}
+
+    /* Додаткове коригування для кнопки всередині тексту */
+    .text :global(a) {
+        display: inline-flex;
+        vertical-align: middle;
+        margin: 0 5px;
+        padding: 5px 15px; /* Робимо її компактнішою для тексту */
+    }
