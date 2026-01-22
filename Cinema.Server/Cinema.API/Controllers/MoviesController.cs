@@ -1,5 +1,4 @@
 ﻿using Cinema.Application.DTOs;
-using Cinema.Application.DTOs;
 using Cinema.Domain.Entities;
 using Cinema.Persistence.Context;
 using Microsoft.AspNetCore.Mvc;
@@ -34,12 +33,13 @@ namespace Cinema.API.Controllers
                     m.Description,
                     m.ReleaseDate,
                     m.GenreMovies.Select(gm => new GenreDto(gm.Genre.GenreId, gm.Genre.GenreName)).ToList(),
-                    m.ActorMovies.Select(am => new ActorDto(
-                        am.Actor.ActorId,
-                        am.Actor.FirstName,
-                        am.Actor.LastName,
-                        am.Actor.PhotoUrl
-                    )).ToList()
+                    m.ActorMovies.Select(am => new ActorShortDto
+                    {
+                        ActorId = am.Actor.ActorId,
+                        FirstName = am.Actor.FirstName,
+                        LastName = am.Actor.LastName,
+                        PhotoUrl = am.Actor.PhotoUrl
+                    }).ToList()
                 ))
                 .ToListAsync();
 
@@ -62,12 +62,13 @@ namespace Cinema.API.Controllers
                     m.Description,
                     m.ReleaseDate,
                     m.GenreMovies.Select(gm => new GenreDto(gm.Genre.GenreId, gm.Genre.GenreName)).ToList(),
-                    m.ActorMovies.Select(am => new ActorDto(
-                        am.Actor.ActorId,
-                        am.Actor.FirstName,
-                        am.Actor.LastName,
-                        am.Actor.PhotoUrl
-                    )).ToList()
+                    m.ActorMovies.Select(am => new ActorShortDto
+                    {
+                        ActorId = am.Actor.ActorId,
+                        FirstName = am.Actor.FirstName,
+                        LastName = am.Actor.LastName,
+                        PhotoUrl = am.Actor.PhotoUrl
+                    }).ToList()
                 ))
                 .FirstOrDefaultAsync();
 

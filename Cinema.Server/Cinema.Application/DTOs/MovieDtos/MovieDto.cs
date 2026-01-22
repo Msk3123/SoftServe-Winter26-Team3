@@ -14,7 +14,7 @@ namespace Cinema.Application.DTOs
         string Description,
         DateOnly ReleaseDate,
         List<GenreDto> Genres,
-        List<ActorDto> Actors
+        List<ActorShortDto> Actors
     );
 
     // POST запити

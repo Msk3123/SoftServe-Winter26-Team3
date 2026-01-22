@@ -1,9 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using AutoMapper;
+﻿using AutoMapper;
+using Cinema.Application.DTOs;
+using Cinema.Application.DTOs.ActorDtos;
 using Cinema.Application.DTOs.SessionDtos;
 using Cinema.Domain.Entities;
+using System;
+using System.Collections.Generic;
+using System.Text;
 namespace Cinema.Application.mappings
 {
     public class MappingProfile : Profile
@@ -27,12 +29,28 @@ namespace Cinema.Application.mappings
             CreateMap<SessionShortDto, Session>();
             CreateMap<SessionCreateDto, Session>();
             CreateMap<SessionPatchDto, Session>()
-            .ForAllMembers(opts => {
+            .ForAllMembers(opts =>
+            {
                 opts.Condition((src, dest, srcMember) =>
                 srcMember != null &&
                     (srcMember is not int i || i != 0)
                 );
             });
+            CreateMap<Actor, ActorShortDto>(); // Автоматично змапить однакові назви полів
+
+            CreateMap<Actor, ActorDetailsDto>()
+                .ForMember(dest => dest.Movies, opt => opt.MapFrom(src =>
+                    src.ActorMovies.Select(am => am.Movie.Title).ToList()));
+
+            CreateMap<ActorCreateDto, Actor>();
+
+            CreateMap<ActorPatchDto, Actor>()
+                .ForAllMembers(opts => {
+                    opts.Condition((src, dest, srcMember) =>
+                        srcMember != null &&
+                        (srcMember is not int i || i != 0)
+                    );
+                });
         }
     }
 }
