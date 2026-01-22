@@ -19,11 +19,11 @@ namespace Cinema.Domain.Entities
         public virtual Tag Tag { get; set; }
         public DateTime PublishedDate { get; set; }
         public bool IsActive { get; set; }
-        public int MovieIid { get; set; }
+        public int? MovieId { get; set; }
         [ForeignKey("MovieId")]
-        public virtual Movie Movie { get; set; }
-        public int ActorId { get; set; }
+        public virtual Movie? Movie { get; set; }
+        public int? ActorId { get; set; }
         [ForeignKey("ActorId")]
-        public virtual Actor Actor { get; set; }
+        public virtual Actor? Actor { get; set; }
     }
 }
