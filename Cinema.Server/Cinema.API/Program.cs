@@ -1,5 +1,5 @@
 using Cinema.Application.Interfaces;
-using Cinema.Application.mappings;
+using Cinema.Application.Mappings;
 using Cinema.Persistence.Context;
 using Cinema.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +14,7 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddDbContext<AppDbContext>();
 //mapper
-builder.Services.AddAutoMapper(typeof(MappingProfile));
+builder.Services.AddAutoMapper(typeof(SessionMapper).Assembly);
 //repo
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<ISessionRepository, SessionRepository>();
