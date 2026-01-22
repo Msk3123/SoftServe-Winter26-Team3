@@ -38,36 +38,26 @@
     margin-top: 10px;
 }
 
-.container :global(.btn),
-.container :global(a) {
-    position: relative !important;
-    display: inline-block !important;
-    color: var(--text-dark) !important;
-    text-decoration: none !important;
-    font-weight: var(--fw-bold) !important;
-    padding: 5px 0 !important;
-    border: none !important;
-    background: none !important;
-    transition: color 0.3s ease;
-    cursor: pointer;
+.dashboardBtn {
+    padding: 0 0;
+    font-weight: var(--fw-bold);
+    color: var(--text-dark);
+    display: inline-block;
+    position: relative;
+    transition: all 0.3s ease;
 }
-.container :global(.btn)::after,
-.container :global(a)::after {
+.dashboardBtn::after {
     content: '';
     position: absolute;
-    width: 0; 
+    width: 0;
     height: 2px;
-    bottom: 0;
-    left: 0;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
     background-color: var(--color-primary);
     transition: width 0.3s ease;
-    }
-
-.container :global(.btn):hover::after,
-.container :global(a):hover::after {
-        width: 100%;
 }
 
-.container :global(.btn):hover {
-    color: var(--color-primary) !important;
+.dashboardBtn:hover::after {
+    width: 96%;
 }
