@@ -14,7 +14,7 @@
   font-weight: var(--fw-bold);
   text-decoration: underline var(--text-main) 2px solid;
 }
-/* media queries, wider screen, more posters */
+/* media queries, wider screen, more posters? */
 .movieList {
   text-align: center;
   display: flex;
@@ -23,16 +23,14 @@
   flex-direction: row;
   gap: 50px;
 }
-.movieItem{
-    width: 250px; 
-  
-  /* Це допоможе уникнути глюків з флексами */
+.movieItem {
+  width: 250px;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-.arrow{
-    margin: -50px 50px 0 50px;
+.arrow {
+  margin: -50px 50px 0 50px;
 }
 .poster {
   width: 250px;
@@ -41,45 +39,105 @@
   object-fit: cover;
   border-radius: 20px;
 }
-.title{
-    font-size: 20px;
-    font-weight: var(--fw-medium);
-    height: 50px;
+.title {
+  font-size: 20px;
+  font-weight: var(--fw-medium);
+  height: 50px;
   max-width: 100%;
 }
 .headerOff {
-    text-align: center;
-  margin-top: 30px;
+  text-align: center;
+  margin-top: 20px;
   font-size: 48px;
   font-weight: var(--fw-bold);
   opacity: 0.4;
 }
-.headerNews{
-    text-align: center;
-  /* margin-bottom: 30px; */
+.headerNews {
+  text-align: center;
+  margin-bottom: 30px;
   font-size: 64px;
   font-style: italic;
   font-weight: var(--fw-bold);
 }
-.newsContainer{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
+.newsContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  margin-bottom: 50px;
 }
-.newsSection{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    padding: auto;
-    border-radius: 41px;
-    background-color: var(--bg-news);
+.newsSection {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 41px;
+  box-sizing: border-box;
+  background-color: var(--bg-news);
+  width: 1200px;
+  height: 272px;
 }
-.newsImage{
-    border-radius: 41px;
-    object-fit: cover;
-    height: 272px;
-    width: 272px;
+.newsImage {
+  border-radius: 41px;
+  object-fit: cover;
+  height: 272px;
+  width: 272px;
+}
+.newsText {
+  display: block;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 0 30px;
+  flex: 1;
+  max-width: 650px;
+}
+.newsTitle {
+  font-size: 36px;
+  font-weight: var(--fw-medium);
+  margin: -20px 0 0px 0;
+
+  line-height: 1.2;
+}
+.newsDesc {
+  font-size: 20px;
+  font-weight: var(--fw-light);
+  margin: 30px 0 0 0;
+  /* display: -webkit-box; */
+  /* -webkit-line-clamp: 3; */
+  /* -webkit-box-orient: vertical; */
+  /* overflow: hidden; */
+}
+.newsDetailedInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding: 24px 30px;
+  height: 100%;
+  min-width: 180px;
+}
+
+.newsButton {
+  background-color: var(--color-primary);
+  border: none;
+  border-radius: 10px;
+  color: var(--text-main);
+  font-size: 24px;
+  font-weight: var(--fw-medium);
+  padding: 10px 15px;
+  cursor: pointer;
+  /* transition: opacity 0.2s; */
+}
+.newsDate {
+  color: var(--text-news-date);
+  font-size: 24px;
+  font-weight: var(--fw-light);
+}
+.newsButton {
+  margin: 100px 0;
+}
+
+.newsDate {
+  margin-top: -20px;
 }

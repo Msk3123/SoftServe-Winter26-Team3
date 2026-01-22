@@ -26,20 +26,18 @@ const newsList = [
   {
     id: 1,
     title: 'Johnny Depp will star in the film "Pirates of the Caribbean 6."',
-    desc: "After 6 years of silence about Caribbean films, now we have official announcement...",
-    image: "../images/news/johnnyDepp.png", // Виправлена папка news та ім'я файлу
-    date: "27.12.2025",
+    desc: "After 6 years of silence about Caribbean films, now we have official announcement. That`s incredible producer Volodymyr Zelensky, the president of Kvartal 95...",
+    image: "../images/news/johnnyDepp.png",
   },
   {
     id: 2,
     title: "Zootopia 2 Eyes $1 Billion Global Revenue.",
-    desc: "The long-awaited sequel has exceeded all expectations, earning over $150 million...",
-    image: "../images/news/zootopia2Poster.jpg", // Перевір, чи там jpg чи png
+    desc: "The long-awaited sequel has exceeded all expectations, earning over $150 million in its opening weekend alone. Analysts predict it will be the biggest animated hit of the year...",
+    image: "../images/news/zootopia2Poster.jpg",
     date: "22.12.2025",
   },
 ];
 // carousel functionality?
-//ADD HOVER!
 const HomePage: React.FC = () => {
   return (
     <div className={styles.container}>
@@ -85,12 +83,12 @@ const HomePage: React.FC = () => {
                 className={styles.newsImage}
               />
               <div className={styles.newsText}>
-                <h4>{news.title}</h4>
-                <p>{news.desc}</p>
+                <h4 className={styles.newsTitle}>{news.title}</h4>
+                <p className={styles.newsDesc}>{news.desc}</p>
               </div>
-              <div className={styles.newsButton}>
-                <button>Read more</button>
-                <span>{news.date}</span>
+              <div className={styles.newsDetailedInfo}>
+                <button className={styles.newsButton}>Read more</button>
+                <span className={styles.newsDate}>{news.date}</span>
               </div>
             </div>
           ))}
@@ -99,5 +97,4 @@ const HomePage: React.FC = () => {
     </div>
   );
 };
-
 export default HomePage;
