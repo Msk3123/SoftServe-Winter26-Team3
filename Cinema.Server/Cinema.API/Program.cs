@@ -19,6 +19,7 @@ builder.Services.AddAutoMapper(typeof(SessionMapper).Assembly);
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<ISessionRepository, SessionRepository>();
 builder.Services.AddScoped<IActorRepository, ActorRepository>();
+builder.Services.AddScoped<IGenreRepository, GenreRepository>();
 builder.Services.AddScoped<INewsRepository, NewsRepository>();
 
 //swagger
