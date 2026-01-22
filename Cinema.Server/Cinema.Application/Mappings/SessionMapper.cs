@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using AutoMapper;
+﻿using AutoMapper;
 using Cinema.Application.DTOs.SessionDtos;
 using Cinema.Domain.Entities;
-namespace Cinema.Application.mappings
+using System.Linq;
+
+namespace Cinema.Application.Mappings 
 {
-    public class MappingProfile : Profile
+    public class SessionMapper : Profile
     {
-        public MappingProfile() {
+        public SessionMapper()
+        {
             CreateMap<Session, SessionShortDto>()
                 .ForMember(dest => dest.MovieTitle, opt => opt.MapFrom(src => src.Movie.Title))
                 .ForMember(dest => dest.HallName, opt => opt.MapFrom(src => src.Hall.HallName))
@@ -18,21 +18,16 @@ namespace Cinema.Application.mappings
                 .ForMember(dest => dest.MovieTitle, opt => opt.MapFrom(src => src.Movie.Title))
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Movie.Description))
                 .ForMember(dest => dest.HallName, opt => opt.MapFrom(src => src.Hall.HallName))
-
                 .ForMember(dest => dest.Genres, opt => opt.MapFrom(src =>
                     src.Movie.GenreMovies.Select(gm => gm.Genre.GenreName).ToList()))
                 .ForMember(dest => dest.Actors, opt => opt.MapFrom(src =>
-                    src.Movie.ActorMovies.Select(am => am.Actor.FirstName + " " + am.Actor.LastName).ToList()));
+                    src.Movie.ActorMovies.Select(am => $"{am.Actor.FirstName} {am.Actor.LastName}").ToList()));
 
             CreateMap<SessionShortDto, Session>();
             CreateMap<SessionCreateDto, Session>();
             CreateMap<SessionPatchDto, Session>()
-            .ForAllMembers(opts => {
-                opts.Condition((src, dest, srcMember) =>
-                srcMember != null &&
-                    (srcMember is not int i || i != 0)
-                );
-            });
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) =>
+                    srcMember != null && (srcMember is not int i || i != 0)));
         }
     }
 }
