@@ -29,7 +29,8 @@ namespace Cinema.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> getById(int id)
         {
-            var session = await _sessionRepository.GetByIdAsync(id);
+            var session = await _sessionRepository.GetWithDetailsAsync(id);
+            if(session == null) return NotFound();
             var response = _mapper.Map<SessionDetailsDto>(session);
             return Ok(response);
         }
@@ -40,8 +41,8 @@ namespace Cinema.API.Controllers
 
             await _sessionRepository.AddAsync(session);
             await _sessionRepository.SaveAsync();
-
-            var result = _mapper.Map<SessionShortDto>(session);
+            var sessionWithDetails = await _sessionRepository.GetWithDetailsAsync(session.SessionId);
+            var result = _mapper.Map<SessionShortDto>(sessionWithDetails);
             return CreatedAtAction(nameof(getById), new { id = session.SessionId }, result);
         }
         [HttpPut("{id}")]
