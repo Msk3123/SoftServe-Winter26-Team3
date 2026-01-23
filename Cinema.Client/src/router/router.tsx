@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router";
+import { createBrowserRouter, Navigate } from "react-router";
 import ClientPageLayout from "../layout/client/ClientPageLayout";
 import AdminPageLayout from "../layout/admin/AdminPageLayout";
 import HomePage from "../pages/Client/Home/HomePage";
@@ -31,11 +31,15 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
+        element: <Navigate to="/home" replace />, 
+      },
+      {
+        path: "home",
         element: <HomePage />,
       },
       {
         path: "sessions",
-        element: <SessionsPage />, //query params(?date=...)
+        element: <SessionsPage />, 
       },
       {
         path: "sessions/:sessionId",
