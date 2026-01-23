@@ -23,14 +23,19 @@ namespace Cinema.Application.DTOs.MovieDtos
         [Url(ErrorMessage = "Invalid Trailer URL format")]
         public string TrailerUrl { get; set; }
 
-        [StringLength(2, MinimumLength = 2 , ErrorMessage = "Language code must be exactly 2 characters(en{ get; set; }fr{ get; set; }ua etc.)")]
+        [StringLength(2, MinimumLength = 2 , ErrorMessage = "Language code must be exactly 2 characters(en,fr,ua etc.)")]
         public string Language { get; set; }
 
         public DateOnly ReleaseDate { get; set; }
         public DateOnly StartDate { get; set; }
         public DateOnly EndDate { get; set; }
 
+        [Required(ErrorMessage = "At least one genre is required")]
+        [MinLength(1, ErrorMessage = "At least one genre must be selected")]
         public List<int> GenreIds{ get; set; }
+
+        [Required(ErrorMessage = "At least one actor is required")]
+        [MinLength(1, ErrorMessage = "At least one actor must be selected")]
         public List<int> ActorIds { get; set; }
     }
 }

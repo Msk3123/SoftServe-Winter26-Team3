@@ -11,6 +11,8 @@ namespace Cinema.Application.DTOs.MovieDtos
         public string TrailerUrl{ get; set; }
         public string Language{ get; set; }
         public string Description{ get; set; }
+        public DateOnly StartDate { get; set; }
+        public DateOnly EndDate { get; set; }
         public DateOnly ReleaseDate{ get; set; }
         public List<GenreDto> Genres{ get; set; }
         public List<ActorShortDto> Actors { get; set; }

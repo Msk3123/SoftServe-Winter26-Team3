@@ -2,7 +2,6 @@
 using Cinema.Application.DTOs;
 using Cinema.Application.DTOs;
 using Cinema.Application.DTOs.MovieDtos;
-using Cinema.Application.Helpers;
 using Cinema.Application.Interfaces;
 using Cinema.Domain.Entities;
 using Cinema.Persistence.Context;
@@ -98,9 +97,24 @@ namespace Cinema.API.Controllers
 
         // POST: api/movie
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] MovieCreateDto dto)
+        public async Task<IActionResult> Create([FromBody] MovieCreateDto movieDto)
         {
-            var movie = _mapper.Map<Movie>(dto);
+            if (movieDto.StartDate < movieDto.ReleaseDate)
+            {
+                ModelState.AddModelError("StartDate", "The start date cannot be earlier than the release date.");
+            }
+
+            if (movieDto.EndDate <= movieDto.StartDate)
+            {
+                ModelState.AddModelError("EndDate", "End date must be later than start date.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var movie = _mapper.Map<Movie>(movieDto);
 
             await _movieRepository.AddAsync(movie);
             await _movieRepository.SaveAsync();
@@ -113,15 +127,27 @@ namespace Cinema.API.Controllers
         }
         // PUT: api/movie/{id}
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] MovieCreateDto dto)
+        public async Task<IActionResult> Update(int id, [FromBody] MovieCreateDto movieDto)
         {
+            if (movieDto.StartDate < movieDto.ReleaseDate)
+            {
+                ModelState.AddModelError("StartDate", "The start date cannot be earlier than the release date.");
+            }
+
+            if (movieDto.EndDate <= movieDto.StartDate)
+            {
+                ModelState.AddModelError("EndDate", "End date must be later than start date.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var movie = await _movieRepository.GetByIdWithDetailsAsync(id);
             if (movie == null) return NotFound();
 
-            _mapper.Map(dto, movie);
-
-            //MovieHelper.UpdateGenres(movie, dto.GenreIds);
-            //MovieHelper.UpdateActors(movie, dto.ActorIds);
+            _mapper.Map(movieDto, movie);
 
             await _movieRepository.SaveAsync();
 
@@ -130,22 +156,26 @@ namespace Cinema.API.Controllers
 
         // PATCH: api/movie/{id}
         [HttpPatch("{id}")]
-        public async Task<IActionResult> Patch(int id, [FromBody] MoviePatchDto dto)
+        public async Task<IActionResult> Patch(int id, [FromBody] MoviePatchDto movieDto)
         {
             var movie = await _movieRepository.GetByIdWithDetailsAsync(id);
             if (movie == null) return NotFound();
 
-            _mapper.Map(dto, movie);
+            var finalReleaseDate = movieDto.ReleaseDate ?? movie.ReleaseDate;
+            var finalStartDate = movieDto.StartDate ?? movie.StartDate;
+            var finalEndDate = movieDto.EndDate ?? movie.EndDate;
 
-            //if (dto.GenreIds != null)
-            //{
-            //    MovieHelper.UpdateGenres(movie, dto.GenreIds);
-            //}
+            if (finalStartDate < finalReleaseDate)
+            {
+                ModelState.AddModelError("StartDate", "The start date cannot be earlier than the release date.");
+            }
 
-            //if (dto.ActorIds != null)
-            //{
-            //    MovieHelper.UpdateActors(movie, dto.ActorIds);
-            //}
+            if (finalEndDate <= finalStartDate)
+            {
+                ModelState.AddModelError("EndDate", "End date must be later than start date.");
+            }
+
+            _mapper.Map(movieDto, movie);
 
             await _movieRepository.SaveAsync();
 
