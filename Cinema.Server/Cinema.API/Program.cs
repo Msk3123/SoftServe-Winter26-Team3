@@ -1,10 +1,15 @@
+using Cinema.API.Middleware;
 using Cinema.Application.Interfaces;
 using Cinema.Application.Mappings;
+using Cinema.Application.Validators.Sessions;
 using Cinema.Persistence.Context;
 using Cinema.Persistence.Repositories;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
 
 // Add services to the container.
 
@@ -27,6 +32,9 @@ builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 //swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+//validation
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddValidatorsFromAssemblyContaining<SessionCreateValidator>();
 // Allow CORS for React frontend
 builder.Services.AddCors(options =>
 {
@@ -38,7 +46,8 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
-
+//exeption middleware
+app.UseMiddleware<ExceptionMiddleware>();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
