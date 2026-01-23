@@ -6,9 +6,9 @@ namespace Cinema.Application.DTOs
 {
     public record ActorShortDto
     {
-        public int ActorId { get; set; }
-        public string FirstName { get; set; } 
+        public int Id { get; set; }
+        public string FirstName { get; set; }
         public string LastName { get; set; }
         public string PhotoUrl { get; set; }
-    }
+    };
 }

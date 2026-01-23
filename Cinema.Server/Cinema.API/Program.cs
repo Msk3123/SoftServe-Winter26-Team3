@@ -21,6 +21,7 @@ builder.Services.AddScoped<ISessionRepository, SessionRepository>();
 builder.Services.AddScoped<IActorRepository, ActorRepository>();
 builder.Services.AddScoped<IGenreRepository, GenreRepository>();
 builder.Services.AddScoped<INewsRepository, NewsRepository>();
+builder.Services.AddScoped<IMovieRepository, MovieRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 
 //swagger
