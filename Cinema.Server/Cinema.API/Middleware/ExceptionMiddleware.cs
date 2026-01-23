@@ -34,18 +34,33 @@ namespace Cinema.API.Middleware
         private async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             context.Response.ContentType = "application/json";
-            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+
+            var statusCode = HttpStatusCode.InternalServerError;
+            var message = "An unexpected error occurred.";
+
+            switch (exception)
+            {
+                case Microsoft.EntityFrameworkCore.DbUpdateException:
+                    statusCode = HttpStatusCode.BadRequest;
+                    message = "Database integrity error: check if related IDs exist.";
+                    break;
+
+                case KeyNotFoundException: 
+                    statusCode = HttpStatusCode.NotFound;
+                    message = "The requested resource was not found.";
+                    break;
+            }
+
+            context.Response.StatusCode = (int)statusCode;
 
             var response = new ErrorResponse
             {
-                StatusCode = context.Response.StatusCode,
-                Message = "Internal Server Error. Please try again later.",
+                StatusCode = (int)statusCode,
+                Message = message,
             };
 
             var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
-            var json = JsonSerializer.Serialize(response, options);
-
-            await context.Response.WriteAsync(json);
+            await context.Response.WriteAsync(JsonSerializer.Serialize(response, options));
         }
     }
 }
