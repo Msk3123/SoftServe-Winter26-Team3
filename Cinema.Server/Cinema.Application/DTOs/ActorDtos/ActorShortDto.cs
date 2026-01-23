@@ -4,10 +4,11 @@ using System.Text;
 
 namespace Cinema.Application.DTOs
 {
-    public record ActorShortDto(
-        int Id,
-        string FirstName,
-        string LastName,
-        string PhotoUrl
-    );
+    public record ActorShortDto
+    {
+        public int Id { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string PhotoUrl { get; set; }
+    };
 }

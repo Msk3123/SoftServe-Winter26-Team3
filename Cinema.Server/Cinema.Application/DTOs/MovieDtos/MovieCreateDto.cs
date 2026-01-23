@@ -5,31 +5,32 @@ using System.Text;
 
 namespace Cinema.Application.DTOs.MovieDtos
 {
-    public record MovieCreateDto(
+    public record MovieCreateDto
+    {
         [Required(ErrorMessage = "Title is required")]
-        string Title,
+        public string Title { get; set; }
 
-        [Range(1, int.MaxValue, ErrorMessage = "Duration must be positive")]
-        int Duration,
-        [Range(0.0, 10.0, ErrorMessage = "Rating must be between 0.0 and 10.0")]
-        decimal Rating,
+        [Range(1,int.MaxValue, ErrorMessage = "Duration must be positive")]
+        public int Duration { get; set; }
+        [Range(0.0, 10.0,ErrorMessage = "Rating must be between 0.0 and 10.0")]
+        public decimal Rating { get; set; }
 
-        string Description,
+        public string Description { get; set; }
 
         [Url(ErrorMessage = "Invalid Poster URL format")]
-        string PosterUrl,
+        public string PosterUrl { get; set; }
 
         [Url(ErrorMessage = "Invalid Trailer URL format")]
-        string TrailerUrl,
+        public string TrailerUrl { get; set; }
 
-        [StringLength(2, MinimumLength = 2, ErrorMessage = "Language code must be exactly 2 characters(en,fr,ua etc.)")]
-        string Language,
+        [StringLength(2, MinimumLength = 2 , ErrorMessage = "Language code must be exactly 2 characters(en{ get; set; }fr{ get; set; }ua etc.)")]
+        public string Language { get; set; }
 
-        DateOnly ReleaseDate,
-        DateOnly StartDate,
-        DateOnly EndDate,
+        public DateOnly ReleaseDate { get; set; }
+        public DateOnly StartDate { get; set; }
+        public DateOnly EndDate { get; set; }
 
-        List<int> GenreIds,
-        List<int> ActorIds
-    );
+        public List<int> GenreIds{ get; set; }
+        public List<int> ActorIds { get; set; }
+    }
 }

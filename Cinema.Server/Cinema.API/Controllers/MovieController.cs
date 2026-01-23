@@ -25,7 +25,7 @@ namespace Cinema.API.Controllers
             _mapper = mapper;
         }
 
-        // GET: api/movies
+        // GET: api/movie
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -35,7 +35,7 @@ namespace Cinema.API.Controllers
             return Ok(response);
         }
 
-        // GET: api/movies/paged?pageNumber=1&pageSize=10
+        // GET: api/movie/paged?pageNumber=1&pageSize=10
         [HttpGet("paged")]
         public async Task<ActionResult> GetPaged([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
@@ -46,7 +46,7 @@ namespace Cinema.API.Controllers
             return Ok(new { Items = dtos, TotalCount = totalCount, PageNumber = pageNumber, PageSize = pageSize });
         }
 
-        // GET: api/movies/upcoming
+        // GET: api/movie/upcoming
         [HttpGet("upcoming")]
         public async Task<ActionResult<IEnumerable<Movie>>> GetUpcoming()
         {
@@ -56,7 +56,7 @@ namespace Cinema.API.Controllers
             return Ok(response);
         }
 
-        // GET: api/movies/now-showing
+        // GET: api/movie/now-showing
         [HttpGet("now-showing")]
         public async Task<ActionResult<IEnumerable<Movie>>> GetNowShowing()
         {
@@ -65,7 +65,7 @@ namespace Cinema.API.Controllers
 
             return Ok(response);
         }
-        // GET: api/movies/genre/{genreId}
+        // GET: api/movie/genre/{genreId}
         [HttpGet("genre/{genreId}")]
         public async Task<ActionResult<IEnumerable<Movie>>> GetByGenre(int genreId)
         {
@@ -75,7 +75,7 @@ namespace Cinema.API.Controllers
             return Ok(response);
         }
 
-        // GET: api/movies/genre/{genreId}
+        // GET: api/movie/actor/{actorId}
         [HttpGet("actor/{actorId}")]
         public async Task<ActionResult<IEnumerable<Movie>>> GetByActor(int actorId)
         {
@@ -85,7 +85,7 @@ namespace Cinema.API.Controllers
             return Ok(response);
         }
 
-        // GET: api/movies/{id}
+        // GET: api/movie/{id}
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -96,7 +96,7 @@ namespace Cinema.API.Controllers
             return Ok(response);
         }
 
-        // POST: api/movies
+        // POST: api/movie
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] MovieCreateDto dto)
         {
@@ -111,7 +111,7 @@ namespace Cinema.API.Controllers
             return CreatedAtAction(nameof(GetById), new { id = movie.MovieId }, response);
 
         }
-        // PUT: api/movies/{id}
+        // PUT: api/movie/{id}
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] MovieCreateDto dto)
         {
@@ -120,15 +120,15 @@ namespace Cinema.API.Controllers
 
             _mapper.Map(dto, movie);
 
-            MovieHelper.UpdateGenres(movie, dto.GenreIds);
-            MovieHelper.UpdateActors(movie, dto.ActorIds);
+            //MovieHelper.UpdateGenres(movie, dto.GenreIds);
+            //MovieHelper.UpdateActors(movie, dto.ActorIds);
 
             await _movieRepository.SaveAsync();
 
             return NoContent();
         }
 
-        // PATCH: api/movies/{id}
+        // PATCH: api/movie/{id}
         [HttpPatch("{id}")]
         public async Task<IActionResult> Patch(int id, [FromBody] MoviePatchDto dto)
         {
@@ -137,22 +137,22 @@ namespace Cinema.API.Controllers
 
             _mapper.Map(dto, movie);
 
-            if (dto.GenreIds != null)
-            {
-                MovieHelper.UpdateGenres(movie, dto.GenreIds);
-            }
+            //if (dto.GenreIds != null)
+            //{
+            //    MovieHelper.UpdateGenres(movie, dto.GenreIds);
+            //}
 
-            if (dto.ActorIds != null)
-            {
-                MovieHelper.UpdateActors(movie, dto.ActorIds);
-            }
+            //if (dto.ActorIds != null)
+            //{
+            //    MovieHelper.UpdateActors(movie, dto.ActorIds);
+            //}
 
             await _movieRepository.SaveAsync();
 
             return NoContent();
         }
 
-        // DELETE: api/movies/{id}
+        // DELETE: api/movie/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

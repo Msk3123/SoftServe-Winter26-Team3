@@ -2,17 +2,17 @@
 
 namespace Cinema.Application.DTOs.MovieDtos
 {
-    public record  MoviePatchDto
-    (
-        string? Title = null,
-        int? Duration = null ,
-        decimal? Rating = null,
-        string? Description = null,
-        string? PosterUrl = null,
-        string? TrailerUrl = null,
-        string? Language = null,
-        DateOnly? ReleaseDate = null,
-        List<int>? GenreIds = null,
-        List<int>? ActorIds = null
-    );
+    public record MoviePatchDto
+    {
+        public string? Title {get; set; }
+        public int? Duration { get; set; }
+        public decimal? Rating { get; set; }
+        public string? Description { get; set; }
+        public string? PosterUrl { get; set; }
+        public string? TrailerUrl { get; set; }
+        public string? Language { get; set; }
+        public DateOnly? ReleaseDate { get; set; }
+        public List<int>? GenreIds { get; set; }
+        public List<int>? ActorIds { get; set; }
+    }
 }
