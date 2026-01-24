@@ -1,4 +1,6 @@
-﻿using Cinema.Application.Interfaces;
+﻿using AutoMapper;
+using Cinema.Application.DTOs.MovieDtos;
+using Cinema.Application.Interfaces;
 using Cinema.Domain.Entities;
 using Cinema.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
@@ -12,10 +14,12 @@ namespace Cinema.Persistence.Repositories
     public class MovieRepository : Repository<Movie>, IMovieRepository
     {
         private readonly AppDbContext _context;
+        private readonly IMapper _mapper;
 
-        public MovieRepository(AppDbContext context) : base(context)
+        public MovieRepository(AppDbContext context, IMapper mapper) : base(context)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public async Task<IEnumerable<Movie>> GetAllWithDetailsAsync()
@@ -76,6 +80,38 @@ namespace Cinema.Persistence.Repositories
                 .ToListAsync();
 
             return (items, totalCount);
+        }
+        public async Task UpdateMoviePatchAsync(int id, MoviePatchDto dto)
+        {
+            var movie = await _context.Movies
+                .Include(m => m.GenreMovies)
+                .Include(m => m.ActorMovies)
+                .FirstOrDefaultAsync(m => m.MovieId == id);
+
+            if (movie == null) throw new KeyNotFoundException("Movie not found");
+            _mapper.Map(dto, movie);
+
+            if (dto.GenreIds != null)
+            {
+                _context.Set<GenreMovie>().RemoveRange(movie.GenreMovies); 
+                movie.GenreMovies = dto.GenreIds.Select(gId => new GenreMovie
+                {
+                    MovieId = id,
+                    GenreId = gId
+                }).ToList();
+            }
+
+            if (dto.ActorIds != null)
+            {
+                _context.Set<ActorMovie>().RemoveRange(movie.ActorMovies);
+                movie.ActorMovies = dto.ActorIds.Select(aId => new ActorMovie
+                {
+                    MovieId = id,
+                    ActorId = aId
+                }).ToList();
+            }
+
+            await _context.SaveChangesAsync();
         }
     }
 }

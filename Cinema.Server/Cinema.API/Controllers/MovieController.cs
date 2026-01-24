@@ -156,29 +156,9 @@ namespace Cinema.API.Controllers
 
         // PATCH: api/movie/{id}
         [HttpPatch("{id}")]
-        public async Task<IActionResult> Patch(int id, [FromBody] MoviePatchDto movieDto)
+        public async Task<IActionResult> PatchMovie(int id, [FromBody] MoviePatchDto moviePatchDto)
         {
-            var movie = await _movieRepository.GetByIdWithDetailsAsync(id);
-            if (movie == null) return NotFound();
-
-            var finalReleaseDate = movieDto.ReleaseDate ?? movie.ReleaseDate;
-            var finalStartDate = movieDto.StartDate ?? movie.StartDate;
-            var finalEndDate = movieDto.EndDate ?? movie.EndDate;
-
-            if (finalStartDate < finalReleaseDate)
-            {
-                ModelState.AddModelError("StartDate", "The start date cannot be earlier than the release date.");
-            }
-
-            if (finalEndDate <= finalStartDate)
-            {
-                ModelState.AddModelError("EndDate", "End date must be later than start date.");
-            }
-
-            _mapper.Map(movieDto, movie);
-
-            await _movieRepository.SaveAsync();
-
+            await _movieRepository.UpdateMoviePatchAsync(id, moviePatchDto);
             return NoContent();
         }
 
