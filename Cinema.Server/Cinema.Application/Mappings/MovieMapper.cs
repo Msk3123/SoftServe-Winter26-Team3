@@ -37,17 +37,20 @@ namespace Cinema.Application.Mappings
                     src.ActorIds.Select(id => new ActorMovie { ActorId = id })));
 
             CreateMap<MoviePatchDto, Movie>()
-                .ForMember(dest => dest.GenreMovies, opt => opt.MapFrom(src =>
-                    src.GenreIds != null ? src.GenreIds.Select(id => new GenreMovie { GenreId = id }) : null))
-                .ForMember(dest => dest.ActorMovies, opt => opt.MapFrom(src =>
-                    src.ActorIds != null ? src.ActorIds.Select(id => new ActorMovie { ActorId = id }) : null))
+                .ForMember(dest => dest.GenreMovies, opt => opt.Ignore())
+                .ForMember(dest => dest.ActorMovies, opt => opt.Ignore())
                 .ForAllMembers(opts => {
                     opts.Condition((src, dest, srcMember) =>
-                        srcMember != null &&
-                        (srcMember is not int i || i != 0) &&
-                        (srcMember is not decimal d || d != 0m)
-        );
-    });
+                {
+                    if (srcMember == null) return false;
+
+                    if (srcMember is DateOnly date && date == default) return false;
+                    if (srcMember is int i && i == 0) return false;
+                    if (srcMember is decimal d && d == 0) return false;
+
+                    return true;
+                    });
+                });
         }
     }
 }
