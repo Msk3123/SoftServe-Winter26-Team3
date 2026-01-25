@@ -1,9 +1,6 @@
 ﻿using AutoMapper;
 using Cinema.Application.DTOs.RoleDtos;
 using Cinema.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Cinema.Application.Mappings
 {
