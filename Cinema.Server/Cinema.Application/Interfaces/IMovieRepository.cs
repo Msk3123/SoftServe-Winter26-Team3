@@ -1,20 +1,19 @@
-﻿using Cinema.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using Cinema.Application.Common.Models;
+using Cinema.Application.DTOs.MovieDtos;
+using Cinema.Domain.Entities;
 
 namespace Cinema.Application.Interfaces
 {
-    public interface IMovieRepository:IRepository<Movie>
+    public interface IMovieRepository : IRepository<Movie>
     {
-        Task<IEnumerable<Movie>> GetAllWithDetailsAsync();
         Task<Movie?> GetByIdWithDetailsAsync(int id);
 
-        Task<IEnumerable<Movie>> GetByGenreIdAsync(int genreId);
-        Task<IEnumerable<Movie>> GetByActorIdAsync(int actorId);
+        Task<(IEnumerable<Movie> Items, int TotalCount)> GetMoviesPagedAsync(QueryParameters queryParameters);
+        Task<(IEnumerable<Movie> Items, int TotalCount)> GetByActorIdPagedAsync(int actorId, QueryParameters queryParameters);
+        Task<(IEnumerable<Movie> Items, int TotalCount)> GetByGenreIdPagedAsync(int genreId, QueryParameters queryParameters);
+        Task<(IEnumerable<Movie> Items, int TotalCount)> GetUpcomingMoviesPagedAsync(QueryParameters queryParameters);
+        Task<(IEnumerable<Movie> Items, int TotalCount)> GetNowShowingMoviesPagedAsync(QueryParameters queryParameters);
 
-        Task<IEnumerable<Movie>> GetUpcomingMoviesAsync();
-        Task<IEnumerable<Movie>> GetNowShowingMoviesAsync();
-        Task<(IEnumerable<Movie> Items, int TotalCount)> GetPagedAsync(int pageNumber, int pageSize);
+        Task UpdateMoviePatchAsync(int id, MoviePatchDto dto);
     }
 }

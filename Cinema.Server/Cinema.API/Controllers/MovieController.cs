@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Cinema.Application.DTOs;
+using Cinema.Application.Common.Models;
 using Cinema.Application.DTOs;
 using Cinema.Application.DTOs.MovieDtos;
 using Cinema.Application.Interfaces;
@@ -13,76 +13,53 @@ namespace Cinema.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class MovieController : ControllerBase
+    public class MovieController : ApiBaseController
     {
         private readonly IMovieRepository _movieRepository;
-        private readonly IMapper _mapper;
 
-        public MovieController(IMovieRepository movieRepository ,IMapper mapper)
+        public MovieController(IMovieRepository movieRepository ,IMapper mapper) :base(mapper)
         {
             _movieRepository = movieRepository;
-            _mapper = mapper;
         }
-
-        // GET: api/movie
+        // GET: api/movie?page=1&limit=10&sortBy=title&order=asc
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetMovies([FromQuery] QueryParameters queryParameters)
         {
-            var movies = await _movieRepository.GetAllWithDetailsAsync();
-            var response = _mapper.Map<IEnumerable<MovieShortDto>>(movies);
-
-            return Ok(response);
-        }
-
-        // GET: api/movie/paged?pageNumber=1&pageSize=10
-        [HttpGet("paged")]
-        public async Task<ActionResult> GetPaged([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
-        {
-            var (items, totalCount) = await _movieRepository.GetPagedAsync(pageNumber, pageSize);
-
-            var dtos = _mapper.Map<IEnumerable<MovieShortDto>>(items);
-
-            return Ok(new { Items = dtos, TotalCount = totalCount, PageNumber = pageNumber, PageSize = pageSize });
+            var result = await _movieRepository.GetMoviesPagedAsync(queryParameters);
+            return OkPaged<Movie, MovieShortDto>(result, queryParameters);
         }
 
         // GET: api/movie/upcoming
         [HttpGet("upcoming")]
-        public async Task<ActionResult<IEnumerable<Movie>>> GetUpcoming()
+        public async Task<IActionResult> GetUpcoming([FromQuery] QueryParameters queryParameters)
         {
-            var movies = await _movieRepository.GetUpcomingMoviesAsync();
-            var response = _mapper.Map<IEnumerable<MovieShortDto>>(movies);
-            
-            return Ok(response);
+            var result = await _movieRepository.GetUpcomingMoviesPagedAsync(queryParameters);
+            return OkPaged<Movie, MovieShortDto>(result, queryParameters);
         }
 
         // GET: api/movie/now-showing
         [HttpGet("now-showing")]
-        public async Task<ActionResult<IEnumerable<Movie>>> GetNowShowing()
+        public async Task<IActionResult> GetNowShowing([FromQuery] QueryParameters queryParameters)
         {
-            var movies = await _movieRepository.GetNowShowingMoviesAsync();
-            var response = _mapper.Map<IEnumerable<MovieShortDto>>(movies);
-
-            return Ok(response);
+            var result = await _movieRepository.GetNowShowingMoviesPagedAsync(queryParameters);
+            return OkPaged<Movie, MovieShortDto>(result, queryParameters);
         }
         // GET: api/movie/genre/{genreId}
-        [HttpGet("genre/{genreId}")]
-        public async Task<ActionResult<IEnumerable<Movie>>> GetByGenre(int genreId)
+        [HttpGet("genre/{genreId:int}")]
+        public async Task<IActionResult> GetByGenre(int genreId, [FromQuery] QueryParameters queryParameters)
         {
-            var movies = await _movieRepository.GetByGenreIdAsync(genreId);
-            var response = _mapper.Map<IEnumerable<MovieShortDto>>(movies);
-
-            return Ok(response);
+            var result = await _movieRepository.GetByGenreIdPagedAsync(genreId, queryParameters);
+            return OkPaged<Movie, MovieShortDto>(result, queryParameters);
         }
 
         // GET: api/movie/actor/{actorId}
-        [HttpGet("actor/{actorId}")]
-        public async Task<ActionResult<IEnumerable<Movie>>> GetByActor(int actorId)
+        [HttpGet("actor/{actorId:int}")]
+        public async Task<IActionResult> GetByActor(int actorId, [FromQuery] QueryParameters queryParameters)
         {
-            var movies = await _movieRepository.GetByActorIdAsync(actorId);
-            var response = _mapper.Map<IEnumerable<MovieShortDto>>(movies);
-
-            return Ok(response);
+            var result = await _movieRepository.GetByActorIdPagedAsync(actorId, queryParameters);
+            return OkPaged<Movie, MovieShortDto>(result, queryParameters);
         }
+
 
         // GET: api/movie/{id}
         [HttpGet("{id:int}")]
@@ -99,21 +76,6 @@ namespace Cinema.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] MovieCreateDto movieDto)
         {
-            if (movieDto.StartDate < movieDto.ReleaseDate)
-            {
-                ModelState.AddModelError("StartDate", "The start date cannot be earlier than the release date.");
-            }
-
-            if (movieDto.EndDate <= movieDto.StartDate)
-            {
-                ModelState.AddModelError("EndDate", "End date must be later than start date.");
-            }
-
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var movie = _mapper.Map<Movie>(movieDto);
 
             await _movieRepository.AddAsync(movie);
@@ -123,32 +85,16 @@ namespace Cinema.API.Controllers
             var response = _mapper.Map<MovieDetailsDto>(result);
 
             return CreatedAtAction(nameof(GetById), new { id = movie.MovieId }, response);
-
         }
+
         // PUT: api/movie/{id}
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] MovieCreateDto movieDto)
         {
-            if (movieDto.StartDate < movieDto.ReleaseDate)
-            {
-                ModelState.AddModelError("StartDate", "The start date cannot be earlier than the release date.");
-            }
-
-            if (movieDto.EndDate <= movieDto.StartDate)
-            {
-                ModelState.AddModelError("EndDate", "End date must be later than start date.");
-            }
-
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var movie = await _movieRepository.GetByIdWithDetailsAsync(id);
-            if (movie == null) return NotFound();
+            if (movie == null) throw new KeyNotFoundException($"Movie with id {id} not found");
 
             _mapper.Map(movieDto, movie);
-
             await _movieRepository.SaveAsync();
 
             return NoContent();
@@ -156,29 +102,9 @@ namespace Cinema.API.Controllers
 
         // PATCH: api/movie/{id}
         [HttpPatch("{id}")]
-        public async Task<IActionResult> Patch(int id, [FromBody] MoviePatchDto movieDto)
+        public async Task<IActionResult> PatchMovie(int id, [FromBody] MoviePatchDto moviePatchDto)
         {
-            var movie = await _movieRepository.GetByIdWithDetailsAsync(id);
-            if (movie == null) return NotFound();
-
-            var finalReleaseDate = movieDto.ReleaseDate ?? movie.ReleaseDate;
-            var finalStartDate = movieDto.StartDate ?? movie.StartDate;
-            var finalEndDate = movieDto.EndDate ?? movie.EndDate;
-
-            if (finalStartDate < finalReleaseDate)
-            {
-                ModelState.AddModelError("StartDate", "The start date cannot be earlier than the release date.");
-            }
-
-            if (finalEndDate <= finalStartDate)
-            {
-                ModelState.AddModelError("EndDate", "End date must be later than start date.");
-            }
-
-            _mapper.Map(movieDto, movie);
-
-            await _movieRepository.SaveAsync();
-
+            await _movieRepository.UpdateMoviePatchAsync(id, moviePatchDto);
             return NoContent();
         }
 

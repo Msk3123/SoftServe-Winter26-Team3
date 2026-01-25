@@ -1,4 +1,6 @@
-﻿using Cinema.Application.Interfaces;
+﻿using Cinema.Application.Common.Models;
+using Cinema.Application.Helpers;
+using Cinema.Application.Interfaces;
 using Cinema.Domain.Entities;
 using Cinema.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
@@ -12,26 +14,27 @@ namespace Cinema.Persistence.Repositories
     {
         public SessionRepository(AppDbContext context) : base(context) { }
 
-        public async Task<IEnumerable<Session>> GetAllWithDetailsAsync()
+        public async Task<(IEnumerable<Session> Items, int TotalCount)> GetAllWithDetailsPagedAsync(QueryParameters queryParameters)
         {
             return await _dbSet
                 .Include(s => s.Hall)
                 .Include(s => s.Movie)
-                    .ThenInclude(m => m.ActorMovies) 
-                        .ThenInclude(am => am.Actor) 
+                    .ThenInclude(m => m.ActorMovies)
+                        .ThenInclude(am => am.Actor)
                 .Include(s => s.Movie)
-                    .ThenInclude(m => m.GenreMovies) 
-                        .ThenInclude(gm => gm.Genre) 
+                    .ThenInclude(m => m.GenreMovies)
+                        .ThenInclude(gm => gm.Genre)
                 .AsNoTracking()
-                .ToListAsync();
+                .ToPagedResultAsync(queryParameters); 
         }
 
-        public async Task<IEnumerable<Session>> GetByMovieIdAsync(int movieId)
+        public async Task<(IEnumerable<Session> Items, int TotalCount)> GetByMovieIdPagedAsync(int movieId, QueryParameters queryParameters)
         {
             return await _dbSet
                 .Where(s => s.MovieId == movieId)
                 .Include(s => s.Hall)
-                .ToListAsync();
+                .AsNoTracking()
+                .ToPagedResultAsync(queryParameters);
         }
         public async Task<Session?> GetByIdWithFullDetailsAsync(int id)
         {

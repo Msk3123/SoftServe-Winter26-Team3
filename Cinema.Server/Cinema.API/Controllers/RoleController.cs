@@ -9,15 +9,13 @@ namespace Cinema.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class RolesController : ControllerBase
+    public class RolesController : ApiBaseController
     {
         private readonly IRoleRepository _roleRepository;
-        private readonly IMapper _mapper;
 
-        public RolesController(IRoleRepository roleRepository, IMapper mapper)
+        public RolesController(IRoleRepository roleRepository, IMapper mapper):base(mapper)
         {
             _roleRepository = roleRepository;
-            _mapper = mapper;
         }
 
         [HttpGet]

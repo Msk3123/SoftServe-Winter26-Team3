@@ -9,15 +9,13 @@ namespace Cinema.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class NewsController : ControllerBase
+    public class NewsController : ApiBaseController
     {
         private readonly INewsRepository _newsRepository;
-        private readonly IMapper _mapper;
 
-        public NewsController(INewsRepository newsRepository, IMapper mapper)
+        public NewsController(INewsRepository newsRepository, IMapper mapper):base(mapper)
         {
             _newsRepository = newsRepository;
-            _mapper = mapper;
         }
         [HttpGet("active")]
         public async Task<IActionResult> GetActive()
