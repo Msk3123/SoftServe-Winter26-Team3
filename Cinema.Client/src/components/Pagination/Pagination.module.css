@@ -1,0 +1,50 @@
+.container{
+    display: flex;
+    justify-items: center;
+    justify-content:center;
+    gap: 0.5em;
+    user-select: none;
+}
+.baseBtn{
+    display: flex;
+    justify-items: center;
+    justify-content:center;
+    min-width: 2rem;
+    height: 2rem;
+    padding:0 0.75rem;
+    border-radius: 0.325rem;
+    font-size: smaller;
+    font-weight: var(--fw-medium);
+    transition: all 200ms ease-in;
+}
+.activeBtn{
+    background-color: var(--color-primary-weak);
+    color: var(--text-main);
+}
+.activeBtn:hover{
+    background-color: var(--button-hover);
+    color: var(--text-main);
+}
+.inactiveBtn{
+    color: var(--text-dark);
+}
+.inactiveBtn:hover{
+    background-color: var(--ui-border);
+    color: var(--text-main);
+}
+.navBtn{
+    
+}
+
+.navBtn:hover{
+    background-color: var(--button-hover);
+}
+.navBtn:disabled{
+    background: var(--button-disabled);
+    cursor: not-allowed;
+}
+.dots{
+    color: var(----text-secondary);
+    padding: 0 0.125rem;
+    letter-spacing: 0.1rem;
+}

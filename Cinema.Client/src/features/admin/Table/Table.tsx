@@ -19,7 +19,7 @@ const Table = <K extends string | number, T extends { id: K }>({ data }: TablePr
                                     key={row.id}
                                     rowData={row}
                                     selectedId={selectedId}
-                                    setSelectedId={()=>setSelectedId(row.id)}
+                                    setSelectedId={()=>setSelectedId(id => id===row.id ? null : row.id)}
                 />)}
             </tbody>
             </table>)

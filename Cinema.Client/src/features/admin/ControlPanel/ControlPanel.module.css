@@ -1,0 +1,9 @@
+.controlPanel{
+    display: flex;
+    justify-items: center;
+    justify-content: space-between;
+}
+
+.createButton{
+    margin-right: 2em;
+}

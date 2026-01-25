@@ -12,6 +12,7 @@ interface Props {
     borderColor?: string;
     htmlType?: 'button' | 'submit' | 'reset';
     to?: string;
+    disabled?:boolean;
 }
 
 const Button: React.FC<Props> = ({
@@ -23,7 +24,8 @@ const Button: React.FC<Props> = ({
     className = "",
     borderColor,
     htmlType = 'button',
-    to
+    to,
+    disabled = false,
 }) => {
 
     let variantClass = styles.fill;
@@ -74,6 +76,7 @@ const Button: React.FC<Props> = ({
             onClick={action}
             className={combinedClasses}
             style={dynamicStyles}
+            disabled={disabled}
         >
             {children}
         </button>
