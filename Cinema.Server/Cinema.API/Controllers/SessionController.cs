@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Cinema.Application.Common.Models;
 using Cinema.Application.DTOs.SessionDtos;
 using Cinema.Application.Interfaces;
 using Cinema.Domain.Entities;
@@ -19,18 +20,24 @@ namespace Cinema.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> getAll() {
-           var sessions = await _sessionRepository.GetAllWithDetailsAsync();
-           var response = _mapper.Map<IEnumerable<SessionShortDto>>(sessions);
-           return Ok(response);
+        public async Task<IActionResult> GetAll([FromQuery] QueryParameters queryParameters) {
+           var results = await _sessionRepository.GetAllWithDetailsPagedAsync(queryParameters);
+           return OkPaged<Session, SessionShortDto>(results, queryParameters);
         }
         [HttpGet("{id}")]
-        public async Task<IActionResult> getById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
             var session = await _sessionRepository.GetWithDetailsAsync(id);
             if(session == null) return NotFound();
             var response = _mapper.Map<SessionDetailsDto>(session);
             return Ok(response);
+        }
+        // GET: api/session/movie/{movieId}
+        [HttpGet("movie/{movieId:int}")]
+        public async Task<IActionResult> GetByMovie(int movieId, [FromQuery] QueryParameters queryParameters)
+        {
+            var results = await _sessionRepository.GetByMovieIdPagedAsync(movieId, queryParameters);
+            return OkPaged<Session, SessionShortDto>(results, queryParameters);
         }
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] SessionCreateDto dto)
@@ -41,13 +48,13 @@ namespace Cinema.API.Controllers
             await _sessionRepository.SaveAsync();
             var sessionWithDetails = await _sessionRepository.GetWithDetailsAsync(session.SessionId);
             var result = _mapper.Map<SessionShortDto>(sessionWithDetails);
-            return CreatedAtAction(nameof(getById), new { id = session.SessionId }, result);
+            return CreatedAtAction(nameof(GetById), new { id = session.SessionId }, result);
         }
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] SessionCreateDto dto)
         {
             var session = await _sessionRepository.GetByIdAsync(id);
-            if (session == null) return NotFound();
+            if (session == null) throw new KeyNotFoundException($"Session with id {id} not found");
 
             _mapper.Map(dto, session);
 
@@ -60,7 +67,7 @@ namespace Cinema.API.Controllers
         {
             var session = await _sessionRepository.GetByIdAsync(id);
 
-            if (session == null) return NotFound();
+            if (session == null) throw new KeyNotFoundException($"Session with id {id} not found");
 
             _mapper.Map(dto, session);
 
@@ -72,7 +79,7 @@ namespace Cinema.API.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var session = await _sessionRepository.GetByIdAsync(id);
-            if (session == null) return NotFound();
+            if (session == null) throw new KeyNotFoundException($"Session with id {id} not found");
 
             await _sessionRepository.DeleteAsync(id);
             await _sessionRepository.SaveAsync();
