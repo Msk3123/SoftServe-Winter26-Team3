@@ -23,4 +23,5 @@ namespace Cinema.Application.Validators.Sessions
                 .When(x => x.SessionDate.HasValue);
         }
     }
+
 }
