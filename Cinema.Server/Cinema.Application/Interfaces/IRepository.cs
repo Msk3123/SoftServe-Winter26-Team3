@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cinema.Application.Common.Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -11,5 +12,6 @@ namespace Cinema.Application.Interfaces
         Task AddAsync(T entity);
         Task SaveAsync();
         Task DeleteAsync(int id);
+        Task<(IEnumerable<T> Items, int TotalCount)> GetPagedAsync(QueryParameters queryParameters);
     }
 }

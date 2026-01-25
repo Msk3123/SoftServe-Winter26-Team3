@@ -1,8 +1,11 @@
-﻿using Cinema.Application.Interfaces;
+﻿using Cinema.Application.Common.Models;
+using Cinema.Application.Helpers;
+using Cinema.Application.Interfaces;
 using Cinema.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq.Dynamic.Core;
 using System.Text;
 
 namespace Cinema.Persistence.Repositories
@@ -34,6 +37,10 @@ namespace Cinema.Persistence.Repositories
                 _dbSet.Remove(entity);
                 
             }
+        }
+        public virtual async Task<(IEnumerable<T> Items, int TotalCount)> GetPagedAsync(QueryParameters queryParameters)
+        {
+            return await _dbSet.AsNoTracking().ToPagedResultAsync(queryParameters);
         }
     }
 }

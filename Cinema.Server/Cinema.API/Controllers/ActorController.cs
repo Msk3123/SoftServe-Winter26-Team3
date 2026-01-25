@@ -10,15 +10,13 @@ namespace Cinema.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ActorsController : ControllerBase
+    public class ActorsController : ApiBaseController
     {
         private readonly IActorRepository _actorRepository;
-        private readonly IMapper _mapper;
 
-        public ActorsController(IActorRepository actorRepository, IMapper mapper)
+        public ActorsController(IActorRepository actorRepository, IMapper mapper) :base(mapper)
         {
             _actorRepository = actorRepository;
-            _mapper = mapper;
         }
 
         [HttpGet]
