@@ -9,24 +9,28 @@ namespace Cinema.Application.Validators.News
         public NewsPatchValidator()
         {
             RuleFor(x => x.Title)
-                .NotEmpty().WithMessage("Заголовок не може бути порожнім.")
-                .MaximumLength(200).WithMessage("Заголовок не може перевищувати 200 символів.")
+                .NotEmpty().WithMessage("Title cannot be empty.")
+                .MaximumLength(200).WithMessage("Title cannot exceed 200 characters.")
                 .When(x => x.Title != null);
 
+            RuleFor(x => x.NewsContent)
+                .NotEmpty().WithMessage("News content cannot be empty.")
+                .When(x => x.NewsContent != null);
+
             RuleFor(x => x.ImageUrl)
-                .IsValidUrl().WithMessage("Некоректний формат URL.")
+                .IsValidUrl().WithMessage("Invalid image URL format.")
                 .When(x => x.ImageUrl != null);
 
             RuleFor(x => x.TagId)
-                .GreaterThan(0).WithMessage("TagId має бути більшим за 0.")
+                .GreaterThan(0).WithMessage("TagId must be greater than 0.")
                 .When(x => x.TagId.HasValue);
 
             RuleFor(x => x.MovieId)
-                .GreaterThan(0).WithMessage("MovieId має бути більшим за 0.")
+                .GreaterThan(0).WithMessage("MovieId must be greater than 0.")
                 .When(x => x.MovieId.HasValue);
 
             RuleFor(x => x.ActorId)
-                .GreaterThan(0).WithMessage("ActorId має бути більшим за 0.")
+                .GreaterThan(0).WithMessage("ActorId must be greater than 0.")
                 .When(x => x.ActorId.HasValue);
         }
     }

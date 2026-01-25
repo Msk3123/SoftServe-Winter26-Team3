@@ -9,30 +9,30 @@ namespace Cinema.Application.Validators.News
         public NewsCreateValidator()
         {
             RuleFor(x => x.Title)
-                .NotEmpty().WithMessage("Заголовок новини обов'язковий.")
-                .MaximumLength(200).WithMessage("Заголовок не може перевищувати 200 символів.");
+                .NotEmpty().WithMessage("News title is required.")
+                .MaximumLength(200).WithMessage("Title cannot exceed 200 characters.");
 
             RuleFor(x => x.NewsContent)
-                .NotEmpty().WithMessage("Контент новини не може бути порожнім.");
+                .NotEmpty().WithMessage("News content is required.");
 
             RuleFor(x => x.ImageUrl)
-                .NotEmpty().WithMessage("Посилання на зображення обов'язкове.")
-                .IsValidUrl().WithMessage("Некоректний формат URL для зображення.");
+                .NotEmpty().WithMessage("Image URL is required.")
+                .IsValidUrl().WithMessage("Invalid image URL format.");
 
             RuleFor(x => x.PublishedDate)
-                .NotEmpty().WithMessage("Дата публікації обов'язкова.")
+                .NotEmpty().WithMessage("Publication date is required.")
                 .Must(date => date.Date >= DateTime.Today)
-                .WithMessage("Дата публікації не може бути в минулому.");
+                .WithMessage("Publication date cannot be in the past.");
 
             RuleFor(x => x.TagId)
-                .GreaterThan(0).WithMessage("TagId має бути більшим за 0.");
+                .GreaterThan(0).WithMessage("TagId must be greater than 0.");
 
             RuleFor(x => x.MovieId)
-                .GreaterThan(0).WithMessage("MovieId має бути більшим за 0.")
+                .GreaterThan(0).WithMessage("MovieId must be greater than 0.")
                 .When(x => x.MovieId.HasValue);
 
             RuleFor(x => x.ActorId)
-                .GreaterThan(0).WithMessage("ActorId має бути більшим за 0.")
+                .GreaterThan(0).WithMessage("ActorId must be greater than 0.")
                 .When(x => x.ActorId.HasValue);
         }
     }
