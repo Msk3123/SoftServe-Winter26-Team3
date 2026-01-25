@@ -1,10 +1,9 @@
-﻿using Cinema.Application.Interfaces;
+﻿using Cinema.Application.Common.Models;
+using Cinema.Application.Helpers;
+using Cinema.Application.Interfaces;
 using Cinema.Domain.Entities;
 using Cinema.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Cinema.Persistence.Repositories
 {
@@ -12,26 +11,27 @@ namespace Cinema.Persistence.Repositories
     {
         public NewsRepository(AppDbContext context) : base(context) { }
 
-        public async Task<IEnumerable<News>> GetAllWithDetailsAsync()
+        public async Task<(IEnumerable<News> Items, int TotalCount)> GetAllWithDetailsPagedAsync(QueryParameters queryParameters)
         {
             return await _dbSet
                 .Include(n => n.Tag)
                 .Include(n => n.Movie)
                 .Include(n => n.Actor)
-                .OrderByDescending(n => n.PublishedDate) 
-                .AsNoTracking()
-                .ToListAsync();
-        }
-
-        public async Task<IEnumerable<News>> GetActiveNewsAsync()
-        {
-            return await _dbSet
-                .Where(n => n.IsActive) 
-                .Include(n => n.Tag)
-                .Include(n => n.Movie)
                 .OrderByDescending(n => n.PublishedDate)
                 .AsNoTracking()
-                .ToListAsync();
+                .ToPagedResultAsync(queryParameters);
+        }
+
+        public async Task<(IEnumerable<News> Items, int TotalCount)> GetActiveNewsPagedAsync(QueryParameters queryParameters)
+        {
+            return await _dbSet
+                .Where(n => n.IsActive)
+                .Include(n => n.Tag)
+                .Include(n => n.Movie)
+                .Include(n => n.Actor)
+                .OrderByDescending(n => n.PublishedDate)
+                .AsNoTracking()
+                .ToPagedResultAsync(queryParameters);
         }
 
         public async Task<News?> GetByIdWithDetailsAsync(int id)
@@ -40,7 +40,7 @@ namespace Cinema.Persistence.Repositories
                 .Include(n => n.Tag)
                 .Include(n => n.Movie)
                 .Include(n => n.Actor)
-                .FirstOrDefaultAsync(n => n.NewsId == id); 
+                .FirstOrDefaultAsync(n => n.NewsId == id);
         }
     }
 }
