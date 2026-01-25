@@ -1,0 +1,5 @@
+.table{
+    margin: 1em;
+    border: 1px var(--text-secondary) solid;
+    border-collapse: collapse;
+}
