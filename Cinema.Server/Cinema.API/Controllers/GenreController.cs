@@ -10,15 +10,14 @@ namespace Cinema.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class GenresController : ControllerBase
+    public class GenresController : ApiBaseController
     {
         private readonly IGenreRepository _genreRepository;
-        private readonly IMapper _mapper;
 
-        public GenresController(IGenreRepository genreRepository, IMapper mapper)
+
+        public GenresController(IGenreRepository genreRepository, IMapper mapper):base(mapper)
         {
             _genreRepository = genreRepository;
-            _mapper = mapper;
         }
 
         [HttpGet]

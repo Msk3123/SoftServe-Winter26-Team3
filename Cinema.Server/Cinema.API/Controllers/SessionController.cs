@@ -9,15 +9,13 @@ namespace Cinema.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class SessionController : ControllerBase
+    public class SessionController : ApiBaseController
     {
         private readonly ISessionRepository _sessionRepository;
-        private readonly IMapper _mapper;
 
-        public SessionController(ISessionRepository sessionRepository, IMapper mapper)
+        public SessionController(ISessionRepository sessionRepository, IMapper mapper):base(mapper)
         {
             _sessionRepository = sessionRepository;
-            _mapper = mapper;
         }
 
         [HttpGet]
