@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
+using Cinema.Application.Common.Models;
 using Cinema.Application.DTOs;
 using Cinema.Application.DTOs.ActorDtos;
 using Cinema.Application.Interfaces;
 using Cinema.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Cinema.API.Controllers
 {
@@ -14,20 +14,20 @@ namespace Cinema.API.Controllers
     {
         private readonly IActorRepository _actorRepository;
 
-        public ActorsController(IActorRepository actorRepository, IMapper mapper) :base(mapper)
+        public ActorsController(IActorRepository actorRepository, IMapper mapper) : base(mapper)
         {
             _actorRepository = actorRepository;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ActorShortDto>>> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] QueryParameters queryParameters)
         {
-            var actors = await _actorRepository.GetAll().ToListAsync();
-            return Ok(_mapper.Map<IEnumerable<ActorShortDto>>(actors));
+            var results = await _actorRepository.GetAllPagedAsync(queryParameters);
+            return OkPaged<Actor, ActorShortDto>(results, queryParameters);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ActorDetailsDto>> GetById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
             var actor = await _actorRepository.GetByIdWithMoviesAsync(id);
             if (actor == null) return NotFound();
@@ -36,23 +36,21 @@ namespace Cinema.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ActorShortDto>> Create(ActorCreateDto dto)
+        public async Task<IActionResult> Create([FromBody] ActorCreateDto dto)
         {
             var actor = _mapper.Map<Actor>(dto);
             await _actorRepository.AddAsync(actor);
             await _actorRepository.SaveAsync();
 
-            return CreatedAtAction(nameof(GetById), new { id = actor.ActorId }, _mapper.Map<ActorShortDto>(actor));
+            var response = _mapper.Map<ActorShortDto>(actor);
+            return CreatedAtAction(nameof(GetById), new { id = actor.ActorId }, response);
         }
+
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, ActorCreateDto dto)
+        public async Task<IActionResult> Update(int id, [FromBody] ActorCreateDto dto)
         {
             var actor = await _actorRepository.GetByIdAsync(id);
-
-            if (actor == null)
-            {
-                return NotFound();
-            }
+            if (actor == null) return NotFound();
 
             _mapper.Map(dto, actor);
             await _actorRepository.SaveAsync();
@@ -61,7 +59,7 @@ namespace Cinema.API.Controllers
         }
 
         [HttpPatch("{id}")]
-        public async Task<IActionResult> Patch(int id, ActorPatchDto dto)
+        public async Task<IActionResult> Patch(int id, [FromBody] ActorPatchDto dto)
         {
             var actor = await _actorRepository.GetByIdAsync(id);
             if (actor == null) return NotFound();
@@ -75,8 +73,12 @@ namespace Cinema.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
+            var actor = await _actorRepository.GetByIdAsync(id);
+            if (actor == null) return NotFound();
+
             await _actorRepository.DeleteAsync(id);
             await _actorRepository.SaveAsync();
+
             return NoContent();
         }
     }
