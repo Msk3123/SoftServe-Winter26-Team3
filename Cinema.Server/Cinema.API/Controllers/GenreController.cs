@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
+using Cinema.Application.Common.Models;
 using Cinema.Application.DTOs;
 using Cinema.Application.DTOs.GenreDtos;
 using Cinema.Application.Interfaces;
 using Cinema.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Cinema.API.Controllers
 {
@@ -14,21 +14,20 @@ namespace Cinema.API.Controllers
     {
         private readonly IGenreRepository _genreRepository;
 
-
-        public GenresController(IGenreRepository genreRepository, IMapper mapper):base(mapper)
+        public GenresController(IGenreRepository genreRepository, IMapper mapper) : base(mapper)
         {
             _genreRepository = genreRepository;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<GenreDto>>> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] QueryParameters queryParameters)
         {
-            var genres = await _genreRepository.GetAll().ToListAsync();
-            return Ok(_mapper.Map<IEnumerable<GenreDto>>(genres));
+            var results = await _genreRepository.GetAllPagedAsync(queryParameters);
+            return OkPaged<Genre, GenreDto>(results, queryParameters);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<GenreDto>> GetById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
             var genre = await _genreRepository.GetByIdAsync(id);
             if (genre == null) return NotFound();
@@ -37,17 +36,18 @@ namespace Cinema.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<GenreDto>> Create(GenreCreateDto dto)
+        public async Task<IActionResult> Create([FromBody] GenreCreateDto dto)
         {
             var genre = _mapper.Map<Genre>(dto);
             await _genreRepository.AddAsync(genre);
             await _genreRepository.SaveAsync();
 
-            return CreatedAtAction(nameof(GetById), new { id = genre.GenreId }, _mapper.Map<GenreDto>(genre));
+            var response = _mapper.Map<GenreDto>(genre);
+            return CreatedAtAction(nameof(GetById), new { id = genre.GenreId }, response);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, GenreCreateDto dto)
+        public async Task<IActionResult> Update(int id, [FromBody] GenreCreateDto dto)
         {
             var genre = await _genreRepository.GetByIdAsync(id);
             if (genre == null) return NotFound();
@@ -59,7 +59,7 @@ namespace Cinema.API.Controllers
         }
 
         [HttpPatch("{id}")]
-        public async Task<IActionResult> Patch(int id, GenrePatchDto dto)
+        public async Task<IActionResult> Patch(int id, [FromBody] GenrePatchDto dto)
         {
             var genre = await _genreRepository.GetByIdAsync(id);
             if (genre == null) return NotFound();
@@ -73,8 +73,12 @@ namespace Cinema.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
+            var genre = await _genreRepository.GetByIdAsync(id);
+            if (genre == null) return NotFound();
+
             await _genreRepository.DeleteAsync(id);
             await _genreRepository.SaveAsync();
+
             return NoContent();
         }
     }
