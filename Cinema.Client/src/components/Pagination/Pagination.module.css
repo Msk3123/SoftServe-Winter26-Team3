@@ -33,7 +33,8 @@
     color: var(--text-main);
 }
 .navBtn{
-    
+    width: 2rem;
+    height: 2rem;
 }
 
 .navBtn:hover{

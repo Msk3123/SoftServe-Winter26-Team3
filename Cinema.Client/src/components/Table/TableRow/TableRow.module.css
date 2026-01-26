@@ -13,6 +13,6 @@
     padding: 0;
 }
 
-.controlCell > button{
+.controlCell > button ,.controlCell>a{
     border-radius: 0;
 }

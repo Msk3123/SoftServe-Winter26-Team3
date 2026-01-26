@@ -1,0 +1,40 @@
+.table{
+    border-collapse: collapse;
+}
+
+.tableHead{
+    background-color: var(--color-primary-weak);
+    font-weight: var(--fw-bold);
+    border: 2px var(--text-dark) solid;
+}
+.emptyHeadCells{
+    width:4em;
+    border: 1px var(--text-secondary) solid;
+}
+.headCell{
+    padding: 0.5em 1.4em;
+    border: 1px var(--text-secondary) solid;
+    text-align: center;
+}
+
+.tableRow:nth-child(even){
+    animation: rowAnimation 1s infinite alternate-reverse;
+}
+.tableRow:nth-child(odd){
+    animation: rowAnimation 1s infinite 1s alternate-reverse;
+}
+
+
+.sceletonCell{
+    height: 4em;
+    border: 1px var(--text-secondary) solid;
+}
+
+@keyframes rowAnimation {
+    0%{
+        background-color: color-mix(in srgb, var(--color-primary-weak), #fff 70% ) ;
+    }
+    100%{
+        background-color: color-mix(in srgb, var(--color-primary-weak), #fff 10% ) ;
+    }
+}
