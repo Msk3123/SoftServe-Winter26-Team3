@@ -22,7 +22,7 @@ const initialState: ReduserState<MovieShort>= {
 };
 const AdminMoviesPage : React.FC = ()=>{
     
-    const {movies,pagination,sortParams,status,actions} = useDataList<MovieShort>(getAllMovies,initialState);
+    const {data : movies,pagination,sortParams,status,actions} = useDataList<MovieShort>(getAllMovies,initialState);
 
     const headers = [
         {value:"id",visibleValue:"№"},

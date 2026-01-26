@@ -9,8 +9,7 @@ export async function getPaginatedData<T extends { id: number }>(
         pageSize: number,
         sortBy: keyof T,
         order: "asc" | "desc"
-    },
-    signal?: AbortSignal // Додаємо цей аргумент
+    }
 ): Promise<Response<T>> {
 
     const queryParams = new URLSearchParams({
@@ -22,7 +21,7 @@ export async function getPaginatedData<T extends { id: number }>(
 
     const url = `${baseUrl}${path}?${queryParams.toString()}`;
     try{
-        const response = await fetch(url,{ signal });
+        const response = await fetch(url);
         if (!response.ok) {
             throw new Error(`Server Error: ${response.status}`);
         }

@@ -1,24 +1,20 @@
 import type { Response } from "../types/api.types";
-import type {MovieShort } from "../types/Movie.types";
 import { baseUrl, getPaginatedData } from "./Api";
+import type { FetchParams } from "./movieApi";
 
-export type FetchParams<T> = {
-    page: number;
-    pageSize: number;
-    sortBy: keyof T;
-    order: "asc" | "desc";
-};
-export const  getAllMovies = async (params: FetchParams<MovieShort>): Promise<Response<MovieShort>> => {
+export interface SessionShortDto {
+    id: number;
+    sessionDate: string;
+    sessionTime: string;
+    movieTitle: string;
+    hallName: string;
+    posterUrl: string;
+}
+
+export const  getAllSessions = async (params: FetchParams<SessionShortDto>): Promise<Response<SessionShortDto>> => {
     
     try{
-        const result= await getPaginatedData<MovieShort>("movie", params);
-        
-        result.items = result.items.map((item:MovieShort) => ({
-            ...item,
-            releaseDate: new Date(item.releaseDate),
-        }));
-        
-        return result;
+        return  getPaginatedData<SessionShortDto>("session", params);
     }catch(error){
         const err = error as Error;
         console.error(err.message);
@@ -26,8 +22,8 @@ export const  getAllMovies = async (params: FetchParams<MovieShort>): Promise<Re
     }
 };
 
-export async function deleteMovie(id:number) {
-    const url=`${baseUrl}movie/${id}`;
+export async function deleteSession(id:number) {
+    const url=`${baseUrl}session/${id}`;
     try {
         const response = await fetch(url, {
             method: 'DELETE',
@@ -41,7 +37,7 @@ export async function deleteMovie(id:number) {
         }
 
         if (response.status === 404) {
-            console.error('Movie not found');
+            console.error('Session not found');
             return false;
         }
 

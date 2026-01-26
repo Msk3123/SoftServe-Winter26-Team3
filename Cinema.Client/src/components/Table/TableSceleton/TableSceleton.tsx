@@ -15,15 +15,16 @@ const TableSceleton:React.FC<Props>=({headers})=>{
                     <th className={styles.emptyHeadCells}></th>
                 </tr>
             </thead>
+            <tbody>
             {Array.from({length:10}).map((_,i)=>{
                 return <tr key={i} className={styles.tableRow}>
                     {headers.map(v=><td key={`${i} ${v.value}`} className={styles.sceletonCell}></td>)}
                     <td key={`${i} empty 1 `} className={styles.sceletonCell}></td>
                     <td key={`${i} empty 2`} className={styles.sceletonCell}></td>
                 </tr>
-
+           
             })}
-    
+            </tbody>
         </table>
 }
 

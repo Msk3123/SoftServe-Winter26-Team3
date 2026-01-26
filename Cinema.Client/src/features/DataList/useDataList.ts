@@ -10,11 +10,10 @@ type FetchParams<T> = {
 };
 
 export default function useDataList<T extends{id:number}>(
-    fetchFn: (params: FetchParams<T>,signal?: AbortSignal) => Promise<Response<T>>,
+    fetchFn: (params: FetchParams<T>) => Promise<Response<T>>,
     initialState: ReduserState<T>
 ) {
     const [state, dispatch] = useReducer(reducer<T>, initialState);
-    const controller = new AbortController();
 
     useEffect(() => {
         const fetchMovies = async() => {
@@ -26,7 +25,7 @@ export default function useDataList<T extends{id:number}>(
                     pageSize: state.pageSize,
                     sortBy: state.sortBy,
                     order: state.order,
-                },controller.signal);
+                });
 
             dispatch({
                 type: "fetch_success",
@@ -44,8 +43,7 @@ export default function useDataList<T extends{id:number}>(
     };
 
         fetchMovies();
-        return () => controller.abort();
-    }, [state.currentPage, state.pageSize, state.sortBy, state.order,fetchFn,controller]);
+    }, [state.currentPage, state.pageSize, state.sortBy, state.order,fetchFn]);
 
     const actions = useMemo(() => ({
         setPage: (page: number) =>
@@ -69,7 +67,7 @@ export default function useDataList<T extends{id:number}>(
             dispatch({ type: 'toggle_sort', payload: key }),
     }),[]);
     return {
-        movies: state.data,
+        data: state.data,
         pagination: {
             current: state.currentPage,
             total: state.totalCount,
