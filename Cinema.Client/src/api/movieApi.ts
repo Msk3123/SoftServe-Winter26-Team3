@@ -1,13 +1,14 @@
-import type { MovieResponse, MovieShort } from "../types/Movie.types";
+import type { Response } from "../types/api.types";
+import type {MovieShort } from "../types/Movie.types";
 import { baseUrl } from "./Api";
 
 export async function getAllMovies({ page=1, pageSize=30,sortBy="id",order="asc"}:
     {
     page:number,
     pageSize:number,
-    sortBy:string,
+    sortBy:keyof MovieShort,
     order:"asc"|"desc"
-    }):Promise<MovieResponse>{
+    }):Promise<Response<MovieShort>>{
 
     const queryParams = new URLSearchParams({
         page: page.toString(),

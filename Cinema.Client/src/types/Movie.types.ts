@@ -4,10 +4,3 @@ export interface MovieShort{
     posterUrl: string;
     releaseDate: Date;
 }
-
-export interface MovieResponse {
-    items: MovieShort[];
-    totalCount:number;
-    pageNumber: number;
-    pageSize: number;
-}

@@ -1,6 +1,7 @@
-import type { MoviesAction, MoviesState } from "./movies.types";
 
-export function reducer(state: MoviesState, action: MoviesAction): MoviesState {
+import type { ReduserAction, ReduserState } from "./reduser.types";
+
+export function reducer<T extends { id: number; }>(state: ReduserState<T>, action: ReduserAction<T>):ReduserState<T>{
     switch (action.type) {
         case "fetch_start":
             return { ...state, loading: true, error: null };
@@ -21,11 +22,13 @@ export function reducer(state: MoviesState, action: MoviesAction): MoviesState {
             return{
                 ...state,
                 data:state.data?.filter(item=> item.id != action.payload),
+                totalCount: state.totalCount - 1,
             };
         case "create_item":
             return{
                 ...state,
                 data: state.data ? [...state.data, action.payload] : [action.payload],
+                totalCount: state.totalCount + 1,
             };
 
         case "fetch_error":
