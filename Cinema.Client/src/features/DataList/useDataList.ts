@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useReducer } from "react";
 import { reducer } from "./reduser";
-import type { Response } from "../../../types/api.types";
+import type { Response } from "../../types/api.types";
 import type { ReduserState } from "./reduser.types";
 type FetchParams<T> = {
     page: number;
@@ -9,11 +9,12 @@ type FetchParams<T> = {
     order: "asc" | "desc";
 };
 
-export default function useMovies<T extends{id:number}>(
-    fetchFn: (params: FetchParams<T>) => Promise<Response<T>>,
+export default function useDataList<T extends{id:number}>(
+    fetchFn: (params: FetchParams<T>,signal?: AbortSignal) => Promise<Response<T>>,
     initialState: ReduserState<T>
 ) {
     const [state, dispatch] = useReducer(reducer<T>, initialState);
+    const controller = new AbortController();
 
     useEffect(() => {
         const fetchMovies = async() => {
@@ -25,7 +26,7 @@ export default function useMovies<T extends{id:number}>(
                     pageSize: state.pageSize,
                     sortBy: state.sortBy,
                     order: state.order,
-                });
+                },controller.signal);
 
             dispatch({
                 type: "fetch_success",
@@ -43,7 +44,8 @@ export default function useMovies<T extends{id:number}>(
     };
 
         fetchMovies();
-    }, [state.currentPage, state.pageSize, state.sortBy, state.order,fetchFn]);
+        return () => controller.abort();
+    }, [state.currentPage, state.pageSize, state.sortBy, state.order,fetchFn,controller]);
 
     const actions = useMemo(() => ({
         setPage: (page: number) =>

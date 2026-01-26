@@ -1,4 +1,3 @@
-
 export type ReduserState<T extends {id:number}> = {
     data?:  readonly T[];
     loading: boolean;

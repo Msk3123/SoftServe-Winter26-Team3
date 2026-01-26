@@ -1,31 +1,18 @@
 import type { Response } from "../types/api.types";
 import type {MovieShort } from "../types/Movie.types";
-import { baseUrl } from "./Api";
+import { baseUrl, getPaginatedData } from "./Api";
 
-export async function getAllMovies({ page=1, pageSize=30,sortBy="id",order="asc"}:
-    {
-    page:number,
-    pageSize:number,
-    sortBy:keyof MovieShort,
-    order:"asc"|"desc"
-    }):Promise<Response<MovieShort>>{
-
-    const queryParams = new URLSearchParams({
-        page: page.toString(),
-        limit: pageSize.toString(),
-        sortBy,
-        order,
-    });
-
-    const url = `${baseUrl}movie?${queryParams.toString()}`;
+export type FetchParams<T> = {
+    page: number;
+    pageSize: number;
+    sortBy: keyof T;
+    order: "asc" | "desc";
+};
+export const  getAllMovies = async (params: FetchParams<MovieShort>, signal?: AbortSignal): Promise<Response<MovieShort>> => {
+    
     try{
-        const response = await fetch(url);
-        if (!response.ok) {
-            throw new Error(`Server Error: ${response.status}`);
-        }
-
-        const result = await response.json();
-
+        const result= await getPaginatedData<MovieShort>("/movies", params, signal);
+        
         result.items = result.items.map((item:MovieShort) => ({
             ...item,
             releaseDate: new Date(item.releaseDate),
@@ -37,7 +24,7 @@ export async function getAllMovies({ page=1, pageSize=30,sortBy="id",order="asc"
         console.error(err.message);
         throw err;
     }
-}
+};
 
 export async function deleteMovie(id:number) {
     const url=`${baseUrl}movie/${id}`;
