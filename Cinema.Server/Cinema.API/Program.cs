@@ -1,6 +1,7 @@
 using Cinema.API.Middleware;
 using Cinema.Application.Interfaces;
 using Cinema.Application.Mappings;
+using Cinema.Application.Services;
 using Cinema.Application.Validators.Sessions;
 using Cinema.Persistence.Context;
 using Cinema.Persistence.Repositories;
@@ -30,6 +31,8 @@ builder.Services.AddScoped<IMovieRepository, MovieRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<ITagRepository, TagRepository>();
 builder.Services.AddScoped<IHallRepository, HallRepository>();
+builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 //swagger
 builder.Services.AddEndpointsApiExplorer();
