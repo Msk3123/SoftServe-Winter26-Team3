@@ -27,7 +27,7 @@ namespace Cinema.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> getById(int id)
         {
-            var session = await _sessionRepository.GetWithDetailsAsync(id);
+            var session = await _sessionRepository.GetByIdWithFullDetailsAsync(id);
             if(session == null) return NotFound();
             var response = _mapper.Map<SessionDetailsDto>(session);
             return Ok(response);

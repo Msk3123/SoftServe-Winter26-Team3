@@ -10,7 +10,7 @@ namespace Cinema.Domain.Entities
     public class Order
     {
         [Key]
-        public int OrderIid { get; set; }
+        public int OrderId { get; set; }
         public DateTime OrderDate { get; set; }
         [Column(TypeName = "decimal(18,2)")]
         public decimal TotalAmount { get; set; }
