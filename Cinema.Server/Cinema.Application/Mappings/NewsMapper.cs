@@ -11,9 +11,9 @@ namespace Cinema.Application.Mappings
         {
             CreateMap<News, NewsShortDto>()
                 .ForMember(dest => dest.ShortContent, opt => opt.MapFrom(src =>
-                    src.NewsContent.Length > 150
-                    ? src.NewsContent.Substring(0, 150)
-                    : src.NewsContent));
+                    string.IsNullOrWhiteSpace(src.NewsContent) || src.NewsContent.Length <= 150
+                    ? src.NewsContent
+                    : src.NewsContent.Substring(0, src.NewsContent.LastIndexOf(' ', 150))));
 
             CreateMap<News, NewsDetailsDto>()
                 .ForMember(dest => dest.TagName, opt => opt.MapFrom(src => src.Tag.TagName))
