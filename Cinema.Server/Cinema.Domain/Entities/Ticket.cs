@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cinema.Domain.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,12 +10,14 @@ namespace Cinema.Domain.Entities
     public class Ticket
     {
         [Key]
-        public int ticket_id { get; set; }
-        public int order_id { get; set; }
-        [ForeignKey("order_id")]
+        public int TicketId { get; set; }
+        public int OrderId { get; set; }
+        [ForeignKey("OrderId")]
         public virtual Order Order { get; set; }
-        public int seat_id { get; set; }
-        [ForeignKey("seat_id")]
-        public virtual Seat Seat { get; set; } = null!;
+        public int SessionSeatId { get; set; }
+        [ForeignKey("SessionSeatId ")]
+        public virtual SessionSeat SessionSeat { get; set; } = null!;
+
+        public TicketType TicketTypes { get; set; }
     }
 }

@@ -8,9 +8,9 @@ namespace Cinema.Domain.Entities
     public class Genre
     {
         [Key]
-        public int genre_id { get; set; }
+        public int GenreId { get; set; }
         [Required]
-        public string name { get; set; }
+        public string GenreName { get; set; }
 
         public virtual ICollection<GenreMovie> GenreMovies { get; set; }
     }

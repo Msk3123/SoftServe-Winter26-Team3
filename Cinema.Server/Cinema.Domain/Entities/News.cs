@@ -9,15 +9,21 @@ namespace Cinema.Domain.Entities
     public class News
     {
         [Key]
-        public int news_id { get; set; }
+        public int NewsId { get; set; }
         [Required]
-        public string title { get; set; }
-        public string content { get; set; }
-        public string image_url { get; set; }
-        public DateTime published_date { get; set; }
-        public bool is_active { get; set; }
-        public int movie_id { get; set; }
-        [ForeignKey("movie_id")]
-        public virtual Movie Movie { get; set; }
+        public string Title { get; set; }
+        public string NewsContent { get; set; }
+        public string ImageUrl { get; set; }
+        public int TagId { get; set; }
+        [ForeignKey("TagId")]
+        public virtual Tag Tag { get; set; }
+        public DateTime PublishedDate { get; set; }
+        public bool IsActive { get; set; }
+        public int? MovieId { get; set; }
+        [ForeignKey("MovieId")]
+        public virtual Movie? Movie { get; set; }
+        public int? ActorId { get; set; }
+        [ForeignKey("ActorId")]
+        public virtual Actor? Actor { get; set; }
     }
 }
