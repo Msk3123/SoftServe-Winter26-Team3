@@ -1,6 +1,7 @@
 .container {
   padding: 20px 0;
   color: var(--text-main);
+  overflow-x: hidden;
 }
 .content {
   max-width: 1200px;
@@ -14,36 +15,42 @@
   font-weight: var(--fw-bold);
   text-decoration: underline var(--text-main) 2px solid;
 }
-/* media queries, wider screen, more posters? */
-.movieList {
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: row;
-  gap: 50px;
-}
 .movieItem {
-  width: 250px;
+  flex: 0 0 260px;
+  width: 260px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  cursor: pointer;
+  scroll-snap-align: center;
+  transition: transform 0.3s ease;
+}
+.movieItem:hover {
+  transform: translateY(-10px);
 }
 .arrow {
   margin: -50px 50px 0 50px;
 }
 .poster {
-  width: 250px;
-  height: 375px;
-  flex-shrink: 0;
+  width: 100%;
+  height: 380px;
   object-fit: cover;
-  border-radius: 20px;
+  border-radius: 24px;
+  transition: all 0.3s ease;
+}
+.movieItem:hover .poster {
+  box-shadow: 0 15px 30px var(--poster-bg-hover);
 }
 .title {
   font-size: 20px;
-  font-weight: var(--fw-medium);
-  height: 50px;
-  max-width: 100%;
+  font-weight: 600;
+  text-align: center;
+  color: var(--text-main);
+  margin: 0;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .headerOff {
   text-align: center;
@@ -104,10 +111,6 @@
   font-size: 20px;
   font-weight: var(--fw-light);
   margin: 30px 0 0 0;
-  /* display: -webkit-box; */
-  /* -webkit-line-clamp: 3; */
-  /* -webkit-box-orient: vertical; */
-  /* overflow: hidden; */
 }
 .newsDetailedInfo {
   display: flex;
@@ -117,7 +120,6 @@
   height: 100%;
   min-width: 180px;
 }
-
 .newsButton {
   background-color: var(--color-primary);
   border: none;
@@ -127,17 +129,131 @@
   font-weight: var(--fw-medium);
   padding: 10px 15px;
   cursor: pointer;
-  /* transition: opacity 0.2s; */
+  margin: 100px 0;
+}
+.newsButton:hover {
+  background-color: var(--button-hover);
 }
 .newsDate {
   color: var(--text-news-date);
   font-size: 24px;
   font-weight: var(--fw-light);
 }
-.newsButton {
-  margin: 100px 0;
-}
-
 .newsDate {
   margin-top: -20px;
+}
+.activeHeader {
+  font-size: 64px;
+  font-weight: bold;
+  color: var(--text-main);
+  text-align: center;
+  text-decoration: underline var(--color-primary) 4px;
+  text-underline-offset: 10px;
+  margin: 30px 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.inactiveHeader {
+  font-size: 40px;
+  font-weight: bold;
+  color: var(--text-inactive);
+  text-align: center;
+  margin: 30px 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.inactiveHeader:hover {
+  color: var(--text-hover);
+}
+.headerWrapper {
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.activeHeader,
+.inactiveHeader {
+  margin: 0;
+}
+h1 {
+  padding-bottom: 30px;
+}
+.carouselContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 0;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+.movieList {
+  display: flex;
+  gap: 30px;
+  overflow-x: auto;
+  flex: 1;
+  min-width: 0;
+  scroll-snap-type: x mandatory;
+  padding: 20px 10px;
+  scrollbar-width: none;
+}
+.movieList::-webkit-scrollbar {
+  display: none;
+}
+.navButton {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 10;
+  padding: 0 20px;
+  transition: transform 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.navButton:first-child {
+  left: -150px;
+}
+.navButton:last-child {
+  right: -150px;
+}
+.navButton img {
+  width: 40px;
+  height: 60px;
+  opacity: 0.7;
+  transition:
+    opacity 0.3s,
+    transform 0.3s;
+}
+.navButton:hover img {
+  opacity: 1;
+  transform: scale(1.2);
+}
+.buttonAllNews {
+  display: block;
+  margin: 50px auto;
+  padding: 14px 40px;
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  background-color: transparent;
+  border: 2px solid var(--button-all-news);
+  color: var(--button-all-news);
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.buttonAllNews:hover {
+  background-color: var(--button-all-news);
+  color: var(--text-main);
+  box-shadow: 0 0 25px var(--poster-bg-hover);
+  transform: translateY(-3px) scale(1.05);
+}
+.buttonAllNews:active {
+  transform: scale(0.95);
 }
