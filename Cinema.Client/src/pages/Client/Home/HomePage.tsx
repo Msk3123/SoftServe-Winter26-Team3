@@ -33,8 +33,8 @@ const HomePage: React.FC = () => {
       try {
         const endpoint =
           activeTab === "now"
-            ? "http://localhost:5199/api/Movie/now-showing"
-            : "http://localhost:5199/api/Movie/upcoming";
+            ? "https://localhost:7249/api/Movie/now-showing"
+            : "https://localhost:7249/api/Movie/upcoming";
 
         const response = await fetch(endpoint);
         if (!response.ok) {
@@ -56,7 +56,7 @@ const HomePage: React.FC = () => {
   useEffect(() => {
     const fetchNews = async () => {
       try {
-        const response = await fetch("http://localhost:5199/api/News");
+        const response = await fetch("https://localhost:7249/api/News");
         if (!response.ok) throw new Error("Failed to fetch news");
         const data = await response.json();
         // console.log("Новини з сервера:", data);
