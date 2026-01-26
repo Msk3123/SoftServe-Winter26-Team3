@@ -1,7 +1,7 @@
 import { Outlet } from "react-router";
 import  styles from  "./AdminSessionsPage.module.css"
-import Table from "../../../features/admin/Table/Table";
-import ControlPanel from "../../../features/admin/ControlPanel/ControlPanel";
+import Table from "../../../components/Table/Table";
+import ControlPanel from "../../../components/ControlPanel/ControlPanel";
 const data =[
     {id:0,value:"action",role:"main",admin:true},
     {id:1,value:"drama",role:"secondary",admin:true},
