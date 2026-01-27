@@ -1,49 +1,14 @@
-import type { Response } from "../types/api.types";
-import { baseUrl, getPaginatedData } from "./Api";
-import type { FetchParams } from "./movieApi";
 
-export interface HallShortDto {
-    id: number;
-    hallName: string;
-    capacity: number;
-}
+import type { FetchFunction } from "../types/api.types";
+import type { HallShort } from "../types/hall.types";
+import { deleteItem, getPaginatedData } from "./api";
 
-export const  getAllHalls = async (params: FetchParams<HallShortDto>): Promise<Response<HallShortDto>> => {
-    
-    try{
-        return  getPaginatedData<HallShortDto>("hall", params);
-    }catch(error){
-        const err = error as Error;
-        console.error(err.message);
-        throw err;
-    }
+
+
+export const  getAllHalls:FetchFunction<HallShort> = async (params) => {
+    return  getPaginatedData<HallShort>("hall", params);
 };
 
-export async function deletehall(id:number) {
-    const url=`${baseUrl}hall/${id}`;
-    try {
-        const response = await fetch(url, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-
-        if(response.status === 204) {
-            return true;
-        }
-
-        if (response.status === 404) {
-            console.error('hall not found');
-            return false;
-        }
-
-        if (!response.ok) {
-            throw new Error('Something went wrong on server side');
-        }
-
-    } catch (error) {
-        console.error('Request error:', error);
-        return false;
-    }
+export async function deletehall(id:number): Promise<boolean | undefined>{
+    return deleteItem("hall",id);
 };

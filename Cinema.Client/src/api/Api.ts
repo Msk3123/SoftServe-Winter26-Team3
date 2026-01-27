@@ -1,16 +1,12 @@
-import type { Response } from "../types/api.types";
+import { capitalizeFirstLetter } from "../helpers/textHelpers";
+import type { ApiResponse, BaseEntity, FetchParams} from "../types/api.types";
 
 export const baseUrl = import.meta.env.VITE_API_URL;
 
-export async function getPaginatedData<T extends { id: number }>(
+export async function getPaginatedData<T extends BaseEntity>(
     path: string,
-    { page = 1, pageSize = 30, sortBy = "id", order = "asc" }: {
-        page: number,
-        pageSize: number,
-        sortBy: keyof T,
-        order: "asc" | "desc"
-    }
-): Promise<Response<T>> {
+    { page = 1, pageSize = 30, sortBy = "id", order = "asc" }: FetchParams<T>
+): Promise<ApiResponse<T>> {
 
     const queryParams = new URLSearchParams({
         page: page.toString(),
@@ -35,3 +31,33 @@ export async function getPaginatedData<T extends { id: number }>(
         throw err;
     }
 }
+
+
+export async function deleteItem(path:string,id:number):Promise<boolean | undefined> {
+    const url=`${baseUrl}${baseUrl}/${id}`;
+    try {
+        const response = await fetch(url, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if(response.status === 204) {
+            return true;
+        }
+
+        if (response.status === 404) {
+            console.error(`${capitalizeFirstLetter(path)} with id '${id}' not found`);
+            return false;
+        }
+
+        if (!response.ok) {
+            throw new Error('Something went wrong on server side');
+        }
+
+    } catch (error) {
+        console.error('Request error:', error);
+        return false;
+    }
+};

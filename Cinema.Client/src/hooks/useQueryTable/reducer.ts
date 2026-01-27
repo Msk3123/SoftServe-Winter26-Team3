@@ -1,7 +1,7 @@
 
-import type { ReduserAction, ReduserState } from "./reduser.types";
+import type { ReducerAction, ReducerState } from "./reducer.types";
 
-export function reducer<T extends { id: number; }>(state: ReduserState<T>, action: ReduserAction<T>):ReduserState<T>{
+export function reducer<T extends { id: number|string }>(state: ReducerState<T>, action: ReducerAction<T>):ReducerState<T>{
     switch (action.type) {
         case "fetch_start":
             return { ...state, loading: true, error: null };

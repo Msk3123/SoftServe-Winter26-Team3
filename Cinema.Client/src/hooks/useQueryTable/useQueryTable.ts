@@ -1,17 +1,13 @@
 import { useEffect, useMemo, useReducer } from "react";
-import { reducer } from "./reduser";
-import type { Response } from "../../types/api.types";
-import type { ReduserState } from "./reduser.types";
-type FetchParams<T> = {
-    page: number;
-    pageSize: number;
-    sortBy: keyof T;
-    order: "asc" | "desc";
-};
+import { reducer } from "./reducer";
+import type { FetchFunction} from "../../types/api.types";
+import type { ReducerState } from "./reducer.types";
+import {defaultInitialState } from "./reducer.initial";
 
-export default function useDataList<T extends{id:number}>(
-    fetchFn: (params: FetchParams<T>) => Promise<Response<T>>,
-    initialState: ReduserState<T>
+
+export default function useQueryTable<T extends{id:number|string}>(
+    fetchFn: FetchFunction<T>,
+    initialState: ReducerState<T> = defaultInitialState as unknown as ReducerState<T>,// add 'as unknown' before the final cast, for type compatibility
 ) {
     const [state, dispatch] = useReducer(reducer<T>, initialState);
 
@@ -61,7 +57,7 @@ export default function useDataList<T extends{id:number}>(
             dispatch({type:"set_data",payload:items}),
         createItem:(item:T)=>
             dispatch({type:"create_item",payload:item}),
-        deleteItem:(id:number)=>
+        deleteItem:(id:number|string)=>
             dispatch({type:"delete_item",payload:id}),
         toggleSort: (key: keyof T) =>
             dispatch({ type: 'toggle_sort', payload: key }),
