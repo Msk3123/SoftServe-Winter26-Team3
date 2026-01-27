@@ -1,4 +1,4 @@
-import type { FetchFunction} from "../types/api.types";
+import type { DeleteFunction, FetchFunction} from "../types/api.types";
 import type { MovieShort } from "../types/movie.types.ts";
 import { deleteItem, getPaginatedData } from "./api.ts";
 
@@ -20,6 +20,6 @@ export const  getAllMovies: FetchFunction<MovieShort> = async (params) => {
     }
 };
 
-export async function deleteMovie(id:number): Promise<boolean | undefined>{
+export const deleteMovie:DeleteFunction = async (id)=>{
     return deleteItem("movie",id);
 };

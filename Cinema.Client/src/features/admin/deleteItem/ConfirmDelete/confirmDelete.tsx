@@ -1,6 +1,6 @@
 import toast from 'react-hot-toast';
 import styles from "./ConfirmDelete.module.css"
-import Button from '../Button/Button';
+import Button from '../../../../components/Button/Button';
 const confirmDelete = (message="Are you sure you want to delete that") => {
   return new Promise((resolve) => {
   toast((t) => (

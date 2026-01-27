@@ -8,11 +8,3 @@
     border:var(--text-dark);
     color: var(--text-dark);
 }
-
-.controlCell{
-    padding: 0;
-}
-
-.controlCell > button ,.controlCell>a{
-    border-radius: 0;
-}

@@ -9,7 +9,6 @@ interface TableProps<T> {
     data: readonly T[];
     columns:ColumnDef<T>[];
     handleSort:(key: keyof T)=>void;
-    handleDelete:(id: number|string) => void,
     sortParams:{
             sortBy: keyof T,
             order: "asc"|"desc",
@@ -28,7 +27,7 @@ const Table = <T extends BaseEntity>(
         handleSort,
         sortParams,
         pagination,
-        handleDelete}: TableProps<T>) => {
+    }: TableProps<T>) => {
     const [selectedId, setSelectedId] = useState<number | string | null>(null);
     
     return(<table className={styles.table}>
@@ -41,7 +40,6 @@ const Table = <T extends BaseEntity>(
                                     rowData={row}
                                     selectedId={selectedId}
                                     setSelectedId={()=>setSelectedId(id => id===row.id ? null : row.id)}
-                                    handleDelete={handleDelete}
                 />)}
             </tbody>
             </table>)

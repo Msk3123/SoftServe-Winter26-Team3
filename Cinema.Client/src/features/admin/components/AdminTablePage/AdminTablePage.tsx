@@ -1,22 +1,65 @@
-import { Outlet } from "react-router";
 import styles from "./AdminTablePage.module.css"
 import useQueryTable from "../../../../hooks/useQueryTable/useQueryTable";
 import ControlPanel from "../../../../components/ControlPanel/ControlPanel";
 import TableSceleton from "../../../../components/Table/TableSceleton/TableSceleton";
 import Table from "../../../../components/Table/Table";
-import type { BaseEntity, FetchFunction } from "../../../../types/api.types";
+import type { BaseEntity, DeleteFunction, FetchFunction } from "../../../../types/api.types";
 import type { ColumnDef } from "../../../../types/common.types";
+import Button from "../../../../components/Button/Button";
+import deleteItem from "../../deleteItem/deleteItem";
+import { useMemo } from "react";
 
 
 interface AdminTablePageProps<T extends BaseEntity>{
     columns: ColumnDef<T>[];
-    queryFn: FetchFunction<T>
-
+    queryFn: FetchFunction<T>;
+    deleteFn?: DeleteFunction;
+    isActions?:boolean;
 }
 
-const AdminTablePage = <T extends BaseEntity>({columns,queryFn}:AdminTablePageProps<T>)=>{
+const AdminTablePage = <T extends BaseEntity>({columns,queryFn,deleteFn,isActions=true}:AdminTablePageProps<T>)=>{
     
     const {data,pagination,sortParams,status,actions} = useQueryTable<T>(queryFn);
+
+    const tableColumns = useMemo(() => {
+        if (!isActions) return columns;
+
+        let handleDelete: ((id: number | string) => Promise<void>) | null = null;
+        
+        if (deleteFn) {
+            handleDelete = deleteItem({
+                deleteAsync: deleteFn,
+                deleteLocal: actions.deleteItem,
+            });
+        }
+
+        const actionsColumn: ColumnDef<T> = {
+            key: "actions",
+            title: "",
+            render: (item) => (
+                <div className={styles.actionCell}>
+                    <Button
+                        to={`./${item.id}/edit`}
+                        variant="fill"
+                        bgColor="var(--color-primary)"
+                        color="var(--text-main)"
+                    >
+                        Edit
+                    </Button>
+            
+                {handleDelete && <Button
+                        action={()=>handleDelete(item.id)}
+                        variant="fill"
+                        bgColor="var(--color-danger)"
+                        color="var(--text-main)">
+                            Delete
+                    </Button>}
+                </div>
+            )
+        };
+
+        return [...columns, actionsColumn];
+    }, [columns, isActions, deleteFn, actions]);
 
     let result;
 
@@ -27,7 +70,7 @@ const AdminTablePage = <T extends BaseEntity>({columns,queryFn}:AdminTablePagePr
                 totalPages={Math.ceil(pagination.total/pagination.pageSize)}
                 handlePageChange={actions.setPage}
             />
-            <TableSceleton columns={columns}/>
+            <TableSceleton columns={tableColumns}/>
         </>
     }else if(status.error || !data){
         result = <div>Error</div>
@@ -42,11 +85,10 @@ const AdminTablePage = <T extends BaseEntity>({columns,queryFn}:AdminTablePagePr
             />
             <Table
                 data={data}
-                columns={columns}
+                columns={tableColumns}
                 sortParams={sortParams}
                 handleSort={actions.toggleSort}
                 pagination={pagination}
-                handleDelete={actions.deleteItem}
             />
         </>
     }
@@ -54,7 +96,6 @@ const AdminTablePage = <T extends BaseEntity>({columns,queryFn}:AdminTablePagePr
 
     return(<div className={styles.container}>
                 {result}
-                <Outlet />
             </div>)
 };
 

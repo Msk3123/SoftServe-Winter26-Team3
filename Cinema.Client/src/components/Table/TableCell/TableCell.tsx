@@ -8,20 +8,10 @@ interface TableCellProps{
 }
 
 const TableCell = ({children,className,handleClick}:TableCellProps)=>{
-    let style = `${styles.tableCell} ${className??""}`;
-    let value = children;
-        
-    if(typeof value=="string"){
-        if(value.startsWith("http")){
-            value = <img src={value} alt="table-img"/>
-            style = style + ` ${styles.imageCell}`
-        }else if(value.includes("GMT")){
-            value = new Date(value).toDateString();
-        }
-    }
+    const style = `${styles.tableCell} ${className??""}`;
 
     return(<td className={style} onClick={handleClick}>
-            {value}
+            {children}
             </td> )
 };
 

@@ -21,8 +21,7 @@ const TableSceleton = <T extends BaseEntity,>({columns}:TableSceletonProps<T>)=>
             {Array.from({length:10}).map((_,i)=>{
                 return <tr key={i} className={styles.tableRow}>
                     {columns.map(v=><td key={`${i} ${String(v.key)}`} className={styles.sceletonCell}></td>)}
-                    <td key={`${i} empty 1 `} className={styles.sceletonCell}></td>
-                    <td key={`${i} empty 2`} className={styles.sceletonCell}></td>
+                    <td key={`${i}-empty-cell`} className={styles.sceletonCell}></td>
                 </tr>
 
             })}

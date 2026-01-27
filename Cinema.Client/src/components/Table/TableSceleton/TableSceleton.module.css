@@ -8,7 +8,7 @@
     border: 2px var(--text-dark) solid;
 }
 .emptyHeadCells{
-    width:4em;
+    width:8em;
     border: 1px var(--text-secondary) solid;
 }
 .headCell{

@@ -16,12 +16,13 @@ interface TableHeadProps<T>{
 const TableHead= <T extends BaseEntity>({columns,handleSort,sortParams}:TableHeadProps<T>)=>{
     return(<thead className={styles.tableHead}>
                 <tr>
-                    {columns.map(({key,title})=><TableCell key={String(key)} handleClick={()=>handleSort(key)}>
-                        {title}
-                        <span className={styles.arrow}>{sortParams.sortBy === key && (sortParams.order === "asc" ? <AiFillCaretUp/> :<AiFillCaretDown/> )}</span>
+                    {columns.map(({key,title})=>
+                        <TableCell key={String(key)} handleClick={()=> key!="actions" && handleSort(key as keyof T)}>
+                            {title}
+                            <span className={styles.arrow}>
+                                {sortParams.sortBy === key && (sortParams.order === "asc" ? <AiFillCaretUp/> :<AiFillCaretDown/> )}
+                            </span>
                         </TableCell>)}
-                    <td></td>
-                    <td></td>
                 </tr>
             </thead> )
 };

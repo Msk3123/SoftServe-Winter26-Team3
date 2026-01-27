@@ -3,12 +3,3 @@
     border: 1px var(--text-secondary) solid;
     text-align: center;
 }
-.imageCell{
-    padding: 0.05em;
-    width: 4em;
-
-}
-.imageCell img{
-    margin: 0 auto;
-    width: 100%;
-}

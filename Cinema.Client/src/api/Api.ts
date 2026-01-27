@@ -33,8 +33,8 @@ export async function getPaginatedData<T extends BaseEntity>(
 }
 
 
-export async function deleteItem(path:string,id:number):Promise<boolean | undefined> {
-    const url=`${baseUrl}${baseUrl}/${id}`;
+export async function deleteItem(path:string,id:number|string):Promise<boolean | undefined> {
+    const url=`${baseUrl}${path}/${id}`;
     try {
         const response = await fetch(url, {
             method: 'DELETE',
