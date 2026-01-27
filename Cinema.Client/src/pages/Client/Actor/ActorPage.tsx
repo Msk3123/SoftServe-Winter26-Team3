@@ -1,6 +1,6 @@
 import  styles from  "./ActorPage.module.css"
 
-const ActorPage : React.FC = ()=>{
+const ActorPage  = ()=>{
     return(<div className={styles.container}>
                 ActorPage
             </div>)

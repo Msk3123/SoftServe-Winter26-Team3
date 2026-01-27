@@ -1,6 +1,6 @@
 import  styles from  "./OrderPage.module.css"
 
-const OrderPage : React.FC = ()=>{
+const OrderPage = ()=>{
     return(<div className={styles.container}>
                 OrderPage
             </div>)

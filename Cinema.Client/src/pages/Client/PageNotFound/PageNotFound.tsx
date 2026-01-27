@@ -2,7 +2,7 @@ import styles from "./PageNotFound.module.css"
 import Button from "../../../components/Button/Button";
 
 
-const PageNotFound : React.FC = ()=>{
+const PageNotFound = ()=>{
     return (
         <div className={styles.container}>
             <div className={styles.content}>

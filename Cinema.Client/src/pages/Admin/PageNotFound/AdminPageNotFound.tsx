@@ -1,7 +1,7 @@
 import styles from "./AdminPageNotFound.module.css"
 import Button from "../../../components/Button/Button";
 
-const AdminPageNotFound : React.FC = ()=>{
+const AdminPageNotFound = ()=>{
     return (
         <div className={styles.container}>
             <div className={styles.content}>

@@ -4,7 +4,7 @@ import styles from "./Header.module.css";
 import { useState } from "react";
 import Button from "../../components/Button/Button";
 
-const Header: React.FC = () => {
+const Header = () => {
     const [isLogged, setIsLogged] = useState<boolean>(false);
     
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);

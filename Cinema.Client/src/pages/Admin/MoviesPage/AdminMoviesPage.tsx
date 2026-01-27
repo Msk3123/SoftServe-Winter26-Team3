@@ -1,62 +1,24 @@
 import { Outlet} from "react-router";
-import  styles from  "./AdminMoviesPage.module.css"
-import ControlPanel from "../../../components/ControlPanel/ControlPanel";
-import Table from "../../../components/Table/Table";
-import TableSceleton from "../../../components/Table/TableSceleton/TableSceleton";
-import type { MovieShort } from "../../../types/Movie.types";
-import type { ReduserState } from "../../../features/DataList/reduser.types";
 import { getAllMovies } from "../../../api/movieApi";
-import useDataList from "../../../features/DataList/useDataList";
+import AdminTablePage from "../../../features/admin/components/AdminTablePage/AdminTablePage";
+import type { MovieShort } from "../../../types/movie.types";
+import type { ColumnDef } from "../../../types/common.types";
 
-const initialState: ReduserState<MovieShort>= {
-    data: undefined,
-    loading: false,
-    error: null,
 
-    currentPage: 1,
-    pageSize: 10,
-    totalCount: 0,
-
-    sortBy: "id",
-    order: "asc",
-};
-const AdminMoviesPage : React.FC = ()=>{
-    
-    const {data : movies,pagination,sortParams,status,actions} = useDataList<MovieShort>(getAllMovies,initialState);
-
-    const headers = [
-        {value:"id",visibleValue:"№"},
-        {value:"title",visibleValue:"Title"},
-        {value:"posterUrl",visibleValue:"Poster"},
-        {value:"releaseDate",visibleValue:"Release Date"},
+const AdminMoviesPage = ()=>{
+    const columns: ColumnDef<MovieShort>[] = [
+        {key:"id",title:"№"},
+        {key:"title",title:"Title"},
+        {key:"posterUrl",title:"Poster"},
+        {key:"releaseDate",title:"Release Date"},
     ]
-    return(<div className={styles.container}>
-                <ControlPanel
-                    currentPage={pagination.current}
-                    totalPages={Math.ceil(pagination.total/pagination.pageSize)}
-                    handlePageChange={actions.setPage}
-                    />
-                {status.isLoading
-                    ?
-                <TableSceleton headers={headers}/>
-                    :
-                    (status.error || !movies)
-                        ?
-                    <div>Error</div>
-                        :
-                        
-                    <Table
-                        data={movies}
-                        headers={headers}
-                        sortParams={sortParams}
-                        handleSort={actions.toggleSort as (key: string) => void}
-                        pagination={pagination}
-                        handleDelete={actions.deleteItem}
-                    />
-                    }
-                
-                <Outlet />
-            </div>)
+
+    return(
+        <>
+            <AdminTablePage columns={columns} queryFn={getAllMovies}/>
+            <Outlet />
+        </>
+    )
 };
 
 export default AdminMoviesPage;
