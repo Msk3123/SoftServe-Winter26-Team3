@@ -1,20 +1,19 @@
-import React from "react";
 import styles from "./Pagination.module.css";
 import Button from "../Button/Button";
 
-interface Props {
+interface PaginationProps {
     currentPage: number;
     totalPages: number;
     onPageChange: (pageNumber: number) => void;
     maxButtons?: number;
 }
 
-const Pagination: React.FC<Props> = ({
+const Pagination= ({
     currentPage,
     totalPages,
     onPageChange,
     maxButtons = 5
-}) => {
+}:PaginationProps ) => {
 
     const getPageNumbers = () => {
         const pages = [];

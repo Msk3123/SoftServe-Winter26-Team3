@@ -1,15 +1,17 @@
+import type { BaseEntity } from "../../../types/api.types";
+import type { ColumnDef } from "../../../types/common.types";
 import styles from "./TableSceleton.module.css"
 
-interface Props{
-    headers:{value:string,visibleValue:string}[];
+interface TableSceletonProps<T>{
+    columns: ColumnDef<T>[];
 }
 
-const TableSceleton:React.FC<Props>=({headers})=>{
+const TableSceleton = <T extends BaseEntity,>({columns}:TableSceletonProps<T>)=>{
     return <table className={styles.table}>
             <thead className={styles.tableHead}>
                 <tr>
-                    {headers.map(({value,visibleValue})=><th key={value} className={styles.headCell}>
-                        {visibleValue}
+                    {columns.map(({key,title})=><th key={String(key)} className={styles.headCell}>
+                        {title}
                         </th>)}
                     <th className={styles.emptyHeadCells}></th>
                     <th className={styles.emptyHeadCells}></th>
@@ -18,11 +20,11 @@ const TableSceleton:React.FC<Props>=({headers})=>{
             <tbody>
             {Array.from({length:10}).map((_,i)=>{
                 return <tr key={i} className={styles.tableRow}>
-                    {headers.map(v=><td key={`${i} ${v.value}`} className={styles.sceletonCell}></td>)}
+                    {columns.map(v=><td key={`${i} ${String(v.key)}`} className={styles.sceletonCell}></td>)}
                     <td key={`${i} empty 1 `} className={styles.sceletonCell}></td>
                     <td key={`${i} empty 2`} className={styles.sceletonCell}></td>
                 </tr>
-           
+
             })}
             </tbody>
         </table>

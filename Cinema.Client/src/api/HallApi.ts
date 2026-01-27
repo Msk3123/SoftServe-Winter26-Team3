@@ -9,6 +9,6 @@ export const  getAllHalls:FetchFunction<HallShort> = async (params) => {
     return  getPaginatedData<HallShort>("hall", params);
 };
 
-export async function deletehall(id:number): Promise<boolean | undefined>{
+export async function deleteHall(id:number): Promise<boolean | undefined>{
     return deleteItem("hall",id);
 };

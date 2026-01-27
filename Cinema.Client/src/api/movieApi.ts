@@ -1,5 +1,5 @@
 import type { FetchFunction} from "../types/api.types";
-import type {MovieShort } from "../types/movie.types.ts";
+import type { MovieShort } from "../types/movie.types.ts";
 import { deleteItem, getPaginatedData } from "./api.ts";
 
 export const  getAllMovies: FetchFunction<MovieShort> = async (params) => {

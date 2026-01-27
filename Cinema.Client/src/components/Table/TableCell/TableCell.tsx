@@ -1,11 +1,13 @@
 import type { ReactNode } from "react";
 import  styles from  "./TableCell.module.css"
-interface Props{
+
+interface TableCellProps{
     children: ReactNode;
     className?: string;
     handleClick?:()=>void;
 }
-const TableCell : React.FC<Props> = ({children,className,handleClick})=>{
+
+const TableCell = ({children,className,handleClick}:TableCellProps)=>{
     let style = `${styles.tableCell} ${className??""}`;
     let value = children;
         

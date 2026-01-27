@@ -4,24 +4,26 @@ import Button from "../../Button/Button";
 import { deleteMovie } from "../../../api/movieApi";
 import toast from "react-hot-toast";
 import confirmDelete from "../../ConfirmDelete/confirmDelete";
+import type { BaseEntity } from "../../../types/api.types";
+import type { ColumnDef } from "../../../types/common.types";
 
-interface TableRowProps<T extends { readonly id: K }, K extends string | number> {
+interface TableRowProps<T extends BaseEntity> {
     rowData: T;
-    selectedId: K | null;
+    selectedId: string | number | null;
     setSelectedId: () => void;
-    headers:{value:string|number,visibleValue:string}[];
+    columns:ColumnDef<T>[];
     index:number;
-    handleDelete:(id: number) => void;
+    handleDelete:(id: number|string) => void;
 }
 
-const TableRow = <K extends string | number, T extends { id: K }>({
+const TableRow = <T extends BaseEntity>({
     rowData,
     selectedId,
     setSelectedId,
-    headers,
+    columns,
     index,
     handleDelete
-}: TableRowProps<T, K>) => {
+}: TableRowProps<T>) => {
     
     const {id} = rowData;
     const isSelected = selectedId === id;
@@ -47,12 +49,12 @@ const TableRow = <K extends string | number, T extends { id: K }>({
     
     return(
                 <tr className={`${styles.tableRow} ${isSelected && styles.selected}`} onClick={setSelectedId}>
-                    {headers.map(({value}
-                    ) => (
-                        <TableCell key={`${id} ${value}`}>
-                            {value=="id"?index+1:String(rowData[value as keyof T])}
+                    {columns.map(({key}) => (
+                        <TableCell key={`${id} ${String(key)}`}>
+                            {key=="id" ? index+1 : String(rowData[key as keyof T])}
                         </TableCell>
                     ))}
+
                         <TableCell key={`${id} edit`} className={styles.controlCell}>
                             <Button
                                 to={`./${id}/edit`}
@@ -62,6 +64,7 @@ const TableRow = <K extends string | number, T extends { id: K }>({
                                     Edit
                             </Button>
                         </TableCell>
+
                         <TableCell key={`${id} delete`} className={styles.controlCell}>
                             <Button
                                 action={deleteHandle}

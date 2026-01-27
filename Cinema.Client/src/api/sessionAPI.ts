@@ -4,7 +4,7 @@ import { deleteItem, getPaginatedData } from "./api";
 
 
 
-export const  getAllHalls:FetchFunction<SessionShort> = async (params) => {
+export const  getAllSessions:FetchFunction<SessionShort> = async (params) => {
     return  getPaginatedData<SessionShort>("session", params);
 };
 

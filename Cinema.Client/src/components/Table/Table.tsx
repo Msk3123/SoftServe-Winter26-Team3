@@ -2,40 +2,42 @@ import { useState } from "react";
 import  styles from  "./Table.module.css"
 import TableHead from "./TableHead/TableHead";
 import TableRow from "./TableRow/TableRow";
+import type { BaseEntity } from "../../types/api.types";
+import type { ColumnDef } from "../../types/common.types";
 
 interface TableProps<T> {
     data: readonly T[];
-    headers:{value:string,visibleValue:string}[];
-    handleSort:(key:string)=>void;
-    handleDelete:(id: number) => void,
+    columns:ColumnDef<T>[];
+    handleSort:(key: keyof T)=>void;
+    handleDelete:(id: number|string) => void,
     sortParams:{
-            sortBy: string,
+            sortBy: keyof T,
             order: "asc"|"desc",
         }
     pagination: {
         current: number;
         total: number;
         pageSize: number;
-}
+    }
 }
 
 
-const Table = <K extends string | number, T extends { id: K }>(
+const Table = <T extends BaseEntity>(
     {   data ,
-        headers,
+        columns,
         handleSort,
         sortParams,
         pagination,
         handleDelete}: TableProps<T>) => {
-    const [selectedId, setSelectedId] = useState<K | null>(null);
+    const [selectedId, setSelectedId] = useState<number | string | null>(null);
     
     return(<table className={styles.table}>
-            <TableHead headers={headers} sortParams={sortParams} handleSort={handleSort}/>
+            <TableHead columns={columns} sortParams={sortParams} handleSort={handleSort}/>
             <tbody>
                 {data.map((row,i) => <TableRow
                                     key={row.id}
                                     index={(pagination.current-1)*pagination.pageSize+i}
-                                    headers={headers}
+                                    columns={columns}
                                     rowData={row}
                                     selectedId={selectedId}
                                     setSelectedId={()=>setSelectedId(id => id===row.id ? null : row.id)}
