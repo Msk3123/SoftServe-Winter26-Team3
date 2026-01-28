@@ -1,17 +1,47 @@
+using Cinema.API.Middleware;
+using Cinema.Application.Interfaces;
+using Cinema.Application.Mappings;
+using Cinema.Application.Services;
+using Cinema.Application.Validators.Sessions;
 using Cinema.Persistence.Context;
+using Cinema.Persistence.Repositories;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 
-builder.Services.AddControllers();
+// Add services to the container.
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<Cinema.API.Filters.AsyncValidationFilter>();
+});
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
 builder.Services.AddDbContext<AppDbContext>();
 //mapper
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddAutoMapper(typeof(SessionMapper).Assembly);
+//repo
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped<ISessionRepository, SessionRepository>();
+builder.Services.AddScoped<IActorRepository, ActorRepository>();
+builder.Services.AddScoped<IGenreRepository, GenreRepository>();
+builder.Services.AddScoped<INewsRepository, NewsRepository>();
+builder.Services.AddScoped<IMovieRepository, MovieRepository>();
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+builder.Services.AddScoped<ITagRepository, TagRepository>();
+builder.Services.AddScoped<IHallRepository, HallRepository>();
+builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<ISeatRepository, SeatRepository>();
+//swagger
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+//validation
+
+builder.Services.AddValidatorsFromAssemblyContaining<SessionCreateValidator>();
 // Allow CORS for React frontend
 builder.Services.AddCors(options =>
 {
@@ -23,11 +53,14 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
-
+//exeption middleware
+app.UseMiddleware<ExceptionMiddleware>();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();

@@ -194,7 +194,7 @@ namespace Cinema.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("NewsId"));
 
-                    b.Property<int>("ActorId")
+                    b.Property<int?>("ActorId")
                         .HasColumnType("int");
 
                     b.Property<string>("ImageUrl")
@@ -204,10 +204,7 @@ namespace Cinema.Persistence.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<int>("MovieId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MovieIid")
+                    b.Property<int?>("MovieId")
                         .HasColumnType("int");
 
                     b.Property<string>("NewsContent")
@@ -237,11 +234,11 @@ namespace Cinema.Persistence.Migrations
 
             modelBuilder.Entity("Cinema.Domain.Entities.Order", b =>
                 {
-                    b.Property<int>("OrderIid")
+                    b.Property<int>("OrderId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderIid"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderId"));
 
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
@@ -258,7 +255,7 @@ namespace Cinema.Persistence.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.HasKey("OrderIid");
+                    b.HasKey("OrderId");
 
                     b.HasIndex("SessionId");
 
@@ -333,7 +330,9 @@ namespace Cinema.Persistence.Migrations
 
                     b.HasKey("SeatId");
 
-                    b.HasIndex("HallId");
+                    b.HasIndex("HallId", "SeatNo")
+                        .IsUnique()
+                        .HasDatabaseName("IX_Seat_HallId_SeatNo_Unique");
 
                     b.ToTable("Seats");
                 });
@@ -532,15 +531,11 @@ namespace Cinema.Persistence.Migrations
                 {
                     b.HasOne("Cinema.Domain.Entities.Actor", "Actor")
                         .WithMany("News")
-                        .HasForeignKey("ActorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ActorId");
 
                     b.HasOne("Cinema.Domain.Entities.Movie", "Movie")
                         .WithMany("News")
-                        .HasForeignKey("MovieId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("MovieId");
 
                     b.HasOne("Cinema.Domain.Entities.Tag", "Tag")
                         .WithMany("News")

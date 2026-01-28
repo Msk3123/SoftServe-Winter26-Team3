@@ -1,8 +1,11 @@
-﻿using Cinema.Application.Interfaces;
+﻿using Cinema.Application.Common.Models;
+using Cinema.Application.Helpers;
+using Cinema.Application.Interfaces;
 using Cinema.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq.Dynamic.Core;
 using System.Text;
 
 namespace Cinema.Persistence.Repositories
@@ -18,20 +21,26 @@ namespace Cinema.Persistence.Repositories
             _dbSet = context.Set<T>();
         }
 
-        public virtual IEnumerable<T> GetAll() => _dbSet.ToList();
+        public virtual IQueryable<T> GetAll() => _dbSet.AsNoTracking();
 
-        public virtual T GetById(int id) => _dbSet.Find(id);
+        public virtual async Task<T?> GetByIdAsync(int id) => await _dbSet.FindAsync(id);
 
-        public void Add(T entity) => _dbSet.Add(entity);
+        public virtual async Task AddAsync(T entity) => await _dbSet.AddAsync(entity);
 
-        public void Update(T entity) => _dbSet.Update(entity);
+        public virtual async Task SaveAsync() => await _context.SaveChangesAsync();
 
-        public void Delete(int id)
+        public virtual async Task DeleteAsync(int id)
         {
-            var entity = GetById(id);
-            if (entity != null) _dbSet.Remove(entity);
+            var entity = await GetByIdAsync(id);
+            if (entity != null)
+            {
+                _dbSet.Remove(entity);
+                
+            }
         }
-
-        public void Save() => _context.SaveChanges();
+        public virtual async Task<(IEnumerable<T> Items, int TotalCount)> GetPagedAsync(QueryParameters queryParameters)
+        {
+            return await _dbSet.AsNoTracking().ToPagedResultAsync(queryParameters);
+        }
     }
 }
