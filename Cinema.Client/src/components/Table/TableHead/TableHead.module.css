@@ -1,0 +1,14 @@
+.tableHead{
+    background-color: var(--color-primary-weak);
+    font-weight: var(--fw-bold);
+    border: 2px var(--text-dark) solid;
+
+}
+
+.tableHead td{
+    position: relative;
+}
+.arrow{
+    position: absolute;
+    transform: translateY(3px);
+}

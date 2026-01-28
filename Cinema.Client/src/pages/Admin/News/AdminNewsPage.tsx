@@ -1,8 +1,8 @@
 import { Outlet } from "react-router";
-import  styles from  "./AdminNewsPage.module.css"
 
-const AdminNewsPage : React.FC = ()=>{
-    return(<div className={styles.container}>
+
+const AdminNewsPage = ()=>{
+    return(<div>
                 AdminNewsPage
                 <Outlet />
             </div>)

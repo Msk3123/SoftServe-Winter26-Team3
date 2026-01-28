@@ -1,6 +1,6 @@
 import  styles from  "./SessionsPage.module.css"
 
-const SessionsPage : React.FC = ()=>{
+const SessionsPage = ()=>{
     return(<div className={styles.container}>
                 SessionsPage
             </div>)

@@ -1,11 +1,23 @@
-import { Outlet } from "react-router";
-import  styles from  "./AdminSessionsPage.module.css"
+import { Outlet} from "react-router";
+import { getAllSessions} from "../../../api/sessionAPI";
+import AdminTablePage from "../../../features/admin/components/AdminTablePage/AdminTablePage";
+import type { ColumnDef } from "../../../types/common.types";
+import type { SessionShort } from "../../../types/session.types";
 
-const AdminSessionsPage : React.FC = ()=>{
-    return(<div className={styles.container}>
-                AdminSessionsPage
+const AdminMoviesPage : React.FC = ()=>{
+    
+    const columns:ColumnDef<SessionShort>[] = [
+    { key: "id", title: "№" },
+    { key: "movieTitle", title: "Movie" },
+    { key: "sessionDate", title: "Date" },
+    { key: "sessionTime", title: "Time" },
+    { key: "hallName", title: "Hall" },
+    { key: "posterUrl", title: "Poster" },
+];
+    return( <>
+                <AdminTablePage columns={columns} queryFn={getAllSessions}/>
                 <Outlet />
-            </div>)
+            </>)
 };
 
-export default AdminSessionsPage;
+export default AdminMoviesPage;

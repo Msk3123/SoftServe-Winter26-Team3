@@ -1,7 +1,7 @@
 import Logo from "../../components/ui/Logo";
 import styles from "./AdminHeader.module.css"
 
-const AdminHeader : React.FC = ()=>{
+const AdminHeader = ()=>{
     return(
         <header className={styles.header}>
             <Logo size="small" sizeAuto={false}/>

@@ -9,7 +9,7 @@ const navItems = [
         { label: "Orders", path: "/admin/orders" },
     ];
 
-const Sidebar: React.FC = () => {
+const Sidebar = () => {
     return (
         <aside className={styles.sidebar}>
             <ul className={styles.navList}>

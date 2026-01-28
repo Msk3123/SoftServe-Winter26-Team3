@@ -1,6 +1,6 @@
 import  styles from  "./TicketsPage.module.css"
 
-const TicketsPage : React.FC = ()=>{
+const TicketsPage = ()=>{
     return(<div className={styles.container}>
                 TicketsPage
             </div>)

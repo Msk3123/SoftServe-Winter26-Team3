@@ -3,7 +3,7 @@ import styles from "./ClientPageLayout.module.css"
 import Header from "./Header";
 import Footer from "./Footer";
 
-const ClientPageLayout: React.FC = ()=>{
+const ClientPageLayout = ()=>{
     return(
         <div className={`${styles.layoutContainer} client`}>
             <Header />

@@ -1,6 +1,6 @@
 import  styles from  "./MovieDetailsPage.module.css"
 
-const MovieDetailsPage : React.FC = ()=>{
+const MovieDetailsPage = ()=>{
     return(<div className={styles.container}>
                 MovieDetailsPage
             </div>)
