@@ -234,11 +234,11 @@ namespace Cinema.Persistence.Migrations
 
             modelBuilder.Entity("Cinema.Domain.Entities.Order", b =>
                 {
-                    b.Property<int>("OrderIid")
+                    b.Property<int>("OrderId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderIid"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderId"));
 
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
@@ -255,7 +255,7 @@ namespace Cinema.Persistence.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.HasKey("OrderIid");
+                    b.HasKey("OrderId");
 
                     b.HasIndex("SessionId");
 
@@ -330,7 +330,9 @@ namespace Cinema.Persistence.Migrations
 
                     b.HasKey("SeatId");
 
-                    b.HasIndex("HallId");
+                    b.HasIndex("HallId", "SeatNo")
+                        .IsUnique()
+                        .HasDatabaseName("IX_Seat_HallId_SeatNo_Unique");
 
                     b.ToTable("Seats");
                 });
@@ -371,6 +373,9 @@ namespace Cinema.Persistence.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SessionSeatId"));
+
+                    b.Property<DateTime?>("LockExpiration")
+                        .HasColumnType("datetime2");
 
                     b.Property<int?>("LockedByUserId")
                         .HasColumnType("int");
@@ -613,7 +618,7 @@ namespace Cinema.Persistence.Migrations
                     b.HasOne("Cinema.Domain.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("LockedByUserId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Cinema.Domain.Entities.Seat", "Seat")
                         .WithMany()
@@ -624,7 +629,7 @@ namespace Cinema.Persistence.Migrations
                     b.HasOne("Cinema.Domain.Entities.Session", "Session")
                         .WithMany("SessionSeats")
                         .HasForeignKey("SessionId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Seat");

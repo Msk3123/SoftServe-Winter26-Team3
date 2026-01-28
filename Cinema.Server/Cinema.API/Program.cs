@@ -1,19 +1,30 @@
 using Cinema.API.Middleware;
 using Cinema.Application.Interfaces;
+using Cinema.Application.Interfaces.Services;
 using Cinema.Application.Mappings;
+using Cinema.Application.Services;
 using Cinema.Application.Validators.Sessions;
 using Cinema.Persistence.Context;
 using Cinema.Persistence.Repositories;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Hangfire;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
-
-
+//hangfire
+builder.Services.AddHangfire(config => config
+    .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+    .UseSimpleAssemblyNameTypeSerializer()
+    .UseRecommendedSerializerSettings()
+    .UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddHangfireServer();
 // Add services to the container.
-
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<Cinema.API.Filters.AsyncValidationFilter>();
+});
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
@@ -28,12 +39,23 @@ builder.Services.AddScoped<IGenreRepository, GenreRepository>();
 builder.Services.AddScoped<INewsRepository, NewsRepository>();
 builder.Services.AddScoped<IMovieRepository, MovieRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+builder.Services.AddScoped<ITagRepository, TagRepository>();
+builder.Services.AddScoped<IHallRepository, HallRepository>();
+builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<ISeatRepository, SeatRepository>();
+builder.Services.AddScoped<ISessionSeatRepository, SessionSeatRepository>();
+//services
+builder.Services.AddScoped<ISessionSeatService, SessionSeatService>();
+builder.Services.AddScoped<ISessionService, SessionService>();
 
+builder.Services.AddControllers()
+    .AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 //swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 //validation
-builder.Services.AddFluentValidationAutoValidation();
+
 builder.Services.AddValidatorsFromAssemblyContaining<SessionCreateValidator>();
 // Allow CORS for React frontend
 builder.Services.AddCors(options =>
@@ -48,6 +70,8 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 //exeption middleware
 app.UseMiddleware<ExceptionMiddleware>();
+//hangfire
+app.UseHangfireDashboard();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

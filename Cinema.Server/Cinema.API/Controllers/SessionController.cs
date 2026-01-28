@@ -2,6 +2,7 @@
 using Cinema.Application.Common.Models;
 using Cinema.Application.DTOs.SessionDtos;
 using Cinema.Application.Interfaces;
+using Cinema.Application.Interfaces.Services;
 using Cinema.Domain.Entities;
 using Cinema.Persistence.Context;
 using Microsoft.AspNetCore.Mvc;
@@ -12,10 +13,13 @@ namespace Cinema.API.Controllers
     [Route("api/[controller]")]
     public class SessionController : ApiBaseController
     {
-        private readonly ISessionRepository _sessionRepository;
+        private readonly ISessionService _sessionService; 
+        private readonly ISessionRepository _sessionRepository; 
 
-        public SessionController(ISessionRepository sessionRepository, IMapper mapper):base(mapper)
+        public SessionController(ISessionService sessionService, ISessionRepository sessionRepository, IMapper mapper)
+            : base(mapper)
         {
+            _sessionService = sessionService;
             _sessionRepository = sessionRepository;
         }
 
@@ -27,7 +31,7 @@ namespace Cinema.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var session = await _sessionRepository.GetWithDetailsAsync(id);
+            var session = await _sessionRepository.GetByIdWithFullDetailsAsync(id);
             if(session == null) return NotFound();
             var response = _mapper.Map<SessionDetailsDto>(session);
             return Ok(response);
@@ -39,16 +43,14 @@ namespace Cinema.API.Controllers
             var results = await _sessionRepository.GetByMovieIdPagedAsync(movieId, queryParameters);
             return OkPaged<Session, SessionShortDto>(results, queryParameters);
         }
+        
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] SessionCreateDto dto)
         {
-            var session = _mapper.Map<Session>(dto);
-
-            await _sessionRepository.AddAsync(session);
-            await _sessionRepository.SaveAsync();
-            var sessionWithDetails = await _sessionRepository.GetWithDetailsAsync(session.SessionId);
-            var result = _mapper.Map<SessionShortDto>(sessionWithDetails);
-            return CreatedAtAction(nameof(GetById), new { id = session.SessionId }, result);
+            var result = await _sessionService.CreateSessionAsync(dto);
+            var entity = await _sessionRepository.GetByIdWithFullDetailsAsync(result.Id);
+            var response = _mapper.Map<SessionShortDto>(entity);
+            return CreatedAtAction(nameof(GetById), new { id = response.Id }, response);
         }
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] SessionCreateDto dto)

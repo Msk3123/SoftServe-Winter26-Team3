@@ -8,11 +8,14 @@
   --bg-main: #FFFFFF;
   --bg-dark: #020700;
   --bg-news: #1A1A1A;
+  --poster-bg-hover: #2ECC7166;
   --text-main: #FFFFFF;
   --text-main-dark: #101012;
   --text-secondary: #5A5A5D;
   --text-dark: #000000;
   --text-news-date: #888888;
+  --text-inactive: #666;
+  --text-hover: #aaa;
   --ui-border: #BEBEBF;
   --ui-disabled: #A1D9BE;
   --button-save: #007BFF;
@@ -20,6 +23,7 @@
   --button-hover: #17C769;
   --button-inactive: #A1D9BE;
   --button-disabled: #D5E5F0;
+  --button-all-news: #2ecc71;
   --font-main: 'Poppins', sans-serif;
   --font-secondary: 'Roboto', sans-serif;
   --fw-light: 300;

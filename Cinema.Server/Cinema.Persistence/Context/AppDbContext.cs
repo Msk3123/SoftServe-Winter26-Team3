@@ -34,6 +34,12 @@ namespace Cinema.Persistence.Context
         {
             base.OnModelCreating(modelBuilder);
 
+
+
+            modelBuilder.Entity<Seat>()
+                .HasIndex(s => new { s.HallId, s.SeatNo })
+                .IsUnique()
+                .HasDatabaseName("IX_Seat_HallId_SeatNo_Unique");
             // --- Налаштування зв'язків Many-to-Many
 
             // Movie <-> Genre
@@ -65,14 +71,14 @@ namespace Cinema.Persistence.Context
                 .HasOne(ss => ss.Session)
                 .WithMany(s => s.SessionSeats)
                 .HasForeignKey(ss => ss.SessionId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
 
             modelBuilder.Entity<SessionSeat>()
                 .HasOne(ss => ss.User)
                 .WithMany()
                 .HasForeignKey(ss => ss.LockedByUserId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Cascade);
 
             // Ticket <-> SessionSeat (One-to-One)
             modelBuilder.Entity<Ticket>()

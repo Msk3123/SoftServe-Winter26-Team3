@@ -6,7 +6,7 @@ namespace Cinema.Application.DTOs.NewsDtos
 {
     public record NewsDetailsDto
     {
-        public int NewsId { get; set; }
+        public int Id { get; set; }
         public string Title { get; set; }
         public string NewsContent { get; set; } 
         public string ImageUrl { get; set; }

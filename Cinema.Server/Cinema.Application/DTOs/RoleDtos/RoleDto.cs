@@ -6,7 +6,7 @@ namespace Cinema.Application.DTOs.RoleDtos
 {
     public record RoleDto
     {
-        public int RoleId { get; set; }
+        public int Id { get; set; }
         public string RoleName { get; set; }
     }
 }
