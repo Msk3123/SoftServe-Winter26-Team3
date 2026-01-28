@@ -6,7 +6,7 @@ namespace Cinema.Application.DTOs.SessionDtos
 {
     public record SessionDetailsDto
     {
-        public int SessionId { get; set; }
+        public int Id { get; set; }
         public DateTime SessionDate { get; set; }
         public TimeSpan SessionTime { get; set; }
 
