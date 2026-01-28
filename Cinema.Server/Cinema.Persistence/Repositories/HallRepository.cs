@@ -20,5 +20,6 @@ namespace Cinema.Persistence.Repositories
                 .AsNoTracking()
                 .ToPagedResultAsync(queryParameters);
         }
+
     }
 }

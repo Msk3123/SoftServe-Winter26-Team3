@@ -13,5 +13,6 @@ namespace Cinema.Application.Interfaces
         Task<Seat?> GetByIdWithDetailsAsync(int id);
         Task<bool> ExistsAsync(int hallId, int seatNo);
         Task<bool> ExistsForOtherSeatAsync(int seatId, int hallId, int seatNo);
+        Task<IEnumerable<Seat>> GetByHallIdAsync(int hallId);
     }
 }

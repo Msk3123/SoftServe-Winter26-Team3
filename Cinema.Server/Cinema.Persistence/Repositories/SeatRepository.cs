@@ -45,5 +45,11 @@ namespace Cinema.Persistence.Repositories
                                           && s.SeatNo == seatNo
                                           && s.SeatId != seatId);
         }
+        public async Task<IEnumerable<Seat>> GetByHallIdAsync(int hallId)
+        {
+            return await _dbSet
+                .Where(s => s.HallId == hallId)
+                .ToListAsync();
+        }
     }
 }
