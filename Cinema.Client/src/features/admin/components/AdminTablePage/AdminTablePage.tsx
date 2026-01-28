@@ -8,6 +8,7 @@ import type { ColumnDef } from "../../../../types/common.types";
 import Button from "../../../../components/Button/Button";
 import deleteItem from "../../deleteItem/deleteItem";
 import { useMemo } from "react";
+import Error from "../../../../components/Error/Error";
 
 
 interface AdminTablePageProps<T extends BaseEntity>{
@@ -73,7 +74,9 @@ const AdminTablePage = <T extends BaseEntity>({columns,queryFn,deleteFn,isAction
             <TableSceleton columns={tableColumns}/>
         </>
     }else if(status.error || !data){
-        result = <div>Error</div>
+        result = <Error
+                    title={"The request could not be completed"}
+                    message={status.error??"We couldn’t load the data from the server. Please check your connection or try again later."}/>
 
     }else{
 
