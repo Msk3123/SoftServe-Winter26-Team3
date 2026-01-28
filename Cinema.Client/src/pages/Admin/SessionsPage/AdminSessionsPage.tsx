@@ -1,8 +1,8 @@
 import { Outlet} from "react-router";
-import { getAllSessions} from "../../../api/sessionAPI";
 import AdminTablePage from "../../../features/admin/components/AdminTablePage/AdminTablePage";
 import type { ColumnDef } from "../../../types/common.types";
 import type { SessionShort } from "../../../types/session.types";
+import { getAllSessions } from "../../../api/sessionAPI";
 
 const AdminMoviesPage : React.FC = ()=>{
     

@@ -17,6 +17,6 @@ export type FetchParams<T extends BaseEntity> = {
     order: "asc" | "desc";
 };
 
-export type FetchFunction<T extends BaseEntity> = (params: FetchParams<T>) => Promise<ApiResponse<T>>
+export type FetchFunction<T extends BaseEntity> = (params?: FetchParams<T>) => Promise<ApiResponse<T>>
 
 export type DeleteFunction=(id: number|string)=>Promise<boolean | undefined>;

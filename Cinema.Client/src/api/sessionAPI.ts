@@ -1,10 +1,10 @@
 import type { DeleteFunction, FetchFunction } from "../types/api.types";
 import type { SessionShort } from "../types/session.types";
-import { deleteItem, getPaginatedData } from "./api";
+import { defaultParams, deleteItem, getPaginatedData } from "./api";
 
 
 
-export const  getAllSessions:FetchFunction<SessionShort> = async (params) => {
+export const  getAllSessions:FetchFunction<SessionShort> = async (params=defaultParams) => {
     try{
         return  await getPaginatedData<SessionShort>("session", params);
     }catch(error){
