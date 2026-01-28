@@ -1,6 +1,6 @@
 import type { DeleteFunction, FetchFunction} from "../types/api.types";
-import type { MovieShort } from "../types/movie.types.ts";
-import { deleteItem, getPaginatedData } from "./api.ts";
+import type { MovieShort } from "../types/movie.types";
+import { deleteItem, getPaginatedData } from "./api";
 
 export const  getAllMovies: FetchFunction<MovieShort> = async (params) => {
     
@@ -16,7 +16,7 @@ export const  getAllMovies: FetchFunction<MovieShort> = async (params) => {
     }catch(error){
         const err = error as Error;
         console.error(err.message);
-        throw err;
+        throw new Error(`${err.message}. Failed to load movies data. Please try again later.`);
     }
 };
 

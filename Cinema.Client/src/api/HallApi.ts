@@ -6,7 +6,13 @@ import { deleteItem, getPaginatedData } from "./api";
 
 
 export const  getAllHalls:FetchFunction<HallShort> = async (params) => {
-    return  getPaginatedData<HallShort>("hall", params);
+    try{
+        return await getPaginatedData<HallShort>("hall", params);
+    }catch(error){
+        const err = error as Error;
+        console.error(err.message);
+        throw new Error(`${err.message}. Failed to load halls data. Please try again later.`);
+    }
 };
 
 export const deleteHall: DeleteFunction = async (id)=>{
