@@ -64,7 +64,7 @@ const AdminTablePage = <T extends BaseEntity>({columns,queryFn,deleteFn,isAction
 
     let result;
 
-    if(status.isLoading){
+    if(status.isLoading && !data){
         result = <>
             <ControlPanel
                 currentPage={pagination.current}

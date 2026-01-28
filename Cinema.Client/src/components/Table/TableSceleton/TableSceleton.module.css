@@ -1,5 +1,8 @@
 .table{
     border-collapse: collapse;
+    width: 100%;
+    border: 1px var(--text-secondary) solid;
+    margin-top: 1em;
 }
 
 .tableHead{
@@ -7,10 +10,7 @@
     font-weight: var(--fw-bold);
     border: 2px var(--text-dark) solid;
 }
-.emptyHeadCells{
-    width:8em;
-    border: 1px var(--text-secondary) solid;
-}
+
 .headCell{
     padding: 0.5em 1.4em;
     border: 1px var(--text-secondary) solid;
@@ -27,7 +27,7 @@
 
 .sceletonCell{
     height: 4em;
-    border: 1px var(--text-secondary) solid;
+    /* border: 1px var(--text-secondary) solid; */
 }
 
 @keyframes rowAnimation {

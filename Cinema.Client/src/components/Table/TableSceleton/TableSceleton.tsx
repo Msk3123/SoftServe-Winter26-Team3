@@ -13,8 +13,6 @@ const TableSceleton = <T extends BaseEntity,>({columns}:TableSceletonProps<T>)=>
                     {columns.map(({key,title})=><th key={String(key)} className={styles.headCell}>
                         {title}
                         </th>)}
-                    <th className={styles.emptyHeadCells}></th>
-                    <th className={styles.emptyHeadCells}></th>
                 </tr>
             </thead>
             <tbody>
