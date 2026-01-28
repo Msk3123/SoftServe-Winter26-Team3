@@ -10,5 +10,6 @@ namespace Cinema.Domain.Enums
         Reserved,
         Sold,
         Blocked
+        
     }
 }
