@@ -3,9 +3,16 @@ import type { ApiResponse, BaseEntity, FetchParams} from "../types/api.types";
 
 export const baseUrl = import.meta.env.VITE_API_URL;
 
+export const defaultParams : FetchParams<BaseEntity>= {
+    page: 1,
+    pageSize: 20,
+    sortBy: "id",
+    order: "asc"
+};
+
 export async function getPaginatedData<T extends BaseEntity>(
     path: string,
-    { page = 1, pageSize = 30, sortBy = "id", order = "asc" }: FetchParams<T>
+    { page = 1, pageSize = 20, sortBy = "id", order = "asc" } : FetchParams<T>
 ): Promise<ApiResponse<T>> {
 
     const queryParams = new URLSearchParams({

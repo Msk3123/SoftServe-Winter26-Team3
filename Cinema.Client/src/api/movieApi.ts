@@ -1,23 +1,46 @@
-import type { DeleteFunction, FetchFunction} from "../types/api.types";
+import type { ApiResponse, DeleteFunction, FetchFunction} from "../types/api.types";
 import type { MovieShort } from "../types/movie.types";
-import { deleteItem, getPaginatedData } from "./api";
+import { defaultParams, deleteItem, getPaginatedData } from "./api";
 
-export const  getAllMovies: FetchFunction<MovieShort> = async (params) => {
+
+const mapMoviesWithDate = (items: MovieShort[]): MovieShort[] => {
+    return items.map((item) => ({
+        ...item,
+        releaseDate: new Date(item.releaseDate),
+    }));
+};
+
+export const  getAllMovies: FetchFunction<MovieShort> = async (params=defaultParams) => {
     
     try{
         const result= await getPaginatedData<MovieShort>("movie", params);
-        
-        result.items = result.items.map((item:MovieShort) => ({
-            ...item,
-            releaseDate: new Date(item.releaseDate),
-        }));
-        
+        result.items = mapMoviesWithDate(result.items);
         return result;
     }catch(error){
         const err = error as Error;
-        console.error(err.message);
         throw new Error(`${err.message}. Failed to load movies data. Please try again later.`);
     }
+};
+
+export const getUpcomingMovies: FetchFunction<MovieShort> = async (params=defaultParams) => {
+    const result = await getPaginatedData<MovieShort>("Movie/upcoming", params);
+    result.items = mapMoviesWithDate(result.items);
+    return result;
+};
+
+export const getNowShowingMovies: FetchFunction<MovieShort> = async (params = defaultParams) => {
+    const result = await getPaginatedData<MovieShort>("Movie/now-showing", params);
+    result.items = mapMoviesWithDate(result.items);
+    return result;
+};
+
+//method for homePage
+export const getMovies = async (type: 'now' | 'soon'): Promise<ApiResponse<MovieShort>> => {
+        if(type==='now'){
+            return await getNowShowingMovies();
+        }else{
+            return await getUpcomingMovies();
+        }
 };
 
 export const deleteMovie:DeleteFunction = async (id)=>{

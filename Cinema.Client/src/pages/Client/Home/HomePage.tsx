@@ -1,15 +1,16 @@
 import React, { useState, useRef, useEffect } from "react";
 import styles from "./HomePage.module.css";
 import { Link } from 'react-router-dom';
-import type { Movie, News, MovieApiResponse, NewsApiResponse } from '../../../../types';
-import { getMovies } from "../../../api/movies";
-import { getNews } from "../../../api/news";
+import { getRecentNews } from "../../../api/newsApi";
 import Button from "../../../components/Button/Button";
+import type { MovieShort } from "../../../types/movie.types";
+import { getMovies } from "../../../api/movieApi";
+import type { NewsShort } from "../../../types/news.types";
 
 const HomePage = () => {
   const [activeTab, setActiveTab] = useState<"now" | "soon">("now");
-  const [movies, setMovies] = useState<Movie[]>([]);
-  const [newsList, setNewsList] = useState<News[]>([]);
+  const [movies, setMovies] = useState<MovieShort[]>([]);
+  const [newsList, setNewsList] = useState<NewsShort[]>([]);
   const [loading, setLoading] = useState(false);
   
   const listRef = useRef<HTMLDivElement>(null);
@@ -33,7 +34,10 @@ const HomePage = () => {
   useEffect(() => {
     const loadNews = async () => {
       try {
-        const cleanNews = await getNews();
+        
+        const response = await getRecentNews();
+        const cleanNews = response.items;
+
         setNewsList(cleanNews);
       } catch (error) {
         console.error("Failed to download news:", error);
@@ -104,14 +108,14 @@ const HomePage = () => {
                   <div key={movie.id} className={styles.movieItem}>
                     <img
                       src={movie.posterUrl || "/assets/placeholderImage.png"}
-                      alt={movie.movieTitle}
+                      alt={movie.title}
                       className={styles.poster}
                       onError={(e) => {
                         (e.target as HTMLImageElement).src =
                           "https://static.vecteezy.com/ti/vecteur-libre/t1/22014063-disparu-image-page-pour-site-internet-conception-ou-mobile-app-conception-non-image-disponible-icone-vecteur-vectoriel.jpg";
                       }}
                     />
-                    <p className={styles.title}>{movie.movieTitle}</p>
+                    <p className={styles.title}>{movie.title}</p>
                   </div>
                 ))
               ) : loading ? null : (
@@ -160,7 +164,7 @@ const HomePage = () => {
                 </p>
               </div>
               <div className={styles.newsDetailedInfo}>
-                <Button 
+                <Button
                     action={() => console.log("Will be open modal in future")}
                     className={styles.newsButton}
                     variant="fill"
