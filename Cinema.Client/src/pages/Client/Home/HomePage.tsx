@@ -17,10 +17,6 @@ interface MovieApiResponse {
   items: Movie[];
   totalCount: number;
 }
-interface NewsApiResponse {
-  items: News[];
-  totalCount: number;
-}
 const HomePage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<"now" | "soon">("now");
   const [movies, setMovies] = useState<Movie[]>([]);

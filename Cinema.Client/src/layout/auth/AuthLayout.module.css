@@ -1,0 +1,19 @@
+.layout {
+  background-color: var(--bg-dark);
+  background-image:
+    radial-gradient(circle at 100% 10%, color-mix(in srgb, var(--color-primary), black 84%) 0%, transparent 36%),
+    radial-gradient(circle at 0% 90%, color-mix(in srgb, var(--color-primary), black 84%) 0%, transparent 36%);
+  background-attachment: fixed;
+  background-size: cover;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.page {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem 1.5rem 3.5rem;
+}

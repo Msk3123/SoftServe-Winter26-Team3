@@ -5,8 +5,35 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="82b801f7-87d1-46fa-a82c-3d693261e5d9" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Cinema.Client/src/features/auth/api/authApi.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Cinema.Client/src/features/auth/model/authStorage.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Cinema.Client/src/features/auth/model/useAuthActions.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Cinema.Server/Cinema.API/Controllers/AuthController.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Cinema.Server/Cinema.Application/Common/Models/JwtOptions.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Cinema.Server/Cinema.Application/DTOs/AuthDtos/AuthResponseDto.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Cinema.Server/Cinema.Application/DTOs/AuthDtos/LoginRequestDto.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Cinema.Server/Cinema.Application/DTOs/AuthDtos/SignUpRequestDto.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Cinema.Server/Cinema.Application/Interfaces/IAuthService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Cinema.Server/Cinema.Application/Interfaces/IJwtTokenGenerator.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Cinema.Server/Cinema.Application/Services/Auth/AuthService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Cinema.Server/Cinema.Application/Services/Auth/JwtTokenGenerator.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Cinema.Server/Cinema.Application/Validators/Auth/LoginRequestDtoValidator.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Cinema.Server/Cinema.Application/Validators/Auth/SignUpRequestDtoValidator.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cinema.Client/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Cinema.Client/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cinema.Client/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/Cinema.Client/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cinema.Client/src/api/Api.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Cinema.Client/src/api/Api.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cinema.Client/src/app/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Cinema.Client/src/app/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cinema.Client/src/app/router/routes.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Cinema.Client/src/app/router/routes.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cinema.Client/src/features/auth/Login.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/Cinema.Client/src/features/auth/Login.module.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cinema.Client/src/features/auth/Login.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Cinema.Client/src/features/auth/Login.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cinema.Client/src/features/auth/SignUp.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/Cinema.Client/src/features/auth/SignUp.module.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cinema.Client/src/features/auth/SignUp.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Cinema.Client/src/features/auth/SignUp.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cinema.Client/src/layout/auth/AuthLayout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Cinema.Client/src/layout/auth/AuthLayout.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Cinema.Client/src/main.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Cinema.Client/src/main.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cinema.Client/src/pages/Client/Home/HomePage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/Cinema.Client/src/pages/Client/Home/HomePage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cinema.Server/Cinema.API/Cinema.API.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Cinema.Server/Cinema.API/Cinema.API.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cinema.Server/Cinema.API/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Cinema.Server/Cinema.API/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cinema.Server/Cinema.API/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/Cinema.Server/Cinema.API/appsettings.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,11 +79,23 @@
 }</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/Cinema.Client/package-lock.json" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Cinema.Server/Cinema.API/Controllers/AuthController.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Cinema.Server/Cinema.API/Program.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Cinema.Server/Cinema.Application/Common/Models/JwtOptions.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Cinema.Server/Cinema.Application/DTOs/AuthDtos/AuthResponseDto.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Cinema.Server/Cinema.Application/DTOs/AuthDtos/LoginRequestDto.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Cinema.Server/Cinema.Application/DTOs/AuthDtos/SignUpRequestDto.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Cinema.Server/Cinema.Application/Interfaces/IAuthService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Cinema.Server/Cinema.Application/Interfaces/IJwtTokenGenerator.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Cinema.Server/Cinema.Application/Services/Auth/AuthService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Cinema.Server/Cinema.Application/Services/Auth/JwtTokenGenerator.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Cinema.Server/Cinema.Application/Validators/Auth/LoginRequestDtoValidator.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Cinema.Server/Cinema.Application/Validators/Auth/SignUpRequestDtoValidator.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Cinema.Server/Cinema.Domain/Entities/Genre.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Cinema.Server/Cinema.Domain/Entities/GenreMovie.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Cinema.Server/Cinema.Domain/Entities/User.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Cinema.Server/Cinema.Persistence/Context/AppDbContext.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Cinema.Server/Cinema.Persistence/Migrations/20260115185137_init.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Cinema.Server/Cinema.Persistence/Migrations/20260115185137_init.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="McpProjectServerCommands">
     <commands />
@@ -67,6 +106,9 @@
   &quot;associatedIndex&quot;: 5
 }</component>
   <component name="ProjectId" id="38R45ZtPhCQDpocaURH984yJ3op" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />

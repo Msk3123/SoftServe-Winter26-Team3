@@ -1,4 +1,4 @@
-import { Link, Outlet } from 'react-router'
+import { Link, Outlet } from 'react-router-dom'
 
 const RootLayout = () => (
     <div className="app-shell">
@@ -10,14 +10,11 @@ const RootLayout = () => (
                 <Link to="/" className="nav__item">
                     Головна
                 </Link>
-                <Link to="/sessions" className="nav__item">
-                    Сеанси
+                <Link to="/auth/login" className="nav__item">
+                    Вхід
                 </Link>
-                <Link to="/news" className="nav__item">
-                    Новини
-                </Link>
-                <Link to="/auth" className="nav__item">
-                    Регістрація
+                <Link to="/auth/signup" className="nav__item">
+                    Реєстрація
                 </Link>
             </nav>
         </header>

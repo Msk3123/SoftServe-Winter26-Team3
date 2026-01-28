@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './Button.module.css';
-import { NavLink } from 'react-router';
+import { NavLink } from 'react-router-dom';
 
 interface Props {
     children: React.ReactNode;

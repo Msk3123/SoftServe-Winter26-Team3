@@ -1,4 +1,4 @@
-import { Outlet } from "react-router";
+import { Outlet } from "react-router-dom";
 import  styles from  "./AdminMoviesPage.module.css"
 
 const AdminMoviesPage : React.FC = ()=>{

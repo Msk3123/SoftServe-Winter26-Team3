@@ -1,0 +1,18 @@
+using Cinema.Application.DTOs.AuthDtos;
+using FluentValidation;
+
+namespace Cinema.Application.Validators.Auth;
+
+public class LoginRequestDtoValidator : AbstractValidator<LoginRequestDto>
+{
+    public LoginRequestDtoValidator()
+    {
+        RuleFor(x => x.Email)
+            .NotEmpty()
+            .EmailAddress();
+
+        RuleFor(x => x.Password)
+            .NotEmpty()
+            .MinimumLength(6);
+    }
+}

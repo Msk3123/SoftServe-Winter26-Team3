@@ -1,4 +1,4 @@
-import { Outlet } from "react-router";
+import { Outlet } from "react-router-dom";
 import styles from "./ClientPageLayout.module.css"
 import Header from "./Header";
 import Footer from "./Footer";
