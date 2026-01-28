@@ -1,0 +1,15 @@
+.label{
+font-weight: var(--fw-medium);
+font-family: var(--font-secondary);
+font-size: 1.125em;
+margin-right: 1em;
+}
+
+.input{
+padding: 0.6em 1em ;
+}
+
+.input:focus-visible{
+    outline-color: var(--color-primary);
+    color: var(--color-primary);
+}

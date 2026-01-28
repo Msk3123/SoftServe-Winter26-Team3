@@ -67,8 +67,8 @@ const AdminTablePage = <T extends BaseEntity>({columns,queryFn,deleteFn,isAction
     if(status.isLoading && !data){
         result = <>
             <ControlPanel
-                currentPage={pagination.current}
-                totalPages={Math.ceil(pagination.total/pagination.pageSize)}
+                pagination={pagination}
+                setPageSize={actions.setPageSize}
                 handlePageChange={actions.setPage}
             />
             <TableSceleton columns={tableColumns}/>
@@ -82,8 +82,8 @@ const AdminTablePage = <T extends BaseEntity>({columns,queryFn,deleteFn,isAction
 
         result = <>
             <ControlPanel
-                currentPage={pagination.current}
-                totalPages={Math.ceil(pagination.total/pagination.pageSize)}
+                pagination={pagination}
+                setPageSize={actions.setPageSize}
                 handlePageChange={actions.setPage}
             />
             <Table
