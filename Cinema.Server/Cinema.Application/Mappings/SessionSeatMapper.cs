@@ -14,9 +14,11 @@ namespace Cinema.Application.Common.Mappings
         {
             CreateMap<SessionSeatCreateDto, SessionSeat>();
 
-            CreateMap<SessionSeat, SessionSeatShortDto>();
+            CreateMap<SessionSeat, SessionSeatShortDto>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.SessionSeatId));
 
-            CreateMap<SessionSeat, SessionSeatDetailsDto>();
+            CreateMap<SessionSeat, SessionSeatDetailsDto>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.SessionSeatId));
 
             CreateMap<SessionSeatPatchDto, SessionSeat>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) =>

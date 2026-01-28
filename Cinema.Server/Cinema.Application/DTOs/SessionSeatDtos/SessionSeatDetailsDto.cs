@@ -9,7 +9,7 @@ namespace Cinema.Application.DTOs.SessionSeatDtos
 {
     public record SessionSeatDetailsDto
     {
-        public int SessionSeatId { get; set; }
+        public int Id { get; set; }
         public int SessionId { get; set; }
         public SeatStatus SeatStatuses { get; set; }
         public DateTime? LockExpiration { get; set; }

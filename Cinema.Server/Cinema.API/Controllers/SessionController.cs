@@ -48,9 +48,9 @@ namespace Cinema.API.Controllers
         public async Task<IActionResult> Create([FromBody] SessionCreateDto dto)
         {
             var result = await _sessionService.CreateSessionAsync(dto);
-            var entity = await _sessionRepository.GetByIdWithFullDetailsAsync(result.SessionId);
+            var entity = await _sessionRepository.GetByIdWithFullDetailsAsync(result.Id);
             var response = _mapper.Map<SessionShortDto>(entity);
-            return CreatedAtAction(nameof(GetById), new { id = response.SessionId }, response);
+            return CreatedAtAction(nameof(GetById), new { id = response.Id }, response);
         }
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] SessionCreateDto dto)
