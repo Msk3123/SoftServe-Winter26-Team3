@@ -82,10 +82,10 @@ export async function getItem<T extends BaseEntity>(path:string,id:number|string
     return handleResponse<SingleResponse<T>>(response,{path,id});
 
 }
-export async function postItem<T extends BaseEntity, TData = Partial<T>>(
+export async function postItem<TData, TResponse>(
     path: string,
     data: TData
-): Promise<SingleResponse<T>> {
+): Promise<SingleResponse<TResponse>> {
 
     const url = `${baseUrl}${path}`;
 
@@ -97,7 +97,7 @@ export async function postItem<T extends BaseEntity, TData = Partial<T>>(
         body: JSON.stringify(data),
     });
 
-    return handleResponse<SingleResponse<T>>(response);
+    return handleResponse<SingleResponse<TResponse>>(response);
 }
 
 export async function putItem<T extends BaseEntity>(
@@ -115,7 +115,7 @@ export async function putItem<T extends BaseEntity>(
     });
     return handleResponse<void>(response,{path,id});
 }
-export async function patchItem<T extends BaseEntity>(
+export async function patchItem<T>(
     path: string,
     id: number | string,
     data: Partial<T>

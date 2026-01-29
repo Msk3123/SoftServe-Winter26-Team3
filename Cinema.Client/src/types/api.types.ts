@@ -31,16 +31,16 @@ export type FetchOneFunction<T> = (
     id: number | string
 ) => Promise<SingleResponse<T>>;
 
-export type PostFunction<T extends BaseEntity, TData = Partial<T>> = (
+export type PostFunction<TData,TResponse> = (
     data: TData
-) => Promise<SingleResponse<T>>;
+) => Promise<SingleResponse<TResponse>>;
 
 export type PutFunction<T extends BaseEntity> = (
     id: number | string,
     data: T
 ) => Promise<void>;
 
-export type PatchFunction<T extends BaseEntity> = (
+export type PatchFunction<T> = (
     id: number | string,
     data: Partial<T>
 )=>Promise<void>;
