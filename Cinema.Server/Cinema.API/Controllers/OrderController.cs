@@ -1,0 +1,50 @@
+﻿using AutoMapper;
+using Cinema.Application.Common.Models;
+using Cinema.Application.DTOs.OrderDto;
+using Cinema.Application.DTOs.OrderDtos;
+using Cinema.Application.Interfaces;
+using Cinema.Application.Interfaces.Services;
+using Cinema.Domain.Entities;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Cinema.API.Controllers
+{
+    [ApiController]
+    [Route("api/[controller]")]
+    public class OrderController : ApiBaseController
+    {
+        private readonly IOrderService _orderService;
+        private readonly IOrderRepository _orderRepository;
+
+        public OrderController(IOrderService orderService, IOrderRepository orderRepository, IMapper mapper) :base(mapper) 
+        {
+            _orderService = orderService;
+            _orderRepository = orderRepository;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateOrder([FromBody] OrderCreateDto dto)
+        {
+            var result = await _orderService.PlaceOrderAsync(dto);
+
+            return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
+        }
+
+        [HttpGet("user/{userId}")]
+        public async Task<IActionResult> GetHistory(int userId, [FromQuery]QueryParameters queryParameters)
+        {
+            var history = await _orderRepository.GetByUserIdPagedAsync(userId,queryParameters);
+            
+
+            return OkPaged<Order, OrderShortDto>(history, queryParameters);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var order = await _orderRepository.GetByIdAsync(id);
+            var result = _mapper.Map<OrderDetailsDto>(order);
+            return Ok(result);
+        }
+    }
+}

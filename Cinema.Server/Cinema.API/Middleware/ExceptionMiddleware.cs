@@ -1,7 +1,8 @@
-﻿using System.Net;
-using System.Text.Json;
+﻿using Cinema.Application.Common.Exceptions;
 using Cinema.Application.Common.Models;
 using FluentValidation;
+using System.Net;
+using System.Text.Json;
 namespace Cinema.API.Middleware
 {
     public class ExceptionMiddleware
@@ -49,7 +50,23 @@ namespace Cinema.API.Middleware
 
                     responseBody = new { statusCode = 400, message = "Validation failed", errors = validationErrors };
                     break;
+                case SeatNotReservedException seatEx:
+                    statusCode = HttpStatusCode.BadRequest;
+                    responseBody = new ErrorResponse
+                    {
+                        StatusCode = 400,
+                        Message = $"Seat with ID {seatEx.SeatId} is not reserved by you or is already taken by someone else."
+                    };
+                    break;
 
+                case ReservationExpiredException expEx:
+                    statusCode = HttpStatusCode.BadRequest;
+                    responseBody = new ErrorResponse
+                    {
+                        StatusCode = 400,
+                        Message = "Your reservation has expired. Please select your seats again."
+                    };
+                    break;
                 case System.Collections.Generic.KeyNotFoundException:
                     statusCode = HttpStatusCode.NotFound;
                     responseBody = new ErrorResponse { StatusCode = 404, Message = "The requested resource was not found." };
