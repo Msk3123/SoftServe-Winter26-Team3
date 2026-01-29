@@ -37,9 +37,9 @@ namespace Cinema.Persistence.Context
 
 
             modelBuilder.Entity<Seat>()
-                .HasIndex(s => new { s.HallId, s.SeatNo })
+                .HasIndex(s => new { s.HallId, s.Row, s.SeatNo })
                 .IsUnique()
-                .HasDatabaseName("IX_Seat_HallId_SeatNo_Unique");
+                .HasDatabaseName("IX_Seat_HallId_Row_Number_Unique");
             // --- Налаштування зв'язків Many-to-Many
 
             // Movie <-> Genre

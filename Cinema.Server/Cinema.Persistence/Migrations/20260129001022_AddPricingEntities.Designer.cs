@@ -4,6 +4,7 @@ using Cinema.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cinema.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260129001022_AddPricingEntities")]
+    partial class AddPricingEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -322,9 +325,6 @@ namespace Cinema.Persistence.Migrations
                     b.Property<int>("HallId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Row")
-                        .HasColumnType("int");
-
                     b.Property<int>("SeatNo")
                         .HasColumnType("int");
 
@@ -335,9 +335,9 @@ namespace Cinema.Persistence.Migrations
 
                     b.HasIndex("SeatTypeId");
 
-                    b.HasIndex("HallId", "Row", "SeatNo")
+                    b.HasIndex("HallId", "SeatNo")
                         .IsUnique()
-                        .HasDatabaseName("IX_Seat_HallId_Row_Number_Unique");
+                        .HasDatabaseName("IX_Seat_HallId_SeatNo_Unique");
 
                     b.ToTable("Seats");
                 });

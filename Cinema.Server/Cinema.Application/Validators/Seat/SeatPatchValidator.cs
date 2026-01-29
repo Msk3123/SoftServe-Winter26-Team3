@@ -8,20 +8,23 @@ namespace Cinema.Application.Validators.SeatValidators
 {
     public class SeatPatchValidator : AbstractValidator<SeatPatchDto>
     {
-        public SeatPatchValidator(ISeatRepository repository)
+        public SeatPatchValidator()
         {
-            // Не забуваємо про каскадний режим
             RuleLevelCascadeMode = CascadeMode.Stop;
+
+            RuleFor(x => x.Row)
+                .InclusiveBetween(1, 100)
+                .When(x => x.Row.HasValue);
 
             RuleFor(x => x.SeatNo)
                 .InclusiveBetween(1, 1000)
                 .When(x => x.SeatNo.HasValue)
                 .WithMessage("Seat number must be between 1 and 1000.");
 
-            RuleFor(x => x.SeatType)
+            RuleFor(x => x.SeatTypeId)
                 .GreaterThan(0)
-                .When(x => x.SeatType.HasValue)
-                .WithMessage("Seat type must be greater than 0.");
+                .When(x => x.SeatTypeId.HasValue)
+                .WithMessage("Seat type ID must be greater than 0.");
 
             RuleFor(x => x.HallId)
                 .GreaterThan(0)
