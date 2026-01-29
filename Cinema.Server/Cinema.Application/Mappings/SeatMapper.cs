@@ -12,11 +12,14 @@ namespace Cinema.Application.Mappings
         public SeatMappingProfile()
         {
             CreateMap<Seat, SeatShortDto>()
-                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.SeatId))
-                .ForMember(dest => dest.HallName, opt => opt.MapFrom(src => src.Hall.HallName));
+                .ForMember(d => d.Id, o => o.MapFrom(s => s.SeatId))
+                .ForMember(d => d.SeatTypeName, o => o.MapFrom(s => s.SeatType.Name))
+                .ForMember(d => d.HallName, o => o.MapFrom(s => s.Hall.HallName));
 
             CreateMap<Seat, SeatDetailsDto>()
-                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.SeatId));
+                .ForMember(d => d.Id, o => o.MapFrom(s => s.SeatId))
+                .ForMember(d => d.SeatTypeName, o => o.MapFrom(s => s.SeatType.Name))
+                .ForMember(d => d.BasePrice, o => o.MapFrom(s => s.SeatType.BasePrice));
 
             CreateMap<SeatCreateDto, Seat>()
                 .ForMember(dest => dest.SeatId, opt => opt.Ignore())
