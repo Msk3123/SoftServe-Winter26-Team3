@@ -45,17 +45,12 @@ builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ISeatRepository, SeatRepository>();
 builder.Services.AddScoped<ISessionSeatRepository, SessionSeatRepository>();
-<<<<<<< Updated upstream
-=======
+
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<ITicketTypeRepository, TicketTypeRepository>();
 builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-//services
+
 builder.Services.AddScoped<ISessionSeatService, SessionSeatService>();
 builder.Services.AddScoped<ISessionService, SessionService>();
 
