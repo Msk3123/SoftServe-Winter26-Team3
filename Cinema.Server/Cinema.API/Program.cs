@@ -46,9 +46,12 @@ builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ISeatRepository, SeatRepository>();
 builder.Services.AddScoped<ISessionSeatRepository, SessionSeatRepository>();
+
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<ITicketTypeRepository, TicketTypeRepository>();
-//services
+builder.Services.AddScoped<ITicketRepository, TicketRepository>();
+
+
 builder.Services.AddScoped<ISessionSeatService, SessionSeatService>();
 builder.Services.AddScoped<ISessionService, SessionService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
