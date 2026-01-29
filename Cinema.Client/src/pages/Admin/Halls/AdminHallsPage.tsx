@@ -2,7 +2,7 @@ import { Outlet} from "react-router";
 import AdminTablePage from "../../../features/admin/components/AdminTablePage/AdminTablePage";
 import type { ColumnDef } from "../../../types/common.types";
 import type { HallShort } from "../../../types/hall.types";
-import { getAllHalls } from "../../../api/hallApi";
+import { deleteHall, getAllHalls } from "../../../api/hallApi";
 
 const AdminMoviesPage = ()=>{
 
@@ -12,7 +12,7 @@ const AdminMoviesPage = ()=>{
     { key: "capacity", title: "Capacity (Seats)" },
 ];
     return( <>
-                <AdminTablePage columns={columns} queryFn={getAllHalls}/>
+                <AdminTablePage columns={columns} queryFn={getAllHalls} deleteFn={deleteHall}/>
                 <Outlet />
             </>)
 };
