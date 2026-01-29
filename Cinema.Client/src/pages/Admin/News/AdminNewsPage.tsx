@@ -5,8 +5,11 @@ import type { ColumnDef } from "../../../types/common.types";
 import { deleteNews, getAllNews } from "../../../api/newsApi";
 import { dateToString } from "../../../helpers/textHelpers";
 import styles from "./AdminNewsPage.module.css";
+import useQueryTable from "../../../hooks/useQueryTable/useQueryTable";
 
 const AdminNewsPage = ()=>{
+
+    const {data,pagination,sortParams,status,actions} = useQueryTable<NewsShort>(getAllNews);
     
     const columns:ColumnDef<NewsShort>[] = [
         { key: "id", title: "№" },
@@ -17,7 +20,11 @@ const AdminNewsPage = ()=>{
     ];
 
     return (<>
-                <AdminTablePage columns={columns} queryFn={getAllNews} deleteFn={deleteNews} />
+                <AdminTablePage
+                    columns={columns}
+                    tableData={{ data, pagination, sortParams, status }}
+                    tableActions={actions}
+                    deleteFn={deleteNews} />
                 <Outlet />
             </>)
 };

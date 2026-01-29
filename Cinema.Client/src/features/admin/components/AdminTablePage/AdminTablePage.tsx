@@ -1,9 +1,8 @@
 import styles from "./AdminTablePage.module.css"
-import useQueryTable from "../../../../hooks/useQueryTable/useQueryTable";
 import ControlPanel from "../../../../components/ControlPanel/ControlPanel";
 import TableSceleton from "../../../../components/Table/TableSceleton/TableSceleton";
 import Table from "../../../../components/Table/Table";
-import type { BaseEntity, DeleteFunction, FetchFunction } from "../../../../types/api.types";
+import type { BaseEntity, DeleteFunction} from "../../../../types/api.types";
 import type { ColumnDef } from "../../../../types/common.types";
 import Button from "../../../../components/Button/Button";
 import deleteItem from "../../deleteItem/deleteItem";
@@ -13,14 +12,38 @@ import Error from "../../../../components/Error/Error";
 
 interface AdminTablePageProps<T extends BaseEntity>{
     columns: ColumnDef<T>[];
-    queryFn: FetchFunction<T>;
     deleteFn?: DeleteFunction;
     isActions?:boolean;
+    tableData:{
+        data: readonly T[] | undefined;
+        pagination: {
+            current: number;
+            total: number;
+            pageSize: number;
+        };
+        status: {
+            isLoading: boolean;
+            error: string | null;
+        };
+        sortParams: {
+            sortBy: keyof T;
+            order: "asc" | "desc";
+        };
+    };
+    tableActions: {
+        setPage: (page: number) => void;
+        setPageSize: (size: number) => void;
+        setSort: (sortBy: keyof T, order: "asc" | "desc") => void;
+        setData: (items: readonly T[]) => void;
+        createItem: (item: T) => void;
+        deleteItem: (id: number | string) => void;
+        toggleSort: (key: keyof T) => void;
+    };
 }
 
-const AdminTablePage = <T extends BaseEntity>({columns,queryFn,deleteFn,isActions=true}:AdminTablePageProps<T>)=>{
+const AdminTablePage = <T extends BaseEntity>({columns,deleteFn,isActions=true,tableData,tableActions}:AdminTablePageProps<T>)=>{
     
-    const {data,pagination,sortParams,status,actions} = useQueryTable<T>(queryFn);
+    const {data,pagination,sortParams,status} = tableData;
 
     const tableColumns = useMemo(() => {
         if (!isActions) return columns;
@@ -30,7 +53,7 @@ const AdminTablePage = <T extends BaseEntity>({columns,queryFn,deleteFn,isAction
         if (deleteFn) {
             handleDelete = deleteItem({
                 deleteAsync: deleteFn,
-                deleteLocal: actions.deleteItem,
+                deleteLocal: tableActions.deleteItem,
             });
         }
 
@@ -60,7 +83,7 @@ const AdminTablePage = <T extends BaseEntity>({columns,queryFn,deleteFn,isAction
         };
 
         return [...columns, actionsColumn];
-    }, [columns, isActions, deleteFn, actions]);
+    }, [columns, isActions, deleteFn,tableActions.deleteItem]);
 
     let result;
 
@@ -68,8 +91,8 @@ const AdminTablePage = <T extends BaseEntity>({columns,queryFn,deleteFn,isAction
         result = <>
             <ControlPanel
                 pagination={pagination}
-                setPageSize={actions.setPageSize}
-                handlePageChange={actions.setPage}
+                setPageSize={tableActions.setPageSize}
+                handlePageChange={tableActions.setPage}
             />
             <TableSceleton columns={tableColumns}/>
         </>
@@ -83,14 +106,14 @@ const AdminTablePage = <T extends BaseEntity>({columns,queryFn,deleteFn,isAction
         result = <>
             <ControlPanel
                 pagination={pagination}
-                setPageSize={actions.setPageSize}
-                handlePageChange={actions.setPage}
+                setPageSize={tableActions.setPageSize}
+                handlePageChange={tableActions.setPage}
             />
             <Table
                 data={data}
                 columns={tableColumns}
                 sortParams={sortParams}
-                handleSort={actions.toggleSort}
+                handleSort={tableActions.toggleSort}
                 pagination={pagination}
             />
         </>

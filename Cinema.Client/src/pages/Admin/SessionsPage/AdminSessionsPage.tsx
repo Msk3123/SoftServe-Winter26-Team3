@@ -5,8 +5,10 @@ import type { SessionShort } from "../../../types/session.types";
 import { deleteSession, getAllSessions } from "../../../api/sessionAPI";
 import styles from "./AdminSessionsPage.module.css"
 import { dateToString } from "../../../helpers/textHelpers";
+import useQueryTable from "../../../hooks/useQueryTable/useQueryTable";
 
 const AdminMoviesPage : React.FC = ()=>{
+    const {data,pagination,sortParams,status,actions} = useQueryTable<SessionShort>(getAllSessions);
     
     const columns:ColumnDef<SessionShort>[] = [
     { key: "id", title: "№" },
@@ -19,7 +21,11 @@ const AdminMoviesPage : React.FC = ()=>{
     { key: "hallName", title: "Hall" }
 ];
     return( <>
-                <AdminTablePage columns={columns} queryFn={getAllSessions} deleteFn={deleteSession}/>
+                <AdminTablePage
+                    columns={columns}
+                    tableData={{ data, pagination, sortParams, status }}
+                    tableActions={actions}
+                    deleteFn={deleteSession}/>
                 <Outlet />
             </>)
 };

@@ -18,7 +18,7 @@ import AdminSessionsPage from "../pages/Admin/SessionsPage/AdminSessionsPage";
 import AdminHallsPage from "../pages/Admin/Halls/AdminHallsPage";
 import AdminNewsPage from "../pages/Admin/News/AdminNewsPage";
 import AdminUsersPage from "../pages/Admin/Users/AdminUsersPage";
-import Modal from "../components/Modal";
+import Modal from "../components/Modal/Modal";
 import AdminOrderPage from "../pages/Admin/Orders/AdminOrdersPage";
 import TicketsPage from "../pages/Client/Tickets/TicketsPage";
 import PageNotFound from "../pages/Client/PageNotFound/PageNotFound";

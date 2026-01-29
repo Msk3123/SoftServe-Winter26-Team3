@@ -5,8 +5,11 @@ import type { MovieShort } from "../../../types/movie.types";
 import type { ColumnDef } from "../../../types/common.types";
 import styles from "./AdminMoviesPage.module.css"
 import { dateToString } from "../../../helpers/textHelpers";
+import useQueryTable from "../../../hooks/useQueryTable/useQueryTable";
 
 const AdminMoviesPage = ()=>{
+    
+    const {data,pagination,sortParams,status,actions} = useQueryTable<MovieShort>(getAllMovies);
 
     const columns: ColumnDef<MovieShort>[] = [
         {key:"id",title:"№"},
@@ -19,7 +22,8 @@ const AdminMoviesPage = ()=>{
         <>
             <AdminTablePage
                 columns={columns}
-                queryFn={getAllMovies}
+                tableData={{ data, pagination, sortParams, status }}
+                tableActions={actions}
                 deleteFn={deleteMovie}/>
             <Outlet />
         </>
