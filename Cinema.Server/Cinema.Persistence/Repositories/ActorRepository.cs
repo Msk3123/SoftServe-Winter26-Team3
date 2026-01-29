@@ -27,7 +27,7 @@ namespace Cinema.Persistence.Repositories
                 .Include(a => a.ActorMovies)
                     .ThenInclude(am => am.Movie)
                 .AsNoTracking()
-                .FirstOrDefaultAsync(a => a.ActorId == id);
+                .FirstOrDefaultAsync(a => ((Actor)(object)a).ActorId == id);
         }
     }
 }
