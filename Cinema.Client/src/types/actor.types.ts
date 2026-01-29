@@ -1,3 +1,5 @@
+import type { MovieShort } from "./movie.types";
+
 export interface ActorShort{
     id: number|string,
     firstName: string,
@@ -16,5 +18,5 @@ export interface ActorCreate {
 
 export interface Actor extends ActorCreate{
     id: number|string;
-    movies:string[];
+    movies:MovieShort[];
 }

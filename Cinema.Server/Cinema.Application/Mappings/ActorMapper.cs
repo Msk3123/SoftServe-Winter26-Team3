@@ -15,7 +15,7 @@ namespace Cinema.Application.Mappings
             CreateMap<Actor, ActorDetailsDto>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.ActorId))
                 .ForMember(dest => dest.Movies, opt => opt.MapFrom(src =>
-                    src.ActorMovies.Select(am => am.Movie.Title).ToList()));
+                    src.ActorMovies.Select(am => am.Movie).ToList()));
 
             CreateMap<ActorCreateDto, Actor>();
 
