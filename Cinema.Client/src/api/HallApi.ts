@@ -1,18 +1,13 @@
 
-import type { DeleteFunction, FetchFunction} from "../types/api.types";
+import type { DeleteFunction, FetchListFunction} from "../types/api.types";
 import type { HallShort } from "../types/hall.types";
 import { defaultParams, deleteItem, getPaginatedData } from "./api";
 
 
 
-export const  getAllHalls:FetchFunction<HallShort> = async (params = defaultParams ) => {
-    try{
+export const  getAllHalls:FetchListFunction<HallShort> = async (params = defaultParams ) => {
         return await getPaginatedData<HallShort>("hall", params);
-    }catch(error){
-        const err = error as Error;
-        console.error(err.message);
-        throw new Error(`${err.message}. Failed to load halls data. Please try again later.`);
-    }
+
 };
 
 export const deleteHall: DeleteFunction = async (id)=>{

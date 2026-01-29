@@ -12,7 +12,7 @@ const AdminMoviesPage = ()=>{
         {key:"id",title:"№"},
         {key:"posterUrl",title:"Poster",render:(item)=><img src={item.posterUrl} alt={`${item.title} poster`} className={styles.imageCell}/>},
         {key:"title",title:"Title"},
-        {key:"releaseDate",title:"Release Date",render:(item)=>dateToString(item.releaseDate),}
+        {key:"releaseDate",title:"Release Date",render:(item)=>dateToString(new Date(item.releaseDate))}
     ]
 
     return(

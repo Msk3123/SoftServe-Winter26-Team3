@@ -4,6 +4,7 @@ using Cinema.Application.Interfaces.Services;
 using Cinema.Application.Mappings;
 using Cinema.Application.Services;
 using Cinema.Application.Validators.Sessions;
+using Cinema.Persistence;
 using Cinema.Persistence.Context;
 using Cinema.Persistence.Repositories;
 using FluentValidation;
@@ -53,6 +54,8 @@ builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 
 builder.Services.AddScoped<ISessionSeatService, SessionSeatService>();
 builder.Services.AddScoped<ISessionService, SessionService>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IOrderService, OrderService>();
 
 builder.Services.AddControllers()
     .AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
