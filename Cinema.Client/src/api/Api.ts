@@ -100,7 +100,7 @@ export async function postItem<TData, TResponse>(
     return handleResponse<SingleResponse<TResponse>>(response);
 }
 
-export async function putItem<T extends BaseEntity>(
+export async function putItem<T>(
     path: string,
     id: number | string,
     data: T

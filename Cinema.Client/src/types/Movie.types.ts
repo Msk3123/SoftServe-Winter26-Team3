@@ -39,6 +39,3 @@ export interface MovieCreate{
     genreIds:	number[];
     actorIds: number[];
 }
-export interface MovieUpdate extends MovieCreate {
-    id: number | string;
-}

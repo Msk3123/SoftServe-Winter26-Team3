@@ -1,5 +1,5 @@
 import type { PaginatedResponse, DeleteFunction, FetchListFunction, FetchListByIdFunction, FetchOneFunction, PostFunction, PutFunction, PatchFunction} from "../types/api.types";
-import type { Movie, MovieCreate, MovieShort, MovieUpdate } from "../types/movie.types";
+import type { Movie, MovieCreate, MovieShort} from "../types/movie.types";
 import { defaultParams, deleteItem, getItem, getPaginatedData, patchItem, postItem, putItem } from "./api";
 
 
@@ -31,7 +31,7 @@ export const getMovie:FetchOneFunction<Movie> = async (id)=>{
 export const postMovie:PostFunction<MovieCreate,Movie>= async(data)=>{
     return await postItem("movie",data);
 }
-export const putMovie:PutFunction<MovieUpdate>= async(id,data)=>{
+export const putMovie:PutFunction<MovieCreate>= async(id,data)=>{
     return await putItem("movie",id,data);
 }
 export const patchMovie:PatchFunction<MovieCreate>= async(id,data)=>{

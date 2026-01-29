@@ -35,7 +35,7 @@ export type PostFunction<TData,TResponse> = (
     data: TData
 ) => Promise<SingleResponse<TResponse>>;
 
-export type PutFunction<T extends BaseEntity> = (
+export type PutFunction<T> = (
     id: number | string,
     data: T
 ) => Promise<void>;
