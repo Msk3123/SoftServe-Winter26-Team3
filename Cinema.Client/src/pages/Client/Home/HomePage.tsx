@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import styles from "./HomePage.module.css";
 import { Link } from 'react-router-dom';
 import { getRecentNews } from "../../../api/newsApi";

@@ -23,6 +23,7 @@ import AdminOrderPage from "../pages/Admin/Orders/AdminOrdersPage";
 import TicketsPage from "../pages/Client/Tickets/TicketsPage";
 import PageNotFound from "../pages/Client/PageNotFound/PageNotFound";
 import AdminPageNotFound from "../pages/Admin/PageNotFound/AdminPageNotFound";
+import AdminActorsPage from "../pages/Admin/Actors/AdminActorsPage";
 
 export const router = createBrowserRouter([
   {
@@ -156,14 +157,23 @@ export const router = createBrowserRouter([
           },
         ],
       },
-
-       {
+      
+      {
         path: "orders",
         element: <AdminOrderPage />,
         children: [
             { path: ":orderId", element: <Modal>order view</Modal>}
         ]
       },
+
+      {
+        path: "actors",
+        element: <AdminActorsPage />,
+        children: [
+            { path: ":orderId", element: <Modal>Actor view</Modal>}
+        ]
+      },
+
       {
         path: "*",
         element: <AdminPageNotFound />,
