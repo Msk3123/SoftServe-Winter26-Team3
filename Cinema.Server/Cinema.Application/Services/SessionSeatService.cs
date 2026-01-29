@@ -28,6 +28,7 @@ namespace Cinema.Application.Services
 
             seat.LockedByUserId = userId;
             seat.SeatStatuses = SeatStatus.Reserved;
+            seat.LockExpiration = DateTime.UtcNow.AddMinutes(15);
             await _repository.SaveAsync();
 
             _backgroundJobs.Schedule<ISessionSeatService>(
