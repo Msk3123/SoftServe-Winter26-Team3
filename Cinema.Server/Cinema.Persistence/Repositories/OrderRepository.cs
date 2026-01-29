@@ -1,10 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Cinema.Application.Common.Models;
+using Cinema.Application.Helpers;
 using Cinema.Application.Interfaces;
 using Cinema.Domain.Entities;
 using Cinema.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Cinema.Persistence.Repositories
 {
@@ -28,12 +30,21 @@ namespace Cinema.Persistence.Repositories
                 .FirstOrDefaultAsync(o => o.OrderId == id);
         }
 
-        public async Task<IEnumerable<Order>> GetByUserIdAsync(int userId)
+        public  async Task<(IEnumerable<Order> Items, int TotalCount)> GetByUserIdPagedAsync(int userId, QueryParameters queryParameters)
         {
             return await _context.Orders
                 .Where(o => o.UserId == userId)
+                .Include(o => o.Session)
+                    .ThenInclude(s => s.Movie)
+                .Include(o => o.Tickets)
+                    .ThenInclude(t => t.SessionSeat)
+                        .ThenInclude(ss => ss.Seat)
+                            .ThenInclude(s => s.SeatType) 
+                .Include(o => o.Tickets)
+                    .ThenInclude(t => t.TicketType)    
                 .OrderByDescending(o => o.OrderDate)
-                .ToListAsync();
+                .AsNoTracking()
+                .ToPagedResultAsync(queryParameters);
         }
     }
 }

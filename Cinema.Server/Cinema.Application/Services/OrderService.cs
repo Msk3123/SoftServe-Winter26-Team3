@@ -26,22 +26,23 @@ namespace Cinema.Application.Services
 
             try
             {
-                // 1. Отримуємо місця ТА ЇХ ТИПИ (SeatType) для ціни
+                var selectedSeatIds = dto.SelectedTickets.Select(st => st.SessionSeatId).ToList();
+                var selectedTypeIds = dto.SelectedTickets.Select(st => st.TicketTypeId).Distinct().ToList();
+
+  
                 var sessionSeats = await _uow.SessionSeats.GetAll()
                     .Include(ss => ss.Seat)
-                        .ThenInclude(s => s.SeatType) // Важливо для BasePrice
-                    .Where(ss => dto.SessionSeatIds.Contains(ss.SessionSeatId))
+                        .ThenInclude(s => s.SeatType) 
+                    .Where(ss => selectedSeatIds.Contains(ss.SessionSeatId))
                     .ToListAsync();
 
-                if (sessionSeats.Count != dto.SessionSeatIds.Count)
+                if (sessionSeats.Count != selectedSeatIds.Count)
                     throw new KeyNotFoundException("Some selected seats were not found.");
 
-                // Отримуємо тип квитка (напр. Adult), щоб взяти Multiplier
-                // Припускаємо, що в dto приходить TicketTypeId
-                var ticketType = await _uow.TicketTypes.GetByIdAsync(dto.TicketTypeId);
-                if (ticketType == null) throw new KeyNotFoundException("Ticket type not found.");
+                var ticketTypes = await _uow.TicketTypes.GetAll()
+                    .Where(tt => selectedTypeIds.Contains(tt.TicketTypeId))
+                    .ToListAsync();
 
-                // 2. Валідація броні
                 foreach (var seat in sessionSeats)
                 {
                     if (seat.SeatStatuses != SeatStatus.Reserved || seat.LockExpiration < DateTime.UtcNow)
@@ -51,7 +52,6 @@ namespace Cinema.Application.Services
                         throw new SeatNotReservedException(seat.SessionSeatId);
                 }
 
-                // 3. Створення Order
                 var order = new Order
                 {
                     UserId = dto.UserId,
@@ -61,36 +61,36 @@ namespace Cinema.Application.Services
                     Tickets = new List<Ticket>()
                 };
 
-                // 4. Створення квитків з РОЗРАХУНКОМ ЦІНИ 💸
                 foreach (var seat in sessionSeats)
                 {
-                    // Формула: Базова ціна місця * Коефіцієнт типу квитка
-                    decimal calculatedPrice = seat.Seat.SeatType.BasePrice * ticketType.Multiplier;
+                    var ticketInfo = dto.SelectedTickets.First(st => st.SessionSeatId == seat.SessionSeatId);
+                    var tType = ticketTypes.First(tt => tt.TicketTypeId == ticketInfo.TicketTypeId);
+
+                    decimal finalPrice = seat.Seat.SeatType.BasePrice * tType.Multiplier;
 
                     order.Tickets.Add(new Ticket
                     {
                         SessionSeatId = seat.SessionSeatId,
-                        TicketTypeId = ticketType.TicketTypeId,
-                        Price = calculatedPrice // Фіксуємо ціну на момент продажу
+                        TicketTypeId = tType.TicketTypeId,
+                        Price = finalPrice 
                     });
 
                     seat.SeatStatuses = SeatStatus.Sold;
                     seat.LockedByUserId = null;
                     seat.LockExpiration = null;
                 }
-
+ 
                 await _uow.Orders.AddAsync(order);
                 await _uow.SaveChangesAsync();
                 await _uow.CommitAsync();
 
-                // 5. Повертаємо деталі (тут репозиторій підтягне все через Include)
                 var completedOrder = await _uow.Orders.GetByIdAsync(order.OrderId);
                 return _mapper.Map<OrderDetailsDto>(completedOrder);
             }
             catch (Exception)
             {
                 await _uow.RollbackAsync();
-                throw;
+                throw; 
             }
         }
     }

@@ -9,7 +9,7 @@ namespace Cinema.Application.Interfaces
         IOrderRepository Orders { get; }
         ISessionSeatRepository SessionSeats { get; }
         ITicketRepository Tickets { get; }
-
+        ITicketTypeRepository TicketTypes { get; }
         Task<int> SaveChangesAsync();
         Task BeginTransactionAsync();
         Task CommitAsync();
