@@ -1,5 +1,5 @@
 export interface HallShort{
-    id: number;
+    id: number|string;
     hallName: string;
     capacity: number;
 }

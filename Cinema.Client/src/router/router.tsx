@@ -18,7 +18,7 @@ import AdminSessionsPage from "../pages/Admin/SessionsPage/AdminSessionsPage";
 import AdminHallsPage from "../pages/Admin/Halls/AdminHallsPage";
 import AdminNewsPage from "../pages/Admin/News/AdminNewsPage";
 import AdminUsersPage from "../pages/Admin/Users/AdminUsersPage";
-import Modal from "../components/Modal";
+import Modal from "../components/Modal/Modal";
 import AdminOrderPage from "../pages/Admin/Orders/AdminOrdersPage";
 import TicketsPage from "../pages/Client/Tickets/TicketsPage";
 import PageNotFound from "../pages/Client/PageNotFound/PageNotFound";
@@ -114,7 +114,7 @@ export const router = createBrowserRouter([
         children: [
           {
             path: "create",
-            element: <Modal>create session</Modal>,
+            element: <Modal title="Create Session">create session</Modal>,
           },
           {
             path: ":sessionId/edit",
@@ -152,9 +152,10 @@ export const router = createBrowserRouter([
         element: <AdminUsersPage />,
         children: [
           {
-            path: ":userId",
+            path: ":userId/edit",
             element: <Modal>User view</Modal>,
           },
+          { path: "create", element: <Modal>create User</Modal> },
         ],
       },
       
@@ -162,7 +163,8 @@ export const router = createBrowserRouter([
         path: "orders",
         element: <AdminOrderPage />,
         children: [
-            { path: ":orderId", element: <Modal>order view</Modal>}
+            { path: "create", element: <Modal>create order</Modal> },
+            { path: ":orderId/edit", element: <Modal>order view</Modal>}
         ]
       },
 
@@ -170,7 +172,8 @@ export const router = createBrowserRouter([
         path: "actors",
         element: <AdminActorsPage />,
         children: [
-            { path: ":orderId", element: <Modal>Actor view</Modal>}
+            { path: "create", element: <Modal>create actors</Modal> },
+            { path: ":orderId/edit", element: <Modal>edit actor</Modal>}
         ]
       },
 
