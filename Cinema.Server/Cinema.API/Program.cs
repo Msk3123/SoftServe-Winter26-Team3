@@ -51,6 +51,9 @@ builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<ITicketTypeRepository, TicketTypeRepository>();
 builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 //services
 builder.Services.AddScoped<ISessionSeatService, SessionSeatService>();
