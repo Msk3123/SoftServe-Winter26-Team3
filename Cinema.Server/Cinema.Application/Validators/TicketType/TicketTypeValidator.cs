@@ -1,9 +1,8 @@
-﻿using Cinema.Application.DTOs.TicketTypeDto;
+﻿using Cinema.Application.DTOs.TicketTypeDtos;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using FluentValidation;
 
 namespace Cinema.Application.Validators.TicketTypeValidators
 {
