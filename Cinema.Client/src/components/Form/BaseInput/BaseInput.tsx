@@ -1,4 +1,4 @@
-import type { ComponentProps, ChangeEvent } from "react";
+import { type ComponentProps, type ChangeEvent, useId } from "react";
 import styles from "./BaseInput.module.css";
 
 interface BaseInputProps extends Omit<ComponentProps<"input">, "onChange"> {
@@ -19,6 +19,8 @@ const BaseInput = ({
     ...props
 }: BaseInputProps) => {
 
+    const id = useId();
+
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (onChange) onChange(e);
         if (onValueChange) onValueChange(e.target.value);
@@ -26,15 +28,16 @@ const BaseInput = ({
 
     return (
         <div className={`${styles.wrapper} ${className || ""}`}>
-            {label && <label className={styles.label}>{label}</label>}
+            {label && <label htmlFor="id">{label}</label>}
+            {error && <span className={styles.errorMessage}>{error}</span>}
             <input
                 className={`${styles.input} ${error ? styles.error : ""}`}
                 value={value}
                 onChange={handleChange}
                 type={type}
+                id={id}
                 {...props}
             />
-            {error && <span className={styles.errorMessage}>{error}</span>}
         </div>
     );
 };

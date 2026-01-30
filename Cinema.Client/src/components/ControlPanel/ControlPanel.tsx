@@ -24,6 +24,7 @@ const ControlPanel =({pagination,setPageSize,handlePageChange}:ControlPanelProps
                 value={pagination.pageSize}
                 onValueChange={(v)=>setPageSize(Number(v))}
                 label="Page Size"
+                className={styles.pageSizeInput}
             />
             <Pagination
                 currentPage={pagination.current}

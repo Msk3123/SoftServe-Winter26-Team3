@@ -1,0 +1,18 @@
+.label{
+font-weight: var(--fw-medium);
+font-family: var(--font-secondary);
+font-size: 1.125em;
+margin-right: 1em;
+}
+
+.textarea{
+padding: 0.6em 1em ;
+width: 100%;
+box-sizing: border-box;
+resize: vertical;
+}
+
+.input:focus-visible{
+    outline-color: var(--color-primary);
+    color: var(--color-primary);
+}

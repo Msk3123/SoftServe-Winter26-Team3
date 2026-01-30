@@ -1,15 +1,27 @@
-.label{
+.wrapper{
+    display: flex;
+    flex-direction: column;
+    margin: 1em 0;
+}
+.wrapper label{
 font-weight: var(--fw-medium);
-font-family: var(--font-secondary);
+font-family: var(--font-main);
 font-size: 1.125em;
-margin-right: 1em;
+margin: 0 1em 0.6em 0;
 }
 
 .input{
-padding: 0.6em 1em ;
+    font-family: var(--font-main);
+    padding: 0.6em 1em ;
 }
 
 .input:focus-visible{
     outline-color: var(--color-primary);
     color: var(--color-primary);
+}
+
+.errorMessage{
+    color: var(--color-danger);
+    font-weight: var(--fw-light);
+    margin-bottom: 0.2em;
 }
