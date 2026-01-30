@@ -13,6 +13,7 @@ interface SelectProps {
     onChange: (value: string) => void;
     placeholder?: string;
     className?: string;
+    error?:string
 }
 
 const Select: React.FC<SelectProps> = ({
@@ -21,7 +22,8 @@ const Select: React.FC<SelectProps> = ({
     value,
     onChange,
     placeholder,
-    className = ""
+    className = "",
+    error
 }) => {
 
     const id = useId();
@@ -49,6 +51,7 @@ const Select: React.FC<SelectProps> = ({
                     ))}
                 </select>
             </div>
+            { error && <span className={styles.error}>{error}</span>}
         </div>
   );
 };

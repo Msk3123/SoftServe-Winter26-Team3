@@ -16,3 +16,8 @@ resize: vertical;
     outline-color: var(--color-primary);
     color: var(--color-primary);
 }
+.error{
+    color: var(--color-danger);
+    font-weight: var(--fw-light);
+    margin-top: 0.2em;
+}

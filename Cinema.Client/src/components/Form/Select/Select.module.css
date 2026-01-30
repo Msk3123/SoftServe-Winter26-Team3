@@ -64,3 +64,9 @@
 .selectField option[value=""] {
     color: var(--text-inactive);
 }
+
+.error{
+    color: var(--color-danger);
+    font-weight: var(--fw-light);
+    margin-top: 0.2em;
+}

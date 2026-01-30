@@ -23,5 +23,5 @@ margin: 0 1em 0.6em 0;
 .errorMessage{
     color: var(--color-danger);
     font-weight: var(--fw-light);
-    margin-bottom: 0.2em;
+    margin-top: 0.2em;
 }

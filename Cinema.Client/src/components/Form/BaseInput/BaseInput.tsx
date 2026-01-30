@@ -29,7 +29,6 @@ const BaseInput = ({
     return (
         <div className={`${styles.wrapper} ${className || ""}`}>
             {label && <label htmlFor="id">{label}</label>}
-            {error && <span className={styles.errorMessage}>{error}</span>}
             <input
                 className={`${styles.input} ${error ? styles.error : ""}`}
                 value={value}
@@ -38,6 +37,7 @@ const BaseInput = ({
                 id={id}
                 {...props}
             />
+            {error && <span className={styles.errorMessage}>{error}</span>}
         </div>
     );
 };
