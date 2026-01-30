@@ -20,7 +20,9 @@ namespace Cinema.Domain.Entities
         public int SessionId { get; set; }
         [ForeignKey("SessionId")]
         public virtual Session Session { get; set; }
-        public OrderStatus OrderStatuses { get; set; }
+
+        public virtual Payment Payment { get; set; }
+        public OrderStatus OrderStatus { get; set; }
 
         public virtual ICollection<Ticket> Tickets { get; set; }
     }
