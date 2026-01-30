@@ -57,7 +57,7 @@ namespace Cinema.Application.Services
                     UserId = dto.UserId,
                     SessionId = dto.SessionId,
                     OrderDate = DateTime.UtcNow,
-                    OrderStatuses = OrderStatus.Confirmed,
+                    OrderStatus = OrderStatus.Confirmed,
                     Tickets = new List<Ticket>()
                 };
 
