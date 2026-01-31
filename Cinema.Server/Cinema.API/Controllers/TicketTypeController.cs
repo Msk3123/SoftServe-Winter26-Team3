@@ -46,6 +46,19 @@ namespace Cinema.API.Controllers
             return CreatedAtAction(nameof(GetById), new { id = ticketType.TicketTypeId }, result);
         }
 
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> Patch(int id, [FromBody] TicketTypePatchDto dto)
+        {
+            var ticketType = await _ticketTypeRepository.GetByIdAsync(id);
+            if (ticketType == null) return NotFound();
+
+            _mapper.Map(dto, ticketType);
+            
+            await _ticketTypeRepository.SaveAsync();
+
+            return NoContent();
+        }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, TicketTypeCreateDto dto)
         {

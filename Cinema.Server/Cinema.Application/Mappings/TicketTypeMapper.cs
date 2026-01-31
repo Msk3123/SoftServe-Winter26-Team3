@@ -12,6 +12,9 @@ namespace Cinema.Application.Mappings
             CreateMap<TicketType, TicketTypeDto>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.TicketTypeId));
             CreateMap<TicketTypeCreateDto, TicketType>();
+
+            CreateMap<TicketTypePatchDto, TicketType>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
         }
     }
 }
