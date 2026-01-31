@@ -24,10 +24,13 @@ namespace Cinema.Application.Mappings
                 .ForMember(d => d.Price, opt => opt.MapFrom(src => src.Price));
 
             CreateMap<Ticket, TicketShortDto>()
+                .ForMember(d => d.Id, opt => opt.MapFrom(src => src.TicketId))
                 .ForMember(d => d.Row, opt => opt.MapFrom(src => src.SessionSeat.Seat.Row))
                 .ForMember(d => d.SeatNo, opt => opt.MapFrom(src => src.SessionSeat.Seat.SeatNo))
                 .ForMember(d => d.TicketTypeName, opt => opt.MapFrom(src => src.TicketType.Name))
-                .ForMember(d => d.Id, opt => opt.MapFrom(src => src.TicketId));
+                .ForMember(d => d.OrderId, opt => opt.MapFrom(src => src.OrderId))
+                .ForMember(d => d.SessionSeatId, opt => opt.MapFrom(src => src.SessionSeatId))
+                .ForMember(d => d.Price, opt => opt.MapFrom(src => src.Price));
         }
     }
 }

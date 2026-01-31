@@ -2,6 +2,7 @@
 using Cinema.Application.Helpers;
 using Cinema.Application.Interfaces;
 using Cinema.Domain.Entities;
+using Cinema.Domain.Enums;
 using Cinema.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -45,6 +46,22 @@ namespace Cinema.Persistence.Repositories
                 .OrderByDescending(o => o.OrderDate)
                 .AsNoTracking()
                 .ToPagedResultAsync(queryParameters);
+        }
+        public async Task<Order> GetOrderWithTicketsAsync(int orderId)
+        {
+            return await _context.Orders
+                .Include(o => o.Tickets)
+                .ThenInclude(t => t.SessionSeat)
+                .FirstOrDefaultAsync(o => o.OrderId == orderId);
+        }
+        public async Task<List<Order>> GetExpiredConfirmedOrdersAsync(DateTime deadline)
+        {
+            return await _context.Orders
+                .Include(o => o.Tickets)
+                    .ThenInclude(t => t.SessionSeat)
+                .Where(o => (o.OrderStatus == OrderStatus.Confirmed || o.OrderStatus == OrderStatus.Cancelled)
+                       && o.OrderDate < deadline)
+                .ToListAsync();
         }
     }
 }

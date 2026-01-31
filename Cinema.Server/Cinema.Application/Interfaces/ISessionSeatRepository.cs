@@ -12,5 +12,6 @@ namespace Cinema.Application.Interfaces
         Task<bool> IsSeatAvailableAsync(int sessionId, int seatId);
 
         Task AddRangeAsync(IEnumerable<SessionSeat> sessionSeats);
+        Task<List<SessionSeat>> GetExpiredOrphanedSeatsAsync(DateTime now);
     }
 }
