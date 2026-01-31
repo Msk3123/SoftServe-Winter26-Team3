@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useId } from 'react';
 import styles from './SelectableInput.module.css';
 import type { BaseEntity } from '../../../types/api.types';
 
