@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { useNavigate } from "react-router-dom";
 import { IoClose } from "react-icons/io5";
@@ -8,18 +8,28 @@ import Button from "../Button/Button";
 interface ModalProps {
     children: React.ReactNode;
     title?: string;
+    onClose?:()=>void;
 }
 
-const Modal = ({ children, title }: ModalProps) => {
+const Modal = ({ children, title,onClose }: ModalProps) => {
     const navigate = useNavigate();
+    const modalRef = useRef<HTMLDivElement>(null);
 
-    const handleClose =useCallback(() => {
-        navigate("..");
-    },[navigate]);
+    const handleClose = useCallback(() => {
+        if (onClose) {
+            onClose();
+        } else {
+            navigate("..");
+        }
+    }, [navigate, onClose]);
 
     useEffect(() => {
         const handleEsc = (e: KeyboardEvent) => {
-            if (e.key === "Escape") handleClose();
+            const allModals = document.querySelectorAll(`.${styles.overlay}`);
+            
+            if (allModals[allModals.length - 1] === modalRef.current) {
+                handleClose();
+            }
         };
 
         window.addEventListener("keydown", handleEsc);
@@ -27,7 +37,7 @@ const Modal = ({ children, title }: ModalProps) => {
     }, [handleClose]);
 
     return createPortal(
-        <div className={styles.overlay} onClick={handleClose}>
+        <div className={styles.overlay} ref={modalRef} onClick={handleClose}>
             <div className={styles.content} onClick={(e) => e.stopPropagation()}>
                 <div className={styles.header}>
                     {title && <h2>{title}</h2>}

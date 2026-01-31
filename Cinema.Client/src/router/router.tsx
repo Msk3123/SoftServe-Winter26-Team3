@@ -24,6 +24,7 @@ import TicketsPage from "../pages/Client/Tickets/TicketsPage";
 import PageNotFound from "../pages/Client/PageNotFound/PageNotFound";
 import AdminPageNotFound from "../pages/Admin/PageNotFound/AdminPageNotFound";
 import AdminActorsPage from "../pages/Admin/Actors/AdminActorsPage";
+import SessionForm from "../features/admin/sessions/SessionForm";
 
 export const router = createBrowserRouter([
   {
@@ -114,11 +115,11 @@ export const router = createBrowserRouter([
         children: [
           {
             path: "create",
-            element: <Modal title="Create Session">create session</Modal>,
+            element: <Modal title="Create Session"><SessionForm/></Modal>,
           },
           {
             path: ":sessionId/edit",
-            element: <Modal>edit session</Modal>,
+            element: <Modal title="Edit Session"><SessionForm/></Modal>,
           },
         ],
       },

@@ -7,3 +7,12 @@
 .createButton{
     margin-right: 2em;
 }
+
+.pageSizeInput{
+    display: inline;
+    margin: 0 0 0 0;
+}
+
+.pageSizeInput label{
+    margin: 0 1em 0 0;
+}

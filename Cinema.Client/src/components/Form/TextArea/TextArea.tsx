@@ -1,45 +1,44 @@
 import { type ComponentProps, type ChangeEvent, useId } from "react";
-import styles from "./BaseInput.module.css";
+import styles from "./TextArea.module.css";
 
-interface BaseInputProps extends Omit<ComponentProps<"input">, "onChange"> {
+interface TextAreaProps extends Omit<ComponentProps<"textarea">, "onChange"> {
     label?: string;
     error?: string;
-    onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+    onChange?: (e: ChangeEvent<HTMLTextAreaElement>) => void;
     onValueChange?: (value: string) => void;
 }
 
-const BaseInput = ({
+const TextArea = ({
     label,
     error,
     value,
     onChange,
     onValueChange,
     className,
-    type = "text",
+    rows = 6,
     ...props
-}: BaseInputProps) => {
+}: TextAreaProps) => {
 
     const id = useId();
-
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
         if (onChange) onChange(e);
         if (onValueChange) onValueChange(e.target.value);
     };
 
     return (
         <div className={`${styles.wrapper} ${className || ""}`}>
-            {label && <label htmlFor="id">{label}</label>}
-            <input
-                className={`${styles.input} ${error ? styles.error : ""}`}
+            {label && <label htmlFor={id} className={styles.label}>{label}</label>}
+            <textarea
+                className={`${styles.textarea} ${error ? styles.error : ""}`}
                 value={value}
                 onChange={handleChange}
-                type={type}
+                rows={rows}
                 id={id}
                 {...props}
             />
-            {error && <span className={styles.errorMessage}>{error}</span>}
+            {error && <span className={styles.error}>{error}</span>}
         </div>
     );
 };
 
-export default BaseInput;
+export default TextArea;
