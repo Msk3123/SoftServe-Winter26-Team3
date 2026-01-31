@@ -25,6 +25,7 @@ import PageNotFound from "../pages/Client/PageNotFound/PageNotFound";
 import AdminPageNotFound from "../pages/Admin/PageNotFound/AdminPageNotFound";
 import AdminActorsPage from "../pages/Admin/Actors/AdminActorsPage";
 import SessionForm from "../features/admin/sessions/SessionForm";
+import CreateActorForm from "../features/admin/actors/CreateActorForm/CreateActorForm";
 
 export const router = createBrowserRouter([
   {
@@ -173,8 +174,8 @@ export const router = createBrowserRouter([
         path: "actors",
         element: <AdminActorsPage />,
         children: [
-            { path: "create", element: <Modal>create actors</Modal> },
-            { path: ":orderId/edit", element: <Modal>edit actor</Modal>}
+            { path: "create", element: <Modal title="Create Actor"><CreateActorForm/></Modal> },
+            { path: ":orderId/edit", element: <Modal title="Create Actor"><CreateActorForm/></Modal>}
         ]
       },
 

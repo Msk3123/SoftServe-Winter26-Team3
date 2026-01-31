@@ -25,11 +25,14 @@ const Modal = ({ children, title,onClose }: ModalProps) => {
 
     useEffect(() => {
         const handleEsc = (e: KeyboardEvent) => {
-            const allModals = document.querySelectorAll(`.${styles.overlay}`);
-            
-            if (allModals[allModals.length - 1] === modalRef.current) {
-                handleClose();
+            if(e.key==="Escape"){
+                const allModals = document.querySelectorAll(`.${styles.overlay}`);
+                
+                if (allModals[allModals.length - 1] === modalRef.current) {
+                    handleClose();
+                }
             }
+
         };
 
         window.addEventListener("keydown", handleEsc);
