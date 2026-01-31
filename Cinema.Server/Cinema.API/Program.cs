@@ -1,11 +1,13 @@
 using Cinema.API.Middleware;
 using Cinema.Application.Interfaces;
+using Cinema.Application.Interfaces.PaymentGateway;
 using Cinema.Application.Interfaces.Services;
 using Cinema.Application.Mappings;
 using Cinema.Application.Services;
 using Cinema.Application.Validators.Sessions;
 using Cinema.Persistence;
 using Cinema.Persistence.Context;
+using Cinema.Persistence.ExternalServices;
 using Cinema.Persistence.Repositories;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -46,17 +48,19 @@ builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ISeatRepository, SeatRepository>();
 builder.Services.AddScoped<ISessionSeatRepository, SessionSeatRepository>();
-
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<ITicketTypeRepository, TicketTypeRepository>();
 builder.Services.AddScoped<ITicketRepository, TicketRepository>();
+builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 
-
+//services  
 builder.Services.AddScoped<ISessionSeatService, SessionSeatService>();
 builder.Services.AddScoped<ISessionService, SessionService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IOrderService, OrderService>();
-
+builder.Services.AddScoped<IPaymentService, PaymentService>();
+builder.Services.AddScoped<IPaymentGateway, PaymentGateway>();
+builder.Services.AddScoped<IBookingCleanupService, BookingCleanupService>();
 builder.Services.AddControllers()
     .AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 //swagger
@@ -80,6 +84,16 @@ var app = builder.Build();
 app.UseMiddleware<ExceptionMiddleware>();
 //hangfire
 app.UseHangfireDashboard();
+using (var scope = app.Services.CreateScope())
+{
+    var recurringJobManager = scope.ServiceProvider.GetRequiredService<IRecurringJobManager>();
+
+    recurringJobManager.AddOrUpdate<IBookingCleanupService>(
+        "cleanup-bookings",
+        service => service.CleanupExpiredBookingsAsync(),
+        Cron.Minutely
+    );
+}
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

@@ -1,6 +1,7 @@
 ﻿using Cinema.Application.Common.Exceptions;
 using Cinema.Application.Common.Models;
 using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using System.Net;
 using System.Text.Json;
 namespace Cinema.API.Middleware
@@ -35,65 +36,60 @@ namespace Cinema.API.Middleware
         private async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             context.Response.ContentType = "application/json";
-            var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
 
-            var statusCode = HttpStatusCode.InternalServerError;
-            object responseBody = null; 
-
-            switch (exception)
+            var (statusCode, response) = exception switch
             {
-                case ValidationException valEx: 
-                    statusCode = HttpStatusCode.BadRequest;
-                    var validationErrors = valEx.Errors
-                        .GroupBy(e => e.PropertyName)
-                        .ToDictionary(g => g.Key, g => g.Select(e => e.ErrorMessage).ToArray());
+                ValidationException ex => (HttpStatusCode.BadRequest, new
+                {
+                    statusCode = 400,
+                    message = "Validation failed",
+                    errors = ex.Errors.GroupBy(e => e.PropertyName)
+                                      .ToDictionary(g => g.Key, g => g.Select(e => e.ErrorMessage).ToArray())
+                }),
 
-                    responseBody = new { statusCode = 400, message = "Validation failed", errors = validationErrors };
-                    break;
-                case SeatNotReservedException seatEx:
-                    statusCode = HttpStatusCode.BadRequest;
-                    responseBody = new ErrorResponse
-                    {
-                        StatusCode = 400,
-                        Message = $"Seat with ID {seatEx.SeatId} is not reserved by you or is already taken by someone else."
-                    };
-                    break;
+                SeatsAlreadyTakenException or SeatAlreadySoldException =>
+                    (HttpStatusCode.Conflict, CreateError(409, exception.Message)),
 
-                case ReservationExpiredException expEx:
-                    statusCode = HttpStatusCode.BadRequest;
-                    responseBody = new ErrorResponse
-                    {
-                        StatusCode = 400,
-                        Message = "Your reservation has expired. Please select your seats again."
-                    };
-                    break;
-                case System.Collections.Generic.KeyNotFoundException:
-                    statusCode = HttpStatusCode.NotFound;
-                    responseBody = new ErrorResponse { StatusCode = 404, Message = "The requested resource was not found." };
-                    break;
+                SessionMismatchException or SeatNotReservedException or ReservationExpiredException =>
+                    (HttpStatusCode.BadRequest, CreateError(400, exception.Message)),
 
-                case Microsoft.EntityFrameworkCore.DbUpdateException dbUpdateEx: 
-                    statusCode = HttpStatusCode.BadRequest;
-                    var dbMessage = "Database integrity error.";
-                    if (dbUpdateEx.InnerException is Microsoft.Data.SqlClient.SqlException sqlEx && (sqlEx.Number == 2601 || sqlEx.Number == 2627))
-                    {
-                        dbMessage = "This record already exists. Please use unique values.";
-                    }
-                    responseBody = new ErrorResponse { StatusCode = 400, Message = dbMessage };
-                    break;
+                KeyNotFoundException ex =>
+                    (HttpStatusCode.NotFound, CreateError(404, ex.Message)),
 
-                default:
-                    responseBody = new ErrorResponse
-                    {
-                        StatusCode = 500,
-                        Message = $"Real Error: {exception.Message}",
-                        Details = exception.InnerException?.Message
-                    };
-                    break;
-            }
+                DbUpdateException dbEx => HandleDbUpdateException(dbEx),
+
+                _ => (HttpStatusCode.InternalServerError, new ErrorResponse
+                {
+                    StatusCode = 500,
+                    Message = _env.IsDevelopment() ? $"Server Error: {exception.Message}" : "An unexpected error occurred.",
+                    Details = _env.IsDevelopment() ? exception.InnerException?.Message : null
+                })
+            };
 
             context.Response.StatusCode = (int)statusCode;
-            await context.Response.WriteAsync(JsonSerializer.Serialize(responseBody, options));
+
+            var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
+            await context.Response.WriteAsync(JsonSerializer.Serialize(response, options));
+        }
+
+        private static ErrorResponse CreateError(int code, string message) =>
+            new() { StatusCode = code, Message = message };
+
+        private (HttpStatusCode, object) HandleDbUpdateException(DbUpdateException ex)
+        {
+            var message = "A database conflict occurred.";
+
+            if (ex.InnerException is Microsoft.Data.SqlClient.SqlException sqlEx)
+            {
+                message = sqlEx.Number switch
+                {
+                    2601 or 2627 => "This seat is already booked or being processed.",
+                    547 => "Invalid data reference (User, Seat, or Session not found).",
+                    _ => "Database operation failed."
+                };
+            }
+
+            return (HttpStatusCode.Conflict, CreateError(409, message));
         }
     }
 }

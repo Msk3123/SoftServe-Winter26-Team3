@@ -11,18 +11,18 @@ namespace Cinema.Application.Services
 {
     public class OrderService : IOrderService
     {
-        private readonly IUnitOfWork _uow;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
         public OrderService(IUnitOfWork uow, IMapper mapper)
         {
-            _uow = uow;
+            _unitOfWork = uow;
             _mapper = mapper;
         }
 
         public async Task<OrderDetailsDto> PlaceOrderAsync(OrderCreateDto dto)
         {
-            await _uow.BeginTransactionAsync();
+            await _unitOfWork.BeginTransactionAsync();
 
             try
             {
@@ -30,7 +30,7 @@ namespace Cinema.Application.Services
                 var selectedTypeIds = dto.SelectedTickets.Select(st => st.TicketTypeId).Distinct().ToList();
 
   
-                var sessionSeats = await _uow.SessionSeats.GetAll()
+                var sessionSeats = await _unitOfWork.SessionSeats.GetAll()
                     .Include(ss => ss.Seat)
                         .ThenInclude(s => s.SeatType) 
                     .Where(ss => selectedSeatIds.Contains(ss.SessionSeatId))
@@ -39,7 +39,7 @@ namespace Cinema.Application.Services
                 if (sessionSeats.Count != selectedSeatIds.Count)
                     throw new KeyNotFoundException("Some selected seats were not found.");
 
-                var ticketTypes = await _uow.TicketTypes.GetAll()
+                var ticketTypes = await _unitOfWork.TicketTypes.GetAll()
                     .Where(tt => selectedTypeIds.Contains(tt.TicketTypeId))
                     .ToListAsync();
 
@@ -51,47 +51,67 @@ namespace Cinema.Application.Services
                     if (seat.LockedByUserId != dto.UserId)
                         throw new SeatNotReservedException(seat.SessionSeatId);
                 }
-
+                if (sessionSeats.Any(ss => ss.SessionId != dto.SessionId))
+                {
+                    throw new SessionMismatchException();
+                }
+                var userExists = await _unitOfWork.Users.GetByIdAsync(dto.UserId);
+                if (userExists == null) throw new KeyNotFoundException("User not found");
                 var order = new Order
                 {
                     UserId = dto.UserId,
                     SessionId = dto.SessionId,
                     OrderDate = DateTime.UtcNow,
                     OrderStatus = OrderStatus.Confirmed,
+
                     Tickets = new List<Ticket>()
                 };
+                var existingTickets = await _unitOfWork.Tickets.GetAll()
+                    .Where(t => selectedSeatIds.Contains(t.SessionSeatId))
+                    .ToListAsync();
+                if (existingTickets.Any())
+                {
+                    throw new SeatsAlreadyTakenException();
+                }
+
+                if (sessionSeats.Any(ss => ss.SeatStatuses == SeatStatus.Sold))
+                {
+                    throw new SeatAlreadySoldException();
+                }
+                decimal totalOrderAmount = 0;
 
                 foreach (var seat in sessionSeats)
                 {
                     var ticketInfo = dto.SelectedTickets.First(st => st.SessionSeatId == seat.SessionSeatId);
                     var tType = ticketTypes.First(tt => tt.TicketTypeId == ticketInfo.TicketTypeId);
-
                     decimal finalPrice = seat.Seat.SeatType.BasePrice * tType.Multiplier;
+
+                    totalOrderAmount += finalPrice;
 
                     order.Tickets.Add(new Ticket
                     {
                         SessionSeatId = seat.SessionSeatId,
                         TicketTypeId = tType.TicketTypeId,
-                        Price = finalPrice 
+                        Price = finalPrice
+
                     });
-
-                    seat.SeatStatuses = SeatStatus.Sold;
-                    seat.LockedByUserId = null;
-                    seat.LockExpiration = null;
+                    seat.LockExpiration = DateTime.UtcNow.AddMinutes(15);
+                    seat.SeatStatuses = SeatStatus.Reserved;
                 }
- 
-                await _uow.Orders.AddAsync(order);
-                await _uow.SaveChangesAsync();
-                await _uow.CommitAsync();
+                order.TotalAmount = totalOrderAmount;
+                await _unitOfWork.Orders.AddAsync(order);
+                await _unitOfWork.SaveChangesAsync();
+                await _unitOfWork.CommitAsync();
 
-                var completedOrder = await _uow.Orders.GetByIdAsync(order.OrderId);
+                var completedOrder = await _unitOfWork.Orders.GetByIdAsync(order.OrderId);
                 return _mapper.Map<OrderDetailsDto>(completedOrder);
             }
             catch (Exception)
             {
-                await _uow.RollbackAsync();
+                await _unitOfWork.RollbackAsync();
                 throw; 
             }
         }
+        
     }
 }
