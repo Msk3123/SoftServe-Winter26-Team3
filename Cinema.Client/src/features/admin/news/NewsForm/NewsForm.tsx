@@ -18,7 +18,7 @@ import { SelectableInput } from "../../../../components/Form/SelectableInput/Sel
 import MovieOption from "../../movies/MovieOption/MovieOption";
 import { getAllActors } from "../../../../api/actorApi";
 import ActorOption from "../../actors/ActorOption/ActorOption";
-import { dateToDayFirst, dateToYearFirst } from "../../../../helpers/textHelpers";
+import { dateToYearFirst } from "../../../../helpers/textHelpers";
 
 
 const initialData = {

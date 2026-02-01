@@ -31,6 +31,7 @@ import editActorFormLoader from "../features/admin/actors/EditActor/editActorFor
 import editNewsFormLoader from "../features/admin/news/EditNews/editNewsFormLoader";
 import EditNewsForm from "../features/admin/news/EditNews/EditNewsForm";
 import CreateNewsForm from "../features/admin/news/CreateNews/CreateNewsForm";
+import MovieForm from "../features/admin/movies/MovieForm/MovieForm";
 
 export const router = createBrowserRouter([
   {
@@ -106,7 +107,7 @@ export const router = createBrowserRouter([
         children: [
           {
             path: "create",
-            element: <Modal>create movie</Modal>,
+            element: <Modal><MovieForm onSubmitAction={async ()=>console.log("submit")}/></Modal>,
           },
           {
             path: ":movieId/edit",
