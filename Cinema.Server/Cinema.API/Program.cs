@@ -62,6 +62,7 @@ builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<IPaymentGateway, PaymentGateway>();
 builder.Services.AddScoped<IBookingCleanupService, BookingCleanupService>();
+builder.Services.AddScoped<IHallService, HallService>();
 builder.Services.AddControllers()
     .AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 //swagger
