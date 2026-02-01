@@ -4,6 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
+using Cinema.Application.DTOs.HallDtos;
+using FluentValidation;
+
 namespace Cinema.Application.Validators.Hall
 {
     public class HallCreateValidator : AbstractValidator<HallCreateDto>
@@ -14,8 +17,11 @@ namespace Cinema.Application.Validators.Hall
                 .NotEmpty().WithMessage("Hall name is required.")
                 .MaximumLength(100).WithMessage("Hall name cannot exceed 100 characters.");
 
-            RuleFor(x => x.Capacity)
-                .GreaterThan(0).WithMessage("Capacity must be greater than 0.");
+            RuleFor(x => x.Rows)
+                .InclusiveBetween(1, 50).WithMessage("Rows must be between 1 and 50.");
+
+            RuleFor(x => x.SeatsPerRow)
+                .InclusiveBetween(1, 100).WithMessage("Seats per row must be between 1 and 100.");
         }
     }
 }

@@ -13,6 +13,11 @@ namespace Cinema.Application.Interfaces
         ITicketTypeRepository TicketTypes { get; }
         IPaymentRepository Payments { get; }
         IUserRepository Users { get; }
+
+        ISessionRepository Sessions { get; }
+        ISeatRepository Seats { get; }
+        IMovieRepository Movies { get; }
+        IHallRepository Halls { get; }
         Task<int> SaveChangesAsync();
         Task BeginTransactionAsync();
         Task CommitAsync();
