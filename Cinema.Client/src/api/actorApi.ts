@@ -3,7 +3,7 @@ import type { DeleteFunction, FetchListFunction, FetchOneFunction, PatchFunction
 import { defaultParams, deleteItem, getItem, getPaginatedData, patchItem, postItem, putItem } from "./api";
 
 export const  getAllActors:FetchListFunction<ActorShort> = async (params = defaultParams ) => {
-        return await getPaginatedData<ActorShort>("actors", params);
+    return await getPaginatedData<ActorShort>("actors", params);
 
 };
 export const getActor:FetchOneFunction<Actor> = async (id)=>{

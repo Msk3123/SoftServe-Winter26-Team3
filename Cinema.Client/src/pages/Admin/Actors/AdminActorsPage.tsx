@@ -24,13 +24,8 @@ const AdminActorsPage = ()=>{
                 tableData={{ data, pagination, sortParams, status }}
                 tableActions={actions}
                 deleteFn={deleteActor}/>
-            <Outlet context={{createItem:actions.createItem , setData:actions.setData}}/>
+            <Outlet context={{createItem:actions.createItem , editItem:actions.editItem}}/>
         </>
     )
 };
-
-export interface AdminActorsPageContext{
-    createItem: (item: ActorShort) => void;
-    setData:(items: readonly ActorShort[]) => void;
-}
 export default AdminActorsPage;

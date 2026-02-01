@@ -25,7 +25,9 @@ import PageNotFound from "../pages/Client/PageNotFound/PageNotFound";
 import AdminPageNotFound from "../pages/Admin/PageNotFound/AdminPageNotFound";
 import AdminActorsPage from "../pages/Admin/Actors/AdminActorsPage";
 import SessionForm from "../features/admin/sessions/SessionForm";
-import CreateActorForm from "../features/admin/actors/CreateActorForm/CreateActorForm";
+import CreateActorForm from "../features/admin/actors/CreateActor/CreateActorForm";
+import EditActorForm from "../features/admin/actors/EditActor/EditActorForm";
+import editActorFormLoader from "../features/admin/actors/EditActor/editActorFormLoader";
 
 export const router = createBrowserRouter([
   {
@@ -175,7 +177,10 @@ export const router = createBrowserRouter([
         element: <AdminActorsPage />,
         children: [
             { path: "create", element: <Modal title="Create Actor"><CreateActorForm/></Modal> },
-            { path: ":orderId/edit", element: <Modal title="Create Actor"><CreateActorForm/></Modal>}
+            { path: ":actorId/edit",
+              element: <Modal title="Edit Actor"><EditActorForm/></Modal>,
+              loader: editActorFormLoader,
+            }
         ]
       },
 

@@ -1,4 +1,4 @@
-import styles from "./CreateActorForm.module.css";
+import styles from "./ActorForm.module.css";
 import type { ActorCreate } from "../../../../types/actor.types";
 import useForm from "../../../../hooks/useForm";
 import actorValidator from "../../validators/actorValidator";
@@ -7,13 +7,9 @@ import Button from "../../../../components/Button/Button";
 import TextArea from "../../../../components/Form/TextArea/TextArea";
 import { AiOutlineDelete } from "react-icons/ai";
 import { useState, type FormEvent } from "react";
-import { postActor } from "../../../../api/actorApi";
-import toast from "react-hot-toast";
-import { useNavigate, useOutletContext } from "react-router";
-import type { AdminActorsPageContext } from "../../../../pages/Admin/Actors/AdminActorsPage";
 
 
-const initialState = {
+const initialData = {
     firstName: "",
     lastName: "",
     biography: "",
@@ -21,42 +17,19 @@ const initialState = {
     photoUrl: "",
 }
 
-const CreateActorForm = ()=>{
-    const {createItem} = useOutletContext<AdminActorsPageContext>();
+interface ActorFormProps{
+    initialState?:ActorCreate;
+    onSubmitAction:(data: ActorCreate) => Promise<void>;
+}
+const ActorForm = ({initialState,onSubmitAction}:ActorFormProps)=>{
     
-    const {formData,errors,isSubmitting,handleChange,handleSubmit} = useForm<ActorCreate>(initialState,actorValidator);
+    const {formData,errors,isSubmitting,handleChange,handleSubmit} = useForm<ActorCreate>(initialState??initialData,actorValidator);
     const [isPending, setIsPending] = useState(false)
-    
-    const navigate = useNavigate();
-    
-    const handleClose = ()=>{
-        navigate("..");
-    }
-    
+
     const onSubmit=async (e: FormEvent<HTMLFormElement>)=>{
         e.preventDefault();
         setIsPending(true);
-        await handleSubmit(async (formData)=>{
-            
-            try{
-                const actor = await postActor(formData);
-                if(actor){
-                    createItem({
-                        id:actor.id,
-                        firstName:actor.firstName,
-                        lastName:actor.lastName,
-                        photoUrl:actor.photoUrl
-                    });
-                    toast.success("Actor succesfully added!")
-                    handleClose();
-                }
-            }catch{
-                toast.error("Can`t add this actor");
-            }
-
-            
-            
-        })
+        await handleSubmit(onSubmitAction)
         setIsPending(false);
     }
 
@@ -127,9 +100,9 @@ const CreateActorForm = ()=>{
 
             <div className={styles.actions}>
                 <Button bgColor="var(--button-cancel)" to="..">Cancel</Button>
-                <Button htmlType="submit" disabled={isSubmitting}>Create Actor</Button>
+                <Button htmlType="submit" disabled={isSubmitting}>Submit</Button>
             </div>
         </form>
     )
 }
-export default CreateActorForm;
+export default ActorForm;
