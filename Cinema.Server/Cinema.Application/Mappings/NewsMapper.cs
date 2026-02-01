@@ -18,10 +18,9 @@ namespace Cinema.Application.Mappings
 
             CreateMap<News, NewsDetailsDto>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.NewsId))
-                .ForMember(dest => dest.TagName, opt => opt.MapFrom(src => src.Tag.TagName))
-                .ForMember(dest => dest.MovieTitle, opt => opt.MapFrom(src => src.Movie.Title))
-                .ForMember(dest => dest.ActorFullName, opt => opt.MapFrom(src =>
-                    $"{src.Actor.FirstName} {src.Actor.LastName}"));
+                .ForMember(dest => dest.Tag, opt => opt.MapFrom(src => src.Tag))
+                .ForMember(dest => dest.Movie, opt => opt.MapFrom(src => src.Movie))
+                .ForMember(dest => dest.Actor, opt => opt.MapFrom(src => src.Actor));
 
             CreateMap<NewsPatchDto, News>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) =>
