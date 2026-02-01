@@ -52,6 +52,7 @@ builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<ITicketTypeRepository, TicketTypeRepository>();
 builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
+builder.Services.AddScoped<ISeatTypeRepository, SeatTypeRepository>();
 
 //services  
 builder.Services.AddScoped<ISessionSeatService, SessionSeatService>();
