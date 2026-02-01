@@ -55,6 +55,8 @@ namespace Cinema.API.Middleware
 
                 KeyNotFoundException ex =>
                     (HttpStatusCode.NotFound, CreateError(404, ex.Message)),
+                SessionOverlapException ex =>
+                    (HttpStatusCode.Conflict, CreateError(409, ex.Message)),
 
                 DbUpdateException dbEx => HandleDbUpdateException(dbEx),
 
