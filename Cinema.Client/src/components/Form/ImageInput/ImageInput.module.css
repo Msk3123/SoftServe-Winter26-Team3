@@ -1,0 +1,39 @@
+
+.imageInput{
+    display: grid;
+    grid-template-columns: 54% 6% 40%;
+    gap: 0.4em;
+    align-items: center;
+}
+
+.imagePreviewWrapper{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+.imagePreview{
+    max-width: 14em;
+    border: 1px var(--ui-border) solid;
+    border-radius: 1em;
+}
+
+.imagePreview:invalid{
+    padding: 1em;
+}
+.imagePlaceholder{
+    height: 12em;
+    width: 12em;
+    padding: 4em;
+    font-weight: var(--fw-light);
+    font-size: 0.6rem;
+    border: 1px var(--ui-border) solid;
+    border-radius: 1em;
+    display: flex;
+    align-items: center;
+    box-shadow:0px 0px 5px rgba(0,0,0,0.6);
+}
+
+.clearButton{
+    font-size: 1.4em;
+    margin-top: 1.6em;
+}

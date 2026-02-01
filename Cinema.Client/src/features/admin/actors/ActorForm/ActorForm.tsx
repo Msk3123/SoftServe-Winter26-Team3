@@ -5,8 +5,8 @@ import actorValidator from "../../validators/actorValidator";
 import BaseInput from "../../../../components/Form/BaseInput/BaseInput";
 import Button from "../../../../components/Button/Button";
 import TextArea from "../../../../components/Form/TextArea/TextArea";
-import { AiOutlineDelete } from "react-icons/ai";
 import { useState, type FormEvent } from "react";
+import ImageInput from "../../../../components/Form/ImageInput/ImageInput";
 
 
 const initialData = {
@@ -35,30 +35,15 @@ const ActorForm = ({initialState,onSubmitAction}:ActorFormProps)=>{
 
     return(
         <form onSubmit={onSubmit} className={isPending ? styles.pendingForm:""}>
-            <div className={styles.imageInput}>
-                <BaseInput
+                <ImageInput
                     value={formData.photoUrl}
                     error={errors.photoUrl}
                     onValueChange={(v)=>handleChange("photoUrl",v)}
-                    type="url"
+                    onValueClear={()=>handleChange("photoUrl","")}
                     label="Actor Photo"
                     placeholder="Put photo URL here.."
                     required
                 />
-                <Button action={()=>handleChange("photoUrl","")} className={styles.clearButton}>< AiOutlineDelete/></Button>
-                
-                <div className={styles.imagePreviewWrapper}>
-                    {formData.photoUrl ? (
-                        <img
-                            src={formData.photoUrl}
-                            alt="Preview"
-                            className={`${styles.actorPreview} ${errors.photoUrl?styles.imagePlaceholder:""}`}
-                            />
-                    ) : (
-                        <div className={styles.imagePlaceholder}>Avatar will appear here</div>
-                    )}
-                </div>
-            </div>
 
                 <BaseInput
                     value={formData.firstName}
