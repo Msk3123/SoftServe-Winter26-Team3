@@ -3,7 +3,7 @@ import AdminTablePage from "../../../features/admin/components/AdminTablePage/Ad
 import type { NewsShort } from "../../../types/news.types";
 import type { ColumnDef } from "../../../types/common.types";
 import { deleteNews, getAllNews } from "../../../api/newsApi";
-import { dateToString } from "../../../helpers/textHelpers";
+import { dateToDayFirst } from "../../../helpers/textHelpers";
 import styles from "./AdminNewsPage.module.css";
 import useQueryTable from "../../../hooks/useQueryTable/useQueryTable";
 import { act } from "react";
@@ -17,7 +17,7 @@ const AdminNewsPage = ()=>{
         {key:"imageUrl",title:"Image",render:(item)=><img src={item.imageUrl} alt={`${item.title} image`} className={styles.imageCell}/>},
         {key:"title",title:"Title"},
         {key:"shortContent",title:"Content"},
-        { key: "publishedDate", title: "Date" , render:(item)=>dateToString(new Date(item.publishedDate))}
+        { key: "publishedDate", title: "Date" , render:(item)=>dateToDayFirst(new Date(item.publishedDate))}
     ];
 
     return (<>

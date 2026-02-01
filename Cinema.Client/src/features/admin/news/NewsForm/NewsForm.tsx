@@ -2,7 +2,7 @@ import styles from "./NewsForm.module.css";
 import useForm from "../../../../hooks/useForm";
 import Button from "../../../../components/Button/Button";
 import { useEffect, useState, type FormEvent } from "react";
-import type { NewsCreate } from "../../../../types/news.types";
+import { GENERAL_TAG_ID, type NewsCreate } from "../../../../types/news.types";
 import newsValidator from "../../validators/newsValidator";
 import BaseInput from "../../../../components/Form/BaseInput/BaseInput";
 import TextArea from "../../../../components/Form/TextArea/TextArea";
@@ -18,6 +18,7 @@ import { SelectableInput } from "../../../../components/Form/SelectableInput/Sel
 import MovieOption from "../../movies/MovieOption/MovieOption";
 import { getAllActors } from "../../../../api/actorApi";
 import ActorOption from "../../actors/ActorOption/ActorOption";
+import { dateToDayFirst, dateToYearFirst } from "../../../../helpers/textHelpers";
 
 
 const initialData = {
@@ -25,7 +26,7 @@ const initialData = {
     newsContent: "",
     imageUrl: "",
     publishedDate: "",
-    tagId:1,//general tag
+    tagId: GENERAL_TAG_ID,
     isActive: false,
     movieId: undefined,
     actorId: undefined,
@@ -49,15 +50,28 @@ const NewsForm = ({initialState,onSubmitAction}:NewsFormProps)=>{
             .then((response)=>response.items)
             .then(items=>
                 setTags(items.map((v)=>({value:v.id, label: v.tagName}))))
-            .catch(err => toast.error("Tag error"));
+            .catch(err =>{
+                console.error(err)
+                toast.error("Tags error")
+            });
     }, []);
 
     useEffect(() => {
-        getAllMovies().then((response)=>setMovies(response.items)).catch(err => toast.error("Movies error"));
+        getAllMovies()
+            .then((response)=>setMovies(response.items))
+            .catch(err =>{
+                console.error(err)
+                toast.error("Movies error")
+            });
     }, []);
 
     useEffect(() => {
-        getAllActors().then((response)=>setActors(response.items)).catch(err => toast.error("Actors error"));
+        getAllActors()
+            .then((response)=>setActors(response.items))
+            .catch(err =>{
+                console.error(err)
+                toast.error("Actors error")
+            });
     }, []);
 
 
@@ -80,7 +94,7 @@ const NewsForm = ({initialState,onSubmitAction}:NewsFormProps)=>{
                 />
 
                 <BaseInput
-                    value={formData.publishedDate}
+                    value={dateToYearFirst(new Date(formData.publishedDate))}
                     error={errors.publishedDate}
                     onValueChange={(v)=>handleChange("publishedDate",v)}
                     type="date"

@@ -4,7 +4,7 @@ import AdminTablePage from "../../../features/admin/components/AdminTablePage/Ad
 import type { MovieShort } from "../../../types/movie.types";
 import type { ColumnDef } from "../../../types/common.types";
 import styles from "./AdminMoviesPage.module.css"
-import { dateToString } from "../../../helpers/textHelpers";
+import { dateToDayFirst } from "../../../helpers/textHelpers";
 import useQueryTable from "../../../hooks/useQueryTable/useQueryTable";
 
 const AdminMoviesPage = ()=>{
@@ -15,7 +15,7 @@ const AdminMoviesPage = ()=>{
         {key:"id",title:"№"},
         {key:"posterUrl",title:"Poster",render:(item)=><img src={item.posterUrl} alt={`${item.title} poster`} className={styles.imageCell}/>},
         {key:"title",title:"Title"},
-        {key:"releaseDate",title:"Release Date",render:(item)=>dateToString(new Date(item.releaseDate))}
+        {key:"releaseDate",title:"Release Date",render:(item)=>dateToDayFirst(new Date(item.releaseDate))}
     ]
 
     return(

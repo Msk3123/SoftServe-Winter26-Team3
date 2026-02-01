@@ -1,7 +1,7 @@
 import { useLoaderData, useNavigate, useOutletContext} from "react-router";
 import toast from "react-hot-toast";
 import type { AdminModalContext } from "../../../../types/admin.types";
-import type { News, NewsCreate, NewsShort } from "../../../../types/news.types";
+import { mapNewsToCreate, type News, type NewsCreate, type NewsShort } from "../../../../types/news.types";
 import { putNews } from "../../../../api/newsApi";
 import NewsForm from "../NewsForm/NewsForm";
 
@@ -37,7 +37,7 @@ const EditNewsForm = ()=>{
             }
         }
 
-    return <NewsForm onSubmitAction={onSubmit}/>
+    return <NewsForm initialState={mapNewsToCreate(initialState)} onSubmitAction={onSubmit}/>
 }
 
 export default EditNewsForm;
