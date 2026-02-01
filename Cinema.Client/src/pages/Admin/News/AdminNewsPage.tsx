@@ -6,6 +6,7 @@ import { deleteNews, getAllNews } from "../../../api/newsApi";
 import { dateToString } from "../../../helpers/textHelpers";
 import styles from "./AdminNewsPage.module.css";
 import useQueryTable from "../../../hooks/useQueryTable/useQueryTable";
+import { act } from "react";
 
 const AdminNewsPage = ()=>{
 
@@ -25,7 +26,7 @@ const AdminNewsPage = ()=>{
                     tableData={{ data, pagination, sortParams, status }}
                     tableActions={actions}
                     deleteFn={deleteNews} />
-                <Outlet />
+                <Outlet context={{createItem:actions.createItem,editItem:actions.editItem}}/>
             </>)
 };
 

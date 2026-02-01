@@ -1,5 +1,5 @@
 export interface NewsShort {
-  id: number;
+  id: number|string;
   title: string;
   shortContent: string;
   imageUrl: string;
@@ -12,8 +12,8 @@ export interface NewsCreate{
   publishedDate: string;
   tagId: number;
   isActive: boolean;
-  movieId?: number;
-  actorId?: number;
+  movieId?: number|string;
+  actorId?: number|string;
 }
 export interface News {
   id: number;

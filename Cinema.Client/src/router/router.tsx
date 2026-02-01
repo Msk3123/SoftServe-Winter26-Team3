@@ -28,6 +28,9 @@ import SessionForm from "../features/admin/sessions/SessionForm";
 import CreateActorForm from "../features/admin/actors/CreateActor/CreateActorForm";
 import EditActorForm from "../features/admin/actors/EditActor/EditActorForm";
 import editActorFormLoader from "../features/admin/actors/EditActor/editActorFormLoader";
+import editNewsFormLoader from "../features/admin/news/EditNews/editNewsFormLoader";
+import EditNewsForm from "../features/admin/news/EditNews/EditNewsForm";
+import CreateNewsForm from "../features/admin/news/CreateNews/CreateNewsForm";
 
 export const router = createBrowserRouter([
   {
@@ -146,8 +149,11 @@ export const router = createBrowserRouter([
         path: "news",
         element: <AdminNewsPage />,
         children: [
-          { path: "create", element: <Modal>create news</Modal> },
-          { path: ":newsId/edit", element: <Modal>edit news</Modal> },
+          { path: "create", element: <Modal title="Create News"><CreateNewsForm/></Modal> },
+            { path: ":newsId/edit",
+              element: <Modal title="Edit News"><EditNewsForm/></Modal>,
+              loader: editNewsFormLoader,
+            }
         ],
       },
 
