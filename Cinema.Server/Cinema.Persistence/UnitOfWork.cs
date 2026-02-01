@@ -1,5 +1,7 @@
 ﻿using Cinema.Application.Interfaces;
+using Cinema.Application.Interfaces.PaymentGateway;
 using Cinema.Persistence.Context;
+using Cinema.Persistence.ExternalServices;
 using Cinema.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore.Storage;
 
@@ -14,7 +16,8 @@ namespace Cinema.Persistence
         private ISessionSeatRepository _sessionSeats;
         private ITicketRepository _tickets;
         private ITicketTypeRepository _ticketTypes;
-
+        private IPaymentRepository _paymentRepository;
+        private IUserRepository _userRepository;
         public UnitOfWork(AppDbContext context)
         {
             _context = context;
@@ -24,6 +27,8 @@ namespace Cinema.Persistence
         public ISessionSeatRepository SessionSeats => _sessionSeats ??= new SessionSeatRepository(_context);
         public ITicketRepository Tickets => _tickets ??= new TicketRepository(_context);
         public ITicketTypeRepository TicketTypes => _ticketTypes ??= new TicketTypeRepository(_context);
+        public IPaymentRepository Payments => _paymentRepository ??= new PaymentRepository(_context);
+        public IUserRepository Users => _userRepository ??= new UserRepository(_context);
 
         public async Task<int> SaveChangesAsync()
         {

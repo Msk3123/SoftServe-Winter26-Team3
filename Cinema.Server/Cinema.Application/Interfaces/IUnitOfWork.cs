@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cinema.Application.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -10,6 +11,8 @@ namespace Cinema.Application.Interfaces
         ISessionSeatRepository SessionSeats { get; }
         ITicketRepository Tickets { get; }
         ITicketTypeRepository TicketTypes { get; }
+        IPaymentRepository Payments { get; }
+        IUserRepository Users { get; }
         Task<int> SaveChangesAsync();
         Task BeginTransactionAsync();
         Task CommitAsync();

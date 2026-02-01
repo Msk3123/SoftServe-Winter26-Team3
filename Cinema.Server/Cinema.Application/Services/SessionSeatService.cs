@@ -1,35 +1,40 @@
-﻿using Cinema.Application.Interfaces;
-using Cinema.Domain.Enums;
+﻿using Cinema.Application.Common.Exceptions;
+using Cinema.Application.Interfaces;
+using Cinema.Application.Interfaces.Services;
 using Cinema.Domain.Entities;
+using Cinema.Domain.Enums;
 using Hangfire;
 using System;
 using System.Threading.Tasks;
-using Cinema.Application.Interfaces.Services;
 
 namespace Cinema.Application.Services
 {
     public class SessionSeatService : ISessionSeatService
     {
-        private readonly ISessionSeatRepository _repository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IBackgroundJobClient _backgroundJobs;
 
-        public SessionSeatService(ISessionSeatRepository repository, IBackgroundJobClient backgroundJobs)
+        public SessionSeatService(IUnitOfWork unitOfWork, IBackgroundJobClient backgroundJobs)
         {
-            _repository = repository;
+            _unitOfWork = unitOfWork;
             _backgroundJobs = backgroundJobs;
         }
 
         public async Task<bool> ReserveSeatAsync(int seatId, int userId)
         {
-            var seat = await _repository.GetByIdAsync(seatId);
+            var user = await _unitOfWork.Users.GetByIdAsync(userId);
+            if (user == null) throw new KeyNotFoundException($"User {userId} not found.");
 
-            if (seat == null || seat.SeatStatuses != SeatStatus.Available)
-                return false;
+            var seat = await _unitOfWork.SessionSeats.GetByIdAsync(seatId);
+
+            if (seat == null) throw new KeyNotFoundException("Seat not found.");
+            if (seat.SeatStatuses != SeatStatus.Available) throw new SeatsAlreadyTakenException();
 
             seat.LockedByUserId = userId;
             seat.SeatStatuses = SeatStatus.Reserved;
             seat.LockExpiration = DateTime.UtcNow.AddMinutes(15);
-            await _repository.SaveAsync();
+
+            await _unitOfWork.SaveChangesAsync();
 
             _backgroundJobs.Schedule<ISessionSeatService>(
                 service => service.ReleaseSeatIfExpired(seatId, userId),
@@ -39,13 +44,13 @@ namespace Cinema.Application.Services
         }
         public async Task ReleaseSeatIfExpired(int seatId, int userId)
         {
-            var seat = await _repository.GetByIdAsync(seatId);
+            var seat = await _unitOfWork.SessionSeats.GetByIdAsync(seatId);
 
             if (seat != null && seat.SeatStatuses == SeatStatus.Reserved && seat.LockedByUserId == userId)
             {
                 seat.SeatStatuses = SeatStatus.Available;
                 seat.LockedByUserId = null;
-                await _repository.SaveAsync();
+                await _unitOfWork.SaveChangesAsync();
             }
         }
     }

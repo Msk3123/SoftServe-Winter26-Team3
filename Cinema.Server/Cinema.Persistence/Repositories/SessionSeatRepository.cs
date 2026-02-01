@@ -1,6 +1,7 @@
 ﻿using Cinema.Application.Interfaces;
 using Cinema.Application.Interfaces.Services;
 using Cinema.Domain.Entities;
+using Cinema.Domain.Enums;
 using Cinema.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -33,6 +34,14 @@ namespace Cinema.Persistence.Repositories
         public async Task AddRangeAsync(IEnumerable<SessionSeat> sessionSeats)
         {
             await _dbSet.AddRangeAsync(sessionSeats);
+        }
+        public async Task<List<SessionSeat>> GetExpiredOrphanedSeatsAsync(DateTime now)
+        {
+            return await _context.SessionSeats
+                .Where(ss => ss.SeatStatuses == SeatStatus.Reserved
+                          && ss.LockExpiration != null
+                          && ss.LockExpiration < now)
+                .ToListAsync();
         }
     }
 }

@@ -2,6 +2,7 @@
 using Cinema.Application.Helpers;
 using Cinema.Application.Interfaces;
 using Cinema.Domain.Entities;
+using Cinema.Domain.Enums;
 using Cinema.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -74,5 +75,6 @@ namespace Cinema.Persistence.Repositories
             }
             await _context.SaveChangesAsync();
         }
+        
     }
 }
