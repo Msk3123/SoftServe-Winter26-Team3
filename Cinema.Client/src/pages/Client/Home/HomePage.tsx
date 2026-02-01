@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import styles from "./HomePage.module.css";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { getRecentNews } from "../../../api/newsApi";
 import Button from "../../../components/Button/Button";
 import type { MovieShort } from "../../../types/movie.types";
@@ -12,7 +12,7 @@ const HomePage = () => {
   const [movies, setMovies] = useState<MovieShort[]>([]);
   const [newsList, setNewsList] = useState<NewsShort[]>([]);
   const [loading, setLoading] = useState(false);
-  
+  const navigate = useNavigate();
   const listRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const loadMovies = async () => {
@@ -105,7 +105,7 @@ const HomePage = () => {
             <div className={styles.movieList} ref={listRef}>
               {movies.length > 0 ? (
                 movies.map((movie) => (
-                  <div key={movie.id} className={styles.movieItem}>
+                  <div key={movie.id} className={styles.movieItem} onClick={()=> navigate(`/movie/${movie.id}`)}>
                     <img
                       src={movie.posterUrl || "/assets/placeholderImage.png"}
                       alt={movie.title}
