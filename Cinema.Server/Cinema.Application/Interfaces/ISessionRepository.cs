@@ -12,5 +12,6 @@ namespace Cinema.Application.Interfaces
         Task<(IEnumerable<Session> Items, int TotalCount)> GetByMovieIdPagedAsync(int movieId, QueryParameters queryParameters);
         Task<Session?> GetByIdWithFullDetailsAsync(int id);
         Task<Session?> GetWithDetailsAsync(int id);
+        Task<IEnumerable<Session>> GetSessionsByDateRangeAsync(int hallId, DateTime startDate, DateTime endDate);
     }
 }
