@@ -145,6 +145,7 @@ const NewsForm = ({initialState,onSubmitAction}:NewsFormProps)=>{
                     onRemove={(item)=>handleChange("movieId",undefined)}
                     getLabel={(item)=>item.title}
                     renderOption={(item)=><MovieOption item={item} />}
+                    multiple={false}
                 />
 
                 <SelectableInput
@@ -156,6 +157,7 @@ const NewsForm = ({initialState,onSubmitAction}:NewsFormProps)=>{
                     onRemove={(item)=>handleChange("actorId",undefined)}
                     getLabel={(item)=>`${item.firstName} ${item.lastName}`}
                     renderOption={(item)=><ActorOption item={item} />}
+                    multiple={false}
                 />
 
 

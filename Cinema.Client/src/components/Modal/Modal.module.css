@@ -2,13 +2,14 @@
     position: absolute;
     top: 0;
     left: 0;
-    backdrop-filter: blur(8px);
-    background-color: rgba(0,0,0,0.3);
+    /* backdrop-filter: blur(5px); design frezee with blur */
+    background-color: rgba(0,0,0,0.4);
     width: 100%;
     min-height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 4em 0;
 }
 .content{
     background-color: var(--bg-main);
@@ -18,6 +19,7 @@
     position: relative;
     min-height: 60vh;
     min-width: 60vw;
+    overflow-y: scroll;
 }
 
 

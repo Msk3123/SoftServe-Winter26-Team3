@@ -47,15 +47,23 @@ export function SelectableInput<T extends BaseEntity>({
     return () => document.removeEventListener('mousedown', handler);
   }, []);
 
+  const handleSelect = (item:T) => {
+    if(!multiple) setIsOpen(false);
+    onSelect(item);
+    setQuery('');
+  }
+
   const displayValue = !multiple && selectedItems.length > 0 
   ? getLabel(selectedItems[0])
   : query;
+
+
 
   return (
     <div className={styles.container} ref={containerRef}>
       <label className={styles.label} htmlFor={id}>{title}</label>
       <div className={styles.inputWrapper} onClick={() => setIsOpen(true)}>
-        {selectedItems.map(item => (
+        {multiple && selectedItems.map(item => (
           <div key={item.id} className={styles.chip}>
             {getLabel(item)}
             <button type="button" onClick={() => onRemove(item.id)}>×</button>
@@ -78,7 +86,7 @@ export function SelectableInput<T extends BaseEntity>({
             <div
               key={item.id}
               className={styles.option}
-              onClick={() => { onSelect(item); setQuery(''); }}
+              onClick={()=>handleSelect(item)}
             >
               {renderOption(item)}
             </div>
