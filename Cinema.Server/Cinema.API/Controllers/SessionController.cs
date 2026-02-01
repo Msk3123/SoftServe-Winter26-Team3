@@ -52,6 +52,12 @@ namespace Cinema.API.Controllers
             var response = _mapper.Map<SessionShortDto>(entity);
             return CreatedAtAction(nameof(GetById), new { id = response.Id }, response);
         }
+        [HttpPost("batch")]
+        public async Task<IActionResult> CreateBatch([FromBody] CreateSessionsBatchDto dto)
+        {
+            await _sessionService.CreateSessionsBatchAsync(dto);
+            return Ok(new { message = "Schedule created successfully" });
+        }
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] SessionCreateDto dto)
         {

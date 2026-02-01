@@ -8,5 +8,6 @@ namespace Cinema.Application.Interfaces.Services
     public interface ISessionService
     {
        Task<SessionDetailsDto> CreateSessionAsync(SessionCreateDto dto);
+        Task CreateSessionsBatchAsync(CreateSessionsBatchDto dto);
     }
 }

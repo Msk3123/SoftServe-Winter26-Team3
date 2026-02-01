@@ -75,6 +75,14 @@ namespace Cinema.Persistence.Repositories
             }
             await _context.SaveChangesAsync();
         }
-        
+        public async Task<IEnumerable<Session>> GetSessionsByDateRangeAsync(int hallId, DateTime startDate, DateTime endDate)
+        {
+            return await _context.Sessions
+                .AsNoTracking()
+                .Where(s => s.HallId == hallId &&
+                            s.SessionDate.Date >= startDate.Date &&
+                            s.SessionDate.Date <= endDate.Date)
+                .ToListAsync();
+        }
     }
 }
