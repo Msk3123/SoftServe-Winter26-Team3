@@ -1,7 +1,8 @@
+import type { BaseEntity } from "../../types/api.types";
 import type { ReducerState } from "./reducer.types";
 
 // We use { id: number } here for the initial template, but the hook will enforce the type.
-export const defaultInitialState: ReducerState<{ id: number|string }>= {
+export const defaultInitialState: ReducerState<BaseEntity>= {
     data: undefined,
     loading: false,
     error: null,

@@ -30,7 +30,16 @@ export function reducer<T extends { id: number|string }>(state: ReducerState<T>,
                 data: state.data ? [...state.data, action.payload] : [action.payload],
                 totalCount: state.totalCount + 1,
             };
-
+        
+        case "edit_item":
+            return {
+                ...state,
+                data: state.data?.map((item) =>
+                    item.id === action.payload.id
+                        ? { ...item, ...action.payload }
+                        : item
+                    ),
+            };
         case "fetch_error":
             return { ...state, loading: false, error: action.payload };
 

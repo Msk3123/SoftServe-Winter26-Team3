@@ -21,6 +21,7 @@ export type ReducerAction<T extends {id:number|string}> =
     | {type:"set_data"; payload:readonly T[]}
     | {type:"delete_item"; payload: number|string}
     | {type:"create_item"; payload: T}
+    | {type:"edit_item"; payload: T}
     | { type: "set_page"; payload: number }
     | { type: "set_page_size"; payload: number }
     | {
