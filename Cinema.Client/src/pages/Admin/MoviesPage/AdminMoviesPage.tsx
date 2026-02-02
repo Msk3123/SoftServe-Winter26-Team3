@@ -25,7 +25,7 @@ const AdminMoviesPage = ()=>{
                 tableData={{ data, pagination, sortParams, status }}
                 tableActions={actions}
                 deleteFn={deleteMovie}/>
-            <Outlet />
+            <Outlet context={{createItem:actions.createItem,editItem:actions.editItem}}/>
         </>
     )
 };

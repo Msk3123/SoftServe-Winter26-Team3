@@ -14,6 +14,7 @@ interface ControlPanelProps{
 }
 
 const ControlPanel =({pagination,setPageSize,handlePageChange}:ControlPanelProps)=>{
+    const min = Math.min(10,pagination.total);
     
     return(
         <div className={styles.controlPanel}>
@@ -22,7 +23,7 @@ const ControlPanel =({pagination,setPageSize,handlePageChange}:ControlPanelProps
                 min={Math.min(10,pagination.total)}
                 max={pagination.total}
                 value={pagination.pageSize}
-                onValueChange={(v)=>setPageSize(Number(v))}
+                onValueChange={(v)=> setPageSize(Number(v)<pagination.total ? min :Number(v) )}
                 label="Page Size"
                 className={styles.pageSizeInput}
             />

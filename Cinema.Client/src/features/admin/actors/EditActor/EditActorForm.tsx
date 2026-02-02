@@ -5,14 +5,21 @@ import ActorForm from "../ActorForm/ActorForm";
 import type { Actor, ActorCreate, ActorShort } from "../../../../types/actor.types";
 import type { AdminModalContext } from "../../../../types/admin.types";
 
-const EditActorForm = ()=>{
+
+interface EditActorFormProps {onClose?:()=>void};
+const EditActorForm = ({onClose}:EditActorFormProps)=>{
     const initialState = useLoaderData() as Actor;
 
     const {editItem} = useOutletContext<AdminModalContext<ActorShort>>();
     const navigate = useNavigate();
     
     const handleClose = ()=>{
-        navigate("..");
+        if(onClose){
+            onClose();
+        }else{
+            navigate("..");
+        }
+        
     }
     
 
@@ -36,7 +43,7 @@ const EditActorForm = ()=>{
             }
         }
 
-    return <ActorForm initialState={initialState} onSubmitAction={onSubmit}/>
+    return <ActorForm initialState={initialState} onSubmitAction={onSubmit} onClose={handleClose}/>
 }
 
 export default EditActorForm;

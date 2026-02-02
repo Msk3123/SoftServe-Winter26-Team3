@@ -9,17 +9,19 @@ import ImageInput from "../../../../components/Form/ImageInput/ImageInput";
 import { dateToYearFirst } from "../../../../helpers/textHelpers";
 import Select from "../../../../components/Form/Select/Select";
 import TextArea from "../../../../components/Form/TextArea/TextArea";
-import { getAllActors } from "../../../../api/actorApi";
+import { getAllActors, postActor } from "../../../../api/actorApi";
 import toast from "react-hot-toast";
-import type { ActorShort } from "../../../../types/actor.types";
+import type { ActorCreate, ActorShort } from "../../../../types/actor.types";
 import type { Genre } from "../../../../types/genre.types";
-import { getAllGenres } from "../../../../api/genreApi";
+import { getAllGenres, postGenre } from "../../../../api/genreApi";
 import { SelectableInput } from "../../../../components/Form/SelectableInput/SelectableInput";
 import ActorOption from "../../actors/ActorOption/ActorOption";
 import GenreOption from "../../../../components/Form/GenreOption/GenreOption";
+import Modal from "../../../../components/Modal/Modal";
+import { ApiError } from "../../../../types/api.types";
+import ActorForm from "../../actors/ActorForm/ActorForm";
 
-
-export const LANGUAGE_OPTIONS = [
+const LANGUAGE_OPTIONS = [
     { value: 'en', label: '🇺🇸 English' },
     { value: 'uk', label: '🇺🇦 Українська' },
     { value: 'fr', label: '🇫🇷 Français' },
@@ -46,13 +48,22 @@ const initialData = {
 interface MovieFormProps{
     initialState?:MovieCreate;
     onSubmitAction:(data: MovieCreate) => Promise<void>;
+    onClose:()=>void;
 }
-const MovieForm = ({initialState,onSubmitAction}:MovieFormProps)=>{
+const MovieForm = ({initialState,onSubmitAction,onClose}:MovieFormProps)=>{
     
     const {formData,errors,isSubmitting,handleChange,handleSubmit} = useForm<MovieCreate>(initialState??initialData,movieValidator);
     const [isPending, setIsPending] = useState(false)
+    const [isModalOpen,setIsModalOpen] = useState(false);
     const [actors, setActors] = useState<ActorShort[]>([]);
     const [genres, setGenres] = useState<Genre[]>([]);
+    const [initialActor,setInitialActor] = useState<ActorCreate>({
+        firstName: "",
+        lastName: "",
+        biography: "",
+        birthday: "",
+        photoUrl: "",
+    });
 
     useEffect(() => {
         getAllActors()
@@ -72,6 +83,41 @@ const MovieForm = ({initialState,onSubmitAction}:MovieFormProps)=>{
             });
     }, []);
 
+    const createNewGenre = async (q:string)=>{
+        try{
+            const res = await postGenre({genreName:q});
+            setGenres(g=>[...g,res]);
+            handleChange("genreIds",[...formData.genreIds,Number(res.id)]);
+            toast.success("Genre created!")
+
+        }catch(e) {
+            const err = e as ApiError
+            console.error(err.message);
+            toast.error("Can`t create this genre");
+        }
+    }
+
+    const handleCreateActor = async (data:ActorCreate)=>{
+            
+            try{
+                const actor = await postActor(data);
+                if(actor){
+                    setActors(a=>[...a,{
+                        id:actor.id,
+                        firstName:actor.firstName,
+                        lastName:actor.lastName,
+                        photoUrl:actor.photoUrl
+                    }]);
+
+                    handleChange("actorIds",[...formData.actorIds,Number(actor.id)])
+                    toast.success("Actor succesfully added!")
+                    setIsModalOpen(false)
+                }
+            }catch{
+                toast.error("Can`t add this actor");
+            }
+        }
+
     const onSubmit=async (e: FormEvent<HTMLFormElement>)=>{
         e.preventDefault();
         setIsPending(true);
@@ -79,7 +125,13 @@ const MovieForm = ({initialState,onSubmitAction}:MovieFormProps)=>{
         setIsPending(false);
     }
 
+    const handleOpenModal=(q)=>{
+        setInitialActor({...initialActor,firstName:q})
+        setIsModalOpen(true);
+    };
+
     return(
+        <>
         <form onSubmit={onSubmit} className={isPending ? styles.pendingForm:""}>
 
             <BaseInput
@@ -93,18 +145,19 @@ const MovieForm = ({initialState,onSubmitAction}:MovieFormProps)=>{
 
             <div className={styles.datesContainer}>
                 <BaseInput
-                    value={formData.rating}
+                    value={!formData.rating ? '':formData.rating}
                     error={errors.rating}
                     onValueChange={(v)=>handleChange("rating",Number(v))}
                     type="number"
                     label="Rating(10)"
                     min={0}
                     max={10}
+                    step="0.1"
                     required
                 />
                 
                 <BaseInput
-                    value={formData.duration}
+                    value={!formData.duration ? '': formData.duration}
                     error={errors.duration}
                     onValueChange={(v)=>handleChange("duration",Number(v))}
                     type="number"
@@ -169,7 +222,7 @@ const MovieForm = ({initialState,onSubmitAction}:MovieFormProps)=>{
                 onValueChange={(v)=>handleChange("trailerUrl",v)}
                 onValueClear={()=>handleChange("trailerUrl","")}
                 label="Trailer"
-                placeholder="Put trailer URL here.."
+                placeholder="Put trailer preview URL here.."
                 className={styles.ImageInput}
                 required
             />
@@ -183,6 +236,7 @@ const MovieForm = ({initialState,onSubmitAction}:MovieFormProps)=>{
                     onSelect={(item)=>handleChange("genreIds",[...formData.genreIds,Number(item.id)])}
                     onRemove={(item)=>handleChange("genreIds",formData.actorIds.filter(i=>i!==item))}
                     getLabel={(item)=>item.name}
+                    onCreateNew={createNewGenre}
                     renderOption={(item)=><GenreOption item={item} />}
                 />
 
@@ -194,6 +248,7 @@ const MovieForm = ({initialState,onSubmitAction}:MovieFormProps)=>{
                     onSelect={(item)=>handleChange("actorIds",[...formData.actorIds,Number(item.id)])}
                     onRemove={(item)=>handleChange("actorIds",formData.actorIds.filter(i=>i!==item))}
                     getLabel={(item)=>`${item.firstName} ${item.lastName}`}
+                    onCreateNew={handleOpenModal}
                     renderOption={(item)=><ActorOption item={item} />}
                 />
             </div>
@@ -206,10 +261,15 @@ const MovieForm = ({initialState,onSubmitAction}:MovieFormProps)=>{
                 />
 
             <div className={styles.actions}>
-                <Button bgColor="var(--button-cancel)" to="..">Cancel</Button>
+                <Button bgColor="var(--button-cancel)" action={onClose}>Cancel</Button>
                 <Button htmlType="submit" disabled={isSubmitting}>Submit</Button>
             </div>
         </form>
+        {isModalOpen&&
+            <Modal title="Create Actor" onClose={()=>setIsModalOpen(false)}>
+                <ActorForm onClose={()=>setIsModalOpen(false)} onSubmitAction={handleCreateActor} initialState={initialActor}/>
+            </Modal>}
+        </>
     )
 }
 export default MovieForm;

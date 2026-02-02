@@ -1,0 +1,49 @@
+import { useLoaderData, useNavigate, useOutletContext } from "react-router";
+import type { AdminModalContext } from "../../../../types/admin.types";
+import { mapMovieToCreate, type Movie, type MovieCreate, type MovieShort } from "../../../../types/movie.types";
+import toast from "react-hot-toast";
+import MovieForm from "../MovieForm/MovieForm";
+import { putMovie } from "../../../../api/movieApi";
+
+interface EditMovieFormProps {
+    onClose?:()=>void;
+}
+
+const EditMovieForm = ({onClose}:EditMovieFormProps)=>{
+
+    const initialState = useLoaderData() as Movie;
+
+    const {editItem} = useOutletContext<AdminModalContext<MovieShort>>();
+    const navigate = useNavigate();
+    
+        
+    const handleClose = ()=>{
+        if(onClose){
+            onClose();
+        }else{
+            navigate("..");
+        }
+        
+    }
+    
+    const onSubmit = async (formData:MovieCreate)=>{
+            
+            try{
+                await putMovie(initialState.id,formData);
+                    editItem({
+                        id: initialState.id,
+                        title: formData.title,
+                        posterUrl: formData.posterUrl,
+                        releaseDate: formData.releaseDate
+                    });
+                    toast.success("Movie succesfully edited!")
+                    handleClose();
+            }catch{
+                toast.error("Can`t edit this movie");
+            }
+        }
+
+    return <MovieForm onSubmitAction={onSubmit} onClose={handleClose} initialState={mapMovieToCreate(initialState)}/>
+}
+
+export default EditMovieForm;

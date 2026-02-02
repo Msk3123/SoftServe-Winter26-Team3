@@ -5,14 +5,25 @@ import type { NewsCreate, NewsShort } from "../../../../types/news.types";
 import { postNews } from "../../../../api/newsApi";
 import NewsForm from "../NewsForm/NewsForm";
 
-const CreateNewsForm = ()=>{
+interface CreateNewsFormProps {
+    onClose?:()=>void;
+}
+
+const CreateNewsForm = ({onClose}:CreateNewsFormProps)=>{
 
     const {createItem} = useOutletContext<AdminModalContext<NewsShort>>();
     const navigate = useNavigate();
     
+        
     const handleClose = ()=>{
-        navigate("..");
+        if(onClose){
+            onClose();
+        }else{
+            navigate("..");
+        }
+        
     }
+    
     
 
     const onSubmit = async (formData:NewsCreate)=>{
@@ -35,7 +46,7 @@ const CreateNewsForm = ()=>{
             }
         }
 
-    return <NewsForm onSubmitAction={onSubmit}/>
+    return <NewsForm onSubmitAction={onSubmit} onClose={handleClose}/>
 }
 
 export default CreateNewsForm;

@@ -35,8 +35,9 @@ const initialData = {
 interface NewsFormProps{
     initialState?:NewsCreate;
     onSubmitAction:(data: NewsCreate) => Promise<void>;
+    onClose:()=>void;
 }
-const NewsForm = ({initialState,onSubmitAction}:NewsFormProps)=>{
+const NewsForm = ({initialState,onSubmitAction,onClose}:NewsFormProps)=>{
     
     const {formData,errors,isSubmitting,handleChange,handleSubmit} = useForm<NewsCreate>(initialState??initialData,newsValidator);
     const [isPending, setIsPending] = useState(false);
@@ -162,7 +163,7 @@ const NewsForm = ({initialState,onSubmitAction}:NewsFormProps)=>{
 
 
             <div className={styles.actions}>
-                <Button bgColor="var(--button-cancel)" to="..">Cancel</Button>
+                <Button bgColor="var(--button-cancel)" action={onClose}>Cancel</Button>
                 <Button htmlType="submit" disabled={isSubmitting}>Submit</Button>
             </div>
         </form>

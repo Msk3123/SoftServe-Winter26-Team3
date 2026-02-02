@@ -4,15 +4,22 @@ import toast from "react-hot-toast";
 import ActorForm from "../ActorForm/ActorForm";
 import type { ActorCreate, ActorShort } from "../../../../types/actor.types";
 import type { AdminModalContext } from "../../../../types/admin.types";
-
-const CreateActorForm = ()=>{
+interface CreateActorFormProps {onClose?:()=>void}
+const CreateActorForm = ({onClose}:CreateActorFormProps)=>{
 
     const {createItem} = useOutletContext<AdminModalContext<ActorShort>>();
     const navigate = useNavigate();
     
+        
     const handleClose = ()=>{
-        navigate("..");
+        if(onClose){
+            onClose();
+        }else{
+            navigate("..");
+        }
+        
     }
+    
     
 
     const onSubmit = async (formData:ActorCreate)=>{
@@ -34,7 +41,7 @@ const CreateActorForm = ()=>{
             }
         }
 
-    return <ActorForm onSubmitAction={onSubmit}/>
+    return <ActorForm onSubmitAction={onSubmit} onClose={handleClose}/>
 }
 
 export default CreateActorForm;

@@ -32,6 +32,9 @@ import editNewsFormLoader from "../features/admin/news/EditNews/editNewsFormLoad
 import EditNewsForm from "../features/admin/news/EditNews/EditNewsForm";
 import CreateNewsForm from "../features/admin/news/CreateNews/CreateNewsForm";
 import MovieForm from "../features/admin/movies/MovieForm/MovieForm";
+import CreateMovieForm from "../features/admin/movies/CreateMovie/CreateMovie";
+import EditMovieForm from "../features/admin/movies/EditMovie/EditMovie";
+import editMovieFormLoader from "../features/admin/movies/EditMovie/editMovieFormLoader";
 
 export const router = createBrowserRouter([
   {
@@ -107,11 +110,12 @@ export const router = createBrowserRouter([
         children: [
           {
             path: "create",
-            element: <Modal><MovieForm onSubmitAction={async ()=>console.log("submit")}/></Modal>,
+            element: <Modal  title="Create Movie"><CreateMovieForm/></Modal>,
           },
           {
             path: ":movieId/edit",
-            element: <Modal>edit movie</Modal>,
+            element: <Modal title="Edit Movie"><EditMovieForm/></Modal>,
+            loader: editMovieFormLoader,
           },
         ],
       },

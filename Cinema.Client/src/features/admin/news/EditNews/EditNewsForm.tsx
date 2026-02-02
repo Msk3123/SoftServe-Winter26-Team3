@@ -5,17 +5,25 @@ import { mapNewsToCreate, type News, type NewsCreate, type NewsShort } from "../
 import { putNews } from "../../../../api/newsApi";
 import NewsForm from "../NewsForm/NewsForm";
 
-const EditNewsForm = ()=>{
+interface EditNewsFormProps {
+    onClose?:()=>void;
+}
+const EditNewsForm = ({onClose}:EditNewsFormProps)=>{
     const initialState = useLoaderData() as News;
 
     const {editItem} = useOutletContext<AdminModalContext<NewsShort>>();
     const navigate = useNavigate();
     
+        
     const handleClose = ()=>{
-        navigate("..");
+        if(onClose){
+            onClose();
+        }else{
+            navigate("..");
+        }
+        
     }
     
-
     const onSubmit = async (formData:NewsCreate)=>{
             
             try{
@@ -37,7 +45,7 @@ const EditNewsForm = ()=>{
             }
         }
 
-    return <NewsForm initialState={mapNewsToCreate(initialState)} onSubmitAction={onSubmit}/>
+    return <NewsForm initialState={mapNewsToCreate(initialState)} onSubmitAction={onSubmit} onClose={handleClose}/>
 }
 
 export default EditNewsForm;

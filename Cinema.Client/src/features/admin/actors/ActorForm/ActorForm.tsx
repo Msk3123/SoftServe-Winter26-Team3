@@ -20,8 +20,9 @@ const initialData = {
 interface ActorFormProps{
     initialState?:ActorCreate;
     onSubmitAction:(data: ActorCreate) => Promise<void>;
+    onClose:()=>void;
 }
-const ActorForm = ({initialState,onSubmitAction}:ActorFormProps)=>{
+const ActorForm = ({initialState,onSubmitAction,onClose}:ActorFormProps)=>{
     
     const {formData,errors,isSubmitting,handleChange,handleSubmit} = useForm<ActorCreate>(initialState??initialData,actorValidator);
     const [isPending, setIsPending] = useState(false)
@@ -84,7 +85,7 @@ const ActorForm = ({initialState,onSubmitAction}:ActorFormProps)=>{
                 />
 
             <div className={styles.actions}>
-                <Button bgColor="var(--button-cancel)" to="..">Cancel</Button>
+                <Button bgColor="var(--button-cancel)" action={onClose}>Cancel</Button>
                 <Button htmlType="submit" disabled={isSubmitting}>Submit</Button>
             </div>
         </form>

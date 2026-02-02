@@ -3,5 +3,5 @@ export interface Genre{
     name: string;
 }
 export interface GenreCreate{
-    name: string;
+    genreName: string;
 }
