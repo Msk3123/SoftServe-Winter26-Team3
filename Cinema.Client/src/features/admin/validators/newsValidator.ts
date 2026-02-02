@@ -17,6 +17,8 @@ const newsValidator: FieldValidator<NewsCreate> = (name, value, allValues) => {
 
         case "imageUrl":
             if (typeof value === 'string' && !value.trim()) return "Image URL is required";
+            if (typeof value === 'string' && value && !value.startsWith("http"))
+                return "Invalid URL";
             break;
 
         case "publishedDate":
