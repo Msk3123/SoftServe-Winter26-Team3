@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './SignUp.module.css';
-import { useAuthActions } from './model/useAuthActions';
+import { useAuthActions } from './hooks/useAuthActions';
 
 const SignUp: React.FC = () => {
     const { signup, isLoading, error } = useAuthActions();
@@ -27,6 +27,7 @@ const SignUp: React.FC = () => {
                     First name
                     <input
                         className={styles.input}
+                        type="text"
                         value={firstName}
                         onChange={(e) => setFirstName(e.target.value)}
                         required
@@ -37,6 +38,7 @@ const SignUp: React.FC = () => {
                     Last name
                     <input
                         className={styles.input}
+                        type="text"
                         value={lastName}
                         onChange={(e) => setLastName(e.target.value)}
                     />
@@ -46,6 +48,7 @@ const SignUp: React.FC = () => {
                     Phone
                     <input
                         className={styles.input}
+                        type="tel"
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
                         autoComplete="tel"

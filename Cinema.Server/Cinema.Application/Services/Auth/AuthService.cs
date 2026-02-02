@@ -41,13 +41,11 @@ public class AuthService : IAuthService
             throw new UnauthorizedAccessException("Невірний email або пароль");
         }
 
-        return new AuthResponseDto
-        {
-            AccessToken = _jwt.Generate(user),
-            UserId = user.UserId,
-            Email = user.Email ?? string.Empty,
-            Role = user.Role?.RoleName ?? string.Empty,
-        };
+        return new AuthResponseDto(
+            AccessToken: _jwt.Generate(user),
+            UserId: user.UserId,
+            Email: user.Email ?? string.Empty,
+            Role: user.Role?.RoleName ?? string.Empty);
     }
 
     public async Task<AuthResponseDto> SignUpAsync(SignUpRequestDto dto, CancellationToken ct = default)
@@ -77,13 +75,10 @@ public class AuthService : IAuthService
         await _users.AddAsync(user);
         await _users.SaveAsync();
 
-        // Після SaveAsync з'являється UserId. Роль тут може бути ще не завантажена, але для токена це не критично.
-        return new AuthResponseDto
-        {
-            AccessToken = _jwt.Generate(user),
-            UserId = user.UserId,
-            Email = user.Email ?? string.Empty,
-            Role = string.Empty,
-        };
+        return new AuthResponseDto(
+            AccessToken: _jwt.Generate(user),
+            UserId: user.UserId,
+            Email: user.Email ?? string.Empty,
+            Role: user.Role?.RoleName ?? string.Empty);
     }
 }

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './Login.module.css';
-import { useAuthActions } from './model/useAuthActions';
+import { useAuthActions } from './hooks/useAuthActions';
 
 const Login: React.FC = () => {
     const { login, isLoading, error } = useAuthActions();

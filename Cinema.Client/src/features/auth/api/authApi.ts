@@ -1,4 +1,4 @@
-import { api } from '../../../api/Api';
+import { api, postJson } from '../../../api/Api';
 
 export type LoginRequest = {
     email: string;
@@ -20,23 +20,6 @@ export type AuthResponse = {
     email: string;
     role: string;
 };
-
-async function postJson<TResponse>(url: string, body: unknown): Promise<TResponse> {
-    const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(body),
-    });
-
-    if (!response.ok) {
-        const text = await response.text();
-        throw new Error(text || `HTTP ${response.status}`);
-    }
-
-    return response.json() as Promise<TResponse>;
-}
 
 export const authApi = {
     login: (req: LoginRequest) => postJson<AuthResponse>(api.buildUrl('/api/auth/login'), req),

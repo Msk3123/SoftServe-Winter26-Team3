@@ -1,12 +1,9 @@
 namespace Cinema.Application.DTOs.AuthDtos;
 
-public class SignUpRequestDto
-{
-    public string FirstName { get; set; } = string.Empty;
-    public string LastName { get; set; } = string.Empty;
-    public string Phone { get; set; } = string.Empty;
-
-    public string Email { get; set; } = string.Empty;
-    public string Password { get; set; } = string.Empty;
-    public string ConfirmPassword { get; set; } = string.Empty;
-}
+public sealed record SignUpRequestDto(
+    string FirstName,
+    string LastName,
+    string Phone,
+    string Email,
+    string Password,
+    string ConfirmPassword);
