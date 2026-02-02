@@ -7,8 +7,11 @@ const editMovieFormLoader = async ({ params }:LoaderFunctionArgs) => {
     }
 
     const data = await getMovie(params.movieId);
-    
-    return data;
+
+    return {
+        ...data,
+        duration: data.duration ? Math.floor(data.duration / 60) : 0
+};
 };
 
 export default editMovieFormLoader;

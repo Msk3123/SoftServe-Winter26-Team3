@@ -1,0 +1,13 @@
+.optionContainer{
+    padding: 1em 2em ;
+    display: flex;
+    align-items: center;
+    gap: 2em;
+    cursor: pointer;
+    position: relative;
+}
+
+.optionContainer:hover{
+    background-color: var(--color-primary-weak);
+    scale: 1.01;
+}

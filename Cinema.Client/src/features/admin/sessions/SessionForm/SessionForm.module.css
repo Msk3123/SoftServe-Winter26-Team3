@@ -1,0 +1,43 @@
+.pendingForm{
+    cursor: not-allowed;
+    background-color: var(--button-disabled);
+}
+.actions{
+    display: flex;
+    justify-content: end;
+    gap:2em;
+    margin-top: 2em;
+}
+
+.datesContainer{
+    display: grid;
+    grid-auto-columns: 1fr;
+    grid-auto-flow: column;
+    gap: 1em;
+    margin: 1em 0;
+}
+.dailyScheduleContainer{
+    padding: 1em;
+    display: flex;
+    flex-wrap: wrap;
+    gap:2em
+}
+.dailySchedule{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1em;
+    color:var(--color-primary)
+}
+
+.timeForm{
+    display: grid;
+    grid-template-columns: 76% 24%;
+    gap: 2%;
+    grid-template-rows: 4em;
+    margin: 1em 0;
+}
+
+.timeForm button{
+    margin-top: calc(1em - 2px);
+}

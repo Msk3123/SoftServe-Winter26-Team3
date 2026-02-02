@@ -6,18 +6,20 @@ interface CheckboxProps {
     checked: boolean;
     onChange: (checked: boolean) => void;
     error?: string;
+    disabled?:boolean;
 }
 
-export const Checkbox: React.FC<CheckboxProps> = ({ label, checked, onChange,error}) => {
+export const Checkbox: React.FC<CheckboxProps> = ({ label, checked, onChange,error,disabled=false}) => {
     const id = useId();
     return (
-    <div className={styles.container}>
+    <div className={styles.container} aria-disabled={disabled}>
         <input
             type="checkbox"
             id={id}
             className={styles.realCheckbox}
             checked={checked}
-            onChange={(e) => onChange(e.target.checked)}
+            onChange={(e) => !disabled && onChange(e.target.checked)}
+            disabled={disabled}
         />
 
         <label htmlFor={id} className={styles.checkboxLabel}>

@@ -26,7 +26,7 @@ const AdminMoviesPage : React.FC = ()=>{
                     tableData={{ data, pagination, sortParams, status }}
                     tableActions={actions}
                     deleteFn={deleteSession}/>
-                <Outlet />
+                <Outlet context={{refresh:actions.refresh,editItem:actions.editItem}}/>
             </>)
 };
 

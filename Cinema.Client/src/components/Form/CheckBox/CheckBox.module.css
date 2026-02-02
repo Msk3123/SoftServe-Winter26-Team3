@@ -60,3 +60,14 @@
     font-weight: var(--fw-light);
     margin-left: 1em;
 }
+
+.realCheckbox:disabled + .checkboxLabel {
+    cursor: not-allowed;
+    opacity: 0.5;
+    filter: grayscale(1);
+}
+
+.realCheckbox:disabled + .checkboxLabel .customCheckbox {
+    background-color: #e0e0e0;
+    border-color: #ccc;
+}

@@ -40,6 +40,11 @@ const movieValidator: FieldValidator<MovieCreate> = (name, value, allValues) => 
             if (!Array.isArray(value) || value.length < 1) return "At least 1 genre required";
             break;
         
+        case "actorIds":
+            if (!Array.isArray(value) || value.length < 1) return "At least 1 actror required";
+            break;
+        
+        
         case "releaseDate":
         case "startDate":
         case "endDate":{

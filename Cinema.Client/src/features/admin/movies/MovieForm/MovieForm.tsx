@@ -125,7 +125,7 @@ const MovieForm = ({initialState,onSubmitAction,onClose}:MovieFormProps)=>{
         setIsPending(false);
     }
 
-    const handleOpenModal=(q)=>{
+    const handleOpenModal=(q:string)=>{
         setInitialActor({...initialActor,firstName:q})
         setIsModalOpen(true);
     };

@@ -1,3 +1,7 @@
+.pendingForm{
+    cursor: not-allowed;
+    background-color: var(--button-disabled);
+}
 
 .actions{
     display: flex;

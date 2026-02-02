@@ -20,3 +20,14 @@ export interface SessionCreate {
     sessionTime: string;
     basePrice: number;
 }
+
+export interface CreateSessionsBatch {
+    movieId: number|string;
+    hallId: number|string;
+    
+    startDate: string;
+    endDate: string;
+    
+    dailySchedule: string[];
+    weekDays: number[];
+}

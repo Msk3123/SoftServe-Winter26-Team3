@@ -29,7 +29,8 @@ const EditMovieForm = ({onClose}:EditMovieFormProps)=>{
     const onSubmit = async (formData:MovieCreate)=>{
             
             try{
-                await putMovie(initialState.id,formData);
+
+                await putMovie(initialState.id,{...formData,duration: Number(formData.duration)*60});
                     editItem({
                         id: initialState.id,
                         title: formData.title,
