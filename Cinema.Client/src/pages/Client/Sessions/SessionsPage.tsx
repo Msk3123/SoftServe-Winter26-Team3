@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "./SessionsPage.module.css";
 import type { SessionShort } from "../../../types/session.types";
 import { getAllSessions } from "../../../api/sessionApi";
@@ -8,8 +8,7 @@ const getNextDays = (daysCount: number) => {
   const days = [];
   const today = new Date();
   const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-  const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec",];
-
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",];
   for (let i = 0; i < daysCount; i++) {
     const date = new Date(today);
     date.setDate(today.getDate() + i);
@@ -73,7 +72,7 @@ const SessionsPage = () => {
   const uniqueHalls = Array.from(
     new Set(displayedSessions.map((s) => s.hallName)),
   ).sort();
-
+  const navigate = useNavigate();
   const renderContent = () => {
     if (loading) {
       return <div className={styles.loadingMessage}>Loading schedule...</div>;
@@ -82,11 +81,13 @@ const SessionsPage = () => {
     if (uniqueHalls.length === 0) {
       return (
         <div className={styles.noSessionsMessage}>
-          <p style={{ color: "var(--text-inactive)" }}>No sessions found for this date :(</p>
+          <p style={{ color: "var(--text-inactive)" }}>
+            No sessions found for this date :(
+          </p>
         </div>
       );
     }
- return uniqueHalls.map((hall) => (
+    return uniqueHalls.map((hall) => (
       <div key={hall} className={styles.sessionHallRow}>
         <div className={styles.hallTitleWrapper}>
           <h2 className={styles.hallTitle}>{hall}</h2>
@@ -100,23 +101,24 @@ const SessionsPage = () => {
               return h1 * 60 + m1 - (h2 * 60 + m2);
             })
             .map((session) => (
-              <Link
-                to={`/movie/${session.movieId}`}
+              <div
                 key={session.id}
-                className={styles.cardLink}
-              >
-                <div className={styles.sessionCard}>
-                  <span className={styles.sessionTime}>
-                    {session.sessionTime.slice(0, 5)}
-                  </span>
+                className={styles.sessionCard}
+                onClick={() => navigate(`/sessions/${session.id}`)}>
+                <span className={styles.sessionTime}>
+                  {session.sessionTime.slice(0, 5)}
+                </span>
+                <Link
+                  to={`/movie/${session.movieId}`}
+                  className={styles.movieTitleLink}
+                  onClick={(e) => e.stopPropagation()}
+                >
                   <span className={styles.sessionMovieName}>
                     {session.movieTitle}
                   </span>
-                  <span className={styles.sessionMoviePlaces}>
-                    Seat available
-                  </span>
-                </div>
-              </Link>
+                </Link>
+                <span className={styles.sessionMoviePlaces}>Seat Available</span>
+              </div>
             ))}
         </div>
       </div>

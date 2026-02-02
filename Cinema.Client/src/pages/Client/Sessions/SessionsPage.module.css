@@ -145,6 +145,15 @@
   margin-bottom: 0.5rem;
   display: block;
   line-height: 1.2;
+  display: inline-block;
+}
+.sessionMovieName:hover{
+  text-decoration: underline;
+  text-decoration-color: var(--text-dark); 
+  text-underline-offset: 4px;
+  transition: all 0.3s ease;
+  transform: scale(1.1);;
+  transform-origin: center center;
 }
 
 .sessionMoviePlaces {
@@ -152,18 +161,6 @@
   text-transform: uppercase;
   color: var(--color-primary);
   transition: all 0.3s ease;
-}
-
-.buyBadge {
-  background-color: var(--color-primary);
-  color: var(--text-dark);
-  text-transform: uppercase;
-  font-size: 0.75rem;
-  padding: 0.25rem 0.5rem;
-  border-radius: 0.25rem;
-  text-align: center;
-  font-weight: var(--fw-bold);
-  transition: color 0.3s ease;
 }
 
 .loadingMessage,

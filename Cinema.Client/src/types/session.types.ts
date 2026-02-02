@@ -5,6 +5,7 @@ export interface SessionShort{
     movieTitle: string;
     hallName: string;
     posterUrl: string;
+    movieId: number;
 }
 export interface Session extends SessionShort {
     movieId: number;

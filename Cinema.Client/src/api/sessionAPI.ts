@@ -7,10 +7,6 @@ export const getAllSessions: FetchListFunction<SessionShort> = async (params = d
     return await getPaginatedData<SessionShort>("session", params);
 };
 
-export const getSessionsByDate: FetchListByIdFunction<SessionShort> = async (date, params = defaultParams) => {
-    return await getPaginatedData<SessionShort>(`session/date/${date}`, params);
-};
-
 export const getSession: FetchOneFunction<Session> = async (id) => {
     return await getItem("session", id);
 };
