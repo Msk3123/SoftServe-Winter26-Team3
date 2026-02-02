@@ -13,7 +13,8 @@ namespace Cinema.Application.Mappings
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.SessionId))
                 .ForMember(dest => dest.MovieTitle, opt => opt.MapFrom(src => src.Movie.Title))
                 .ForMember(dest => dest.HallName, opt => opt.MapFrom(src => src.Hall.HallName))
-                .ForMember(dest => dest.PosterUrl, opt => opt.MapFrom(src => src.Movie.PosterUrl));
+                .ForMember(dest => dest.PosterUrl, opt => opt.MapFrom(src => src.Movie.PosterUrl))
+                .ForMember(dest => dest.MovieId, opt => opt.MapFrom(src => src.Movie.MovieId));
 
             CreateMap<Session, SessionDetailsDto>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.SessionId))
