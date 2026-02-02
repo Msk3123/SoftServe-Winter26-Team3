@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useReducer } from "react";
 import { reducer } from "./reducer";
-import type { FetchListFunction} from "../../types/api.types";
+import type { BaseEntity, FetchListFunction} from "../../types/api.types";
 import type { ReducerState } from "./reducer.types";
 import {defaultInitialState } from "./reducer.initial";
 
 
-export default function useQueryTable<T extends{id:number|string}>(
+export default function useQueryTable<T extends BaseEntity>(
     fetchFn: FetchListFunction<T>,
     initialState: ReducerState<T> = defaultInitialState as unknown as ReducerState<T>,// add 'as unknown' before the final cast, for type compatibility
 ) {
@@ -57,6 +57,8 @@ export default function useQueryTable<T extends{id:number|string}>(
             dispatch({type:"set_data",payload:items}),
         createItem:(item:T)=>
             dispatch({type:"create_item",payload:item}),
+        editItem:(item:T)=>
+            dispatch({type:"edit_item",payload:item}),
         deleteItem:(id:number|string)=>
             dispatch({type:"delete_item",payload:id}),
         toggleSort: (key: keyof T) =>

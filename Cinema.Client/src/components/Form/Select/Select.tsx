@@ -1,4 +1,4 @@
-import React, { useId } from 'react';
+import React, { useId, type ComponentProps } from 'react';
 import styles from "./Select.module.css"
 
 interface Option {
@@ -6,7 +6,7 @@ interface Option {
     label: string;
 }
 
-interface SelectProps {
+interface SelectProps extends Omit<ComponentProps<"select">, "onChange">  {
     label?: string;
     options: Option[];
     value: string | number;
@@ -23,7 +23,8 @@ const Select: React.FC<SelectProps> = ({
     onChange,
     placeholder,
     className = "",
-    error
+    error,
+    ...props
 }) => {
 
     const id = useId();
@@ -36,7 +37,7 @@ const Select: React.FC<SelectProps> = ({
                     className={styles.selectField}
                     value={value}
                     onChange={(e) => onChange(e.target.value)}
-                    required
+                    {...props}
                 >
                     {placeholder && (
                     <option value="" disabled>

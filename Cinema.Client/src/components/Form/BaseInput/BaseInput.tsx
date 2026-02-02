@@ -28,7 +28,7 @@ const BaseInput = ({
 
     return (
         <div className={`${styles.wrapper} ${className || ""}`}>
-            {label && <label htmlFor="id">{label}</label>}
+            {label && <label htmlFor={id}>{label}</label>}
             <input
                 className={`${styles.input} ${error ? styles.error : ""}`}
                 value={value}

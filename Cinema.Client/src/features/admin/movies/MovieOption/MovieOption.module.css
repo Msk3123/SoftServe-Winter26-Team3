@@ -1,0 +1,26 @@
+.optionContainer{
+    padding: 1em 2em ;
+    display: flex;
+    align-items: center;
+    gap: 2em;
+    cursor: pointer;
+    position: relative;
+}
+
+.optionContainer:hover{
+    background-color: var(--color-primary-weak);
+    scale: 1.01;
+}
+.image{
+    width: 4em;
+    border:1px var(--ui-border) solid;
+    border-radius: 0.2em;
+}
+
+.releaseDate{
+    position: absolute;
+    font-weight: var(--fw-light);
+    color:var(--text-inactive);
+    right: 1em;
+    bottom: 0.5em;
+}

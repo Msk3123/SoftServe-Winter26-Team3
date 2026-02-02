@@ -36,6 +36,23 @@ export interface MovieCreate{
     releaseDate: string;
     startDate:	string;
     endDate: string;
-    genreIds:	number[];
-    actorIds: number[];
+    genreIds:	(number|string)[];
+    actorIds: (number|string)[];
 }
+
+export const mapMovieToCreate = (movie: Movie): MovieCreate => {
+  return {
+    title: movie.title,
+    duration: movie.duration,
+    rating: movie.rating,
+    description: movie.description,
+    posterUrl: movie.posterUrl,
+    trailerUrl: movie.trailerUrl,
+    language: movie.language,
+    releaseDate: movie.releaseDate,
+    startDate: movie.startDate,
+    endDate: movie.endDate,
+    genreIds: movie.genres.map(g => g.id),
+    actorIds: movie.actors.map(a => a.id),
+  };
+};
