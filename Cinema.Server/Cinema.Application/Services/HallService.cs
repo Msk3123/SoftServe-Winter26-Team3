@@ -32,7 +32,7 @@ namespace Cinema.Application.Services
                     {
                         Row = row,
                         SeatNo = number,
-                        SeatTypeId = 1 
+                        SeatTypeId = 1
                     });
                 }
             }
