@@ -1,6 +1,6 @@
 import logoUrl from '../../assets/logo.svg';
 
-interface Props{
+interface LogoProps{
     size?: "extraSmall"|"small"|"regular"|"large";
     sizeAuto?:boolean;
 }
@@ -13,7 +13,7 @@ interface Props{
         extralarge:{ width: 260, height: 98 }
     };
 
-const Logo: React.FC<Props> = ({size="regular",sizeAuto=true})=>{
+const Logo = ({size="regular",sizeAuto=true}:LogoProps)=>{
     const {width,height} = dimensions[size]
     return(
         <img

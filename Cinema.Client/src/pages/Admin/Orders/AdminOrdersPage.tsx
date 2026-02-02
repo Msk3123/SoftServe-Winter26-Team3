@@ -1,8 +1,7 @@
-import { Outlet } from "react-router-dom";
-import  styles from  "./AdminOrdersPage.module.css"
+import { Outlet } from "react-router";
 
-const AdminOrdersPage : React.FC = ()=>{
-    return(<div className={styles.container}>
+const AdminOrdersPage = ()=>{
+    return(<div>
                 AdminOrdersPage
                 <Outlet />
             </div>)

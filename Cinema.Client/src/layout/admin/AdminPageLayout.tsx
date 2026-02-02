@@ -3,7 +3,7 @@ import Sidebar from "./Sidebar";
 import styles from "./AdminPageLayout.module.css"
 import AdminHeader from "./AdminHeader";
 
-const AdminPageLayout: React.FC = ()=>{
+const AdminPageLayout = ()=>{
     return(
         <div className={`${styles.layoutContainer} admin`}>
             <AdminHeader />

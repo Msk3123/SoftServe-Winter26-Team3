@@ -2,6 +2,7 @@
 using Cinema.Application.Common.Models;
 using Cinema.Application.DTOs.HallDtos;
 using Cinema.Application.Interfaces;
+using Cinema.Application.Interfaces.Services;
 using Cinema.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,10 +13,12 @@ namespace Cinema.API.Controllers
     public class HallController : ApiBaseController
     {
         private readonly IHallRepository _hallRepository;
+        private readonly IHallService _hallService;
 
-        public HallController(IHallRepository hallRepository, IMapper mapper) : base(mapper)
+        public HallController(IHallRepository hallRepository, IMapper mapper, IHallService hallService) : base(mapper)
         {
             _hallRepository = hallRepository;
+            _hallService = hallService;
         }
 
         [HttpGet]
@@ -35,14 +38,10 @@ namespace Cinema.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] HallCreateDto dto)
+        public async Task<IActionResult> Create(HallCreateDto dto)
         {
-            var hall = _mapper.Map<Hall>(dto);
-            await _hallRepository.AddAsync(hall);
-            await _hallRepository.SaveAsync();
-
-            var response = _mapper.Map<HallDto>(hall);
-            return CreatedAtAction(nameof(GetById), new { id = hall.HallId }, response);
+            await _hallService.CreateHallAsync(dto);
+            return Ok(); 
         }
 
         [HttpPut("{id}")]

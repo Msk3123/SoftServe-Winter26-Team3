@@ -25,7 +25,8 @@ namespace Cinema.Persistence.Repositories
         public async Task<(IEnumerable<Seat> Items, int TotalCount)> GetByHallIdPagedAsync(int hallId, QueryParameters queryParameters)
         {
             return await _dbSet
-                .Where(s => s.HallId == hallId) 
+                .Where(s => s.HallId == hallId)
+                .Include(s => s.SeatType)
                 .AsNoTracking()
                 .ToPagedResultAsync(queryParameters); 
         }
@@ -33,17 +34,25 @@ namespace Cinema.Persistence.Repositories
         {
             return await _dbSet
                 .Include(s => s.Hall) 
+                .Include(s => s.SeatType)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(s => s.SeatId == id);
         }
-        public async Task<bool> ExistsAsync(int hallId, int seatNo)
+        public async Task<bool> ExistsAsync(int hallId, int row, int seatNo)
         {
-            return await _dbSet.AnyAsync(s => s.HallId == hallId && s.SeatNo == seatNo);
+            return await _dbSet.AnyAsync(s => s.HallId == hallId && s.Row == row && s.SeatNo == seatNo);
         }
         public async Task<bool> ExistsForOtherSeatAsync(int seatId, int hallId, int seatNo)
         {
             return await _dbSet.AnyAsync(s => s.HallId == hallId
                                           && s.SeatNo == seatNo
                                           && s.SeatId != seatId);
+        }
+        public async Task<IEnumerable<Seat>> GetByHallIdAsync(int hallId)
+        {
+            return await _dbSet
+                .Where(s => s.HallId == hallId)
+                .ToListAsync();
         }
     }
 }

@@ -2,6 +2,7 @@
 using Cinema.Application.Helpers;
 using Cinema.Application.Interfaces;
 using Cinema.Domain.Entities;
+using Cinema.Domain.Enums;
 using Cinema.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -55,6 +56,33 @@ namespace Cinema.Persistence.Repositories
                 .Include(s => s.Movie)
                 .Include(s => s.Hall)
                 .FirstOrDefaultAsync(s => s.SessionId == id);
+        }
+        public async Task DeleteAsync(int sessionId)
+        {
+            var seats = await _context.SessionSeats
+                .Where(s => s.SessionId == sessionId)
+                .ToListAsync();
+
+            if (seats.Any())
+            {
+                _context.SessionSeats.RemoveRange(seats);
+            }
+
+            var session = await _context.Sessions.FindAsync(sessionId);
+            if (session != null)
+            {
+                _context.Sessions.Remove(session);
+            }
+            await _context.SaveChangesAsync();
+        }
+        public async Task<IEnumerable<Session>> GetSessionsByDateRangeAsync(int hallId, DateTime startDate, DateTime endDate)
+        {
+            return await _context.Sessions
+                .AsNoTracking()
+                .Where(s => s.HallId == hallId &&
+                            s.SessionDate.Date >= startDate.Date &&
+                            s.SessionDate.Date <= endDate.Date)
+                .ToListAsync();
         }
     }
 }

@@ -1,0 +1,15 @@
+.actionCell{
+    display: flex;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+}
+
+.actionCell >button , .actionCell> a {
+    border-radius: 0;
+    width: 100%;
+}
+
+td:has(.actionCell){
+    padding: 0;
+}

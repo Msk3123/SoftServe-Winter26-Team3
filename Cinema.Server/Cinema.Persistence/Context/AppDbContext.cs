@@ -37,9 +37,9 @@ namespace Cinema.Persistence.Context
 
 
             modelBuilder.Entity<Seat>()
-                .HasIndex(s => new { s.HallId, s.SeatNo })
+                .HasIndex(s => new { s.HallId, s.Row, s.SeatNo })
                 .IsUnique()
-                .HasDatabaseName("IX_Seat_HallId_SeatNo_Unique");
+                .HasDatabaseName("IX_Seat_HallId_Row_Number_Unique");
             // --- Налаштування зв'язків Many-to-Many
 
             // Movie <-> Genre
@@ -71,14 +71,14 @@ namespace Cinema.Persistence.Context
                 .HasOne(ss => ss.Session)
                 .WithMany(s => s.SessionSeats)
                 .HasForeignKey(ss => ss.SessionId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
 
             modelBuilder.Entity<SessionSeat>()
                 .HasOne(ss => ss.User)
                 .WithMany()
                 .HasForeignKey(ss => ss.LockedByUserId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Cascade);
 
             // Ticket <-> SessionSeat (One-to-One)
             modelBuilder.Entity<Ticket>()
@@ -100,7 +100,11 @@ namespace Cinema.Persistence.Context
                 .WithMany(u => u.Orders)
                 .HasForeignKey(o => o.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
-
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.Payment)
+                .WithOne(p => p.Order)
+                .HasForeignKey<Payment>(p => p.OrderId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

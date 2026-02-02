@@ -1,21 +1,28 @@
-using System.Text;
 using Cinema.API.Middleware;
-using Cinema.Application.Common.Models;
 using Cinema.Application.Interfaces;
+using Cinema.Application.Interfaces.PaymentGateway;
+using Cinema.Application.Interfaces.Services;
 using Cinema.Application.Mappings;
 using Cinema.Application.Services;
-using Cinema.Application.Services.Auth;
 using Cinema.Application.Validators.Sessions;
+using Cinema.Persistence;
 using Cinema.Persistence.Context;
+using Cinema.Persistence.ExternalServices;
 using Cinema.Persistence.Repositories;
 using FluentValidation;
 using FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Hangfire;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
-
+//hangfire
+builder.Services.AddHangfire(config => config
+    .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+    .UseSimpleAssemblyNameTypeSerializer()
+    .UseRecommendedSerializerSettings()
+    .UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddHangfireServer();
 // Add services to the container.
 builder.Services.AddControllers(options =>
 {
@@ -40,35 +47,29 @@ builder.Services.AddScoped<IHallRepository, HallRepository>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ISeatRepository, SeatRepository>();
+builder.Services.AddScoped<ISessionSeatRepository, SessionSeatRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<ITicketTypeRepository, TicketTypeRepository>();
+builder.Services.AddScoped<ITicketRepository, TicketRepository>();
+builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
+builder.Services.AddScoped<ISeatTypeRepository, SeatTypeRepository>();
 
-// auth
-builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Jwt"));
-builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
-builder.Services.AddScoped<IAuthService, AuthService>();
-
-builder.Services
-    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        var jwt = builder.Configuration.GetSection("Jwt").Get<JwtOptions>() ?? new JwtOptions();
-
-        options.RequireHttpsMetadata = true;
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = jwt.Issuer,
-            ValidAudience = jwt.Audience,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt.Key)),
-        };
-    });
-
+//services  
+builder.Services.AddScoped<ISessionSeatService, SessionSeatService>();
+builder.Services.AddScoped<ISessionService, SessionService>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
+builder.Services.AddScoped<IPaymentGateway, PaymentGateway>();
+builder.Services.AddScoped<IBookingCleanupService, BookingCleanupService>();
+builder.Services.AddScoped<IHallService, HallService>();
+builder.Services.AddControllers()
+    .AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 //swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 //validation
+
 builder.Services.AddValidatorsFromAssemblyContaining<SessionCreateValidator>();
 // Allow CORS for React frontend
 builder.Services.AddCors(options =>
@@ -83,6 +84,18 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 //exeption middleware
 app.UseMiddleware<ExceptionMiddleware>();
+//hangfire
+app.UseHangfireDashboard();
+using (var scope = app.Services.CreateScope())
+{
+    var recurringJobManager = scope.ServiceProvider.GetRequiredService<IRecurringJobManager>();
+
+    recurringJobManager.AddOrUpdate<IBookingCleanupService>(
+        "cleanup-bookings",
+        service => service.CleanupExpiredBookingsAsync(),
+        Cron.Minutely
+    );
+}
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -95,7 +108,6 @@ app.UseHttpsRedirection();
 
 app.UseCors("AllowReactApp");
 
-app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

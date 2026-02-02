@@ -243,7 +243,7 @@ namespace Cinema.Persistence.Migrations
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("OrderStatuses")
+                    b.Property<int>("OrderStatus")
                         .HasColumnType("int");
 
                     b.Property<int>("SessionId")
@@ -275,21 +275,25 @@ namespace Cinema.Persistence.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<string>("ExternalTransactionId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("PaymentDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("PaymentMethods")
+                    b.Property<int>("PaymentMethod")
                         .HasColumnType("int");
 
-                    b.Property<int>("PaymentStatuses")
+                    b.Property<int>("PaymentStatus")
                         .HasColumnType("int");
 
                     b.HasKey("PaymentId");
 
-                    b.HasIndex("OrderId");
+                    b.HasIndex("OrderId")
+                        .IsUnique();
 
                     b.ToTable("Payments");
                 });
@@ -322,19 +326,45 @@ namespace Cinema.Persistence.Migrations
                     b.Property<int>("HallId")
                         .HasColumnType("int");
 
+                    b.Property<int>("Row")
+                        .HasColumnType("int");
+
                     b.Property<int>("SeatNo")
                         .HasColumnType("int");
 
-                    b.Property<int>("SeatType")
+                    b.Property<int>("SeatTypeId")
                         .HasColumnType("int");
 
                     b.HasKey("SeatId");
 
-                    b.HasIndex("HallId", "SeatNo")
+                    b.HasIndex("SeatTypeId");
+
+                    b.HasIndex("HallId", "Row", "SeatNo")
                         .IsUnique()
-                        .HasDatabaseName("IX_Seat_HallId_SeatNo_Unique");
+                        .HasDatabaseName("IX_Seat_HallId_Row_Number_Unique");
 
                     b.ToTable("Seats");
+                });
+
+            modelBuilder.Entity("Cinema.Domain.Entities.SeatType", b =>
+                {
+                    b.Property<int>("SeatTypeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SeatTypeId"));
+
+                    b.Property<decimal>("BasePrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("SeatTypeId");
+
+                    b.ToTable("SeatType");
                 });
 
             modelBuilder.Entity("Cinema.Domain.Entities.Session", b =>
@@ -373,6 +403,9 @@ namespace Cinema.Persistence.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SessionSeatId"));
+
+                    b.Property<DateTime?>("LockExpiration")
+                        .HasColumnType("datetime2");
 
                     b.Property<int?>("LockedByUserId")
                         .HasColumnType("int");
@@ -425,10 +458,13 @@ namespace Cinema.Persistence.Migrations
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
 
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<int>("SessionSeatId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TicketTypes")
+                    b.Property<int>("TicketTypeId")
                         .HasColumnType("int");
 
                     b.HasKey("TicketId");
@@ -438,7 +474,30 @@ namespace Cinema.Persistence.Migrations
                     b.HasIndex("SessionSeatId")
                         .IsUnique();
 
+                    b.HasIndex("TicketTypeId");
+
                     b.ToTable("Tickets");
+                });
+
+            modelBuilder.Entity("Cinema.Domain.Entities.TicketType", b =>
+                {
+                    b.Property<int>("TicketTypeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TicketTypeId"));
+
+                    b.Property<decimal>("Multiplier")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("TicketTypeId");
+
+                    b.ToTable("TicketType");
                 });
 
             modelBuilder.Entity("Cinema.Domain.Entities.User", b =>
@@ -572,8 +631,8 @@ namespace Cinema.Persistence.Migrations
             modelBuilder.Entity("Cinema.Domain.Entities.Payment", b =>
                 {
                     b.HasOne("Cinema.Domain.Entities.Order", "Order")
-                        .WithMany()
-                        .HasForeignKey("OrderId")
+                        .WithOne("Payment")
+                        .HasForeignKey("Cinema.Domain.Entities.Payment", "OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -588,7 +647,15 @@ namespace Cinema.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Cinema.Domain.Entities.SeatType", "SeatType")
+                        .WithMany("Seats")
+                        .HasForeignKey("SeatTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Hall");
+
+                    b.Navigation("SeatType");
                 });
 
             modelBuilder.Entity("Cinema.Domain.Entities.Session", b =>
@@ -615,7 +682,7 @@ namespace Cinema.Persistence.Migrations
                     b.HasOne("Cinema.Domain.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("LockedByUserId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Cinema.Domain.Entities.Seat", "Seat")
                         .WithMany()
@@ -626,7 +693,7 @@ namespace Cinema.Persistence.Migrations
                     b.HasOne("Cinema.Domain.Entities.Session", "Session")
                         .WithMany("SessionSeats")
                         .HasForeignKey("SessionId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Seat");
@@ -650,9 +717,17 @@ namespace Cinema.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("Cinema.Domain.Entities.TicketType", "TicketType")
+                        .WithMany("Tickets")
+                        .HasForeignKey("TicketTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Order");
 
                     b.Navigation("SessionSeat");
+
+                    b.Navigation("TicketType");
                 });
 
             modelBuilder.Entity("Cinema.Domain.Entities.User", b =>
@@ -698,12 +773,20 @@ namespace Cinema.Persistence.Migrations
 
             modelBuilder.Entity("Cinema.Domain.Entities.Order", b =>
                 {
+                    b.Navigation("Payment")
+                        .IsRequired();
+
                     b.Navigation("Tickets");
                 });
 
             modelBuilder.Entity("Cinema.Domain.Entities.Role", b =>
                 {
                     b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("Cinema.Domain.Entities.SeatType", b =>
+                {
+                    b.Navigation("Seats");
                 });
 
             modelBuilder.Entity("Cinema.Domain.Entities.Session", b =>
@@ -722,6 +805,11 @@ namespace Cinema.Persistence.Migrations
             modelBuilder.Entity("Cinema.Domain.Entities.Tag", b =>
                 {
                     b.Navigation("News");
+                });
+
+            modelBuilder.Entity("Cinema.Domain.Entities.TicketType", b =>
+                {
+                    b.Navigation("Tickets");
                 });
 
             modelBuilder.Entity("Cinema.Domain.Entities.User", b =>

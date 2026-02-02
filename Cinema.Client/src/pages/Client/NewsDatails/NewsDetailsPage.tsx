@@ -1,6 +1,6 @@
 import  styles from  "./NewsDetailsPage.module.css"
 
-const NewsDetailsPage : React.FC = ()=>{
+const NewsDetailsPage = ()=>{
     return(<div className={styles.container}>
                 NewsDetailsPage
             </div>)

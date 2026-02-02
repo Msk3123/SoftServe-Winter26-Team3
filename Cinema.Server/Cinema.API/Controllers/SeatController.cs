@@ -32,7 +32,8 @@ namespace Cinema.API.Controllers
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var seat = await _seatRepository.GetByIdAsync(id);
+            var seat = await _seatRepository.GetByIdWithDetailsAsync(id);
+            
             if (seat == null) throw new KeyNotFoundException($"Seat with id {id} not found");
 
             var response = _mapper.Map<SeatDetailsDto>(seat);

@@ -1,0 +1,89 @@
+
+.adminTheme {
+    --main-text-color: var(--text-dark);
+    --secondary-text-color: var(--text-secondary);
+    --btn-text-color: var(--text-dark);
+}
+
+.clientTheme {
+    --main-text-color: var(--text-main);
+    --secondary-text-color: color-mix(var(--text-main),#000 10%);
+    --btn-text-color: var(--text-main);
+}
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 70vh;
+    color: var(--main-text-color);
+    font-family: var(--font-main);
+    text-align: center;
+}
+
+.errorCode {
+    font-size: 8rem;
+    color: var(--color-danger);
+    font-weight: var(--fw-heavy);
+    margin: 0;
+}
+
+.title {
+    font-size: 2.2rem;
+    font-weight: var(--fw-bold);
+    margin: 15px 0;
+    text-transform: uppercase;
+    color: var(--main-text-color);
+}
+
+.content {
+    max-width: 600px;
+    padding: 20px;
+}
+
+.errorCode {
+    font-size:6rem;
+    color: var(--color-danger);
+    font-weight: var(--fw-heavy);
+    margin: 0;
+}
+
+.title {
+    font-size: 1.6rem;
+    font-weight: var(--fw-bold);
+    margin: 15px 0;
+    text-transform: uppercase;
+}
+
+.message{
+    font-size: 1rem;
+    color: var(--secondary-text-color);
+    margin-bottom: 30px;
+}
+
+.actions {
+    margin-top: 10px;
+}
+
+.dashboardBtn {
+    padding: 0 0;
+    font-weight: var(--fw-bold);
+    color: var(--btn-text-color);
+    display: inline-block;
+    position: relative;
+    transition: all 0.3s ease;
+}
+.dashboardBtn::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--color-primary);
+    transition: width 0.3s ease;
+}
+
+.dashboardBtn:hover::after {
+    width: 96%;
+}

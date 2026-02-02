@@ -1,42 +1,24 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import styles from "./HomePage.module.css";
-interface Movie {
-  id: number;
-  movieTitle: string;
-  posterUrl: string;
-}
-interface News {
-  id: number;
-  title: string;
-  // newsContent: string;
-  shortContent: string;
-  imageUrl: string;
-  publishedDate: string;
-}
-interface MovieApiResponse {
-  items: Movie[];
-  totalCount: number;
-}
-const HomePage: React.FC = () => {
+import { Link, useNavigate } from 'react-router-dom';
+import { getRecentNews } from "../../../api/newsApi";
+import Button from "../../../components/Button/Button";
+import type { MovieShort } from "../../../types/movie.types";
+import { getMovies } from "../../../api/movieApi";
+import type { NewsShort } from "../../../types/news.types";
+
+const HomePage = () => {
   const [activeTab, setActiveTab] = useState<"now" | "soon">("now");
-  const [movies, setMovies] = useState<Movie[]>([]);
-  const [newsList, setNewsList] = useState<News[]>([]);
+  const [movies, setMovies] = useState<MovieShort[]>([]);
+  const [newsList, setNewsList] = useState<NewsShort[]>([]);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
   const listRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    const fetchMovies = async () => {
+    const loadMovies = async () => {
       setLoading(true);
       try {
-        const endpoint =
-          activeTab === "now"
-            ? "https://localhost:7249/api/Movie/now-showing"
-            : "https://localhost:7249/api/Movie/upcoming";
-
-        const response = await fetch(endpoint);
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        const data: MovieApiResponse = await response.json();
+        const data = await getMovies(activeTab);
         if (data.items.length === 0) {
           console.warn("Warning: The server returned an empty list of movies!");
         }
@@ -47,22 +29,21 @@ const HomePage: React.FC = () => {
         setLoading(false);
       }
     };
-    fetchMovies();
+    loadMovies();
   }, [activeTab]);
   useEffect(() => {
-    const fetchNews = async () => {
+    const loadNews = async () => {
       try {
-        const response = await fetch("https://localhost:7249/api/News");
-        if (!response.ok) throw new Error("Failed to fetch news");
-        const data = await response.json();
-        // console.log("Новини з сервера:", data);
-        const newsData = data.items ? data.items : data;
-        setNewsList(newsData);
+        
+        const response = await getRecentNews();
+        const cleanNews = response.items;
+
+        setNewsList(cleanNews);
       } catch (error) {
-        console.error("Не вдалося завантажити новини:", error);
+        console.error("Failed to download news:", error);
       }
     };
-    fetchNews();
+    loadNews();
   }, []);
   const scroll = (direction: "left" | "right") => {
     if (listRef.current) {
@@ -124,17 +105,17 @@ const HomePage: React.FC = () => {
             <div className={styles.movieList} ref={listRef}>
               {movies.length > 0 ? (
                 movies.map((movie) => (
-                  <div key={movie.id} className={styles.movieItem}>
+                  <div key={movie.id} className={styles.movieItem} onClick={()=> navigate(`/movie/${movie.id}`)}>
                     <img
                       src={movie.posterUrl || "/assets/placeholderImage.png"}
-                      alt={movie.movieTitle}
+                      alt={movie.title}
                       className={styles.poster}
                       onError={(e) => {
                         (e.target as HTMLImageElement).src =
                           "https://static.vecteezy.com/ti/vecteur-libre/t1/22014063-disparu-image-page-pour-site-internet-conception-ou-mobile-app-conception-non-image-disponible-icone-vecteur-vectoriel.jpg";
                       }}
                     />
-                    <p className={styles.title}>{movie.movieTitle}</p>
+                    <p className={styles.title}>{movie.title}</p>
                   </div>
                 ))
               ) : loading ? null : (
@@ -183,16 +164,22 @@ const HomePage: React.FC = () => {
                 </p>
               </div>
               <div className={styles.newsDetailedInfo}>
-                <button className={styles.newsButton}>Read more</button>
+                <Button
+                    action={() => console.log("Will be open modal in future")}
+                    className={styles.newsButton}
+                    variant="fill"
+                >
+                    Read more
+                </Button>
                 <span className={styles.newsDate}>
                   {formatDate(news.publishedDate)}
                 </span>
               </div>
             </div>
           ))}
-          <a href="/news" className={styles.buttonAllNews}>
+          <Link to="/news" className={styles.buttonAllNews}>
             Read all news
-          </a>
+          </Link>
         </div>
       </div>
     </div>

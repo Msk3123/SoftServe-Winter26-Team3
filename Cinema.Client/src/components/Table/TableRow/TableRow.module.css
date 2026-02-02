@@ -1,0 +1,10 @@
+.tableRow:nth-child(even){
+    background-color: color-mix(in srgb, var(--color-primary-weak), #fff 70% ) ;
+}
+
+.tableRow.selected {
+    background-color:var(--color-primary-weak);
+    font-weight: var(--fw-medium);
+    border:var(--text-dark);
+    color: var(--text-dark);
+}

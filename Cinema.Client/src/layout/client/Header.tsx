@@ -1,13 +1,12 @@
-import { NavLink } from "react-router-dom";
+import { NavLink } from "react-router";
 import Logo from "../../components/ui/Logo";
 import styles from "./Header.module.css";
 import { useState } from "react";
 import Button from "../../components/Button/Button";
-import { useAuth } from "../../features/auth/hooks/useAuth";
 
-const Header: React.FC = () => {
-    const { isAuthenticated, user, logout } = useAuth();
-
+const Header = () => {
+    const [isLogged, setIsLogged] = useState<boolean>(false);
+    
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
     const toggleMenu = () => setIsMenuOpen((prev) => !prev);
@@ -21,7 +20,7 @@ const Header: React.FC = () => {
             </div>
 
             <button
-                className={`${styles.burger} ${isMenuOpen ? styles.burgerActive : ''}`}
+                className={`${styles.burger} ${isMenuOpen ? styles.burgerActive : ''}`} 
                 onClick={toggleMenu}
                 aria-label="Toggle menu"
             >
@@ -56,22 +55,19 @@ const Header: React.FC = () => {
                             News
                         </NavLink>
                     </li>
-
+                    
                     <div className={styles.authButtons}>
-                        {isAuthenticated ? (
+                        {isLogged ? (
                             <>
-                                <li className={styles.navlink}>
-                                    {user?.email ?? 'Account'}
-                                </li>
                                 <li>
                                     <NavLink
-                                        to={`/tickets/${user?.userId ?? ''}`}
+                                        to="/tickets/userId"
                                         onClick={closeMenu}
                                         className={({ isActive }) => isActive ? `${styles.navlink} ${styles.active} ` : styles.navlink}
                                     >My Tickets</NavLink>
                                 </li>
                                 <li>
-                                    <Button bgColor="var(--color-danger)" action={() => { logout(); closeMenu(); }}>
+                                    <Button bgColor="var(--color-danger)" action={() => { setIsLogged(false); closeMenu(); }}>
                                         Log out
                                     </Button>
                                 </li>
@@ -79,7 +75,7 @@ const Header: React.FC = () => {
                         ) : (
                             <>
                                 <li>
-                                    <Button to="/auth/login" action={closeMenu}>
+                                    <Button to="/auth/login" action={() => { setIsLogged(true); closeMenu(); }}>
                                         Login
                                     </Button>
                                 </li>
