@@ -3,6 +3,7 @@ using Cinema.Application.Common.Models;
 using Cinema.Application.DTOs.SessionDtos;
 using Cinema.Application.Interfaces;
 using Cinema.Application.Interfaces.Services;
+using Cinema.Application.Services;
 using Cinema.Domain.Entities;
 using Cinema.Persistence.Context;
 using Microsoft.AspNetCore.Mvc;
@@ -89,7 +90,7 @@ namespace Cinema.API.Controllers
             var session = await _sessionRepository.GetByIdAsync(id);
             if (session == null) throw new KeyNotFoundException($"Session with id {id} not found");
 
-            await _sessionRepository.DeleteAsync(id);
+            _sessionService.DeleteSessionAsync(id);
             await _sessionRepository.SaveAsync();
 
             return NoContent();

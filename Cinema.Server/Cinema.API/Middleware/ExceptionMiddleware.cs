@@ -39,24 +39,24 @@ namespace Cinema.API.Middleware
 
             var (statusCode, response) = exception switch
             {
-                ValidationException ex => (HttpStatusCode.BadRequest, new
-                {
-                    statusCode = 400,
-                    message = "Validation failed",
-                    errors = ex.Errors.GroupBy(e => e.PropertyName)
-                                      .ToDictionary(g => g.Key, g => g.Select(e => e.ErrorMessage).ToArray())
-                }),
+                // 400 
+                ValidationException ex => (HttpStatusCode.BadRequest, new { /* твій поточний код для FluentValidation */ }),
 
-                SeatsAlreadyTakenException or SeatAlreadySoldException =>
-                    (HttpStatusCode.Conflict, CreateError(409, exception.Message)),
-
-                SessionMismatchException or SeatNotReservedException or ReservationExpiredException =>
+                SessionMismatchException or
+                SeatNotReservedException or
+                ReservationExpiredException or
+                InvalidBatchPeriodException => // Додано з твого списку
                     (HttpStatusCode.BadRequest, CreateError(400, exception.Message)),
 
-                KeyNotFoundException ex =>
-                    (HttpStatusCode.NotFound, CreateError(404, ex.Message)),
-                SessionOverlapException ex =>
-                    (HttpStatusCode.Conflict, CreateError(409, ex.Message)),
+                // 404 
+                KeyNotFoundException => (HttpStatusCode.NotFound, CreateError(404, exception.Message)),
+
+                // 409 
+                SeatsAlreadyTakenException or
+                SeatAlreadySoldException or
+                SessionOverlapException or
+                UnavailableOperationException => 
+                    (HttpStatusCode.Conflict, CreateError(409, exception.Message)),
 
                 DbUpdateException dbEx => HandleDbUpdateException(dbEx),
 
