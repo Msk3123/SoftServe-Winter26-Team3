@@ -38,9 +38,9 @@ const initialData = {
     posterUrl: "",
     trailerUrl: "",
     language: "uk",
-    releaseDate: "",
-    startDate: "",
-    endDate: "",
+    releaseDate:dateToYearFirst(new Date()),
+    startDate:dateToYearFirst(new Date()),
+    endDate:dateToYearFirst(new Date()),
     genreIds: [],
     actorIds: [],
 }

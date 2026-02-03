@@ -7,13 +7,14 @@ import Button from "../../../../components/Button/Button";
 import TextArea from "../../../../components/Form/TextArea/TextArea";
 import { useState, type FormEvent } from "react";
 import ImageInput from "../../../../components/Form/ImageInput/ImageInput";
+import { dateToYearFirst } from "../../../../helpers/textHelpers";
 
 
 const initialData = {
     firstName: "",
     lastName: "",
     biography: "",
-    birthday: "",
+    birthday: dateToYearFirst(new Date("2000-01-01")),
     photoUrl: "",
 }
 
