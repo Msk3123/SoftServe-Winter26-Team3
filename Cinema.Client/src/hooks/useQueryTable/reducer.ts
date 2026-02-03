@@ -47,7 +47,7 @@ export function reducer<T extends { id: number|string }>(state: ReducerState<T>,
             return { ...state, currentPage: action.payload };
 
         case "set_page_size":
-            return { ...state, pageSize: action.payload, currentPage: 1 };
+            return { ...state, pageSize: !action.payload ?1:action.payload, currentPage: 1 };
 
         case "set_sort":
             return {
@@ -64,21 +64,24 @@ export function reducer<T extends { id: number|string }>(state: ReducerState<T>,
             let nextKey = key;
 
             if (isSameKey) {
-                if (state.order === "asc") {
-                nextOrder = "desc";
-            } else {
-                nextKey = "id";
-                nextOrder = "asc";
-        }
-    }
+                    if (state.order === "asc") {
+                    nextOrder = "desc";
+                } else {
+                    nextKey = "id";
+                    nextOrder = "asc";
+                }
+            }
 
-    return {
-        ...state,
-        sortBy: nextKey,
-        order: nextOrder,
-        currentPage: 1
-    };
-}
+            return {
+                ...state,
+                sortBy: nextKey,
+                order: nextOrder,
+                currentPage: 1
+            };
+        }
+
+        case "refresh":
+            return {...state,refreshTrigger: state.refreshTrigger + 1}
 
         default:
             return state;

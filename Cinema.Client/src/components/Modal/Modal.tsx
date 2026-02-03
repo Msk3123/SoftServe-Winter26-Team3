@@ -24,6 +24,7 @@ const Modal = ({ children, title,onClose }: ModalProps) => {
     }, [navigate, onClose]);
 
     useEffect(() => {
+
         const handleEsc = (e: KeyboardEvent) => {
             if(e.key==="Escape"){
                 const allModals = document.querySelectorAll(`.${styles.overlay}`);
@@ -36,7 +37,10 @@ const Modal = ({ children, title,onClose }: ModalProps) => {
         };
 
         window.addEventListener("keydown", handleEsc);
-        return () => window.removeEventListener("keydown", handleEsc);
+        
+        return () => {
+            window.removeEventListener("keydown", handleEsc);
+        }
     }, [handleClose]);
 
     return createPortal(

@@ -10,6 +10,8 @@ export const defaultInitialState: ReducerState<BaseEntity>= {
     currentPage: 1,
     pageSize: 10,
     totalCount: 0,
+    
+    refreshTrigger: 0,
 
     sortBy: "id",
     order: "asc",

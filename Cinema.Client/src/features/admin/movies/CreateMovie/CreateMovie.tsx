@@ -27,7 +27,7 @@ const CreateMovieForm = ({onClose}:CreateMovieFormProps)=>{
     const onSubmit = async (formData:MovieCreate)=>{
             
             try{
-                const movie = await postMovie(formData);
+                const movie = await postMovie({...formData,duration: Number(formData.duration)*60});
                 if(movie){
                     createItem({
                         id: movie.id,

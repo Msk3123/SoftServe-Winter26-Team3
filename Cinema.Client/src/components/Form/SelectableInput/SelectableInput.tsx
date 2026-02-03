@@ -74,6 +74,7 @@ export function SelectableInput<T extends BaseEntity>({
           value={isOpen && !multiple ? query : displayValue}
           onFocus={() => { if(!multiple) setQuery(''); setIsOpen(true); }}
           onChange={(e) => setQuery(e.target.value)}
+          autoComplete="off"
           id={id}
           placeholder="Search..."
         />
