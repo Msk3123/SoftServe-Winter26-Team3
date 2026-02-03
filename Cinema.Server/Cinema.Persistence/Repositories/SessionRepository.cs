@@ -78,6 +78,7 @@ namespace Cinema.Persistence.Repositories
         public async Task<IEnumerable<Session>> GetSessionsByDateRangeAsync(int hallId, DateTime startDate, DateTime endDate)
         {
             return await _context.Sessions
+                .Include(s => s.Movie)
                 .AsNoTracking()
                 .Where(s => s.HallId == hallId &&
                             s.SessionDate.Date >= startDate.Date &&
