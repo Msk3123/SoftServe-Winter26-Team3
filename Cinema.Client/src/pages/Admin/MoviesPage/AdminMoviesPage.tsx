@@ -1,4 +1,4 @@
-import { Outlet} from "react-router";
+import { Outlet } from "react-router-dom";
 import { deleteMovie, getAllMovies } from "../../../api/movieApi";
 import AdminTablePage from "../../../features/admin/components/AdminTablePage/AdminTablePage";
 import type { MovieShort } from "../../../types/movie.types";

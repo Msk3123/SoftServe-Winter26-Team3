@@ -1,4 +1,4 @@
-import type { LoaderFunctionArgs } from "react-router";
+import type { LoaderFunctionArgs } from "react-router-dom";
 import { getActor } from "../../../../api/actorApi";
 
 const editActorFormLoader = async ({ params }:LoaderFunctionArgs) => {

@@ -1,4 +1,4 @@
-export const baseUrl = import.meta.env.VITE_API_URL ?? 'https://localhost:7249';
+export const baseUrl = import.meta.env.VITE_API_URL ?? 'https://localhost:7249/';
 
 export const api = {
     buildUrl: (path: string) => `${baseUrl.replace(/\/$/, '')}/${path.replace(/^\//, '')}`,
@@ -35,8 +35,6 @@ export async function postJson<TResponse>(url: string, body: unknown): Promise<T
 
 import { capitalizeFirstLetter } from "../helpers/textHelpers";
 import { type PaginatedResponse, type BaseEntity, type FetchParams, type SingleResponse, ApiError} from "../types/api.types";
-
-export const baseUrl = import.meta.env.VITE_API_URL;
 
 export const defaultParams : FetchParams<BaseEntity>= {
     page: 1,
@@ -110,7 +108,7 @@ export async function getPaginatedData<T extends BaseEntity>(
 }
 
 export async function getItem<T extends BaseEntity>(path:string,id:number|string):Promise<SingleResponse<T>> {
-    const url = `${baseUrl}${path}/${id}`;
+    const url = api.buildUrl(`${baseUrl}${path}/${id}`);
     
     const response = await fetch(url);
         
@@ -122,7 +120,7 @@ export async function postItem<TData, TResponse>(
     data: TData
 ): Promise<SingleResponse<TResponse>> {
 
-    const url = `${baseUrl}${path}`;
+    const url = api.buildUrl(`${baseUrl}${path}`);
 
     const response = await fetch(url, {
         method: 'POST',
@@ -141,7 +139,7 @@ export async function putItem<T>(
     data: T
 ): Promise<void> {
 
-    const url =`${baseUrl}${path}/${id}`;
+    const url =api.buildUrl(`${baseUrl}${path}/${id}`);
 
     const response = await fetch(url, {
         method: 'PUT',
@@ -168,7 +166,7 @@ export async function patchItem<T>(
 }
 
 export async function deleteItem(path:string,id:number|string):Promise<boolean | undefined> {
-    const url=`${baseUrl}${path}/${id}`;
+    const url=api.buildUrl(`${baseUrl}${path}/${id}`);
         
     const response = await fetch(url, {
             method: 'DELETE',

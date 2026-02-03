@@ -1,4 +1,4 @@
-import { useNavigate, useOutletContext } from "react-router";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import { postActor } from "../../../../api/actorApi";
 import toast from "react-hot-toast";
 import ActorForm from "../ActorForm/ActorForm";

@@ -22,6 +22,6 @@ export type AuthResponse = {
 };
 
 export const authApi = {
-    login: (req: LoginRequest) => postJson<AuthResponse>(api.buildUrl('/api/auth/login'), req),
-    signup: (req: SignUpRequest) => postJson<AuthResponse>(api.buildUrl('/api/auth/signup'), req),
+    login: (req: LoginRequest) => postJson<AuthResponse>(api.buildUrl('auth/login'), req),
+    signup: (req: SignUpRequest) => postJson<AuthResponse>(api.buildUrl('auth/signup'), req),
 };

@@ -17,7 +17,6 @@ import { Toaster } from 'react-hot-toast'
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
         <div><Toaster/></div>
-        <RouterProvider router={router} />
         <AuthProvider>
             <RouterProvider router={router} />
         </AuthProvider>

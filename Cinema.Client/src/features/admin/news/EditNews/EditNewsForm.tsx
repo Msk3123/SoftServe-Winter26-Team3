@@ -1,4 +1,4 @@
-import { useLoaderData, useNavigate, useOutletContext} from "react-router";
+import { useLoaderData, useNavigate, useOutletContext} from "react-router-dom";
 import toast from "react-hot-toast";
 import type { AdminModalContext } from "../../../../types/admin.types";
 import { mapNewsToCreate, type News, type NewsCreate, type NewsShort } from "../../../../types/news.types";

@@ -1,4 +1,4 @@
-import { NavLink } from "react-router";
+import { NavLink } from "react-router-dom";
 import Logo from "../../components/ui/Logo";
 import styles from "./AdminHeader.module.css"
 

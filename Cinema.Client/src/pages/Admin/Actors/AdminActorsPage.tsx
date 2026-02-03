@@ -1,4 +1,4 @@
-import { Outlet} from "react-router";
+import { Outlet } from "react-router-dom";
 import { deleteActor, getAllActors } from "../../../api/actorApi";
 import AdminTablePage from "../../../features/admin/components/AdminTablePage/AdminTablePage";
 import type { ActorShort } from "../../../types/actor.types";

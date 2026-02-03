@@ -1,4 +1,4 @@
-import { Outlet } from "react-router";
+import { Outlet } from "react-router-dom";
 import AdminTablePage from "../../../features/admin/components/AdminTablePage/AdminTablePage";
 import type { NewsShort } from "../../../types/news.types";
 import type { ColumnDef } from "../../../types/common.types";
@@ -6,7 +6,6 @@ import { deleteNews, getAllNews } from "../../../api/newsApi";
 import { dateToDayFirst } from "../../../helpers/textHelpers";
 import styles from "./AdminNewsPage.module.css";
 import useQueryTable from "../../../hooks/useQueryTable/useQueryTable";
-import { act } from "react";
 
 const AdminNewsPage = ()=>{
 

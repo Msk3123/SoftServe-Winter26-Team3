@@ -1,4 +1,4 @@
-import { useLoaderData, useNavigate, useOutletContext} from "react-router";
+import { useLoaderData, useNavigate, useOutletContext} from "react-router-dom";
 import { putActor } from "../../../../api/actorApi";
 import toast from "react-hot-toast";
 import ActorForm from "../ActorForm/ActorForm";

@@ -1,4 +1,4 @@
-import type { LoaderFunctionArgs } from "react-router";
+import type { LoaderFunctionArgs } from "react-router-dom";
 import { getNews } from "../../../../api/newsApi";
 
 const editNewsFormLoader = async ({ params }:LoaderFunctionArgs) => {

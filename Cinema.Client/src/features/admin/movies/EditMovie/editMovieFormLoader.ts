@@ -1,4 +1,4 @@
-import type { LoaderFunctionArgs } from "react-router";
+import type { LoaderFunctionArgs } from "react-router-dom";
 import { getMovie } from "../../../../api/movieApi";
 
 const editMovieFormLoader = async ({ params }:LoaderFunctionArgs) => {

@@ -1,4 +1,4 @@
-import { Outlet} from "react-router";
+import { Outlet } from "react-router-dom";
 import AdminTablePage from "../../../features/admin/components/AdminTablePage/AdminTablePage";
 import type { ColumnDef } from "../../../types/common.types";
 import type { HallShort } from "../../../types/hall.types";
