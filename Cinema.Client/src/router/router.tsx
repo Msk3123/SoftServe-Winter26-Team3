@@ -24,17 +24,18 @@ import TicketsPage from "../pages/Client/Tickets/TicketsPage";
 import PageNotFound from "../pages/Client/PageNotFound/PageNotFound";
 import AdminPageNotFound from "../pages/Admin/PageNotFound/AdminPageNotFound";
 import AdminActorsPage from "../pages/Admin/Actors/AdminActorsPage";
-import SessionForm from "../features/admin/sessions/SessionForm";
 import CreateActorForm from "../features/admin/actors/CreateActor/CreateActorForm";
 import EditActorForm from "../features/admin/actors/EditActor/EditActorForm";
 import editActorFormLoader from "../features/admin/actors/EditActor/editActorFormLoader";
 import editNewsFormLoader from "../features/admin/news/EditNews/editNewsFormLoader";
 import EditNewsForm from "../features/admin/news/EditNews/EditNewsForm";
 import CreateNewsForm from "../features/admin/news/CreateNews/CreateNewsForm";
-import MovieForm from "../features/admin/movies/MovieForm/MovieForm";
 import CreateMovieForm from "../features/admin/movies/CreateMovie/CreateMovie";
 import EditMovieForm from "../features/admin/movies/EditMovie/EditMovie";
 import editMovieFormLoader from "../features/admin/movies/EditMovie/editMovieFormLoader";
+import CreateSessionForm from "../features/admin/sessions/CreateSession/CreateSessionForm";
+import EditSessionForm from "../features/admin/sessions/EditSession/EditSessionForm";
+import editSessionFormLoader from "../features/admin/sessions/EditSession/editSessionFormLoader";
 
 export const router = createBrowserRouter([
   {
@@ -126,11 +127,12 @@ export const router = createBrowserRouter([
         children: [
           {
             path: "create",
-            element: <Modal title="Create Session"><SessionForm/></Modal>,
+            element: <Modal  title="Create Session"><CreateSessionForm /></Modal>,
           },
           {
             path: ":sessionId/edit",
-            element: <Modal title="Edit Session"><SessionForm/></Modal>,
+            element: <Modal title="Edit Session"><EditSessionForm /></Modal>,
+            loader : editSessionFormLoader,
           },
         ],
       },

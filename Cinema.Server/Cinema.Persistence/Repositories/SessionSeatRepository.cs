@@ -43,5 +43,6 @@ namespace Cinema.Persistence.Repositories
                           && ss.LockExpiration < now)
                 .ToListAsync();
         }
+        
     }
 }

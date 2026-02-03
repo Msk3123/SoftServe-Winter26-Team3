@@ -7,6 +7,8 @@ export type ReducerState<T extends {id:number|string}> = {
     pageSize: number;
     totalCount: number;
 
+    refreshTrigger:number;
+
     sortBy: keyof T;
     order: "asc" | "desc";
 };
@@ -28,4 +30,5 @@ export type ReducerAction<T extends {id:number|string}> =
         type: "set_sort";
         payload: { sortBy: keyof T; order: "asc" | "desc" };
         }
-    | { type: 'toggle_sort'; payload: keyof T };
+    | { type: 'toggle_sort'; payload: keyof T }
+    | { type:"refresh" };

@@ -3,6 +3,7 @@ using Cinema.Application.Common.Models;
 using Cinema.Application.DTOs.SessionDtos;
 using Cinema.Application.Interfaces;
 using Cinema.Application.Interfaces.Services;
+using Cinema.Application.Services;
 using Cinema.Domain.Entities;
 using Cinema.Persistence.Context;
 using Microsoft.AspNetCore.Mvc;

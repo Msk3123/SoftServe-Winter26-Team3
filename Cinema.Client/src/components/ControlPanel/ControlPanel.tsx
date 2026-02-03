@@ -14,22 +14,34 @@ interface ControlPanelProps{
 }
 
 const ControlPanel =({pagination,setPageSize,handlePageChange}:ControlPanelProps)=>{
-    const min = Math.min(10,pagination.total);
-    
-    return(
+    const safeTotalPages = pagination.pageSize > 0
+        ? Math.ceil(pagination.total / pagination.pageSize)
+        : 1;
+
+    return (
         <div className={styles.controlPanel}>
             <BaseInput
                 type="number"
-                min={Math.min(10,pagination.total)}
+                min={1}
                 max={pagination.total}
-                value={pagination.pageSize}
-                onValueChange={(v)=> setPageSize(Number(v)<pagination.total ? min :Number(v) )}
+                value={pagination.pageSize === 0 ? "" : pagination.pageSize}
+                onValueChange={(v) => {
+                    if (v === "") {
+                        setPageSize(0);
+                        return;
+                    }
+
+                    const newValue = Number(v);
+                    if (newValue <= pagination.total) {
+                        setPageSize(newValue);
+                    }
+                }}
                 label="Page Size"
                 className={styles.pageSizeInput}
             />
             <Pagination
                 currentPage={pagination.current}
-                totalPages={Math.ceil(pagination.total/pagination.pageSize)}
+                totalPages={safeTotalPages}
                 onPageChange={handlePageChange}
             />
             <Button className={styles.createButton} to="./create">Create</Button>

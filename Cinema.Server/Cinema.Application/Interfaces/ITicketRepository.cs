@@ -12,6 +12,8 @@ namespace Cinema.Application.Interfaces
             Task<Ticket?> GetTicketWithDetailsAsync(int ticketId);
             Task<IEnumerable<Ticket>> GetTicketsByOrderIdAsync(int orderId);
             Task<(IEnumerable<Ticket> Items, int TotalCount)> GetTicketsByUserIdPagedAsync(int userId, QueryParameters queryParameters);
-        
+        Task<bool> AnyBySessionIdAsync(int sessionId);
+
+
     }
 }

@@ -53,5 +53,10 @@ namespace Cinema.Persistence.Repositories
                 .OrderByDescending(t => t.Order.OrderDate) 
                 .ToPagedResultAsync(queryParameters);
         }
+        public async Task<bool> AnyBySessionIdAsync(int sessionId)
+        {
+            return await _context.Tickets
+                .AnyAsync(t => t.SessionSeat.SessionId == sessionId);
+        }
     }
 }

@@ -1,13 +1,12 @@
 ﻿using AutoMapper;
+using Cinema.Application.Common.Configurations;
 using Cinema.Application.Common.Exceptions;
 using Cinema.Application.DTOs.SessionDtos;
 using Cinema.Application.Interfaces;
 using Cinema.Application.Interfaces.Services;
 using Cinema.Domain.Entities;
 using Cinema.Domain.Enums;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using Microsoft.Extensions.Options;
 
 namespace Cinema.Application.Services
 {
@@ -15,17 +14,23 @@ namespace Cinema.Application.Services
     {
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly CinemaSettings _options;
+
         public SessionService(
             IMapper mapper,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            IOptions<CinemaSettings> options)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+            _options = options.Value;
         }
 
         public async Task<SessionDetailsDto> CreateSessionAsync(SessionCreateDto dto)
         {
             var movie = await _unitOfWork.Movies.GetByIdAsync(dto.MovieId);
+            if (movie == null) throw new KeyNotFoundException("Movie not found");
+
             var duration = TimeSpan.FromSeconds(movie.Duration);
 
             var existingSessions = await _unitOfWork.Sessions
@@ -34,18 +39,15 @@ namespace Cinema.Application.Services
             ValidateSessionOverlap(dto.SessionDate, dto.SessionTime, duration, existingSessions);
 
             var session = _mapper.Map<Session>(dto);
-
             var hallSeats = await _unitOfWork.Seats.GetByHallIdAsync(dto.HallId);
 
             session.SessionSeats = hallSeats.Select(seat => new SessionSeat
             {
                 SeatId = seat.SeatId,
-                SeatStatuses = SeatStatus.Available,
-                LockedByUserId = null
+                SeatStatuses = SeatStatus.Available
             }).ToList();
 
             await _unitOfWork.Sessions.AddAsync(session);
-
             await _unitOfWork.SaveChangesAsync();
 
             return _mapper.Map<SessionDetailsDto>(session);
@@ -53,12 +55,18 @@ namespace Cinema.Application.Services
 
         public async Task CreateSessionsBatchAsync(CreateSessionsBatchDto dto)
         {
+            var daysCount = (dto.EndDate - dto.StartDate).Days;
+            if (daysCount > _options.MaxBatchDays)
+                throw new InvalidBatchPeriodException();
+
             var movie = await _unitOfWork.Movies.GetByIdAsync(dto.MovieId);
             var duration = TimeSpan.FromSeconds(movie.Duration);
 
-            var existingSessions = await _unitOfWork.Sessions
+
+            var dbSessions = await _unitOfWork.Sessions
                 .GetSessionsByDateRangeAsync(dto.HallId, dto.StartDate, dto.EndDate);
 
+            var allSessionsInContext = dbSessions.ToList();
             var hallSeats = (await _unitOfWork.Seats.GetByHallIdAsync(dto.HallId)).ToList();
 
             for (var date = dto.StartDate.Date; date <= dto.EndDate.Date; date = date.AddDays(1))
@@ -67,7 +75,7 @@ namespace Cinema.Application.Services
 
                 foreach (var time in dto.DailySchedule)
                 {
-                    ValidateSessionOverlap(date, time, duration, existingSessions);
+                    ValidateSessionOverlap(date, time, duration, allSessionsInContext);
 
                     var session = new Session
                     {
@@ -75,6 +83,7 @@ namespace Cinema.Application.Services
                         HallId = dto.HallId,
                         SessionDate = date,
                         SessionTime = time,
+                        Movie = movie, 
                         SessionSeats = hallSeats.Select(s => new SessionSeat
                         {
                             SeatId = s.SeatId,
@@ -82,6 +91,7 @@ namespace Cinema.Application.Services
                         }).ToList()
                     };
 
+                    allSessionsInContext.Add(session);
                     await _unitOfWork.Sessions.AddAsync(session);
                 }
             }
@@ -89,27 +99,70 @@ namespace Cinema.Application.Services
             await _unitOfWork.SaveChangesAsync();
         }
 
+       
+
         private void ValidateSessionOverlap(
             DateTime date,
             TimeSpan newTime,
-            TimeSpan duration,
+            TimeSpan newDuration,
             IEnumerable<Session> existingSessions)
         {
-            var cleaningTime = TimeSpan.FromMinutes(15);
-            var totalDuration = duration + cleaningTime;
-
+            var cleaningTime = TimeSpan.FromMinutes(_options.CleaningDurationMinutes);
             var newStart = newTime;
-            var newEnd = newTime.Add(totalDuration);
+            var newEnd = newTime.Add(newDuration).Add(cleaningTime);
 
-            var overlap = existingSessions.Any(s =>
-                s.SessionDate.Date == date.Date &&
-                newStart < s.SessionTime.Add(totalDuration) &&
-                newEnd > s.SessionTime);
-
-            if (overlap)
+            foreach (var s in existingSessions.Where(x => x.SessionDate.Date == date.Date))
             {
-                throw new SessionOverlapException(
-                    $"Session on {date:yyyy-MM-dd} at {newTime:hh\\:mm} overlaps with an existing schedule in this hall.");
+                var existingDuration = TimeSpan.FromSeconds(s.Movie.Duration);
+                var existingStart = s.SessionTime;
+                var existingEnd = s.SessionTime.Add(existingDuration).Add(cleaningTime);
+
+                if (newStart < existingEnd && newEnd > existingStart)
+                {
+                    throw new SessionOverlapException(
+                        $"Schedule conflict on {date:yyyy-MM-dd}: " +
+                        $"New session ({newStart:hh\\:mm}-{newEnd:hh\\:mm}, incl. cleaning) " +
+                        $"overlaps with '{s.Movie.Title}' ({existingStart:hh\\:mm}-{existingEnd:hh\\:mm}).");
+                }
+            }
+        }
+        public async Task DeleteSessionAsync(int sessionId)
+        {
+            var session = await _unitOfWork.Sessions.GetByIdAsync(sessionId);
+            if (session == null) throw new KeyNotFoundException("Session not found");
+            if (await _unitOfWork.Tickets.AnyBySessionIdAsync(sessionId))
+            {
+                throw new UnavailableOperationException("Cannot delete session: tickets have already been sold.");
+            }
+
+            var seats = (await _unitOfWork.SessionSeats.GetBySessionIdAsync(sessionId)).ToList();
+
+            if (seats.Any(s => s.SeatStatuses == SeatStatus.Sold))
+            {
+                throw new UnavailableOperationException("Cannot delete session: seats are marked as sold.");
+            }
+            var hasOrders = await _unitOfWork.Orders.AnyBySessionIdAsync(sessionId);
+            if (hasOrders)
+            {
+                throw new UnavailableOperationException("Cannot delete session: tickets or orders already exist.");
+            }
+            await _unitOfWork.BeginTransactionAsync();
+            try
+            {
+                foreach (var seat in seats)
+                {
+                    _unitOfWork.SessionSeats.Remove(seat);
+                }
+
+                _unitOfWork.Sessions.Remove(session);
+
+                await _unitOfWork.SaveChangesAsync();
+                await _unitOfWork.CommitAsync();
+            }
+            catch (Exception)
+            {
+                await _unitOfWork.RollbackAsync();
+                throw;
             }
         }
     }

@@ -39,7 +39,7 @@ export default function useQueryTable<T extends BaseEntity>(
     };
 
         fetchMovies();
-    }, [state.currentPage, state.pageSize, state.sortBy, state.order,fetchFn]);
+    }, [state.currentPage, state.pageSize, state.sortBy, state.order,fetchFn,state.refreshTrigger]);
 
     const actions = useMemo(() => ({
         setPage: (page: number) =>
@@ -63,6 +63,7 @@ export default function useQueryTable<T extends BaseEntity>(
             dispatch({type:"delete_item",payload:id}),
         toggleSort: (key: keyof T) =>
             dispatch({ type: 'toggle_sort', payload: key }),
+        refresh: () => dispatch({ type: "refresh" }),
     }),[]);
     return {
         data: state.data,

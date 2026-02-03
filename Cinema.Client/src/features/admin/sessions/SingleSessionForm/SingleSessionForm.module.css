@@ -1,14 +1,12 @@
-
 .pendingForm{
     cursor: not-allowed;
     background-color: var(--button-disabled);
 }
-
 .actions{
     display: flex;
     justify-content: end;
     gap:2em;
-    margin-top: 1em;
+    margin-top: 2em;
 }
 
 .datesContainer{
@@ -19,6 +17,15 @@
     margin: 1em 0;
 }
 
-.ImageInput{
-    margin: 2em 0;
+.timeForm{
+    display: grid;
+    grid-template-columns: 76% 24%;
+    gap: 2%;
+    grid-template-rows: calc(6em + 2px);
+    align-items: end;
+    margin: 1em 0;
+}
+.timeForm >div{
+    margin: 0;
+    justify-items: end;
 }

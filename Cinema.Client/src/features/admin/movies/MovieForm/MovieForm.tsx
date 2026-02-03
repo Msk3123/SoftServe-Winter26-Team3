@@ -38,9 +38,9 @@ const initialData = {
     posterUrl: "",
     trailerUrl: "",
     language: "uk",
-    releaseDate: "",
-    startDate: "",
-    endDate: "",
+    releaseDate:dateToYearFirst(new Date()),
+    startDate:dateToYearFirst(new Date()),
+    endDate:dateToYearFirst(new Date()),
     genreIds: [],
     actorIds: [],
 }
@@ -125,7 +125,7 @@ const MovieForm = ({initialState,onSubmitAction,onClose}:MovieFormProps)=>{
         setIsPending(false);
     }
 
-    const handleOpenModal=(q)=>{
+    const handleOpenModal=(q:string)=>{
         setInitialActor({...initialActor,firstName:q})
         setIsModalOpen(true);
     };

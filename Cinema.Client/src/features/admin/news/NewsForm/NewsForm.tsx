@@ -25,7 +25,7 @@ const initialData = {
     title: "",
     newsContent: "",
     imageUrl: "",
-    publishedDate: "",
+    publishedDate: dateToYearFirst(new Date()),
     tagId: GENERAL_TAG_ID,
     isActive: false,
     movieId: undefined,
