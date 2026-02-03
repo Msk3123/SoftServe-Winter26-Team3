@@ -120,7 +120,7 @@ const SessionForm =  ({initialState,onSubmitAction,onClose}:SessionFormProps) =>
 
 
     return (
-        <form onSubmit={onSubmit} className={isPending ? styles.pendingForm:""}>
+        <form onSubmit={onSubmit} className={isPending ? styles.pendingForm:""} noValidate>
 
             <SelectableInput
                 title="Movie"
@@ -203,6 +203,7 @@ const SessionForm =  ({initialState,onSubmitAction,onClose}:SessionFormProps) =>
             }}>
                 <BaseInput
                     type="time"
+                    label="Time"
                     error={errors.dailySchedule}
                     onValueChange={setTime}
                     step="600"

@@ -1,3 +1,8 @@
+import type { ActorShort } from "./actor.types";
+import type { Genre } from "./genre.types";
+import type { HallShort } from "./hall.types";
+import type { MovieShort } from "./movie.types";
+
 export interface SessionShort{
     id: number;
     sessionDate: string;
@@ -7,20 +12,43 @@ export interface SessionShort{
     posterUrl: string;
     movieId: number;
 }
-export interface Session extends SessionShort {
-    movieId: number;
-    hallId: number;
-    basePrice: number;
+export interface Session{
+    id:number;
+    actors:ActorShort[];
+    genres: Genre[];
+    hall:HallShort;
+    movie:MovieShort;
+    sessionDate: string;
+    sessionTime: string;
 }
 
 export interface SessionCreate {
-    movieId: number;
-    hallId: number;
+    movieId: number|string;
+    hallId: number|string;
     sessionDate: string;
     sessionTime: string;
-    basePrice: number;
 }
 
+export const mapSessionToShort = (session: Session): SessionShort =>{
+    return {
+        id:session.id,
+        sessionDate: session.sessionDate,
+        sessionTime: session.sessionTime,
+        movieTitle:session.movie.title,
+        hallName: session.hall.hallName,
+        posterUrl: session.movie.posterUrl,
+        movieId: session.movie.id,
+    };
+}
+
+export const mapSessionToCreate = (session: Session): SessionCreate =>{
+    return {
+        movieId: session.movie.id,
+        hallId: session.hall.id,
+        sessionDate: session.sessionDate,
+        sessionTime: session.sessionTime
+    }
+}
 export interface CreateSessionsBatch {
     movieId: number|string;
     hallId: number|string;

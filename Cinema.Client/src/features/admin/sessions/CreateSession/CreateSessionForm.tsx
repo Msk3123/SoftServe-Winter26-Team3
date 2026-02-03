@@ -1,5 +1,5 @@
 import { useNavigate, useOutletContext,} from "react-router";
-import type { CreateSessionsBatch } from "../../../../types/session.types";
+import type { CreateSessionsBatch, SessionShort } from "../../../../types/session.types";
 import { createSessionBatch } from "../../../../api/sessionApi";
 import toast from "react-hot-toast";
 import SessionForm from "../SessionForm/SessionForm";
@@ -13,7 +13,7 @@ const CreateSessionForm = ({onClose}:CreateSessionFormProps)=>{
 
     const navigate = useNavigate();
     
-    const {refresh} = useOutletContext<{refresh:()=>void,editItem:(item: MovieShort) => void;}>();
+    const {refresh} = useOutletContext<{refresh:()=>void,editItem:(item: SessionShort) => void;}>();
     const handleClose = ()=>{
         if(onClose){
             onClose();

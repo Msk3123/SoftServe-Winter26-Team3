@@ -34,6 +34,8 @@ import CreateMovieForm from "../features/admin/movies/CreateMovie/CreateMovie";
 import EditMovieForm from "../features/admin/movies/EditMovie/EditMovie";
 import editMovieFormLoader from "../features/admin/movies/EditMovie/editMovieFormLoader";
 import CreateSessionForm from "../features/admin/sessions/CreateSession/CreateSessionForm";
+import EditSessionForm from "../features/admin/sessions/EditSession/EditSessionForm";
+import editSessionFormLoader from "../features/admin/sessions/EditSession/editSessionFormLoader";
 
 export const router = createBrowserRouter([
   {
@@ -129,7 +131,8 @@ export const router = createBrowserRouter([
           },
           {
             path: ":sessionId/edit",
-            element: <Modal title="Edit Session">edit </Modal>,
+            element: <Modal title="Edit Session"><EditSessionForm /></Modal>,
+            loader : editSessionFormLoader,
           },
         ],
       },

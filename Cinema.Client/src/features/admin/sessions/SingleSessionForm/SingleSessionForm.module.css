@@ -16,19 +16,6 @@
     gap: 1em;
     margin: 1em 0;
 }
-.dailyScheduleContainer{
-    padding: 1em;
-    display: flex;
-    flex-wrap: wrap;
-    gap:2em
-}
-.dailySchedule{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1em;
-    color:var(--color-primary)
-}
 
 .timeForm{
     display: grid;
