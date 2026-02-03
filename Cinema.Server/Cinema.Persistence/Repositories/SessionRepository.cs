@@ -85,5 +85,10 @@ namespace Cinema.Persistence.Repositories
                             s.SessionDate.Date <= endDate.Date)
                 .ToListAsync();
         }
+        public async Task<bool> AnyByHallIdAsync(int hallId)
+        {
+            return await _context.Sessions
+                .AnyAsync(s => s.HallId == hallId);
+        }
     }
 }

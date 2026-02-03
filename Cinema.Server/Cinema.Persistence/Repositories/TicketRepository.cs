@@ -41,7 +41,7 @@ namespace Cinema.Persistence.Repositories
         public async Task<(IEnumerable<Ticket> Items, int TotalCount)> GetTicketsByUserIdPagedAsync(int userId, QueryParameters queryParameters)
         {
             return await _context.Tickets
-                .AsNoTracking() 
+                .AsNoTracking()
                 .Include(t => t.Order)
                 .Include(t => t.TicketType)
                 .Include(t => t.SessionSeat)
@@ -50,13 +50,18 @@ namespace Cinema.Persistence.Repositories
                     .ThenInclude(o => o.Session)
                         .ThenInclude(s => s.Movie)
                 .Where(t => t.Order.UserId == userId)
-                .OrderByDescending(t => t.Order.OrderDate) 
+                .OrderByDescending(t => t.Order.OrderDate)
                 .ToPagedResultAsync(queryParameters);
         }
         public async Task<bool> AnyBySessionIdAsync(int sessionId)
         {
             return await _context.Tickets
                 .AnyAsync(t => t.SessionSeat.SessionId == sessionId);
+        }
+        public async Task<bool> AnyByHallIdAsync(int hallId)
+        {
+            return await _context.Tickets
+                .AnyAsync(t => t.SessionSeat.Session.HallId == hallId);
         }
     }
 }

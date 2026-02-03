@@ -13,7 +13,7 @@ namespace Cinema.Application.DTOs.SessionDtos
         public TimeSpan SessionTime { get; set; }
 
         public MovieDetailsDto Movie { get; set; }
-        public HallDto Hall { get; set; }
+        public HallShortDto Hall { get; set; }
         public List<string> Genres { get; set; } = new();
         public List<string> Actors { get; set; } = new();
     }

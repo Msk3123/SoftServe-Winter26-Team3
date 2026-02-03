@@ -8,5 +8,7 @@ namespace Cinema.Application.Interfaces.Services
      public interface IHallService
     {
         Task CreateHallAsync(HallCreateDto dto);
+        Task UpdateHallAsync(int id,HallCreateDto dto);
+        Task DeleteHallAsync(int id);
     }
 }
