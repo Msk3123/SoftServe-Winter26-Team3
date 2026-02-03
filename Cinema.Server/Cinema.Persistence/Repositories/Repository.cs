@@ -42,5 +42,9 @@ namespace Cinema.Persistence.Repositories
         {
             return await _dbSet.AsNoTracking().ToPagedResultAsync(queryParameters);
         }
+        public void Remove(T entity)
+        {
+            _dbSet.Remove(entity);
+        }
     }
 }

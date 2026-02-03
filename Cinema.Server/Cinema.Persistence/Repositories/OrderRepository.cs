@@ -63,5 +63,10 @@ namespace Cinema.Persistence.Repositories
                        && o.OrderDate < deadline)
                 .ToListAsync();
         }
+        public async Task<bool> AnyBySessionIdAsync(int sessionId)
+        {
+            return await _context.Orders
+                .AnyAsync(o => o.SessionId == sessionId);
+        }
     }
 }

@@ -1,4 +1,5 @@
 using Cinema.API.Middleware;
+using Cinema.Application.Common.Configurations;
 using Cinema.Application.Interfaces;
 using Cinema.Application.Interfaces.PaymentGateway;
 using Cinema.Application.Interfaces.Services;
@@ -63,6 +64,7 @@ builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<IPaymentGateway, PaymentGateway>();
 builder.Services.AddScoped<IBookingCleanupService, BookingCleanupService>();
 builder.Services.AddScoped<IHallService, HallService>();
+builder.Services.Configure<CinemaSettings>(builder.Configuration.GetSection("CinemaSettings"));
 builder.Services.AddControllers()
     .AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 //swagger

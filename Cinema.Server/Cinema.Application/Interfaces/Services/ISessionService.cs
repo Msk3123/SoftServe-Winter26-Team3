@@ -9,5 +9,6 @@ namespace Cinema.Application.Interfaces.Services
     {
        Task<SessionDetailsDto> CreateSessionAsync(SessionCreateDto dto);
         Task CreateSessionsBatchAsync(CreateSessionsBatchDto dto);
+        Task DeleteSessionAsync(int sessionId);
     }
 }
