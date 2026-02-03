@@ -87,7 +87,12 @@ namespace Cinema.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            await _sessionRepository.DeleteAsync(id);
+            var session = await _sessionRepository.GetByIdAsync(id);
+            if (session == null) throw new KeyNotFoundException($"Session with id {id} not found");
+
+            _sessionService.DeleteSessionAsync(id);
+            await _sessionRepository.SaveAsync();
+
             return NoContent();
         }
     }
