@@ -5,6 +5,7 @@ using Cinema.Application.Interfaces;
 using Cinema.Application.Interfaces.Services;
 using Cinema.Application.Services;
 using Cinema.Domain.Entities;
+using Cinema.Domain.Enums;
 using Cinema.Persistence.Context;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,8 +26,8 @@ namespace Cinema.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] QueryParameters queryParameters) {
-           var results = await _sessionRepository.GetAllWithDetailsPagedAsync(queryParameters);
+        public async Task<IActionResult> GetAll([FromQuery] QueryParameters queryParameters,[FromQuery] SessionFilter sessionFilter) {
+           var results = await _sessionRepository.GetAllWithDetailsPagedAsync(queryParameters, sessionFilter);
            return OkPaged<Session, SessionShortDto>(results, queryParameters);
         }
         [HttpGet("{id}")]
@@ -87,7 +88,7 @@ namespace Cinema.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            await _sessionRepository.DeleteAsync(id);
+            await _sessionService.DeleteSessionAsync(id);
             return NoContent();
         }
     }
