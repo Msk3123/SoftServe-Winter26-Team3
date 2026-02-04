@@ -21,7 +21,7 @@ namespace Cinema.Application.Services
             cinemaSettings = options.Value;
 
         }
-        public async Task CreateHallAsync(HallCreateDto dto)
+        public async Task<Hall> CreateHallAsync(HallCreateDto dto)
         {
             var hall = new Hall
             {
@@ -45,6 +45,7 @@ namespace Cinema.Application.Services
 
             await _unitOfWork.Halls.AddAsync(hall);
             await _unitOfWork.SaveChangesAsync();
+            return hall;
         }
         public async Task UpdateHallAsync(int id, HallCreateDto dto)
         {

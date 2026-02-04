@@ -10,7 +10,7 @@ import type { HallShort } from "../../../../types/hall.types";
 import { getAllHalls } from "../../../../api/hallApi";
 import { SelectableInput } from "../../../../components/Form/SelectableInput/SelectableInput";
 import MovieOption from "../../movies/MovieOption/MovieOption";
-import HallOption from "../../halls/HallOption";
+import HallOption from "../../halls/HallOption/HallOption";
 import BaseInput from "../../../../components/Form/BaseInput/BaseInput";
 import { dateToYearFirst } from "../../../../helpers/textHelpers";
 import singleSessionValidator from "../../validators/singleSessionValidator";
@@ -81,7 +81,7 @@ const SingleSessionForm =  ({initialState,onSubmitAction,onClose}:SingleSessionF
                 items={halls}
                 selectedIds={formData.hallId?[formData.hallId]:[]}
                 onSelect={(item)=>handleChange("hallId",Number(item.id))}
-                onRemove={(item)=>handleChange("hallId",0)}
+                onRemove={()=>handleChange("hallId",0)}
                 getLabel={(item)=>item.hallName}
                 renderOption={(item)=><HallOption item={item} />}
                 multiple={false}

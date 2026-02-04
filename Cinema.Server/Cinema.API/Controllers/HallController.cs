@@ -40,8 +40,10 @@ namespace Cinema.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(HallCreateDto dto)
         {
-            await _hallService.CreateHallAsync(dto);
-            return Ok(); 
+            var hall = await _hallService.CreateHallAsync(dto);
+            var response = _mapper.Map<HallShortDto>(hall);
+            
+            return Ok(response); 
         }
 
         [HttpPut("{id}")]

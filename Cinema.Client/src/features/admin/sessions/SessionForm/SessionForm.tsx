@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState, type FormEvent } from "react";
+import {useEffect, useState, type FormEvent } from "react";
 import useForm from "../../../../hooks/useForm";
 import type { CreateSessionsBatch } from "../../../../types/session.types";
 import sessionValidator from "../../validators/sessionValidator";
@@ -11,7 +11,7 @@ import type { HallShort } from "../../../../types/hall.types";
 import { getAllHalls } from "../../../../api/hallApi";
 import { SelectableInput } from "../../../../components/Form/SelectableInput/SelectableInput";
 import MovieOption from "../../movies/MovieOption/MovieOption";
-import HallOption from "../../halls/HallOption";
+import HallOption from "../../halls/HallOption/HallOption";
 import BaseInput from "../../../../components/Form/BaseInput/BaseInput";
 import { dateToYearFirst } from "../../../../helpers/textHelpers";
 import { Checkbox } from "../../../../components/Form/CheckBox/CheckBox";
@@ -140,7 +140,7 @@ const SessionForm =  ({initialState,onSubmitAction,onClose}:SessionFormProps) =>
                 items={halls}
                 selectedIds={formData.hallId?[formData.hallId]:[]}
                 onSelect={(item)=>handleChange("hallId",item.id)}
-                onRemove={(item)=>handleChange("hallId",0)}
+                onRemove={()=>handleChange("hallId",0)}
                 getLabel={(item)=>item.hallName}
                 renderOption={(item)=><HallOption item={item} />}
                 multiple={false}

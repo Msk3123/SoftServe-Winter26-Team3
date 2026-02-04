@@ -1,4 +1,4 @@
-import type { HallShort } from "../../../types/hall.types";
+import type { HallShort } from "../../../../types/hall.types";
 import styles from "./HallOption.module.css";
 
 const HallOption = ({item}:{item:HallShort})=>{

@@ -36,6 +36,7 @@ import editMovieFormLoader from "../features/admin/movies/EditMovie/editMovieFor
 import CreateSessionForm from "../features/admin/sessions/CreateSession/CreateSessionForm";
 import EditSessionForm from "../features/admin/sessions/EditSession/EditSessionForm";
 import editSessionFormLoader from "../features/admin/sessions/EditSession/editSessionFormLoader";
+import CreateHallForm from "../features/admin/halls/HallCreate/HallCreate";
 
 export const router = createBrowserRouter([
   {
@@ -143,7 +144,7 @@ export const router = createBrowserRouter([
         children: [
           {
             path: "create",
-            element: <Modal>create hall</Modal>,
+            element: <Modal><CreateHallForm/></Modal>,
           },
           {
             path: ":hallId/edit",

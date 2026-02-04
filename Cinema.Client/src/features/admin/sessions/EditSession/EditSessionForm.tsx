@@ -43,7 +43,7 @@ const EditSessionForm = ({onClose}:EditSessionFormProps)=>{
             }
         }
 
-    return <SingleSessionForm initialState={mapSessionToCreate(initialState)} onSubmitAction={onSubmit}/>
+    return <SingleSessionForm initialState={mapSessionToCreate(initialState)} onSubmitAction={onSubmit} onClose={handleClose}/>
 }
 
 export default EditSessionForm;
