@@ -40,12 +40,24 @@ namespace Cinema.API.Middleware
             var (statusCode, response) = exception switch
             {
                 // 400 
-                ValidationException ex => (HttpStatusCode.BadRequest, new { /* твій поточний код для FluentValidation */ }),
+                ValidationException ex => (
+                    HttpStatusCode.BadRequest,
+                    new ErrorResponse
+                    {
+                        StatusCode = 400,
+                        Message = "Validation failed",
+                        Details = JsonSerializer.Serialize(ex.Errors
+                            .GroupBy(e => e.PropertyName)
+                            .ToDictionary(
+                                g => g.Key,
+                                g => g.Select(x => x.ErrorMessage).ToArray()
+                        ))
+                    }),
 
                 SessionMismatchException or
                 SeatNotReservedException or
                 ReservationExpiredException or
-                InvalidBatchPeriodException => // Додано з твого списку
+                InvalidBatchPeriodException => 
                     (HttpStatusCode.BadRequest, CreateError(400, exception.Message)),
 
                 // 404 
