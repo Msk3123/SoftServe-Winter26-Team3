@@ -1,12 +1,15 @@
 import type { PaginatedResponse, DeleteFunction, FetchListFunction, FetchListByIdFunction, FetchOneFunction, PostFunction, PutFunction, PatchFunction} from "../types/api.types";
-import type { CreateSessionsBatch, Session, SessionCreate, SessionShort } from "../types/session.types";
+import type { CreateSessionsBatch, Session, SessionCreate, SessionShort} from "../types/session.types";
 import { defaultParams, deleteItem, getItem, getPaginatedData, patchItem, postItem, putItem } from "./api";
+import { SessionFilter, type SessionFilterType, type SessionQueryParams} from "../types/session.types";
 
-
-export const getAllSessions: FetchListFunction<SessionShort> = async (params = defaultParams) => {
-    return await getPaginatedData<SessionShort>("session", params);
+export const getAllSessions = async (params: SessionQueryParams = defaultParams) => {
+    return await getPaginatedData<SessionShort>("session", {
+        ...params,
+        // Використовуємо Active за замовчуванням для розкладу
+        sessionFilter: params.sessionFilter ?? SessionFilter.Active 
+    } as SessionQueryParams); 
 };
-
 export const getSession: FetchOneFunction<Session> = async (id) => {
     return await getItem("session", id);
 };

@@ -55,7 +55,7 @@ namespace Cinema.Application.Services
 
         public async Task CreateSessionsBatchAsync(CreateSessionsBatchDto dto)
         {
-            var daysCount = (dto.EndDate - dto.StartDate).Days;
+            var daysCount = (dto.EndDate.Date - dto.StartDate.Date).Days;
             if (daysCount > _options.MaxBatchDays)
                 throw new InvalidBatchPeriodException();
 
@@ -71,31 +71,29 @@ namespace Cinema.Application.Services
 
             for (var date = dto.StartDate.Date; date <= dto.EndDate.Date; date = date.AddDays(1))
             {
-                if (!dto.WeekDays.Contains((int)date.DayOfWeek)) continue;
-
-                foreach (var time in dto.DailySchedule)
-                {
-                    ValidateSessionOverlap(date, time, duration, allSessionsInContext);
-
-                    var session = new Session
+                    if (!dto.WeekDays.Contains((int)date.DayOfWeek)) continue;
+                    foreach (var time in dto.DailySchedule)
                     {
-                        MovieId = dto.MovieId,
-                        HallId = dto.HallId,
-                        SessionDate = date,
-                        SessionTime = time,
-                        Movie = movie, 
-                        SessionSeats = hallSeats.Select(s => new SessionSeat
+                        ValidateSessionOverlap(date, time, duration, allSessionsInContext);
+
+                        var session = new Session
                         {
-                            SeatId = s.SeatId,
-                            SeatStatuses = SeatStatus.Available
-                        }).ToList()
-                    };
+                            MovieId = dto.MovieId,
+                            HallId = dto.HallId,
+                            SessionDate = date,
+                            SessionTime = time,
+                            Movie = movie,
+                            SessionSeats = hallSeats.Select(s => new SessionSeat
+                            {
+                                SeatId = s.SeatId,
+                                SeatStatuses = SeatStatus.Available
+                            }).ToList()
+                        };
 
-                    allSessionsInContext.Add(session);
-                    await _unitOfWork.Sessions.AddAsync(session);
-                }
+                        allSessionsInContext.Add(session);
+                        await _unitOfWork.Sessions.AddAsync(session);
+                    }
             }
-
             await _unitOfWork.SaveChangesAsync();
         }
 
