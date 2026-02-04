@@ -1,0 +1,17 @@
+.seat {
+    flex: 1 1 0;
+    aspect-ratio: 1 / 1;
+    
+    max-width: 3em;
+    border-radius: 0.2em;
+    background: var(--bg-main);
+    border: 2px var(--color-primary) solid;
+    box-sizing: border-box;
+    transition: all ease-in-out 100ms;
+    border-radius: 0.5em 0.5em 0.2em 0.2em;
+    
+}
+
+.seat:hover{
+    background-color: var(--color-primary-weak);
+}

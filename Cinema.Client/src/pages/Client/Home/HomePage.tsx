@@ -165,7 +165,7 @@ const HomePage = () => {
               </div>
               <div className={styles.newsDetailedInfo}>
                 <Button
-                    action={() => console.log("Will be open modal in future")}
+                    action={() => console.log("Will be open AdminModal in future")}
                     className={styles.newsButton}
                     variant="fill"
                 >

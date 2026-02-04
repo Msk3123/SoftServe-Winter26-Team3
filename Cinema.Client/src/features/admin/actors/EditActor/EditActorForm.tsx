@@ -3,14 +3,14 @@ import { putActor } from "../../../../api/actorApi";
 import toast from "react-hot-toast";
 import ActorForm from "../ActorForm/ActorForm";
 import type { Actor, ActorCreate, ActorShort } from "../../../../types/actor.types";
-import type { AdminModalContext } from "../../../../types/admin.types";
+import type { AdminAdminModalContext } from "../../../../types/admin.types";
 
 
 interface EditActorFormProps {onClose?:()=>void};
 const EditActorForm = ({onClose}:EditActorFormProps)=>{
     const initialState = useLoaderData() as Actor;
 
-    const {editItem} = useOutletContext<AdminModalContext<ActorShort>>();
+    const {editItem} = useOutletContext<AdminAdminModalContext<ActorShort>>();
     const navigate = useNavigate();
     
     const handleClose = ()=>{

@@ -1,11 +1,11 @@
 
-import type { DeleteFunction, FetchListFunction, FetchOneFunction, PatchFunction, PostFunction, PutFunction} from "../types/api.types";
+import type { DeleteFunction, FetchPaginatedListFunction, FetchOneFunction, PatchFunction, PostFunction, PutFunction} from "../types/api.types";
 import type { HallCreate, HallShort } from "../types/hall.types";
 import { defaultParams, deleteItem, getItem, getPaginatedData, patchItem, postItem, putItem } from "./api";
 
 
 
-export const  getAllHalls:FetchListFunction<HallShort> = async (params = defaultParams ) => {
+export const  getAllHalls:FetchPaginatedListFunction<HallShort> = async (params = defaultParams ) => {
         return await getPaginatedData<HallShort>("hall", params);
 };
 

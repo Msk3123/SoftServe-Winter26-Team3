@@ -3,11 +3,11 @@ import { postActor } from "../../../../api/actorApi";
 import toast from "react-hot-toast";
 import ActorForm from "../ActorForm/ActorForm";
 import type { ActorCreate, ActorShort } from "../../../../types/actor.types";
-import type { AdminModalContext } from "../../../../types/admin.types";
+import type { AdminAdminModalContext } from "../../../../types/admin.types";
 interface CreateActorFormProps {onClose?:()=>void}
 const CreateActorForm = ({onClose}:CreateActorFormProps)=>{
 
-    const {createItem} = useOutletContext<AdminModalContext<ActorShort>>();
+    const {createItem} = useOutletContext<AdminAdminModalContext<ActorShort>>();
     const navigate = useNavigate();
     
         

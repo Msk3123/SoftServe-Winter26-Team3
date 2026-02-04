@@ -18,7 +18,7 @@ import AdminSessionsPage from "../pages/Admin/SessionsPage/AdminSessionsPage";
 import AdminHallsPage from "../pages/Admin/Halls/AdminHallsPage";
 import AdminNewsPage from "../pages/Admin/News/AdminNewsPage";
 import AdminUsersPage from "../pages/Admin/Users/AdminUsersPage";
-import Modal from "../components/Modal/Modal";
+import AdminModal from "../components/AdminModal/AdminModal";
 import AdminOrderPage from "../pages/Admin/Orders/AdminOrdersPage";
 import TicketsPage from "../pages/Client/Tickets/TicketsPage";
 import PageNotFound from "../pages/Client/PageNotFound/PageNotFound";
@@ -112,11 +112,11 @@ export const router = createBrowserRouter([
         children: [
           {
             path: "create",
-            element: <Modal  title="Create Movie"><CreateMovieForm/></Modal>,
+            element: <AdminModal  title="Create Movie"><CreateMovieForm/></AdminModal>,
           },
           {
             path: ":movieId/edit",
-            element: <Modal title="Edit Movie"><EditMovieForm/></Modal>,
+            element: <AdminModal title="Edit Movie"><EditMovieForm/></AdminModal>,
             loader: editMovieFormLoader,
           },
         ],
@@ -128,11 +128,11 @@ export const router = createBrowserRouter([
         children: [
           {
             path: "create",
-            element: <Modal  title="Create Session"><CreateSessionForm /></Modal>,
+            element: <AdminModal  title="Create Session"><CreateSessionForm /></AdminModal>,
           },
           {
             path: ":sessionId/edit",
-            element: <Modal title="Edit Session"><EditSessionForm /></Modal>,
+            element: <AdminModal title="Edit Session"><EditSessionForm /></AdminModal>,
             loader : editSessionFormLoader,
           },
         ],
@@ -144,11 +144,11 @@ export const router = createBrowserRouter([
         children: [
           {
             path: "create",
-            element: <Modal><CreateHallForm/></Modal>,
+            element: <AdminModal><CreateHallForm/></AdminModal>,
           },
           {
             path: ":hallId/edit",
-            element: <Modal>edit hall</Modal>,
+            element: <AdminModal>edit hall</AdminModal>,
           },
         ],
       },
@@ -157,9 +157,9 @@ export const router = createBrowserRouter([
         path: "news",
         element: <AdminNewsPage />,
         children: [
-          { path: "create", element: <Modal title="Create News"><CreateNewsForm/></Modal> },
+          { path: "create", element: <AdminModal title="Create News"><CreateNewsForm/></AdminModal> },
             { path: ":newsId/edit",
-              element: <Modal title="Edit News"><EditNewsForm/></Modal>,
+              element: <AdminModal title="Edit News"><EditNewsForm/></AdminModal>,
               loader: editNewsFormLoader,
             }
         ],
@@ -171,9 +171,9 @@ export const router = createBrowserRouter([
         children: [
           {
             path: ":userId/edit",
-            element: <Modal>User view</Modal>,
+            element: <AdminModal>User view</AdminModal>,
           },
-          { path: "create", element: <Modal>create User</Modal> },
+          { path: "create", element: <AdminModal>create User</AdminModal> },
         ],
       },
       
@@ -181,8 +181,8 @@ export const router = createBrowserRouter([
         path: "orders",
         element: <AdminOrderPage />,
         children: [
-            { path: "create", element: <Modal>create order</Modal> },
-            { path: ":orderId/edit", element: <Modal>order view</Modal>}
+            { path: "create", element: <AdminModal>create order</AdminModal> },
+            { path: ":orderId/edit", element: <AdminModal>order view</AdminModal>}
         ]
       },
 
@@ -190,9 +190,9 @@ export const router = createBrowserRouter([
         path: "actors",
         element: <AdminActorsPage />,
         children: [
-            { path: "create", element: <Modal title="Create Actor"><CreateActorForm/></Modal> },
+            { path: "create", element: <AdminModal title="Create Actor"><CreateActorForm/></AdminModal> },
             { path: ":actorId/edit",
-              element: <Modal title="Edit Actor"><EditActorForm/></Modal>,
+              element: <AdminModal title="Edit Actor"><EditActorForm/></AdminModal>,
               loader: editActorFormLoader,
             }
         ]

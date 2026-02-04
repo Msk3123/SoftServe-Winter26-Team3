@@ -17,7 +17,7 @@ import { getAllGenres, postGenre } from "../../../../api/genreApi";
 import { SelectableInput } from "../../../../components/Form/SelectableInput/SelectableInput";
 import ActorOption from "../../actors/ActorOption/ActorOption";
 import GenreOption from "../../../../components/Form/GenreOption/GenreOption";
-import Modal from "../../../../components/Modal/Modal";
+import AdminModal from "../../../../components/AdminModal/AdminModal";
 import { ApiError } from "../../../../types/api.types";
 import ActorForm from "../../actors/ActorForm/ActorForm";
 
@@ -54,7 +54,7 @@ const MovieForm = ({initialState,onSubmitAction,onClose}:MovieFormProps)=>{
     
     const {formData,errors,isSubmitting,handleChange,handleSubmit} = useForm<MovieCreate>(initialState??initialData,movieValidator);
     const [isPending, setIsPending] = useState(false)
-    const [isModalOpen,setIsModalOpen] = useState(false);
+    const [isAdminModalOpen,setIsAdminModalOpen] = useState(false);
     const [actors, setActors] = useState<ActorShort[]>([]);
     const [genres, setGenres] = useState<Genre[]>([]);
     const [initialActor,setInitialActor] = useState<ActorCreate>({
@@ -111,7 +111,7 @@ const MovieForm = ({initialState,onSubmitAction,onClose}:MovieFormProps)=>{
 
                     handleChange("actorIds",[...formData.actorIds,Number(actor.id)])
                     toast.success("Actor succesfully added!")
-                    setIsModalOpen(false)
+                    setIsAdminModalOpen(false)
                 }
             }catch{
                 toast.error("Can`t add this actor");
@@ -125,9 +125,9 @@ const MovieForm = ({initialState,onSubmitAction,onClose}:MovieFormProps)=>{
         setIsPending(false);
     }
 
-    const handleOpenModal=(q:string)=>{
+    const handleOpenAdminModal=(q:string)=>{
         setInitialActor({...initialActor,firstName:q})
-        setIsModalOpen(true);
+        setIsAdminModalOpen(true);
     };
 
     return(
@@ -248,7 +248,7 @@ const MovieForm = ({initialState,onSubmitAction,onClose}:MovieFormProps)=>{
                     onSelect={(item)=>handleChange("actorIds",[...formData.actorIds,Number(item.id)])}
                     onRemove={(item)=>handleChange("actorIds",formData.actorIds.filter(i=>i!==item))}
                     getLabel={(item)=>`${item.firstName} ${item.lastName}`}
-                    onCreateNew={handleOpenModal}
+                    onCreateNew={handleOpenAdminModal}
                     renderOption={(item)=><ActorOption item={item} />}
                 />
             </div>
@@ -265,10 +265,10 @@ const MovieForm = ({initialState,onSubmitAction,onClose}:MovieFormProps)=>{
                 <Button htmlType="submit" disabled={isSubmitting}>Submit</Button>
             </div>
         </form>
-        {isModalOpen&&
-            <Modal title="Create Actor" onClose={()=>setIsModalOpen(false)}>
-                <ActorForm onClose={()=>setIsModalOpen(false)} onSubmitAction={handleCreateActor} initialState={initialActor}/>
-            </Modal>}
+        {isAdminModalOpen&&
+            <AdminModal title="Create Actor" onClose={()=>setIsAdminModalOpen(false)}>
+                <ActorForm onClose={()=>setIsAdminModalOpen(false)} onSubmitAction={handleCreateActor} initialState={initialActor}/>
+            </AdminModal>}
         </>
     )
 }

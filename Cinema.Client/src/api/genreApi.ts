@@ -1,9 +1,9 @@
-import type {FetchListFunction, FetchOneFunction,PatchFunction, PostFunction, PutFunction, } from "../types/api.types";
+import type {FetchPaginatedListFunction, FetchOneFunction,PatchFunction, PostFunction, PutFunction, } from "../types/api.types";
 import type { Genre, GenreCreate } from "../types/genre.types";
 import { getPaginatedData, deleteItem, defaultParams, getItem, postItem, putItem, patchItem } from "./api";
 
 
-export const getAllGenres: FetchListFunction<Genre> = async (params = defaultParams) => {
+export const getAllGenres: FetchPaginatedListFunction<Genre> = async (params = defaultParams) => {
     return await getPaginatedData<Genre>("genres", params);
 };
 

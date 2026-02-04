@@ -18,14 +18,17 @@ export type FetchParams<T extends BaseEntity> = {
     order: "asc" | "desc";
 };
 
-export type FetchListFunction<T extends BaseEntity> = (
+export type FetchPaginatedListFunction<T extends BaseEntity> = (
     params?: FetchParams<T>
 ) => Promise<PaginatedResponse<T>>;
 
-export type FetchListByIdFunction<T extends BaseEntity> = (
+export type FetchPaginatedListByIdFunction<T extends BaseEntity> = (
     id: number | string,
     params?: FetchParams<T>
 ) => Promise<PaginatedResponse<T>>;
+
+export type FetchListFunction<T extends BaseEntity> = () => Promise<T[]>;
+export type FetchListByIdFunction<T extends BaseEntity> = ( id: number | string) => Promise<T[]>;
 
 export type FetchOneFunction<T> = (
     id: number | string

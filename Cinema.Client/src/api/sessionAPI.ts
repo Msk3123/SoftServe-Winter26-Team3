@@ -1,9 +1,9 @@
-import type { PaginatedResponse, DeleteFunction, FetchListFunction, FetchListByIdFunction, FetchOneFunction, PostFunction, PutFunction, PatchFunction} from "../types/api.types";
+import type { DeleteFunction, FetchPaginatedListFunction, FetchOneFunction, PostFunction, PutFunction, PatchFunction} from "../types/api.types";
 import type { CreateSessionsBatch, Session, SessionCreate, SessionShort } from "../types/session.types";
 import { defaultParams, deleteItem, getItem, getPaginatedData, patchItem, postItem, putItem } from "./api";
 
 
-export const getAllSessions: FetchListFunction<SessionShort> = async (params = defaultParams) => {
+export const getAllSessions: FetchPaginatedListFunction<SessionShort> = async (params = defaultParams) => {
     return await getPaginatedData<SessionShort>("session", params);
 };
 

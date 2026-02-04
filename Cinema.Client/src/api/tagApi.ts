@@ -1,8 +1,8 @@
-import type { DeleteFunction, FetchListFunction, FetchOneFunction, PatchFunction, PostFunction, PutFunction } from "../types/api.types";
+import type { DeleteFunction, FetchPaginatedListFunction, FetchOneFunction, PatchFunction, PostFunction, PutFunction } from "../types/api.types";
 import type { Tag, TagCreate } from "../types/tags.types";
 import { defaultParams, deleteItem, getItem, getPaginatedData, patchItem, postItem, putItem } from "./api";
 
-export const  getAllTags:FetchListFunction<Tag> = async (params = defaultParams ) => {
+export const  getAllTags:FetchPaginatedListFunction<Tag> = async (params = defaultParams ) => {
     return await getPaginatedData<Tag>("tags", params);
 
 };

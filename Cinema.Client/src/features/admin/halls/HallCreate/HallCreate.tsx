@@ -4,8 +4,9 @@ import HallForm from "../HallForm/HallForm";
 import type { HallCreate, HallShort } from "../../../../types/hall.types";
 import { postHall } from "../../../../api/hallApi";
 import { useState } from "react";
-import type { AdminModalContext } from "../../../../types/admin.types";
+import type { AdminAdminModalContext } from "../../../../types/admin.types";
 import HallMapSceleton from "../../../../components/HallMap/HallMapSceleton/HallMapSceleton";
+import HallMapEdit from "../HallMapEdit/HallMapEdit";
 
 interface CreateHallFormProps {
     onClose?:()=>void;
@@ -18,7 +19,7 @@ const CreateHallForm = ({onClose}:CreateHallFormProps)=>{
     const [formData,setFormData] = useState<HallCreate|null>(null)
     const [isPending,setIsPending] = useState<boolean>(false)
     
-    const {createItem} = useOutletContext<AdminModalContext<HallShort>>();
+    const {createItem} = useOutletContext<AdminAdminModalContext<HallShort>>();
     const handleClose = ()=>{
         if(onClose){
             onClose();
@@ -46,13 +47,16 @@ const CreateHallForm = ({onClose}:CreateHallFormProps)=>{
             }
         }
 
-    return  <>
-                <HallForm onSubmitAction={onSubmit} onClose={handleClose}/>
-                {isPending ? <HallMapSceleton
+    const sceleton =  <HallMapSceleton
                                 rows={formData?.rows ?? 8}
                                 seatsPerRow={formData?.seatsPerRow ?? 12}
                             />
-                            : hall && <span>hall map</span>}
+
+    return  <>
+                <HallForm onSubmitAction={onSubmit} onClose={handleClose}/>
+                {isPending
+                ? sceleton
+                : hall && <HallMapEdit id={hall.id} sceleton={sceleton}/>}
             </>
 }
 
