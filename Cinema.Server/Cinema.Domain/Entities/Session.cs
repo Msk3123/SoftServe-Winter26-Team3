@@ -14,6 +14,8 @@ namespace Cinema.Domain.Entities
         public DateTime SessionDate { get; set; }
         [Required]
         public TimeSpan SessionTime { get; set; }
+
+        public bool IsDeleted { get; set; } = false;
         public int MovieId { get; set; }
         [ForeignKey("MovieId")]
         public virtual Movie Movie { get; set; }
