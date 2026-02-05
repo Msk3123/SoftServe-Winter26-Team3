@@ -15,18 +15,17 @@ namespace Cinema.Persistence.Repositories
     {
         public SessionRepository(AppDbContext context) : base(context) { }
 
-        public async Task<(IEnumerable<Session> Items, int TotalCount)> GetAllWithDetailsPagedAsync(QueryParameters queryParameters)
+        public async Task<(IEnumerable<Session> Items, int TotalCount)> GetAllWithDetailsPagedAsync(
+            QueryParameters queryParameters,
+            SessionFilter timeFilter)
         {
             return await _dbSet
                 .Include(s => s.Hall)
-                .Include(s => s.Movie)
-                    .ThenInclude(m => m.ActorMovies)
-                        .ThenInclude(am => am.Actor)
-                .Include(s => s.Movie)
-                    .ThenInclude(m => m.GenreMovies)
-                        .ThenInclude(gm => gm.Genre)
+                .Include(s => s.Movie).ThenInclude(m => m.ActorMovies).ThenInclude(am => am.Actor)
+                .Include(s => s.Movie).ThenInclude(m => m.GenreMovies).ThenInclude(gm => gm.Genre)
                 .AsNoTracking()
-                .ToPagedResultAsync(queryParameters); 
+                .ApplyTimeFilter(timeFilter) 
+                .ToPagedResultAsync(queryParameters);
         }
 
         public async Task<(IEnumerable<Session> Items, int TotalCount)> GetByMovieIdPagedAsync(int movieId, QueryParameters queryParameters)
@@ -83,6 +82,12 @@ namespace Cinema.Persistence.Repositories
                 .Where(s => s.HallId == hallId &&
                             s.SessionDate.Date >= startDate.Date &&
                             s.SessionDate.Date <= endDate.Date)
+                .ToListAsync();
+        }
+        public async Task<IEnumerable<Session>> GetByMovieId(int movieId)
+        {
+            return await _dbSet
+                .Where(s => s.MovieId == movieId)
                 .ToListAsync();
         }
     }

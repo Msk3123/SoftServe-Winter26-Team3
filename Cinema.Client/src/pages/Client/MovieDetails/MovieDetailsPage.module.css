@@ -1,171 +1,149 @@
 .wrapper {
     min-height: 100vh;
-    padding: 2rem 4rem; /* Збігається з твоїм contentWrapper */
-     /* Твій глибокий чорний */
-    color: var(--text-main); /* Білий текст */
+    padding: 2rem 4rem;
+    color: var(--text-main);
 }
-
+.description {
+    margin-top: 2rem;
+    line-height: 1.7;         
+    font-size: 1.2rem;        
+    color: var(--text-main);
+    max-width: 900px;        
+}
 .container {
     max-width: 1600px;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: 300px 1fr 400px; /* Три колонки як у Multiplex */
+    grid-template-columns: 300px 1fr 400px;
     gap: 3rem;
 }
-.badgeContainer{
-    display: flex;
-  flex-wrap: wrap;
-  gap: 8px; 
+.selectWrapper {
+    position: relative;
+    margin-bottom: 1.5rem;
 }
+.selectWrapper::after {
+    content: '▼';
+    font-size: 0.8rem;
+    color: var(--color-primary);
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+/* Колонки */
 .poster {
     width: 100%;
     border-radius: 12px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
     object-fit: cover;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.posterWrapper {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    gap:2em;
-    width: 100%;
-    margin-top: 1.5rem;
-}
-
-/* Якщо твоя Button не має вбудованої іконки Play, можна стилізувати тут */
-.playIcon {
-    margin-right: 8px;
-    color: var(--color-primary);
 }
 
 .title {
-    font-family: var(--font-main);
-    font-weight: var(--fw-bold);
     font-size: 3rem;
+    font-weight: var(--fw-bold);
     margin-bottom: 2rem;
-    color: var(--text-main);
 }
 
 .detailsGrid {
     display: grid;
-    grid-template-columns: 140px 1fr;
-    gap: 1rem 1.5rem;
+    grid-template-columns: 160px 1fr; /* Трохи розширили ліву колонку */
+    gap: 1.2rem 2rem;
     margin-bottom: 2.5rem;
-    font-family: var(--font-main);
-}
-
-.label {
-    color: var(--text-secondary); /* Сірий колір з твоїх змінних */
-    font-weight: var(--fw-medium);
-}
-
-.value {
-    color: var(--text-main);
-    font-weight: var(--fw-regular);
-}
-
-.rating {
-    color: var(--color-primary); /* Твій фірмовий зелений для рейтингу */
-    font-weight: var(--fw-bold);
-}
-
-.description {
-    line-height: 1.6;
-    color: var(--text-main);
     font-size: 1.1rem;
-    max-width: 800px;
 }
+.label { color: var(--text-secondary); }
+.rating { color: var(--color-primary); font-weight: var(--fw-bold); }
 
-.sessionsPlaceholder {
-    height: 100%;
-    background-color: rgba(255, 255, 255, 0.05); /* Легкий прозорий фон */
-    padding: 2rem;
-    border-radius: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+/* --- СЕКЦІЯ СЕАНСІВ --- */
+.sessionsContainer {
+    background-color: var(--bg-news);
+    padding: 1.5rem;
+    border-radius: 1rem;
+    border: 1px solid var(--card-divider);
 }
 
 .sessionsTitle {
     color: var(--color-primary);
-    font-weight: var(--fw-bold);
-    margin-bottom: 1.5rem;
     text-transform: uppercase;
+    font-size: 1.125rem;
+    margin-bottom: 1.5rem;
     letter-spacing: 1px;
 }
 
-/* Стан завантаження */
-.status {
-    height: 60vh;
+/* Наша нова випадашка */
+.dateSelect {
+    appearance: none;
+    width: 100%;
+    padding: 1rem; /* трохи більше відступів */
+    background-color: var(--bg-dark);
+    border: 1px solid var(--card-divider);
+    border-radius: 0.5rem;
+    color: var(--text-main);
+
+    font-size: 1.1rem;     
+    font-weight: 500;       
+    font-family: inherit;  
+    
+    cursor: pointer;
+    outline: none;
+}
+.dateSelect:focus {
+    border-color: var(--color-primary);
+}
+.loadingText, .emptyText {
+    text-align: center;
+    color: var(--text-secondary);
+    padding: 2rem 0;
+}
+.sessionsList {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    color: var(--color-primary);
-    font-family: var(--font-main);
+    flex-direction: column;
+    gap: 0.75rem;
 }
 
+.sessionCard {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--bg-dark);
+    padding: 1.25rem;
+    border-radius: 0.75rem;
+    border: 1px solid var(--card-divider);
+    transition: all 0.2s ease;
+}
+
+.sessionCard:hover {
+    border-color: var(--color-primary);
+    transform: translateY(-2px);
+}
+
+.time {
+    font-size: 1.5rem;
+    font-weight: var(--fw-heavy);
+    color: var(--text-main);
+    display: block;
+}
+
+.hall {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+.label {
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.value {
+    color: var(--text-main);
+}
 /* Адаптивність */
 @media (max-width: 1100px) {
-    .container {
-        grid-template-columns: 1fr 1fr;
-    }
-    .rightCol {
-        grid-column: span 2;
-    }
+    .container { grid-template-columns: 1fr 1fr; }
+    .rightCol { grid-column: span 2; }
 }
 
 @media (max-width: 768px) {
-    .wrapper {
-        padding: 1rem;
-    }
-    .container {
-        grid-template-columns: 1fr;
-    }
-    .leftCol, .centerCol, .rightCol {
-        grid-column: span 1;
-    }
-    .title {
-        font-size: 2rem;
-    }
-}
-.skeleton {
-    background: linear-gradient(
-        90deg,
-        rgba(255, 255, 255, 0.05) 25%,
-        rgba(255, 255, 255, 0.1) 50%,
-        rgba(255, 255, 255, 0.05) 75%
-    );
-    background-size: 200% 100%;
-    animation: shimmer 1.5s infinite;
-    border-radius: 4px;
-}
-
-@keyframes shimmer {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
-}
-
-/* Специфічні блоки для MovieDetails */
-.posterSkeleton {
-    width: 100%;
-    aspect-ratio: 2/3;
-    border-radius: 12px;
-}
-
-.titleSkeleton {
-    width: 60%;
-    height: 3rem;
-    margin-bottom: 2rem;
-}
-
-.textLineSkeleton {
-    width: 100%;
-    height: 1rem;
-    margin-bottom: 0.8rem;
-}
-
-.specSkeleton {
-    width: 40%;
-    height: 1.2rem;
+    .container { grid-template-columns: 1fr; }
+    .title { font-size: 2rem; }
 }

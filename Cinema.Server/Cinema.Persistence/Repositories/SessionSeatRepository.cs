@@ -38,6 +38,7 @@ namespace Cinema.Persistence.Repositories
         public async Task<List<SessionSeat>> GetExpiredOrphanedSeatsAsync(DateTime now)
         {
             return await _context.SessionSeats
+                .IgnoreQueryFilters()
                 .Where(ss => ss.SeatStatuses == SeatStatus.Reserved
                           && ss.LockExpiration != null
                           && ss.LockExpiration < now)

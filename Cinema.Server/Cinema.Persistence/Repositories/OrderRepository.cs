@@ -20,6 +20,7 @@ namespace Cinema.Persistence.Repositories
         public override async Task<Order?> GetByIdAsync(int id)
         {
             return await _context.Orders
+                .IgnoreQueryFilters()
                 .Include(o => o.Tickets)
                     .ThenInclude(t => t.SessionSeat)
                         .ThenInclude(ss => ss.Seat)
@@ -57,9 +58,10 @@ namespace Cinema.Persistence.Repositories
         public async Task<List<Order>> GetExpiredConfirmedOrdersAsync(DateTime deadline)
         {
             return await _context.Orders
+                .IgnoreQueryFilters()
                 .Include(o => o.Tickets)
                     .ThenInclude(t => t.SessionSeat)
-                .Where(o => (o.OrderStatus == OrderStatus.Confirmed || o.OrderStatus == OrderStatus.Cancelled)
+                .Where(o => (o.OrderStatus == OrderStatus.Confirmed || o.OrderStatus == OrderStatus.Created)
                        && o.OrderDate < deadline)
                 .ToListAsync();
         }
