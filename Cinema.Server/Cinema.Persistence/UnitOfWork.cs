@@ -3,7 +3,7 @@ using Cinema.Application.Interfaces;
 using Cinema.Application.Interfaces.PaymentGateway;
 using Cinema.Domain.Entities;
 using Cinema.Persistence.Context;
-using Cinema.Persistence.ExternalServices;
+using Cinema.Persistence;
 using Cinema.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore.Storage;
 
