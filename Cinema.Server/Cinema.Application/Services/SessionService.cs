@@ -55,7 +55,7 @@ namespace Cinema.Application.Services
 
         public async Task CreateSessionsBatchAsync(CreateSessionsBatchDto dto)
         {
-            var daysCount = (dto.EndDate - dto.StartDate).Days;
+            var daysCount = (dto.EndDate.Date - dto.StartDate.Date).Days;
             if (daysCount > _options.MaxBatchDays)
                 throw new InvalidBatchPeriodException();
 
@@ -71,31 +71,29 @@ namespace Cinema.Application.Services
 
             for (var date = dto.StartDate.Date; date <= dto.EndDate.Date; date = date.AddDays(1))
             {
-                if (!dto.WeekDays.Contains((int)date.DayOfWeek)) continue;
-
-                foreach (var time in dto.DailySchedule)
-                {
-                    ValidateSessionOverlap(date, time, duration, allSessionsInContext);
-
-                    var session = new Session
+                    if (!dto.WeekDays.Contains((int)date.DayOfWeek)) continue;
+                    foreach (var time in dto.DailySchedule)
                     {
-                        MovieId = dto.MovieId,
-                        HallId = dto.HallId,
-                        SessionDate = date,
-                        SessionTime = time,
-                        Movie = movie, 
-                        SessionSeats = hallSeats.Select(s => new SessionSeat
+                        ValidateSessionOverlap(date, time, duration, allSessionsInContext);
+
+                        var session = new Session
                         {
-                            SeatId = s.SeatId,
-                            SeatStatuses = SeatStatus.Available
-                        }).ToList()
-                    };
+                            MovieId = dto.MovieId,
+                            HallId = dto.HallId,
+                            SessionDate = date,
+                            SessionTime = time,
+                            Movie = movie,
+                            SessionSeats = hallSeats.Select(s => new SessionSeat
+                            {
+                                SeatId = s.SeatId,
+                                SeatStatuses = SeatStatus.Available
+                            }).ToList()
+                        };
 
-                    allSessionsInContext.Add(session);
-                    await _unitOfWork.Sessions.AddAsync(session);
-                }
+                        allSessionsInContext.Add(session);
+                        await _unitOfWork.Sessions.AddAsync(session);
+                    }
             }
-
             await _unitOfWork.SaveChangesAsync();
         }
 
@@ -130,38 +128,26 @@ namespace Cinema.Application.Services
         {
             var session = await _unitOfWork.Sessions.GetByIdAsync(sessionId);
             if (session == null) throw new KeyNotFoundException("Session not found");
-            if (await _unitOfWork.Tickets.AnyBySessionIdAsync(sessionId))
+
+            if ((session.SessionDate.Date + session.SessionTime) > DateTime.UtcNow)
             {
-                throw new UnavailableOperationException("Cannot delete session: tickets have already been sold.");
+                var hasTickets = await _unitOfWork.Tickets.AnyBySessionIdAsync(sessionId);
+                if (hasTickets)
+                {
+                    throw new UnavailableOperationException(
+                        "Cannot delete an upcoming session because tickets have already been sold. " +
+                        "Refund the tickets first.");
+                }
             }
 
-            var seats = (await _unitOfWork.SessionSeats.GetBySessionIdAsync(sessionId)).ToList();
+            session.IsDeleted = true;
 
-            if (seats.Any(s => s.SeatStatuses == SeatStatus.Sold))
-            {
-                throw new UnavailableOperationException("Cannot delete session: seats are marked as sold.");
-            }
-            var hasOrders = await _unitOfWork.Orders.AnyBySessionIdAsync(sessionId);
-            if (hasOrders)
-            {
-                throw new UnavailableOperationException("Cannot delete session: tickets or orders already exist.");
-            }
-            await _unitOfWork.BeginTransactionAsync();
             try
             {
-                foreach (var seat in seats)
-                {
-                    _unitOfWork.SessionSeats.Remove(seat);
-                }
-
-                _unitOfWork.Sessions.Remove(session);
-
                 await _unitOfWork.SaveChangesAsync();
-                await _unitOfWork.CommitAsync();
             }
             catch (Exception)
             {
-                await _unitOfWork.RollbackAsync();
                 throw;
             }
         }

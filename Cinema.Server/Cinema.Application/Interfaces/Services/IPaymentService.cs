@@ -11,5 +11,6 @@ namespace Cinema.Application.Interfaces
         Task<PaymentDetailsDto> InitializePaymentAsync(PaymentCreateDto dto);
         Task<PaymentDetailsDto> ProcessCallbackAsync(string transactionId, int orderId);
         Task<PaymentDetailsDto> GetPaymentByOrderIdAsync(int orderId);
+        Task<PaymentDetailsDto> HandlePaymentCallbackAsync(string data, string signature);
     }
 }

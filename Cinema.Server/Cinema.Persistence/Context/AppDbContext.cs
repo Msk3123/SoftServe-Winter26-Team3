@@ -40,6 +40,22 @@ namespace Cinema.Persistence.Context
                 .HasIndex(s => new { s.HallId, s.Row, s.SeatNo })
                 .IsUnique()
                 .HasDatabaseName("IX_Seat_HallId_Row_Number_Unique");
+
+            modelBuilder.Entity<Movie>().HasQueryFilter(m => !m.IsDeleted);
+            modelBuilder.Entity<Session>().HasQueryFilter(s => !s.IsDeleted);
+
+            // Movie <-> News
+            modelBuilder.Entity<News>()
+            .HasOne(n => n.Movie)
+                .WithMany(m => m.News)
+                .HasForeignKey(n => n.MovieId)
+                .OnDelete(DeleteBehavior.SetNull);
+            // News <-> Actor
+            modelBuilder.Entity<News>()
+                .HasOne(n => n.Actor)
+                .WithMany(a => a.News)
+                .HasForeignKey(n => n.ActorId)
+                .OnDelete(DeleteBehavior.SetNull);
             // --- Налаштування зв'язків Many-to-Many
 
             // Movie <-> Genre

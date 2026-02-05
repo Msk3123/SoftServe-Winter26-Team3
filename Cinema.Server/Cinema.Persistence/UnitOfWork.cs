@@ -3,7 +3,7 @@ using Cinema.Application.Interfaces;
 using Cinema.Application.Interfaces.PaymentGateway;
 using Cinema.Domain.Entities;
 using Cinema.Persistence.Context;
-using Cinema.Persistence.ExternalServices;
+using Cinema.Persistence;
 using Cinema.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore.Storage;
 
@@ -25,6 +25,7 @@ namespace Cinema.Persistence
         private ISessionRepository _sessions;
         private ISeatRepository _seats;
         private IHallRepository _hallRepository;
+
         public UnitOfWork(AppDbContext context, IMapper mapper)
 
         {
@@ -42,7 +43,7 @@ namespace Cinema.Persistence
         public ISeatRepository Seats => _seats ??= new SeatRepository(_context);
         public IMovieRepository Movies => _movieRepository ??= new MovieRepository(_context, _mapper);
         public IHallRepository Halls => _hallRepository ??= new HallRepository(_context);
-
+        public IMovieRepository Movie => _movieRepository ??= new MovieRepository(_context, _mapper);
         public async Task<int> SaveChangesAsync()
         {
             return await _context.SaveChangesAsync();

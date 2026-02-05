@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using Cinema.Application.DTOs.PaymentDtos;
 using Cinema.Application.Interfaces;
+using Cinema.Application.Interfaces.PaymentGateway;
 using Microsoft.AspNetCore.Mvc;
+using System.Text;
 
 namespace Cinema.API.Controllers
 {
@@ -10,8 +12,7 @@ namespace Cinema.API.Controllers
     public class PaymentController : ApiBaseController
     {
         private readonly IPaymentService _paymentService;
-
-        public PaymentController(IPaymentService paymentService, IMapper mapper  ) : base(mapper)
+        public PaymentController(IPaymentService paymentService, IMapper mapper) : base(mapper)
         {
             _paymentService = paymentService;
         }
@@ -25,13 +26,14 @@ namespace Cinema.API.Controllers
         }
 
         [HttpPost("callback")]
-        public async Task<IActionResult> PaymentCallback([FromBody] PaymentCallbackDto callback)
+        [Consumes("application/x-www-form-urlencoded")]
+        public async Task<IActionResult> PaymentCallback([FromForm] string data, [FromForm] string signature)
         {
-            //тут перевірка Signature
-            var result = await _paymentService.ProcessCallbackAsync(callback.TransactionId, callback.OrderId);
+            Console.WriteLine("-----------------------------");
+            var result = await _paymentService.HandlePaymentCallbackAsync(data, signature);
+
             return Ok(result);
         }
-
         [HttpGet("order/{orderId}")]
         public async Task<IActionResult> GetByOrderId(int orderId)
         {
