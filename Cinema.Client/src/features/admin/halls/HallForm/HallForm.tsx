@@ -33,7 +33,7 @@ const HallForm =  ({initialState,onSubmitAction,onClose,isLoadingDimensions=fals
         }
     },[initialState])
 
-    const onSubmit=async (e: FormEvent<HTMLFormElement>)=>{і
+    const onSubmit=async (e: FormEvent<HTMLFormElement>)=>{
         e.preventDefault();
         setIsPending(true);
         await handleSubmit(onSubmitAction)
