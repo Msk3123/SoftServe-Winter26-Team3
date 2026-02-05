@@ -74,7 +74,12 @@ namespace Cinema.API.Controllers
 
             return Ok(response);
         }
-
+        [HttpGet("search")]
+        public async Task<IActionResult> SearchMovies([FromQuery] string query, [FromQuery] QueryParameters queryParameters)
+        {
+            var result = await _movieService.SearchMoviesAsync(query, queryParameters);
+            return OkPaged<Movie, MovieShortDto>(result, queryParameters);
+        }
         // POST: api/movie
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] MovieCreateDto movieDto)

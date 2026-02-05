@@ -17,5 +17,12 @@ namespace Cinema.Persistence.Repositories
                 .AsNoTracking()
                 .ToPagedResultAsync(queryParameters);
         }
+        public async Task<(IEnumerable<Genre> items, int TotalCount)> GetByNameAsync(string searchTerm, QueryParameters queryParameters)
+        {
+            return await _dbSet
+                .Where(g => g.GenreName.Contains(searchTerm))
+                .AsNoTracking()
+                .ToPagedResultAsync(queryParameters);
+        }
     }
 }

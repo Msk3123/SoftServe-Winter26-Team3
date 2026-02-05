@@ -13,7 +13,7 @@ namespace Cinema.Application.Interfaces
         Task<(IEnumerable<Movie> Items, int TotalCount)> GetByGenreIdPagedAsync(int genreId, QueryParameters queryParameters);
         Task<(IEnumerable<Movie> Items, int TotalCount)> GetUpcomingMoviesPagedAsync(QueryParameters queryParameters);
         Task<(IEnumerable<Movie> Items, int TotalCount)> GetNowShowingMoviesPagedAsync(QueryParameters queryParameters);
-
         Task UpdateMoviePatchAsync(int id, MoviePatchDto dto);
+        Task<(IEnumerable<Movie> Items, int totalCount)> SearchByTitleAsync(string title, QueryParameters queryParameters);
     }
 }
