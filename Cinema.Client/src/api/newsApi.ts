@@ -2,7 +2,6 @@ import type {FetchListFunction, FetchOneFunction, FetchParams, PatchFunction, Po
 import type {News, NewsCreate, NewsShort } from "../types/news.types";
 import { getPaginatedData, deleteItem, defaultParams, getItem, postItem, putItem, patchItem } from "./api";
 
-
 export const getAllNews: FetchListFunction<NewsShort> = async (params = defaultParams) => {
     return await getPaginatedData<NewsShort>("news", params);
 };
@@ -34,3 +33,4 @@ export const patchNews:PatchFunction<NewsCreate>= async(id,data)=>{
 export const deleteNews = async (id: number | string) => {
     return await deleteItem("News", id);
 };
+
