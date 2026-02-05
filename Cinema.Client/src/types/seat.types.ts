@@ -1,5 +1,5 @@
 export interface SeatShort{
-    id:number;
+    id:number|string;
     row:number;
     seatNo:number;
     seatTypeName:string;
@@ -10,15 +10,15 @@ export interface SeatDetails{
     id:number;
     row:number;
     seatNo:number;
-    seatTypeId: number;
+    seatTypeId: number|string;
     seatTypeName:string;
     basePrice:number;
-    hallId:number;
+    hallId:number|string;
 }
 
 export interface SeatCreate{
     Row: number;
     SeatNo: number;
-    SeatTypeId: number;
-    HallId: number;
+    SeatTypeId: number|string;
+    HallId: number|string;
 }

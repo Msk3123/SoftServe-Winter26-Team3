@@ -20,7 +20,7 @@ const AdminHallsPage = ()=>{
                 tableData={{ data, pagination, sortParams, status }}
                 tableActions={actions}
                 deleteFn={deleteHall}/>
-                <Outlet  context={{createItem:actions.createItem, editItem:actions.editItem}}/>
+                <Outlet  context={{createItem:actions.createItem, editItem:actions.editItem , deleteItem:actions.deleteItem}}/>
             </>)
 };
 
