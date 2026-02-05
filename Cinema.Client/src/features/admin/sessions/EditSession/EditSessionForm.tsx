@@ -3,6 +3,7 @@ import toast from "react-hot-toast";
 import { getSession, putSession } from "../../../../api/sessionApi";
 import { mapSessionToCreate, mapSessionToShort, type Session, type SessionCreate, type SessionShort } from "../../../../types/session.types";
 import SingleSessionForm from "../SingleSessionForm/SingleSessionForm";
+import { handleError } from "../../../../helpers/handleError";
 
 interface EditSessionFormProps {
     onClose?:()=>void;
@@ -38,8 +39,8 @@ const EditSessionForm = ({onClose}:EditSessionFormProps)=>{
                     
                 toast.success("Session succesfully edited!")
                 handleClose();
-            }catch{
-                toast.error("Can`t edit this session");
+            }catch(e){
+                handleError(e,"Can`t edit this session");
             }
         }
 

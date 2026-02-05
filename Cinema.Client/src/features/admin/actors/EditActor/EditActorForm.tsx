@@ -1,9 +1,10 @@
 import { useLoaderData, useNavigate, useOutletContext} from "react-router";
 import { putActor } from "../../../../api/actorApi";
-import toast from "react-hot-toast";
 import ActorForm from "../ActorForm/ActorForm";
 import type { Actor, ActorCreate, ActorShort } from "../../../../types/actor.types";
 import type { AdminAdminModalContext } from "../../../../types/admin.types";
+import { handleError } from "../../../../helpers/handleError";
+import toast from "react-hot-toast";
 
 
 interface EditActorFormProps {onClose?:()=>void};
@@ -38,8 +39,8 @@ const EditActorForm = ({onClose}:EditActorFormProps)=>{
                 toast.success("Actor succesfully updated!")
                 handleClose();
 
-            }catch{
-                toast.error("Can`t add this actor");
+            }catch(e){
+               handleError(e,"Can`t edit this actor");
             }
         }
 

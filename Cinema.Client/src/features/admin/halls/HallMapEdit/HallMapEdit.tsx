@@ -25,7 +25,7 @@ const HallMapEdit = ({id, sceleton,onSubmit}: HallMapEditProps) => {
     const [isDrawing, setIsDrawing] = useState(false);
     const [changes, setChanges] = useState<Record<string | number, SeatTypeWithColor>>({});
 
-    const updateSeatInChanges = useCallback((seatId: number) => {
+    const updateSeatInChanges = useCallback((seatId: number|string) => {
         if (!selectedSeatType) return;
         
         setChanges(prev => ({
@@ -34,7 +34,7 @@ const HallMapEdit = ({id, sceleton,onSubmit}: HallMapEditProps) => {
         }));
     }, [selectedSeatType]);
 
-    const handleMouseEnter = useCallback((seatId: number) => {
+    const handleMouseEnter = useCallback((seatId: number|string) => {
         if (isDrawing) {
             updateSeatInChanges(seatId);
         }

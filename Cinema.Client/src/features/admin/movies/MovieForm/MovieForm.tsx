@@ -18,8 +18,8 @@ import { SelectableInput } from "../../../../components/Form/SelectableInput/Sel
 import ActorOption from "../../actors/ActorOption/ActorOption";
 import GenreOption from "../../../../components/Form/GenreOption/GenreOption";
 import AdminModal from "../../../../components/AdminModal/AdminModal";
-import { ApiError } from "../../../../types/api.types";
 import ActorForm from "../../actors/ActorForm/ActorForm";
+import { handleError } from "../../../../helpers/handleError";
 
 const LANGUAGE_OPTIONS = [
     { value: 'en', label: '🇺🇸 English' },
@@ -69,8 +69,7 @@ const MovieForm = ({initialState,onSubmitAction,onClose}:MovieFormProps)=>{
         getAllActors()
             .then((response)=>setActors(response.items))
             .catch(err =>{
-                console.error(err)
-                toast.error("Actors error")
+                handleError(err,"Actors error")
             });
     }, []);
 
@@ -78,8 +77,7 @@ const MovieForm = ({initialState,onSubmitAction,onClose}:MovieFormProps)=>{
         getAllGenres()
             .then((response)=>setGenres(response.items))
             .catch(err =>{
-                console.error(err)
-                toast.error("Actors error")
+                handleError(err,"Genre error")
             });
     }, []);
 
@@ -91,9 +89,7 @@ const MovieForm = ({initialState,onSubmitAction,onClose}:MovieFormProps)=>{
             toast.success("Genre created!")
 
         }catch(e) {
-            const err = e as ApiError
-            console.error(err.message);
-            toast.error("Can`t create this genre");
+            handleError(e,"Can`t create this genre");
         }
     }
 
@@ -113,8 +109,8 @@ const MovieForm = ({initialState,onSubmitAction,onClose}:MovieFormProps)=>{
                     toast.success("Actor succesfully added!")
                     setIsAdminModalOpen(false)
                 }
-            }catch{
-                toast.error("Can`t add this actor");
+            }catch(e){
+                handleError(e,"Can`t add this actor");
             }
         }
 

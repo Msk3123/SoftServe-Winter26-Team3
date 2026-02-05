@@ -10,7 +10,7 @@ import HallMapEdit from "../HallMapEdit/HallMapEdit";
 import { saveHallMap } from "../api/saveHallMap";
 import Button from "../../../../components/Button/Button";
 import styles from "../HallForm/HallForm.module.css"
-import type { ApiError } from "../../../../types/api.types";
+import { handleError } from "../../../../helpers/handleError";
 
 interface CreateHallFormProps {
     onClose?:()=>void;
@@ -47,8 +47,7 @@ const CreateHallForm = ({onClose}:CreateHallFormProps)=>{
 
             toast.success("Hall successfuly created");
         }catch(e){
-            console.log(e);
-            toast.error("Hall didn`t created");
+            handleError(e,"Hall didn`t created");
         }finally{
             setIsPending(false)
         }
@@ -79,8 +78,7 @@ const CreateHallForm = ({onClose}:CreateHallFormProps)=>{
             await deleteHall(hall.id);
             deleteItem(hall.id);
         }catch(e){
-            const err = e as ApiError;
-            toast.error(err.message);
+            handleError(e)
         }finally{
             handleClose();
             setIsPending(false)

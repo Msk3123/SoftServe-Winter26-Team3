@@ -2,10 +2,10 @@ import { memo, useRef, type RefObject } from "react";
 import styles from "./Seat.module.css";
 
 interface SeatProps {
-    id: number;
+    id: number|string;
     color: string;
-    onClick: (id: number, ref?: RefObject<HTMLDivElement | null>) => void;
-    onMouseEnter?: (id: number) => void;
+    onClick: (id: number|string, ref?: RefObject<HTMLDivElement | null>) => void;
+    onMouseEnter?: (id: number|string) => void;
     className?:string;
 }
 

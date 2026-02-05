@@ -4,6 +4,7 @@ import { mapMovieToCreate, type Movie, type MovieCreate, type MovieShort } from 
 import toast from "react-hot-toast";
 import MovieForm from "../MovieForm/MovieForm";
 import { putMovie } from "../../../../api/movieApi";
+import { handleError } from "../../../../helpers/handleError";
 
 interface EditMovieFormProps {
     onClose?:()=>void;
@@ -39,8 +40,8 @@ const EditMovieForm = ({onClose}:EditMovieFormProps)=>{
                     });
                     toast.success("Movie succesfully edited!")
                     handleClose();
-            }catch{
-                toast.error("Can`t edit this movie");
+            }catch(e){
+                handleError(e,"Can`t edit this movie");
             }
         }
 

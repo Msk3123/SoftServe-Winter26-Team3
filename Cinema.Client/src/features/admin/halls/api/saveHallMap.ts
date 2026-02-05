@@ -1,6 +1,6 @@
 import toast from "react-hot-toast";
-import type { ApiError } from "../../../../types/api.types";
 import { patchSeat } from "../../../../api/seatApi";
+import { handleError } from "../../../../helpers/handleError";
 
 export const saveHallMap = async (changes: {id: number; seatTypeId: string | number; }[])=>{
         try{
@@ -11,7 +11,6 @@ export const saveHallMap = async (changes: {id: number; seatTypeId: string | num
 
             toast.success("Hall map successfuly saved");
         }catch(e){
-            const err= e as ApiError;
-            toast.error(err.message);
+            handleError(e)
         }
     }

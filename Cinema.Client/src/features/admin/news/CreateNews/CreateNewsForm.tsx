@@ -4,6 +4,7 @@ import type { AdminAdminModalContext } from "../../../../types/admin.types";
 import type { NewsCreate, NewsShort } from "../../../../types/news.types";
 import { postNews } from "../../../../api/newsApi";
 import NewsForm from "../NewsForm/NewsForm";
+import { handleError } from "../../../../helpers/handleError";
 
 interface CreateNewsFormProps {
     onClose?:()=>void;
@@ -41,8 +42,8 @@ const CreateNewsForm = ({onClose}:CreateNewsFormProps)=>{
                     toast.success("News succesfully added!")
                     handleClose();
                 }
-            }catch{
-                toast.error("Can`t add this news");
+            }catch(e){
+                handleError(e,"Can`t add this news");
             }
         }
 

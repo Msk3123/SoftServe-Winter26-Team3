@@ -18,6 +18,7 @@ import { Checkbox } from "../../../../components/Form/CheckBox/CheckBox";
 
 import { AiOutlineDelete } from "react-icons/ai";
 import checkIsDayInPeriod from "./checkIsDayInWeek";
+import { handleError } from "../../../../helpers/handleError";
 
 interface SessionFormProps{
     initialState?:CreateSessionsBatch;
@@ -46,8 +47,7 @@ const SessionForm =  ({initialState,onSubmitAction,onClose}:SessionFormProps) =>
         getAllMovies({pageSize:50,page:1,sortBy:"releaseDate",order:"desc"})
             .then((response)=>setMovies(response.items))
             .catch(err =>{
-                console.error(err)
-                toast.error("Movies error")
+                handleError(err,"Movies error")
             });
     }, []);
 
@@ -55,8 +55,7 @@ const SessionForm =  ({initialState,onSubmitAction,onClose}:SessionFormProps) =>
         getAllHalls()
             .then((response)=>setHalls(response.items))
             .catch(err =>{
-                console.error(err)
-                toast.error("Halls error")
+                handleError(err,"Halls error")
             });
     }, []);
 
