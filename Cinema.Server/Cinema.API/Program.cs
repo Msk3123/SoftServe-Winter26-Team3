@@ -1,4 +1,5 @@
 using Cinema.API.Middleware;
+using Cinema.Application.Common.Config;
 using Cinema.Application.Common.Configurations;
 using Cinema.Application.Interfaces;
 using Cinema.Application.Interfaces.PaymentGateway;
@@ -8,7 +9,6 @@ using Cinema.Application.Services;
 using Cinema.Application.Validators.Sessions;
 using Cinema.Persistence;
 using Cinema.Persistence.Context;
-using Cinema.Persistence.ExternalServices;
 using Cinema.Persistence.Repositories;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -61,17 +61,19 @@ builder.Services.AddScoped<ISessionService, SessionService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
-builder.Services.AddScoped<IPaymentGateway, PaymentGateway>();
+builder.Services.AddScoped<IPaymentGateway, LiqPayGateway>();
 builder.Services.AddScoped<IBookingCleanupService, BookingCleanupService>();
 builder.Services.AddScoped<IHallService, HallService>();
 builder.Services.Configure<CinemaSettings>(builder.Configuration.GetSection("CinemaSettings"));
 builder.Services.AddControllers()
     .AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+
+//liqpay
+builder.Services.Configure<LiqPaySettings>(builder.Configuration.GetSection("LiqPaySettings"));
 //swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 //validation
-
 builder.Services.AddValidatorsFromAssemblyContaining<SessionCreateValidator>();
 // Allow CORS for React frontend
 builder.Services.AddCors(options =>
