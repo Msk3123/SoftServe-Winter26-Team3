@@ -27,14 +27,6 @@
     font-weight: bold;
 }
 
-/* .rowNumber:last-child{
-    margin-left: 1em;
-}
-
-.rowNumber:first-child{
-    margin-right: 1em;
-} */
-
 .rowDiff{
     width: 100%;
     display: flex;
@@ -52,7 +44,7 @@
     aspect-ratio: 1 / 1;
     font-weight: bold;
     font-size: smaller;
-} 
+}
 
 
 .seat {
@@ -60,7 +52,7 @@
     aspect-ratio: 1 / 1;
     
     max-width: 3em;
-    border-radius: 0.5em 0.5em 0.2em 0.2em;
+    border-radius: 40% 40%  0.2em 0.2em;
     background: var(--bg-main);
     border: 2px var(--color-primary) solid;
     box-sizing: border-box;

@@ -22,9 +22,11 @@
     align-items: center;
     flex: 1 1 0;
     aspect-ratio: 1 / 1;
-    /* width: 0.2em; */
     font-size: smaller;
     font-weight: bold;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .rowDiff{
@@ -44,5 +46,8 @@
     aspect-ratio: 1 / 1;
     font-weight: bold;
     font-size: smaller;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 } 
 

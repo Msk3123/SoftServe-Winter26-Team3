@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import useForm from "../../../../hooks/useForm";
 import type { HallCreate } from "../../../../types/hall.types";
 import styles from "./HallForm.module.css";
@@ -11,6 +11,7 @@ interface HallFormProps{
     initialState?:HallCreate;
     onSubmitAction:(data: HallCreate) => Promise<void>;
     onClose:()=>void;
+    isLoadingDimensions?:boolean;
 }
 
 
@@ -19,15 +20,23 @@ const initialData = {
     rows: 8,
     seatsPerRow: 20,
 }
-const HallForm =  ({initialState,onSubmitAction,onClose}:HallFormProps) => {
+const HallForm =  ({initialState,onSubmitAction,onClose,isLoadingDimensions=false}:HallFormProps) => {
     const {formData,errors,isSubmitting,handleChange,handleSubmit} = useForm<HallCreate>(initialState??initialData,hallValidator);
     const [isPending, setIsPending] = useState(false);
     const [isSceleton,setIsSceleton] = useState(true);
 
-    const onSubmit=async (e: FormEvent<HTMLFormElement>)=>{
+    useEffect(()=>{
+        if (initialState && formData.hallName !== initialState.hallName){
+            Object.entries(initialState).forEach(([key, value]) => {
+                handleChange(key as keyof HallCreate, value);
+            });
+        }
+    },[initialState])
+
+    const onSubmit=async (e: FormEvent<HTMLFormElement>)=>{і
         e.preventDefault();
         setIsPending(true);
-        await handleSubmit(await onSubmitAction)
+        await handleSubmit(onSubmitAction)
         setIsPending(false);
         setIsSceleton(false);
     }
@@ -53,6 +62,7 @@ const HallForm =  ({initialState,onSubmitAction,onClose}:HallFormProps) => {
                     autoComplete="off"
                     min={1}
                     error={errors.rows}
+                    disabled={isLoadingDimensions}
                     required
                 />
 
@@ -64,16 +74,17 @@ const HallForm =  ({initialState,onSubmitAction,onClose}:HallFormProps) => {
                     min={1}
                     autoComplete="off"
                     error={errors.seatsPerRow}
+                    disabled={isLoadingDimensions}
                     required
                 />
             </div>
             <div className={styles.actions}>
                 <Button bgColor="var(--button-cancel)" action={onClose}>Cancel</Button>
-                <Button htmlType="submit" disabled={isSubmitting}>Save</Button>
+                <Button htmlType="submit" disabled={isSubmitting || isLoadingDimensions}>Save</Button>
             </div>
         </form>
 
-        {isSceleton &&
+        {(!initialState && isSceleton)&&
             <div className={styles.sceletonContainer}>
                 <div className={styles.sceletonHover}> Save hall first</div>
                 <HallMapSceleton rows={formData.rows} seatsPerRow={formData.seatsPerRow} />

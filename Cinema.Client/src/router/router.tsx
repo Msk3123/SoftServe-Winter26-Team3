@@ -36,7 +36,9 @@ import editMovieFormLoader from "../features/admin/movies/EditMovie/editMovieFor
 import CreateSessionForm from "../features/admin/sessions/CreateSession/CreateSessionForm";
 import EditSessionForm from "../features/admin/sessions/EditSession/EditSessionForm";
 import editSessionFormLoader from "../features/admin/sessions/EditSession/editSessionFormLoader";
-import CreateHallForm from "../features/admin/halls/HallCreate/HallCreate";
+import CreateHallForm from "../features/admin/halls/HallCreate/CreateHallForm";
+import EditHallForm from "../features/admin/halls/HallEdit/EditHallForm";
+import editHallFormLoader from "../features/admin/halls/HallEdit/editHallFormLoader";
 
 export const router = createBrowserRouter([
   {
@@ -144,11 +146,12 @@ export const router = createBrowserRouter([
         children: [
           {
             path: "create",
-            element: <AdminModal><CreateHallForm/></AdminModal>,
+            element: <AdminModal title="Create Hall"><CreateHallForm/></AdminModal>,
           },
           {
             path: ":hallId/edit",
-            element: <AdminModal>edit hall</AdminModal>,
+            element: <AdminModal title="Edit Hall"><EditHallForm/></AdminModal>,
+            loader:editHallFormLoader,
           },
         ],
       },
@@ -158,7 +161,7 @@ export const router = createBrowserRouter([
         element: <AdminNewsPage />,
         children: [
           { path: "create", element: <AdminModal title="Create News"><CreateNewsForm/></AdminModal> },
-            { path: ":newsId/edit",
+          { path: ":newsId/edit",
               element: <AdminModal title="Edit News"><EditNewsForm/></AdminModal>,
               loader: editNewsFormLoader,
             }

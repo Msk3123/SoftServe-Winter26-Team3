@@ -72,7 +72,6 @@ const CreateHallForm = ({onClose}:CreateHallFormProps)=>{
             }
 
         try{
-            setFormData(formData);
             setIsPending(true);
             
             await deleteHall(hall.id);

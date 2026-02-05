@@ -1,4 +1,4 @@
-import { Outlet} from "react-router";
+import { Outlet, useLocation} from "react-router";
 import AdminTablePage from "../../../features/admin/components/AdminTablePage/AdminTablePage";
 import type { ColumnDef } from "../../../types/common.types";
 import type { HallShort } from "../../../types/hall.types";
@@ -6,6 +6,7 @@ import { deleteHall, getAllHalls } from "../../../api/hallApi";
 import useQueryTable from "../../../hooks/useQueryTable/useQueryTable";
 
 const AdminHallsPage = ()=>{
+    const location = useLocation();
 
     const {data,pagination,sortParams,status,actions} = useQueryTable<HallShort>(getAllHalls);
 
@@ -20,7 +21,7 @@ const AdminHallsPage = ()=>{
                 tableData={{ data, pagination, sortParams, status }}
                 tableActions={actions}
                 deleteFn={deleteHall}/>
-                <Outlet  context={{createItem:actions.createItem, editItem:actions.editItem , deleteItem:actions.deleteItem}}/>
+                <Outlet key={location.pathname} context={{createItem:actions.createItem, editItem:actions.editItem , deleteItem:actions.deleteItem}}/>
             </>)
 };
 

@@ -17,10 +17,11 @@ interface HallMapEditProps{
                 id: number,
                 seatTypeId: string | number,}[])
                 =>Promise<void>;
+    setDimensions?: (rows:number)=>void;
 }
 
-const HallMapEdit = ({id, sceleton,onSubmit}: HallMapEditProps) => {
-    const {seats: initialSeats, isLoading, error} = useHallMap(id);
+const HallMapEdit = ({id, sceleton,onSubmit,setDimensions}: HallMapEditProps) => {
+    const {seats: initialSeats, isLoading, error} = useHallMap(id,setDimensions);
     const [selectedSeatType, setSelectedSeatType] = useState<SeatTypeWithColor| null>(null);
     const [isDrawing, setIsDrawing] = useState(false);
     const [changes, setChanges] = useState<Record<string | number, SeatTypeWithColor>>({});
