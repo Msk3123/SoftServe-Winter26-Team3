@@ -10,5 +10,6 @@ namespace Cinema.Application.Interfaces
     {
         Task<(IEnumerable<Actor> Items, int TotalCount)> GetAllPagedAsync(QueryParameters queryParameters);
         Task<Actor?> GetByIdWithMoviesAsync(int id);
+        Task<(IEnumerable<Actor> items, int TotalCount)> getByNameAsync(string searchTerm, QueryParameters queryParameters);
     }
 }

@@ -34,6 +34,12 @@ namespace Cinema.API.Controllers
 
             return Ok(_mapper.Map<GenreDto>(genre));
         }
+        [HttpGet("search")]
+        public async Task<IActionResult> Search([FromQuery] string genreName, [FromQuery]QueryParameters queryParameters)
+        {
+            var genres = await _genreRepository.GetByNameAsync(genreName, queryParameters);
+            return OkPaged<Genre, GenreDto>(genres, queryParameters);
+        }
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] GenreCreateDto dto)
