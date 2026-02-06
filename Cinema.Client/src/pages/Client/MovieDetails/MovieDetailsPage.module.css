@@ -162,3 +162,20 @@
     .container { grid-template-columns: 1fr; }
     .title { font-size: 2rem; }
 }
+
+.actorLink {
+    color: var(--color-primary); 
+    text-decoration: none;
+    transition: all 0.3s ease;
+    padding-bottom: 0.0625rem;
+    display: inline-block;
+}
+
+.actorLink:hover {
+    text-decoration: underline;
+    text-decoration-color: var(--color-primary);
+    text-underline-offset: 0.1875rem;
+    text-shadow: 0 0 0.625rem rgba(0, 224, 84, 1); 
+    transform: scale(1.05);
+    cursor: pointer;
+}

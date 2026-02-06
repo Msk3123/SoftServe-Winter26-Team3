@@ -8,6 +8,7 @@ const navItems = [
         { label: "News", path: "/admin/news" },
         { label: "Orders", path: "/admin/orders" },
         { label: "Actors", path: "/admin/actors" },
+        {label:"Seats",path:"/admin/seats"}
     ];
 
 const Sidebar = () => {

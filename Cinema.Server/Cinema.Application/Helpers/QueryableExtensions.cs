@@ -47,11 +47,16 @@ namespace Cinema.Application.Helpers
         public static IQueryable<Session> ApplyTimeFilter(this IQueryable<Session> query, SessionFilter filter)
         {
             var now = DateTime.UtcNow;
+            var nowDate = now.Date;
+            var nowTime = now.TimeOfDay;
 
             return filter switch
             {
-                SessionFilter.Active => query.Where(s => s.SessionDate.Date + s.SessionTime > now),
-                SessionFilter.Past => query.Where(s => s.SessionDate.Date + s.SessionTime <= now),
+                SessionFilter.Active => query.Where(s => s.SessionDate.Date > nowDate ||
+                                                       (s.SessionDate.Date == nowDate && s.SessionTime > nowTime)),
+
+                SessionFilter.Past => query.Where(s => s.SessionDate.Date < nowDate ||
+                                                     (s.SessionDate.Date == nowDate && s.SessionTime <= nowTime)),
                 _ => query
             };
         }

@@ -6,8 +6,8 @@ import type { MovieShort } from "./movie.types";
 
 export const SessionFilter = {
     All: 0,
-    Active: 1,
-    Past: 2
+    Past: 1,
+    Active: 2
 } as const;
 
 export type SessionFilterType = typeof SessionFilter[keyof typeof SessionFilter];

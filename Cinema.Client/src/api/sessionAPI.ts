@@ -4,11 +4,19 @@ import { defaultParams, deleteItem, getItem, getPaginatedData, patchItem, postIt
 import { SessionFilter, type SessionFilterType, type SessionQueryParams} from "../types/session.types";
 
 export const getAllSessions = async (params: SessionQueryParams = defaultParams) => {
-    return await getPaginatedData<SessionShort>("session", {
-        ...params,
-        // Використовуємо Active за замовчуванням для розкладу
-        sessionFilter: params.sessionFilter ?? SessionFilter.Active 
-    } as SessionQueryParams); 
+    const { page, pageSize, sortBy, order, ...extraParams } = params;
+
+    const filters = {
+        ...extraParams,
+        sessionFilter: params.sessionFilter ?? SessionFilter.Active,
+        movieId: params.movieId
+    };
+
+    return await getPaginatedData<SessionShort>(
+        "session", 
+        { page, pageSize, sortBy, order }, 
+        filters
+    ); 
 };
 export const getSession: FetchOneFunction<Session> = async (id) => {
     return await getItem("session", id);
