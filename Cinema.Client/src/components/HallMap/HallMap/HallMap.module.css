@@ -1,3 +1,9 @@
+.wrapper{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
 .container {
     display: flex;
     flex-direction: column;
@@ -15,18 +21,27 @@
     gap: 0.5%;
     justify-content: center;
 }
+
+.cell{
+    flex: 1 1 0;
+    aspect-ratio: 1 / 1;
+    
+    max-width: 3em;
+    max-height: 3em;
+
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
 .rowNumber{
     color: var(--text-secondary);
     display: flex;
     justify-content: center;
     align-items: center;
-    flex: 1 1 0;
-    aspect-ratio: 1 / 1;
     font-size: smaller;
     font-weight: bold;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+    border: 2px transparent solid;
 }
 
 .rowDiff{
@@ -42,12 +57,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    flex: 1 1 0;
-    aspect-ratio: 1 / 1;
     font-weight: bold;
     font-size: smaller;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+
 } 
 
