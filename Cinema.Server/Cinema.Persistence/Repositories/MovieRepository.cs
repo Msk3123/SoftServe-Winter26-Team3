@@ -99,5 +99,13 @@ namespace Cinema.Persistence.Repositories
 
             await _context.SaveChangesAsync();
         }
+        public async Task<(IEnumerable<Movie> Items, int totalCount)> SearchByTitleAsync(string title, QueryParameters queryParameters)
+        {
+            return await _context.Movies
+                .AsNoTracking()
+                .Where(m => m.Title.Contains(title))
+                .ToPagedResultAsync(queryParameters);
+        }
+
     }
 }

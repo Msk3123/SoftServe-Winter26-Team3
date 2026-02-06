@@ -6,6 +6,8 @@ namespace Cinema.Application.Interfaces.PaymentGateway
 {
     public interface IPaymentGateway
     {
-        Task<(string CheckoutUrl, string TransactionId)> CreatePaymentSessionAsync(decimal amount, int orderId);
+        Task<(string checkoutUrl, string transactionId)> CreatePaymentSessionAsync(decimal amount, int orderId);
+        bool IsSignatureValid(string data, string signature);
+        string GenerateSignature(string data);
     }
 }

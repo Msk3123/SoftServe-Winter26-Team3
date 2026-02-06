@@ -41,7 +41,8 @@ namespace Cinema.Persistence.Repositories
         public async Task<(IEnumerable<Ticket> Items, int TotalCount)> GetTicketsByUserIdPagedAsync(int userId, QueryParameters queryParameters)
         {
             return await _context.Tickets
-                .AsNoTracking()
+                .IgnoreQueryFilters()
+                .AsNoTracking() 
                 .Include(t => t.Order)
                 .Include(t => t.TicketType)
                 .Include(t => t.SessionSeat)

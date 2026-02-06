@@ -39,8 +39,11 @@ namespace Cinema.Application.Services
                     .Where(ss => selectedSeatIds.Contains(ss.SessionSeatId))
                     .ToListAsync();
 
-                if (sessionSeats.Count != selectedSeatIds.Count)
-                    throw new KeyNotFoundException("Some selected seats were not found.");
+                var ticketsAlreadyExist = await _unitOfWork.Tickets.GetAll()
+                    .AnyAsync(t => selectedSeatIds.Contains(t.SessionSeatId));
+
+                if (ticketsAlreadyExist)
+                    throw new SeatsAlreadyTakenException();
 
                 var ticketTypes = await _unitOfWork.TicketTypes.GetAll()
                     .Where(tt => selectedTypeIds.Contains(tt.TicketTypeId))
@@ -69,13 +72,7 @@ namespace Cinema.Application.Services
 
                     Tickets = new List<Ticket>()
                 };
-                var existingTickets = await _unitOfWork.Tickets.GetAll()
-                    .Where(t => selectedSeatIds.Contains(t.SessionSeatId))
-                    .ToListAsync();
-                if (existingTickets.Any())
-                {
-                    throw new SeatsAlreadyTakenException();
-                }
+               
 
                 if (sessionSeats.Any(ss => ss.SeatStatuses == SeatStatus.Sold))
                 {
@@ -106,8 +103,7 @@ namespace Cinema.Application.Services
                 await _unitOfWork.SaveChangesAsync();
                 await _unitOfWork.CommitAsync();
 
-                var completedOrder = await _unitOfWork.Orders.GetByIdAsync(order.OrderId);
-                return _mapper.Map<OrderDetailsDto>(completedOrder);
+                return _mapper.Map<OrderDetailsDto>(order);
             }
             catch (Exception)
             {

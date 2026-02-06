@@ -3,6 +3,7 @@ using Cinema.Application.Common.Models;
 using Cinema.Application.DTOs;
 using Cinema.Application.DTOs.MovieDtos;
 using Cinema.Application.Interfaces;
+using Cinema.Application.Interfaces.Services;
 using Cinema.Domain.Entities;
 using Cinema.Persistence.Context;
 using Cinema.Persistence.Repositories;
@@ -16,10 +17,12 @@ namespace Cinema.API.Controllers
     public class MovieController : ApiBaseController
     {
         private readonly IMovieRepository _movieRepository;
+        private readonly IMovieService _movieService;
 
-        public MovieController(IMovieRepository movieRepository ,IMapper mapper) :base(mapper)
+        public MovieController(IMovieRepository movieRepository ,IMapper mapper, IMovieService movieService) :base(mapper)
         {
             _movieRepository = movieRepository;
+            _movieService = movieService;
         }
         // GET: api/movie?page=1&limit=10&sortBy=title&order=asc
         [HttpGet]
@@ -71,7 +74,12 @@ namespace Cinema.API.Controllers
 
             return Ok(response);
         }
-
+        [HttpGet("search")]
+        public async Task<IActionResult> SearchMovies([FromQuery] string query, [FromQuery] QueryParameters queryParameters)
+        {
+            var result = await _movieService.SearchMoviesAsync(query, queryParameters);
+            return OkPaged<Movie, MovieShortDto>(result, queryParameters);
+        }
         // POST: api/movie
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] MovieCreateDto movieDto)
@@ -112,12 +120,7 @@ namespace Cinema.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var movie = await _movieRepository.GetByIdAsync(id);
-            if (movie == null) return NotFound();
-
-            await _movieRepository.DeleteAsync(id);
-            await _movieRepository.SaveAsync();
-
+            await _movieService.DeleteMovieAsync(id);
             return NoContent();
         }
     }

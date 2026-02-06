@@ -34,3 +34,4 @@ export const patchNews:PatchFunction<NewsCreate>= async(id,data)=>{
 export const deleteNews = async (id: number | string) => {
     return await deleteItem("News", id);
 };
+

@@ -34,6 +34,12 @@ namespace Cinema.API.Controllers
 
             return Ok(_mapper.Map<ActorDetailsDto>(actor));
         }
+        [HttpGet("search")]
+        public async Task<IActionResult> Search([FromQuery] string query, [FromQuery] QueryParameters queryParameters)
+        {
+            var results = await _actorRepository.getByNameAsync(query, queryParameters);
+            return OkPaged<Actor, ActorShortDto>(results, queryParameters);
+        }
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] ActorCreateDto dto)

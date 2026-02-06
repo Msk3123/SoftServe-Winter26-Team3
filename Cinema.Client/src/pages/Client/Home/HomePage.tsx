@@ -1,19 +1,35 @@
 import { useState, useRef, useEffect } from "react";
 import styles from "./HomePage.module.css";
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from "react-router-dom";
 import { getRecentNews } from "../../../api/newsApi";
 import Button from "../../../components/Button/Button";
 import type { MovieShort } from "../../../types/movie.types";
 import { getMovies } from "../../../api/movieApi";
-import type { NewsShort } from "../../../types/news.types";
-
+import { getNews } from "../../../api/newsApi";
+import type { NewsShort, News } from "../../../types/news.types";
+import Modal from "../../../components/ClientModal/ClientModal";
 const HomePage = () => {
   const [activeTab, setActiveTab] = useState<"now" | "soon">("now");
   const [movies, setMovies] = useState<MovieShort[]>([]);
   const [newsList, setNewsList] = useState<NewsShort[]>([]);
+  // const [selectedNews, setSelectedNews] = useState<News | null>(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const listRef = useRef<HTMLDivElement>(null);
+  const [selectedNews, setSelectedNews] = useState<NewsShort | null>(null);
+  const [fullNews, setFullNews] = useState<News | null>(null);
+  // 2. Додай стейт для тексту
+  const [fullContent, setFullContent] = useState<string>("");
+  useEffect(() => {
+    if (selectedNews) {
+      setFullNews(null);
+      getNews(selectedNews.id)
+        .then((data) => {
+          setFullNews(data);
+        })
+        .catch((err) => console.error("Failed to load full news:", err));
+    }
+  }, [selectedNews]);
   useEffect(() => {
     const loadMovies = async () => {
       setLoading(true);
@@ -34,7 +50,6 @@ const HomePage = () => {
   useEffect(() => {
     const loadNews = async () => {
       try {
-        
         const response = await getRecentNews();
         const cleanNews = response.items;
 
@@ -105,7 +120,11 @@ const HomePage = () => {
             <div className={styles.movieList} ref={listRef}>
               {movies.length > 0 ? (
                 movies.map((movie) => (
-                  <div key={movie.id} className={styles.movieItem} onClick={()=> navigate(`/movie/${movie.id}`)}>
+                  <div
+                    key={movie.id}
+                    className={styles.movieItem}
+                    onClick={() => navigate(`/movie/${movie.id}`)}
+                  >
                     <img
                       src={movie.posterUrl || "/assets/placeholderImage.png"}
                       alt={movie.title}
@@ -165,11 +184,11 @@ const HomePage = () => {
               </div>
               <div className={styles.newsDetailedInfo}>
                 <Button
-                    action={() => console.log("Will be open AdminModal in future")}
-                    className={styles.newsButton}
-                    variant="fill"
+                  action={() => setSelectedNews(news)}
+                  className={styles.newsButton}
+                  variant="fill"
                 >
-                    Read more
+                  Read more
                 </Button>
                 <span className={styles.newsDate}>
                   {formatDate(news.publishedDate)}
@@ -182,6 +201,46 @@ const HomePage = () => {
           </Link>
         </div>
       </div>
+      {selectedNews && (
+        <Modal title="" onClose={() => setSelectedNews(null)}>
+          <div className={styles.modalBody}>
+            <div className={styles.imageContainer}>
+              <img
+                src={selectedNews.imageUrl || "/assets/placeholder_news.png"}
+                alt={selectedNews.title}
+                className={styles.newsImageModal}
+              />
+            </div>
+            <div className={styles.infoContainer}>
+              <h2 className={styles.newsTitleModal}>{selectedNews.title}</h2>
+              <p className={styles.newsTextModal}>
+                {fullNews ? fullNews.newsContent : selectedNews.shortContent}
+              </p>
+              <div className={styles.newsActionsModal}>
+                {fullNews?.movie && (
+                  <Link
+                    to={`/movie/${fullNews.movie.id}`}
+                    className={styles.modalLinkBtn}
+                  >
+                    About film
+                  </Link>
+                )}
+                {fullNews?.actor && (
+                  <Link
+                    to={`/actor/${fullNews.actor.id}`}
+                    className={styles.modalLinkBtn}
+                  >
+                    About actor
+                  </Link>
+                )}
+              </div>
+              <div className={styles.newsDateModal}>
+                {formatDate(selectedNews.publishedDate)}
+              </div>
+            </div>
+          </div>
+        </Modal>
+      )}
     </div>
   );
 };

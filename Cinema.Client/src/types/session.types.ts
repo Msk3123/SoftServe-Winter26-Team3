@@ -1,7 +1,16 @@
 import type { ActorShort } from "./actor.types";
+import type { FetchParams } from "./api.types";
 import type { Genre } from "./genre.types";
 import type { HallShort } from "./hall.types";
 import type { MovieShort } from "./movie.types";
+
+export const SessionFilter = {
+    All: 0,
+    Active: 1,
+    Past: 2
+} as const;
+
+export type SessionFilterType = typeof SessionFilter[keyof typeof SessionFilter];
 
 export interface SessionShort{
     id: number;
@@ -58,4 +67,9 @@ export interface CreateSessionsBatch {
     
     dailySchedule: string[];
     weekDays: number[];
+}
+
+export interface SessionQueryParams extends FetchParams<SessionShort> {
+    sessionFilter?: SessionFilterType;
+    movieId?: number | string;
 }

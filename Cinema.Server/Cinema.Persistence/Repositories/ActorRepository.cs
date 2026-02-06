@@ -29,5 +29,12 @@ namespace Cinema.Persistence.Repositories
                 .AsNoTracking()
                 .FirstOrDefaultAsync(a => ((Actor)(object)a).ActorId == id);
         }
+        public async Task<(IEnumerable<Actor>items, int TotalCount)> getByNameAsync(string searchTerm,QueryParameters queryParameters)
+        {
+            return await _dbSet
+                .Where(a => a.FirstName.Contains(searchTerm) || a.LastName.Contains(searchTerm))
+                .AsNoTracking()
+                .ToPagedResultAsync(queryParameters);
+        }
     }
 }
