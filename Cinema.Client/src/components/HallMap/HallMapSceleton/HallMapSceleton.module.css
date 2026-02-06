@@ -12,11 +12,11 @@
     gap: 5px;
     padding: 10px;
     
-    width: max-content;
+    width: max-content; 
     min-width: 100%;
-    margin: 0 auto;
+    margin: 0 auto; 
     box-sizing: border-box;
-    justify-content: space-between;
+    
     align-items: center;
 }
 
