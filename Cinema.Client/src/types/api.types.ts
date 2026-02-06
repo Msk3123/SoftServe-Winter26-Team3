@@ -16,6 +16,7 @@ export type FetchParams<T extends BaseEntity> = {
     pageSize: number;
     sortBy: keyof T;
     order: "asc" | "desc";
+    
 };
 
 export type FetchPaginatedListFunction<T extends BaseEntity> = (

@@ -3,6 +3,7 @@ import type { CreateSessionsBatch, Session, SessionCreate, SessionShort} from ".
 import { defaultParams, deleteItem, getItem, getPaginatedData, patchItem, postItem, putItem } from "./api";
 import { SessionFilter, type SessionFilterType, type SessionQueryParams} from "../types/session.types";
 
+
 export const getAllSessions = async (params: SessionQueryParams = defaultParams) => {
     const { page, pageSize, sortBy, order, ...extraParams } = params;
 
