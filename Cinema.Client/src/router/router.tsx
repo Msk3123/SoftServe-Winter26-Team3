@@ -188,8 +188,7 @@ export const router = createBrowserRouter([
         path: "orders",
         element: <AdminOrderPage />,
         children: [
-            { path: "create", element: <AdminModal>create order</AdminModal> },
-            { path: ":orderId/edit", element: <AdminModal>order view</AdminModal>}
+            { path: ":orderId/details", element: <AdminModal>order view</AdminModal>}
         ]
       },
 
