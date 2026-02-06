@@ -6,7 +6,6 @@ import { deleteNews, getAllNews } from "../../../api/newsApi";
 import { dateToDayFirst } from "../../../helpers/textHelpers";
 import styles from "./AdminNewsPage.module.css";
 import useQueryTable from "../../../hooks/useQueryTable/useQueryTable";
-import { act } from "react";
 
 const AdminNewsPage = ()=>{
 

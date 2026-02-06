@@ -3,11 +3,11 @@ import type { SeatType, SeatTypeCreate } from "../types/seatType.types";
 import { getPaginatedData, deleteItem, defaultParams, getItem, postItem, putItem, patchItem } from "./api";
 
 
-export const getAllSeatType: FetchPaginatedListFunction<SeatType> = async (params = defaultParams) => {
+export const getAllSeatTypes: FetchPaginatedListFunction<SeatType> = async (params = defaultParams) => {
     return await getPaginatedData<SeatType>("seatTypes", params);
 };
 
-export const getNews:FetchOneFunction<SeatType> = async (id)=>{
+export const getSeatType:FetchOneFunction<SeatType> = async (id)=>{
     return await getItem("seatTypes",id);
 }
 
