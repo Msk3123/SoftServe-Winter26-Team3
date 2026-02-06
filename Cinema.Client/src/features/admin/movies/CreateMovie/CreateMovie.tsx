@@ -1,9 +1,10 @@
 import { useNavigate, useOutletContext } from "react-router";
-import type { AdminModalContext } from "../../../../types/admin.types";
+import type { AdminAdminModalContext } from "../../../../types/admin.types";
 import type { MovieCreate, MovieShort } from "../../../../types/movie.types";
 import toast from "react-hot-toast";
 import MovieForm from "../MovieForm/MovieForm";
 import { postMovie } from "../../../../api/movieApi";
+import { handleError } from "../../../../helpers/handleError";
 
 interface CreateMovieFormProps {
     onClose?:()=>void;
@@ -11,7 +12,7 @@ interface CreateMovieFormProps {
 
 const CreateMovieForm = ({onClose}:CreateMovieFormProps)=>{
 
-    const {createItem} = useOutletContext<AdminModalContext<MovieShort>>();
+    const {createItem} = useOutletContext<AdminAdminModalContext<MovieShort>>();
     const navigate = useNavigate();
     
         
@@ -38,8 +39,8 @@ const CreateMovieForm = ({onClose}:CreateMovieFormProps)=>{
                     toast.success("Movie succesfully added!")
                     handleClose();
                 }
-            }catch{
-                toast.error("Can`t add this movie");
+            }catch(e){
+                handleError(e,"Can`t add this movie");
             }
         }
 

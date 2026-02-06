@@ -1,8 +1,8 @@
 import type { Actor, ActorCreate, ActorShort } from "../types/actor.types";
-import type { DeleteFunction, FetchListFunction, FetchOneFunction, PatchFunction, PostFunction, PutFunction } from "../types/api.types";
+import type { DeleteFunction, FetchPaginatedListFunction, FetchOneFunction, PatchFunction, PostFunction, PutFunction } from "../types/api.types";
 import { defaultParams, deleteItem, getItem, getPaginatedData, patchItem, postItem, putItem } from "./api";
 
-export const  getAllActors:FetchListFunction<ActorShort> = async (params = defaultParams ) => {
+export const  getAllActors:FetchPaginatedListFunction<ActorShort> = async (params = defaultParams ) => {
     return await getPaginatedData<ActorShort>("actors", params);
 
 };

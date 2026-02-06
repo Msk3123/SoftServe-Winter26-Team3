@@ -25,7 +25,7 @@ namespace Cinema.API.Controllers
         public async Task<IActionResult> GetAll([FromQuery] QueryParameters queryParameters)
         {
             var results = await _hallRepository.GetAllPagedAsync(queryParameters);
-            return OkPaged<Hall, HallDto>(results, queryParameters);
+            return OkPaged<Hall, HallShortDto>(results, queryParameters);
         }
 
         [HttpGet("{id}")]
@@ -34,51 +34,45 @@ namespace Cinema.API.Controllers
             var hall = await _hallRepository.GetByIdAsync(id);
             if (hall == null) return NotFound();
 
-            return Ok(_mapper.Map<HallDto>(hall));
+            return Ok(_mapper.Map<HallShortDto>(hall));
         }
 
         [HttpPost]
         public async Task<IActionResult> Create(HallCreateDto dto)
         {
-            await _hallService.CreateHallAsync(dto);
-            return Ok(); 
+            var hall = await _hallService.CreateHallAsync(dto);
+            var response = _mapper.Map<HallShortDto>(hall);
+            
+            return Ok(response); 
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] HallCreateDto dto)
         {
-            var hall = await _hallRepository.GetByIdAsync(id);
-            if (hall == null) return NotFound();
-
-            _mapper.Map(dto, hall);
-            await _hallRepository.SaveAsync();
-
+            await _hallService.UpdateHallAsync(id, dto);
             return NoContent();
         }
 
-        [HttpPatch("{id}")]
-        public async Task<IActionResult> Patch(int id, [FromBody] HallPatchDto dto)
-        {
-            Console.WriteLine($"Incoming Capacity: {dto.Capacity?.ToString() ?? "NULL"}");
-            var hall = await _hallRepository.GetByIdAsync(id);
-            if (hall == null) return NotFound();
+        //[HttpPatch("{id}")]
+        //public async Task<IActionResult> Patch(int id, [FromBody] HallPatchDto dto)
+        //{
+        //    Console.WriteLine($"Incoming Capacity: {dto.Capacity?.ToString() ?? "NULL"}");
+        //    var hall = await _hallRepository.GetByIdAsync(id);
+        //    if (hall == null) return NotFound();
 
-            _mapper.Map(dto, hall);
-            await _hallRepository.SaveAsync();
+        //    _mapper.Map(dto, hall);
+        //    await _hallRepository.SaveAsync();
 
-            return NoContent();
-        }
+        //    return NoContent();
+        //}
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var hall = await _hallRepository.GetByIdAsync(id);
-            if (hall == null) return NotFound();
-
-            await _hallRepository.DeleteAsync(id);
-            await _hallRepository.SaveAsync();
-
+ 
+            await _hallService.DeleteHallAsync(id);
             return NoContent();
         }
+
     }
 }

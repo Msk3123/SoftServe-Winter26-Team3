@@ -8,7 +8,7 @@ namespace Cinema.Application.Interfaces
 {
     public interface ISeatRepository : IRepository<Seat>
     {
-        Task<(IEnumerable<Seat> Items, int TotalCount)> GetByHallIdPagedAsync(int hallId, QueryParameters queryParameters);
+        Task<IEnumerable<Seat>> GetByHallId(int hallId);
         Task<(IEnumerable<Seat> Items, int TotalCount)> GetAllPagedAsync(QueryParameters queryParameters);
         Task<Seat?> GetByIdWithDetailsAsync(int id);
         Task<bool> ExistsAsync(int hallId, int row, int seatNo);

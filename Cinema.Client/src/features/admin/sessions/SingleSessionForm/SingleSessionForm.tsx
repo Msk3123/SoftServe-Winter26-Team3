@@ -2,7 +2,6 @@ import { useEffect, useState, type FormEvent } from "react";
 import useForm from "../../../../hooks/useForm";
 import type { SessionCreate} from "../../../../types/session.types";
 import { getAllMovies } from "../../../../api/movieApi";
-import toast from "react-hot-toast";
 import type { MovieShort } from "../../../../types/movie.types";
 import Button from "../../../../components/Button/Button";
 import styles from "./SingleSessionForm.module.css"
@@ -10,10 +9,11 @@ import type { HallShort } from "../../../../types/hall.types";
 import { getAllHalls } from "../../../../api/hallApi";
 import { SelectableInput } from "../../../../components/Form/SelectableInput/SelectableInput";
 import MovieOption from "../../movies/MovieOption/MovieOption";
-import HallOption from "../../halls/HallOption";
+import HallOption from "../../halls/HallOption/HallOption";
 import BaseInput from "../../../../components/Form/BaseInput/BaseInput";
 import { dateToYearFirst } from "../../../../helpers/textHelpers";
 import singleSessionValidator from "../../validators/singleSessionValidator";
+import { handleError } from "../../../../helpers/handleError";
 
 interface SingleSessionFormProps{
     initialState?:SessionCreate;
@@ -38,8 +38,7 @@ const SingleSessionForm =  ({initialState,onSubmitAction,onClose}:SingleSessionF
         getAllMovies({pageSize:50,page:1,sortBy:"releaseDate",order:"desc"})
             .then((response)=>setMovies(response.items))
             .catch(err =>{
-                console.error(err)
-                toast.error("Movies error")
+                handleError(err,"Movies error")
             });
     }, []);
 
@@ -47,8 +46,7 @@ const SingleSessionForm =  ({initialState,onSubmitAction,onClose}:SingleSessionF
         getAllHalls()
             .then((response)=>setHalls(response.items))
             .catch(err =>{
-                console.error(err)
-                toast.error("Halls error")
+                handleError(err,"Halls error")
             });
     }, []);
 
@@ -81,7 +79,7 @@ const SingleSessionForm =  ({initialState,onSubmitAction,onClose}:SingleSessionF
                 items={halls}
                 selectedIds={formData.hallId?[formData.hallId]:[]}
                 onSelect={(item)=>handleChange("hallId",Number(item.id))}
-                onRemove={(item)=>handleChange("hallId",0)}
+                onRemove={()=>handleChange("hallId",0)}
                 getLabel={(item)=>item.hallName}
                 renderOption={(item)=><HallOption item={item} />}
                 multiple={false}

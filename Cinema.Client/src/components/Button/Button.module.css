@@ -13,6 +13,11 @@
     font-size: inherit;
 }
 
+.button:disabled {
+    background-color: var(--button-disabled);
+}
+
+
 .fill {
 
 }

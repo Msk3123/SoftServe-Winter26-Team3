@@ -30,6 +30,15 @@ namespace Cinema.Persistence.Repositories
                 .AsNoTracking()
                 .ToPagedResultAsync(queryParameters); 
         }
+        public async Task<IEnumerable<Seat>> GetByHallId(int hallId)
+        {
+            return await _dbSet
+                .Where(s => s.HallId == hallId)
+                .Include(s => s.SeatType)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
         public async Task<Seat?> GetByIdWithDetailsAsync(int id)
         {
             return await _dbSet

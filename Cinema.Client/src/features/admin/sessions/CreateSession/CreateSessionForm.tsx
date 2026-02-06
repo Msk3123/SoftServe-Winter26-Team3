@@ -3,7 +3,7 @@ import type { CreateSessionsBatch, SessionShort } from "../../../../types/sessio
 import { createSessionBatch } from "../../../../api/sessionApi";
 import toast from "react-hot-toast";
 import SessionForm from "../SessionForm/SessionForm";
-import type { MovieShort } from "../../../../types/movie.types";
+import { handleError } from "../../../../helpers/handleError";
 
 interface CreateSessionFormProps {
     onClose?:()=>void;
@@ -33,8 +33,8 @@ const CreateSessionForm = ({onClose}:CreateSessionFormProps)=>{
                 handleClose();
 
             
-            }catch{
-                toast.error("Sessions didn`t created");
+            }catch(e){
+                handleError(e,"Sessions didn`t created");
             }
         }
 

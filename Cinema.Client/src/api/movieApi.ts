@@ -1,26 +1,26 @@
-import type { PaginatedResponse, DeleteFunction, FetchListFunction, FetchListByIdFunction, FetchOneFunction, PostFunction, PutFunction, PatchFunction} from "../types/api.types";
+import type { PaginatedResponse, DeleteFunction, FetchPaginatedListFunction, FetchPaginatedListByIdFunction, FetchOneFunction, PostFunction, PutFunction, PatchFunction} from "../types/api.types";
 import type { Movie, MovieCreate, MovieShort} from "../types/movie.types";
 import { defaultParams, deleteItem, getItem, getPaginatedData, patchItem, postItem, putItem } from "./api";
 
 
-export const  getAllMovies: FetchListFunction<MovieShort> = async (params=defaultParams) => {
+export const  getAllMovies: FetchPaginatedListFunction<MovieShort> = async (params=defaultParams) => {
     return await getPaginatedData<MovieShort>("movie", params);
 
 };
 
-export const getUpcomingMovies:  FetchListFunction<MovieShort> = async (params=defaultParams) => {
+export const getUpcomingMovies:  FetchPaginatedListFunction<MovieShort> = async (params=defaultParams) => {
     return await getPaginatedData<MovieShort>("Movie/upcoming", params);
 };
 
-export const getNowShowingMovies: FetchListFunction<MovieShort> = async (params = defaultParams) => {
+export const getNowShowingMovies: FetchPaginatedListFunction<MovieShort> = async (params = defaultParams) => {
     return await getPaginatedData<MovieShort>("Movie/now-showing", params);
 };
 
-export const getMoviesByActor: FetchListByIdFunction<MovieShort> = async (actorId,params = defaultParams) => {
+export const getMoviesByActor: FetchPaginatedListByIdFunction<MovieShort> = async (actorId,params = defaultParams) => {
     return await getPaginatedData<MovieShort>(`movie/actor/${actorId}`, params);
 };
 
-export const getMoviesByGenre: FetchListByIdFunction<MovieShort> = async (genreId,params = defaultParams) => {
+export const getMoviesByGenre: FetchPaginatedListByIdFunction<MovieShort> = async (genreId,params = defaultParams) => {
     return await getPaginatedData<MovieShort>(`movie/genre/${genreId}`, params);
 };
 

@@ -1,12 +1,12 @@
 import { useEffect, useMemo, useReducer } from "react";
 import { reducer } from "./reducer";
-import type { BaseEntity, FetchListFunction} from "../../types/api.types";
+import type { BaseEntity, FetchPaginatedListFunction} from "../../types/api.types";
 import type { ReducerState } from "./reducer.types";
 import {defaultInitialState } from "./reducer.initial";
 
 
 export default function useQueryTable<T extends BaseEntity>(
-    fetchFn: FetchListFunction<T>,
+    fetchFn: FetchPaginatedListFunction<T>,
     initialState: ReducerState<T> = defaultInitialState as unknown as ReducerState<T>,// add 'as unknown' before the final cast, for type compatibility
 ) {
     const [state, dispatch] = useReducer(reducer<T>, initialState);

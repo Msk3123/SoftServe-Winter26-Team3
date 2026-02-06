@@ -74,6 +74,28 @@ export async function getPaginatedData<T extends BaseEntity>(
 
 }
 
+export async function getList<T extends BaseEntity>(
+    path: string
+): Promise<T[]> {
+
+    const url = `${baseUrl}${path}`;
+
+    const response = await fetch(url);
+    return handleResponse<T[]>(response);
+}
+
+export async function getListById<T extends BaseEntity>(
+    path: string,
+    id:number|string
+): Promise<T[]> {
+
+    const url = `${baseUrl}${path}/${id}`;
+
+    const response = await fetch(url);
+    return handleResponse<T[]>(response);
+
+}
+
 export async function getItem<T extends BaseEntity>(path:string,id:number|string):Promise<SingleResponse<T>> {
     const url = `${baseUrl}${path}/${id}`;
     

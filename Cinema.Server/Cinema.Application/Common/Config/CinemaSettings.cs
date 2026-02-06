@@ -13,5 +13,6 @@ using System.Text;
             public int SessionSeatLockExpirationMinutes { get; set; }
             public int RefundDeadlineMinutes { get; set; }
             public int StopSalesBeforeSessionMinutes { get; set; }
+            public int defaultSeatTypeToCreate { get; set; }
         }
     }

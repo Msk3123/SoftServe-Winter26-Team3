@@ -1,13 +1,14 @@
 import { useNavigate, useOutletContext } from "react-router";
 import { postActor } from "../../../../api/actorApi";
-import toast from "react-hot-toast";
 import ActorForm from "../ActorForm/ActorForm";
 import type { ActorCreate, ActorShort } from "../../../../types/actor.types";
-import type { AdminModalContext } from "../../../../types/admin.types";
+import type { AdminAdminModalContext } from "../../../../types/admin.types";
+import { handleError } from "../../../../helpers/handleError";
+import toast from "react-hot-toast";
 interface CreateActorFormProps {onClose?:()=>void}
 const CreateActorForm = ({onClose}:CreateActorFormProps)=>{
 
-    const {createItem} = useOutletContext<AdminModalContext<ActorShort>>();
+    const {createItem} = useOutletContext<AdminAdminModalContext<ActorShort>>();
     const navigate = useNavigate();
     
         
@@ -36,8 +37,8 @@ const CreateActorForm = ({onClose}:CreateActorFormProps)=>{
                     toast.success("Actor succesfully added!")
                     handleClose();
                 }
-            }catch{
-                toast.error("Can`t add this actor");
+            }catch(e){
+                handleError(e,"Can`t add this actor");
             }
         }
 

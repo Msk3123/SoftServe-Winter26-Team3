@@ -51,13 +51,18 @@ namespace Cinema.Persistence.Repositories
                     .ThenInclude(o => o.Session)
                         .ThenInclude(s => s.Movie)
                 .Where(t => t.Order.UserId == userId)
-                .OrderByDescending(t => t.Order.OrderDate) 
+                .OrderByDescending(t => t.Order.OrderDate)
                 .ToPagedResultAsync(queryParameters);
         }
         public async Task<bool> AnyBySessionIdAsync(int sessionId)
         {
             return await _context.Tickets
                 .AnyAsync(t => t.SessionSeat.SessionId == sessionId);
+        }
+        public async Task<bool> AnyByHallIdAsync(int hallId)
+        {
+            return await _context.Tickets
+                .AnyAsync(t => t.SessionSeat.Session.HallId == hallId);
         }
     }
 }

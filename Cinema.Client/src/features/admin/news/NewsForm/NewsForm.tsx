@@ -12,13 +12,13 @@ import Select from "../../../../components/Form/Select/Select";
 import { getAllMovies } from "../../../../api/movieApi";
 import type { MovieShort } from "../../../../types/movie.types";
 import type { ActorShort } from "../../../../types/actor.types";
-import toast from "react-hot-toast";
 import { getAllTags } from "../../../../api/tagApi";
 import { SelectableInput } from "../../../../components/Form/SelectableInput/SelectableInput";
 import MovieOption from "../../movies/MovieOption/MovieOption";
 import { getAllActors } from "../../../../api/actorApi";
 import ActorOption from "../../actors/ActorOption/ActorOption";
 import { dateToYearFirst } from "../../../../helpers/textHelpers";
+import { handleError } from "../../../../helpers/handleError";
 
 
 const initialData = {
@@ -52,8 +52,7 @@ const NewsForm = ({initialState,onSubmitAction,onClose}:NewsFormProps)=>{
             .then(items=>
                 setTags(items.map((v)=>({value:v.id, label: v.tagName}))))
             .catch(err =>{
-                console.error(err)
-                toast.error("Tags error")
+                handleError(err,"Tags error")
             });
     }, []);
 
@@ -61,8 +60,7 @@ const NewsForm = ({initialState,onSubmitAction,onClose}:NewsFormProps)=>{
         getAllMovies()
             .then((response)=>setMovies(response.items))
             .catch(err =>{
-                console.error(err)
-                toast.error("Movies error")
+                handleError(err,"Movies error")
             });
     }, []);
 
@@ -70,8 +68,7 @@ const NewsForm = ({initialState,onSubmitAction,onClose}:NewsFormProps)=>{
         getAllActors()
             .then((response)=>setActors(response.items))
             .catch(err =>{
-                console.error(err)
-                toast.error("Actors error")
+                handleError(err,"Actors error")
             });
     }, []);
 
@@ -143,7 +140,7 @@ const NewsForm = ({initialState,onSubmitAction,onClose}:NewsFormProps)=>{
                     items={movies}
                     selectedIds={formData.movieId?[formData.movieId]:[]}
                     onSelect={(item)=>handleChange("movieId",item.id)}
-                    onRemove={(item)=>handleChange("movieId",undefined)}
+                    onRemove={()=>handleChange("movieId",undefined)}
                     getLabel={(item)=>item.title}
                     renderOption={(item)=><MovieOption item={item} />}
                     multiple={false}
@@ -155,7 +152,7 @@ const NewsForm = ({initialState,onSubmitAction,onClose}:NewsFormProps)=>{
                     items={actors}
                     selectedIds={formData.actorId?[formData.actorId]:[]}
                     onSelect={(item)=>handleChange("actorId",item.id)}
-                    onRemove={(item)=>handleChange("actorId",undefined)}
+                    onRemove={()=>handleChange("actorId",undefined)}
                     getLabel={(item)=>`${item.firstName} ${item.lastName}`}
                     renderOption={(item)=><ActorOption item={item} />}
                     multiple={false}

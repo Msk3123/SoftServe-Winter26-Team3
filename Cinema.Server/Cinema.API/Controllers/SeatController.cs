@@ -42,10 +42,14 @@ namespace Cinema.API.Controllers
 
         // GET: api/seat/hall/{hallId}
         [HttpGet("hall/{hallId:int}")]
-        public async Task<IActionResult> GetByHall(int hallId, [FromQuery] QueryParameters queryParameters)
+        public async Task<IActionResult> GetByHall(int hallId)
         {
-            var results = await _seatRepository.GetByHallIdPagedAsync(hallId, queryParameters);
-            return OkPaged<Seat, SeatShortDto>(results, queryParameters);
+            var results = await _seatRepository.GetByHallId(hallId);
+            if(results == null || !results.Any()) throw new KeyNotFoundException($"No seats found for hall with id {hallId}");
+            
+            var response = _mapper.Map<IEnumerable<SeatShortDto>>(results);
+
+            return Ok( response );
         }
 
         // POST: api/seat

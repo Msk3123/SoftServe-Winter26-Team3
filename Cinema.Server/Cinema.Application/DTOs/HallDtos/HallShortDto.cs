@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Cinema.Application.DTOs.HallDtos
 {
-    public record HallDto
+    public record HallShortDto
     {
         public int Id { get; init; }
         public string HallName { get; init; }

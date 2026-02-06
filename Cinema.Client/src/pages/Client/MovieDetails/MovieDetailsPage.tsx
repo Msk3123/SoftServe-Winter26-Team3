@@ -51,6 +51,7 @@ const MovieDetails = () => {
                         <Button 
                             variant='text-only'
                             className={styles.trailerBtn}
+                            color='var(--color-primary)'
                             action={() => movie.trailerUrl && window.open(movie.trailerUrl, '_blank')}
                         >
                             <span className={styles.playIcon}>▶</span> Watch Trailer

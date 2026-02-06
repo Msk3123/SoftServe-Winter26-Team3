@@ -1,9 +1,10 @@
 import { useLoaderData, useNavigate, useOutletContext } from "react-router";
-import type { AdminModalContext } from "../../../../types/admin.types";
+import type { AdminAdminModalContext } from "../../../../types/admin.types";
 import { mapMovieToCreate, type Movie, type MovieCreate, type MovieShort } from "../../../../types/movie.types";
 import toast from "react-hot-toast";
 import MovieForm from "../MovieForm/MovieForm";
 import { putMovie } from "../../../../api/movieApi";
+import { handleError } from "../../../../helpers/handleError";
 
 interface EditMovieFormProps {
     onClose?:()=>void;
@@ -13,7 +14,7 @@ const EditMovieForm = ({onClose}:EditMovieFormProps)=>{
 
     const initialState = useLoaderData() as Movie;
 
-    const {editItem} = useOutletContext<AdminModalContext<MovieShort>>();
+    const {editItem} = useOutletContext<AdminAdminModalContext<MovieShort>>();
     const navigate = useNavigate();
     
         
@@ -39,8 +40,8 @@ const EditMovieForm = ({onClose}:EditMovieFormProps)=>{
                     });
                     toast.success("Movie succesfully edited!")
                     handleClose();
-            }catch{
-                toast.error("Can`t edit this movie");
+            }catch(e){
+                handleError(e,"Can`t edit this movie");
             }
         }
 

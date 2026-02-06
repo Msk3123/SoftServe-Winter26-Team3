@@ -1,9 +1,10 @@
 import { useLoaderData, useNavigate, useOutletContext} from "react-router";
 import toast from "react-hot-toast";
-import type { AdminModalContext } from "../../../../types/admin.types";
+import type { AdminAdminModalContext } from "../../../../types/admin.types";
 import { mapNewsToCreate, type News, type NewsCreate, type NewsShort } from "../../../../types/news.types";
 import { putNews } from "../../../../api/newsApi";
 import NewsForm from "../NewsForm/NewsForm";
+import { handleError } from "../../../../helpers/handleError";
 
 interface EditNewsFormProps {
     onClose?:()=>void;
@@ -11,7 +12,7 @@ interface EditNewsFormProps {
 const EditNewsForm = ({onClose}:EditNewsFormProps)=>{
     const initialState = useLoaderData() as News;
 
-    const {editItem} = useOutletContext<AdminModalContext<NewsShort>>();
+    const {editItem} = useOutletContext<AdminAdminModalContext<NewsShort>>();
     const navigate = useNavigate();
     
         
@@ -40,8 +41,8 @@ const EditNewsForm = ({onClose}:EditNewsFormProps)=>{
                 toast.success("News succesfully updated!")
                 handleClose();
 
-            }catch{
-                toast.error("Can`t add this news");
+            }catch(e){
+                handleError(e,"Can`t edit this news");
             }
         }
 

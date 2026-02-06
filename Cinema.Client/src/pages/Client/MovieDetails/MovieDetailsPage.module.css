@@ -32,13 +32,28 @@
     pointer-events: none;
 }
 /* Колонки */
+.posterWrapper{
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+}
+
 .poster {
     width: 100%;
     border-radius: 12px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
     object-fit: cover;
 }
-
+.trailerBtn{
+    display: flex;
+    gap:1em;
+    font-size: larger;
+    font-weight: var(--fw-bold);
+    padding: 1em;
+}
+.trailerBtn:hover{
+    color: var(--bg-primary-weak);
+}
 .title {
     font-size: 3rem;
     font-weight: var(--fw-bold);

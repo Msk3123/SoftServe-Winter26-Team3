@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Cinema.Application.Common.Configurations;
 using Cinema.Application.Common.Exceptions;
 using Cinema.Application.DTOs.OrderDtos;
 using Cinema.Application.Interfaces;
@@ -6,6 +7,7 @@ using Cinema.Application.Interfaces.Services;
 using Cinema.Domain.Entities;
 using Cinema.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace Cinema.Application.Services
 {
@@ -13,11 +15,12 @@ namespace Cinema.Application.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-
-        public OrderService(IUnitOfWork uow, IMapper mapper)
+        private readonly CinemaSettings _cinemaSettings;
+        public OrderService(IUnitOfWork uow, IMapper mapper, IOptions<CinemaSettings> options)
         {
             _unitOfWork = uow;
             _mapper = mapper;
+            _cinemaSettings = options.Value;
         }
 
         public async Task<OrderDetailsDto> PlaceOrderAsync(OrderCreateDto dto)
@@ -92,7 +95,7 @@ namespace Cinema.Application.Services
                         Price = finalPrice
 
                     });
-                    seat.LockExpiration = DateTime.UtcNow.AddMinutes(15);
+                    seat.LockExpiration = DateTime.UtcNow.AddMinutes(_cinemaSettings.CleaningDurationMinutes);
                     seat.SeatStatuses = SeatStatus.Reserved;
                 }
                 order.TotalAmount = totalOrderAmount;
