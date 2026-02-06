@@ -57,14 +57,23 @@ async function handleResponse<T>(response: Response,context?: ErrorContext): Pro
 
 export async function getPaginatedData<T extends BaseEntity>(
     path: string,
-    { page = 1, pageSize = 20, sortBy = "id", order = "asc" } : FetchParams<T>
-): Promise<PaginatedResponse<T>> {
+    { page = 1, pageSize = 20, sortBy = "id", order = "asc" }: FetchParams<T>,
+    extraParams: Record<string, any> = {} 
+    ): Promise<PaginatedResponse<T>> {
 
     const queryParams = new URLSearchParams({
         page: page.toString(),
         limit: pageSize.toString(),
         sortBy: String(sortBy),
         order,
+        ...extraParams // Розпаковуємо фільтри (movieId, query, filter тощо)
+    });
+
+    // Видаляємо undefined значення, щоб не було ?movieId=undefined
+    Object.keys(extraParams).forEach(key => {
+        if (extraParams[key] === undefined || extraParams[key] === null) {
+            queryParams.delete(key);
+        }
     });
 
     const url = `${baseUrl}${path}?${queryParams.toString()}`;

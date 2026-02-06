@@ -4,7 +4,7 @@
     overflow-x: auto;
     overflow-y: hidden;
     padding-bottom: 12px;
-    
+
 }
 
 .container {
@@ -41,7 +41,7 @@
     -webkit-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    
+
     font-size: smaller;
     font-weight: bold;
 }
@@ -49,45 +49,4 @@
 .rowNumber, .colNumber {
     color: var(--text-secondary);
     border: 2px transparent solid;
-}
-
-
-.row {
-    display: flex;
-    gap: 4px;
-    flex-wrap: nowrap;
-    
-    justify-content: center;
-}
-
-.cell {
-    flex: 0 0 30px; 
-    width: 30px;
-    height: 30px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    user-select: none;
-}
-
-.rowNumber, .colNumber {
-    flex: 0 0 30px;
-    width: 30px;
-    height: 30px;
-    
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 12px;
-    font-weight: bold;
-    color: var(--text-secondary);
-}
-
-.rowDiff {
-    display: flex;
-    gap: 4px;
-    width: auto; 
-    
-    justify-content: center;
 }

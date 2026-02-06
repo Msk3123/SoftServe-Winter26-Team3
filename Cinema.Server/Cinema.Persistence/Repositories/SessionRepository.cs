@@ -28,12 +28,14 @@ namespace Cinema.Persistence.Repositories
                 .ToPagedResultAsync(queryParameters);
         }
 
-        public async Task<(IEnumerable<Session> Items, int TotalCount)> GetByMovieIdPagedAsync(int movieId, QueryParameters queryParameters)
+        public async Task<(IEnumerable<Session> Items, int TotalCount)> GetByMovieIdPagedAsync(
+            int movieId, QueryParameters queryParameters, SessionFilter sessionFilter)
         {
             return await _dbSet
                 .Where(s => s.MovieId == movieId)
                 .Include(s => s.Hall)
                 .AsNoTracking()
+                .ApplyTimeFilter(sessionFilter)
                 .ToPagedResultAsync(queryParameters);
         }
         public async Task<Session?> GetByIdWithFullDetailsAsync(int id)
