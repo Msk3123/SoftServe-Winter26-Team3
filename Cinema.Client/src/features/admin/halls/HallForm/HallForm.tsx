@@ -61,6 +61,7 @@ const HallForm =  ({initialState,onSubmitAction,onClose,isLoadingDimensions=fals
                     type="number"
                     autoComplete="off"
                     min={1}
+                    max={50}
                     error={errors.rows}
                     disabled={isLoadingDimensions}
                     required
@@ -72,6 +73,7 @@ const HallForm =  ({initialState,onSubmitAction,onClose,isLoadingDimensions=fals
                     onValueChange={(v)=>handleChange("seatsPerRow",Number(v))}
                     type="number"
                     min={1}
+                    max={100}
                     autoComplete="off"
                     error={errors.seatsPerRow}
                     disabled={isLoadingDimensions}
@@ -87,7 +89,9 @@ const HallForm =  ({initialState,onSubmitAction,onClose,isLoadingDimensions=fals
         {(!initialState && isSceleton)&&
             <div className={styles.sceletonContainer}>
                 <div className={styles.sceletonHover}> Save hall first</div>
-                <HallMapSceleton rows={formData.rows} seatsPerRow={formData.seatsPerRow} />
+                {(formData.rows<=50 && formData.seatsPerRow <= 100  )
+                ?<HallMapSceleton rows={formData.rows} seatsPerRow={formData.seatsPerRow} />
+                :<div className={styles.sceletonError}> Hall dimensions is to large</div>}
             </div>
         }
 

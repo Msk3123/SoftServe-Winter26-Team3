@@ -1,9 +1,8 @@
 .seat {
-    flex: 1 1 0;
-    aspect-ratio: 1 / 1;
-    
-    max-width: 3em;
-    max-height: 3em;
+    flex: 0 0 30px; 
+    width: 30px;
+    height: 30px;
+
     border-radius: 0.2em;
     background: var(--bg-main);
     border: 2px var(--color-primary) solid;
