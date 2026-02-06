@@ -3,4 +3,5 @@
     border: 1px var(--text-secondary) solid;
     border-collapse: collapse;
     width: 100%;
+    font-weight: var(--fw-medium);
 }

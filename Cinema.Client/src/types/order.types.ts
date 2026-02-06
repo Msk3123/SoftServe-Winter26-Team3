@@ -1,12 +1,12 @@
 import type { TicketShort } from "./ticket.types";
 
 export const OrderStatus = {
-    Created: 0,
-    Reserved: 1,
-    Confirmed: 2,
-    Cancelled: 3,
-    Completed: 4,
-    Refunded: 5,
+    Created: "Created",
+    Reserved: "Reserved",
+    Confirmed: "Confirmed",
+    Cancelled: "Cancelled",
+    Completed: "Completed",
+    Refunded: "Refunded",
 } as const;
 
 export type OrderStatus = typeof OrderStatus[keyof typeof OrderStatus];
@@ -15,7 +15,7 @@ export interface OrderShort {
     id: number|string;
     orderDate: string;
     totalAmount: number;
-    orderStatus: OrderStatus;
+    orderStatuses: OrderStatus;
 }
 
 export interface OrderDetails {

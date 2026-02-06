@@ -1,9 +1,11 @@
 
-import type { FetchOneFunction, PostFunction, FetchPaginatedListByIdFunction} from "../types/api.types";
+import type { FetchOneFunction, PostFunction, FetchPaginatedListByIdFunction, FetchPaginatedListFunction} from "../types/api.types";
 import type { OrderCreate, OrderShort} from "../types/order.types";
 import { defaultParams, getItem, getPaginatedData, postItem, } from "./api";
 
-
+export const getAllOrders: FetchPaginatedListFunction<OrderShort> = async (params = defaultParams) => {
+    return await getPaginatedData<OrderShort>("order", params);
+};
 
 export const  getUserOrders:FetchPaginatedListByIdFunction<OrderShort> = async (id,params = defaultParams ) => {
         return await getPaginatedData<OrderShort>(`order/user/${id}`, params);
