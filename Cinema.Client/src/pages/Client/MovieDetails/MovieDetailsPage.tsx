@@ -12,13 +12,8 @@ import type { SessionShort } from '../../../types/session.types';
 const MovieDetails = () => {
     const { movieId } = useParams<{ movieId: string }>();
     const { movie, isLoading, error } = useMovie(movieId);
-    
-    // Початкова дата — сьогодні
     const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
-
     const { groupedSession, loading: isSessionsLoading } = useSession(movieId);
-
-    // Хелпер для форматування дати у випадашці
     const formatDate = (dateStr: string) => {
         const date = new Date(dateStr);
         const today = new Date().toISOString().split('T')[0];
@@ -28,12 +23,10 @@ const MovieDetails = () => {
             day: 'numeric',
             month: 'long',
         });
-
         const formatted = formatter.format(date);
         return dateStr === today ? `Сьогодні, ${formatted}` : formatted;
     };
 
-    // Отримуємо сеанси для обраної дати
     const sessionsForDay = useMemo(() => {
         return groupedSession[selectedDate] || [];
     }, [groupedSession, selectedDate]);
@@ -44,14 +37,12 @@ const MovieDetails = () => {
     return (
         <main className={styles.wrapper}>
             <div className={styles.container}>
-                {/* Ліва колонка: Постер та Трейлер */}
                 <aside className={styles.leftCol}>
                     <div className={styles.posterWrapper}>
                         <img src={movie.posterUrl} alt={movie.title} className={styles.poster} />
                         <Button 
                             variant='text-only'
                             className={styles.trailerBtn}
-                            color='var(--color-primary)'
                             action={() => movie.trailerUrl && window.open(movie.trailerUrl, '_blank')}
                         >
                             <span className={styles.playIcon}>▶</span> Watch Trailer
@@ -59,7 +50,6 @@ const MovieDetails = () => {
                     </div>
                 </aside>
 
-                {/* Центральна колонка: Інфо про фільм */}
                 <section className={styles.centerCol}>
                     <h1 className={styles.title}>{movie.title}</h1>
                     
@@ -100,7 +90,6 @@ const MovieDetails = () => {
                     </div>
                 </section>
 
-                {/* Права колонка: Розклад сеансів */}
                 <aside className={styles.rightCol}>
                     <div className={styles.sessionsContainer}>
                         <h3 className={styles.sessionsTitle}>Showtimes</h3>
@@ -131,7 +120,7 @@ const MovieDetails = () => {
                                             </span>
                                             <span className={styles.hall}>{session.hallName}</span>
                                         </div>
-                                        <Button variant="outline" className={styles.buyBtn}>
+                                        <Button to={`/sessions/${session.id}`} variant="outline" className={styles.buyBtn}>
                                             Buy
                                         </Button>
                                     </div>

@@ -1,4 +1,4 @@
-import type {DeleteFunction, FetchOneFunction, PostFunction, PutFunction, PatchFunction, FetchListFunction, FetchListByIdFunction} from "../types/api.types";
+import type {DeleteFunction, FetchOneFunction, PostFunction, PutFunction, PatchFunction, FetchListByIdFunction, FetchListFunction} from "../types/api.types";
 import type { SeatCreate, SeatDetails, SeatShort} from "../types/seat.types";
 import {deleteItem, getItem, getList, getListById,patchItem, postItem, putItem } from "./api";
 

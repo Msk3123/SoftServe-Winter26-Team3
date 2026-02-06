@@ -16,5 +16,6 @@ namespace Cinema.Application.Interfaces
         Task<IEnumerable<Session>> GetSessionsByDateRangeAsync(int hallId, DateTime startDate, DateTime endDate);
         Task<bool> AnyByHallIdAsync(int hallId);
         Task<IEnumerable<Session>> GetByMovieId(int movieId);
+        Task<Session?> GetByIdExtendedAsync(int id);
     }
 }
