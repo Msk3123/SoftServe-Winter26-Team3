@@ -1,7 +1,7 @@
 import { useEffect,useState } from "react";
 import type { ApiError } from "../../../../types/api.types";
 import type { SeatType, SeatTypeWithColor } from "../../../../types/seatType.types";
-import { getAllSeatType } from "../../../../api/seatTypeApi";
+import { getAllSeatTypes } from "../../../../api/seatTypeApi";
 import { getSeatColor } from "../helpers/getSeatColor";
 
 const useSeatTypes = ()=>{
@@ -13,7 +13,7 @@ const useSeatTypes = ()=>{
         const fetchData = async () => {
             try{
                 setIsLoading(true)
-                const data = await getAllSeatType()
+                const data = await getAllSeatTypes()
 
                 const typesWithColors = data.items.map((seatType:SeatType)=> {return  {seatType:seatType , color:getSeatColor(seatType.name)}})
             

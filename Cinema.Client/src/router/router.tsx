@@ -39,6 +39,10 @@ import editSessionFormLoader from "../features/admin/sessions/EditSession/editSe
 import CreateHallForm from "../features/admin/halls/HallCreate/CreateHallForm";
 import EditHallForm from "../features/admin/halls/HallEdit/EditHallForm";
 import editHallFormLoader from "../features/admin/halls/HallEdit/editHallFormLoader";
+import CreateSeatType from "../features/admin/seatType/CreateSeatType/CreateSeatType";
+import EditSeatTypeForm from "../features/admin/seatType/EditSeatType/EditSeatTypeForm";
+import AdminSeatTypesPage from "../pages/Admin/SeatTypes/AdminSeatTypesPage";
+import editSeatTypeFormLoader from "../features/admin/seatType/EditSeatType/editSeatTypeLoader";
 
 export const router = createBrowserRouter([
   {
@@ -199,6 +203,18 @@ export const router = createBrowserRouter([
               loader: editActorFormLoader,
             }
         ]
+      },
+
+      {
+        path: "seats",
+        element: <AdminSeatTypesPage />,
+        children: [
+          { path: "create", element: <AdminModal title="Create Seat Type"><CreateSeatType/></AdminModal> },
+          { path: ":seatId/edit",
+              element: <AdminModal title="Edit Seat Type"><EditSeatTypeForm /></AdminModal>,
+              loader: editSeatTypeFormLoader,
+            }
+        ],
       },
 
       {
