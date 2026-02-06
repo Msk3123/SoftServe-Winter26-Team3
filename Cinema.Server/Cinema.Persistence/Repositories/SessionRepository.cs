@@ -38,6 +38,16 @@ namespace Cinema.Persistence.Repositories
                 .ApplyTimeFilter(sessionFilter)
                 .ToPagedResultAsync(queryParameters);
         }
+        public async Task<Session?> GetByIdExtendedAsync(int id)
+        {
+            return await _context.Sessions
+                .Include(s => s.Movie)
+                .Include(s => s.Hall)
+                .Include(s => s.SessionSeats)
+                .ThenInclude(ss => ss.Seat)
+                .ThenInclude(seat => seat.SeatType)
+                .FirstOrDefaultAsync(s => s.SessionId == id);
+        }
         public async Task<Session?> GetByIdWithFullDetailsAsync(int id)
         {
             return await _dbSet
