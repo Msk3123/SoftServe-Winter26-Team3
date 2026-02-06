@@ -1,8 +1,7 @@
-
 export interface DateOption {
-    label: string;      
-    subLabel: string;   
-    value: string;     
+    label: string;      // "Wed, Feb 4"
+    subLabel: string;   // "Today" / "Tomorrow"
+    value: string;      // "2026-02-04" (для ключів у groupedSessions)
 }
 
 export const generateDateOptions = (count: number = 7): DateOption[] => {
@@ -13,7 +12,7 @@ export const generateDateOptions = (count: number = 7): DateOption[] => {
         const d = new Date();
         d.setDate(d.getDate() + i);
         
-        const dateStr = d.toISOString().split('T')[0]; 
+        const dateStr = d.toISOString().split('T')[0]; // Геруємо YYYY-MM-DD
         
         let subLabel = '';
         if (i === 0) subLabel = 'Today';

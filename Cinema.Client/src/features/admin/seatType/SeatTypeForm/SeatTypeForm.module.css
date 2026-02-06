@@ -1,0 +1,11 @@
+.pendingForm{
+    cursor: not-allowed;
+    background-color: var(--button-disabled);
+}
+
+.actions{
+    display: flex;
+    justify-content: end;
+    gap:2em;
+    margin-top: 1em;
+}
