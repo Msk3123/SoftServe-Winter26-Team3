@@ -11,6 +11,7 @@ import { saveHallMap } from "../api/saveHallMap";
 import Button from "../../../../components/Button/Button";
 import styles from "../HallForm/HallForm.module.css"
 import { handleError } from "../../../../helpers/handleError";
+import { handleCloseAttempt } from "../HallCreate/handleCloseAttempt";
 
 interface EditHallFormProps {
     onClose?:()=>void;
@@ -25,6 +26,7 @@ const EditHallForm = ({onClose}:EditHallFormProps)=>{
     const [formData,setFormData] = useState<HallCreate|null>(null);
     const [isPending,setIsPending] = useState<boolean>(false);
     const [dimensions, setDimensions] = useState<{ rows: number; seatsPerRow: number } | null>(null);
+    const [canSave, setCanSave] = useState(false);
     
     const {editItem} = useOutletContext<WithDelete<AdminAdminModalContext<HallShort>>>();
     
@@ -51,6 +53,7 @@ const EditHallForm = ({onClose}:EditHallFormProps)=>{
             const hall = await getHall(initialState.id);
             editItem(hall)
 
+            setCanSave(true);
             toast.success("Hall successfuly updated");
         }catch(e){
             handleError(e,"Hall wasn't updated");
@@ -65,11 +68,20 @@ const EditHallForm = ({onClose}:EditHallFormProps)=>{
         try{
             setIsPending(true);
             await saveHallMap(changes)
-
+            setCanSave(true);
         }finally{
             setIsPending(false)
         }
     }
+
+    const handleSubmitAttempt = () => {
+            if (!isPending) {
+                handleCloseAttempt(handleClose)
+                return;
+            }
+    
+            handleClose();
+        };
 
 
     const sceleton =  <HallMapSceleton
@@ -107,6 +119,14 @@ const EditHallForm = ({onClose}:EditHallFormProps)=>{
                 />}
                 <div className={styles.actions}>
                     <Button bgColor="var(--color-danger)" action={handleClose}>Cancel</Button>
+                    <Button
+                        htmlType="submit"
+                        action={handleSubmitAttempt}
+                        disabled={!canSave || isPending}
+                        bgColor={ (!canSave || isPending) ? "var(--button-disabled)":"var(--color-primary)"}
+                    >
+                        Save
+                    </Button>
                 </div>
             </div>
 }

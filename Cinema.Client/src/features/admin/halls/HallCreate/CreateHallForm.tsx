@@ -11,6 +11,7 @@ import { saveHallMap } from "../api/saveHallMap";
 import Button from "../../../../components/Button/Button";
 import styles from "../HallForm/HallForm.module.css"
 import { handleError } from "../../../../helpers/handleError";
+import { handleCloseAttempt } from "./handleCloseAttempt";
 
 interface CreateHallFormProps {
     onClose?:()=>void;
@@ -23,7 +24,8 @@ const CreateHallForm = ({onClose}:CreateHallFormProps)=>{
     const navigate = useNavigate();
     const [hall,setHall] = useState<HallShort|null>(null);
     const [formData,setFormData] = useState<HallCreate|null>(null)
-    const [isPending,setIsPending] = useState<boolean>(false)
+    const [isPending,setIsPending] = useState<boolean>(false);
+    const [canSave, setCanSave] = useState(false);
     
     const {createItem,deleteItem} = useOutletContext<WithDelete<AdminAdminModalContext<HallShort>>>();
     
@@ -45,6 +47,7 @@ const CreateHallForm = ({onClose}:CreateHallFormProps)=>{
             setHall(hall);
             createItem(hall)
 
+            setCanSave(true)
             toast.success("Hall successfuly created");
         }catch(e){
             handleError(e,"Hall didn`t created");
@@ -84,6 +87,16 @@ const CreateHallForm = ({onClose}:CreateHallFormProps)=>{
         }
     }
 
+    const handleSubmitAttempt = () => {
+        if (hall && !isPending) {
+            
+            handleCloseAttempt(handleClose)
+            return;
+        }
+
+        handleClose();
+    };
+
     const sceleton =  <HallMapSceleton
                                 rows={formData?.rows ?? 8}
                                 seatsPerRow={formData?.seatsPerRow ?? 12}
@@ -96,7 +109,14 @@ const CreateHallForm = ({onClose}:CreateHallFormProps)=>{
                 : hall && <HallMapEdit id={hall.id} sceleton={sceleton} onSubmit={onSubmitHallMap}/>}
                 <div className={styles.actions}>
                     <Button bgColor="var(--color-danger)" action={handleDelete}>Cancel</Button>
-                    <Button htmlType="submit" action={handleClose}>Save</Button>
+                    <Button
+                        htmlType="submit"
+                        action={handleSubmitAttempt}
+                        disabled={!canSave || isPending}
+                        bgColor={ (!canSave || isPending) ? "var(--button-disabled)":"var(--color-primary)"}
+                    >
+                        Save
+                    </Button>
                 </div>
             </>
 }

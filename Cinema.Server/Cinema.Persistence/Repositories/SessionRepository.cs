@@ -88,6 +88,7 @@ namespace Cinema.Persistence.Repositories
         {
             return await _context.Sessions
                 .AnyAsync(s => s.HallId == hallId);
+        }
         public async Task<IEnumerable<Session>> GetByMovieId(int movieId)
         {
             return await _dbSet
