@@ -1,4 +1,4 @@
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useState, useMemo } from 'react';
 import { useMovie } from '../../../hooks/useMovie/useMovie'; 
 import { useSession } from '../../../hooks/useSession/useSession';
@@ -89,11 +89,9 @@ const MovieDetails = () => {
 
                         <span className={styles.label}>Actors:</span>
                         <span className={styles.value}>
-                            <Link to={`/actor/${movie.actors[0]?.id}`} className={styles.actorLink}>
-                                {movie.actors && movie.actors.length > 0 
-                                    ? movie.actors.map(a => `${a.firstName} ${a.lastName}`).join(', ') 
-                                    : 'No info'}
-                            </Link>
+                            {movie.actors && movie.actors.length > 0 
+                                ? movie.actors.map(a => `${a.firstName} ${a.lastName}`).join(', ') 
+                                : 'No info'}
                         </span>
                     </div>
 

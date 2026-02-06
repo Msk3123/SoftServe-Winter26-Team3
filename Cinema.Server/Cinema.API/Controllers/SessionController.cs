@@ -40,9 +40,9 @@ namespace Cinema.API.Controllers
         }
         // GET: api/session/movie/{movieId}
         [HttpGet("movie/{movieId:int}")]
-        public async Task<IActionResult> GetByMovie(int movieId, [FromQuery] QueryParameters queryParameters, [FromQuery] SessionFilter sessionFilter)
+        public async Task<IActionResult> GetByMovie(int movieId, [FromQuery] QueryParameters queryParameters)
         {
-            var results = await _sessionRepository.GetByMovieIdPagedAsync(movieId, queryParameters, sessionFilter);
+            var results = await _sessionRepository.GetByMovieIdPagedAsync(movieId, queryParameters);
             return OkPaged<Session, SessionShortDto>(results, queryParameters);
         }
         

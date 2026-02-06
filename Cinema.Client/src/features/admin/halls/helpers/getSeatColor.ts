@@ -12,7 +12,7 @@ const SPECIAL_COLORS: Record<string, string> = {
     "IMAX": "#1E90FF",
     "D-Box": "#FF4500",
 
-    "Standart": "var(--bg-main)",
+    "Standard": "var(--bg-main)",
     "Regular": "var(--bg-main)",
     "Base":"var(--bg-main)",
     "Student": "#4CAF50",
