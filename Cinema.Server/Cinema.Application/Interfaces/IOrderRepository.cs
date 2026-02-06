@@ -10,6 +10,7 @@ namespace Cinema.Application.Interfaces
     {
         Task<(IEnumerable<Order> Items, int TotalCount)> GetByUserIdPagedAsync(int userId, QueryParameters queryParameters);
 
+        Task<(IEnumerable<Order> Items, int TotalCount)> GetAllPagedAsync(QueryParameters queryParameters);
         Task<Order> GetOrderWithTicketsAsync(int orderId);
         Task<List<Order>> GetExpiredConfirmedOrdersAsync(DateTime now);
         Task<bool> AnyBySessionIdAsync(int sessionId);
