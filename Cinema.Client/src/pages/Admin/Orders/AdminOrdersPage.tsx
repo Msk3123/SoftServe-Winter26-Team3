@@ -38,6 +38,7 @@ const AdminOrdersPage = ()=>{
                     tableData={{ data, pagination, sortParams, status }}
                     tableActions={actions}
                     isActions={false}
+                    isCreate={false}
                 />
                 <Outlet context={{createItem:actions.createItem,editItem:actions.editItem}}/>
             </>)
