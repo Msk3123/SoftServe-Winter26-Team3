@@ -16,7 +16,6 @@
     min-width: 100%;
     margin: 0 auto; 
     box-sizing: border-box;
-    
     align-items: center;
 }
 
@@ -24,7 +23,7 @@
     display: flex;
     gap: 4px;
     flex-wrap: nowrap;
-    
+
     justify-content: center;
 }
 
@@ -43,7 +42,7 @@
     flex: 0 0 30px;
     width: 30px;
     height: 30px;
-    
+
     display: flex;
     justify-content: center;
     align-items: center;
@@ -56,6 +55,6 @@
     display: flex;
     gap: 4px;
     width: auto; 
-    
+
     justify-content: center;
 }

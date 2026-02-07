@@ -49,7 +49,6 @@ namespace Cinema.Application.Helpers
             var now = DateTime.UtcNow;
             var nowDate = now.Date;
             var nowTime = now.TimeOfDay;
-
             return filter switch
             {
                 SessionFilter.Active => query.Where(s => s.SessionDate.Date > nowDate ||
