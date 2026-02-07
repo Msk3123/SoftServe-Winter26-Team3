@@ -3,7 +3,7 @@ import type { HallCreate } from "../../../types/hall.types";
 import type { FieldValidator } from "./FieldValidator";
 
 const hallValidator: FieldValidator<HallCreate> = (name, value, allValues) => {
-    const forbidden = /^\s*newhall\s*$/i;
+    const forbidden = /^\s*new\s*hall\s*$/i;
     
     switch (name) {
         case "hallName":

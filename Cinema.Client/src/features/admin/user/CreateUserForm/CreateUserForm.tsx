@@ -4,7 +4,6 @@ import type { User, UserCreate } from "../../../../types/user.types";
 import { postUser } from "../../../../api/userApi";
 import toast from "react-hot-toast";
 import { handleError } from "../../../../helpers/handleError";
-import NewsForm from "../../news/NewsForm/NewsForm";
 import UserForm from "../UserForm/UserForm";
 
 interface CreateUserProps {

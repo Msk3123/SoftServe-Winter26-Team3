@@ -1,0 +1,17 @@
+.user {
+  display: flex;
+  align-items: center;
+  gap: 0.857rem;
+  padding: 1rem 0;
+  border-bottom: 1px var(--ui-border) solid;
+}
+
+.name {
+  font-weight: var(--fw-medium);
+  text-transform: capitalize;
+}
+
+.email {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
