@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import { getAllSessions } from '../../api/sessionApi';
+import { getSessionByMovieId } from '../../api/sessionApi';
 import { SessionFilter, type SessionShort, type SessionQueryParams } from '../../types/session.types';
 
 export const useSession = (movieId?: number | string) => {
@@ -23,8 +23,11 @@ const fetchSession = useCallback(async (isNextPage = false) => {
             movieId: movieId,
             sessionFilter: SessionFilter.Active
         };
-
-        const response = await getAllSessions(params);
+        if(!movieId){
+            setError("movieId is required")
+            return
+        }
+        const response = await getSessionByMovieId(movieId,params);
 
         setSession(prev => isNextPage ? [...prev, ...response.items] : response.items);
         setHasMore(response.items.length === currentLimit);

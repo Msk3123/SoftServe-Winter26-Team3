@@ -9,7 +9,7 @@
     box-sizing: border-box;
     transition: all ease-in-out 100ms;
     border-radius: 40% 40%  0.2em 0.2em;
-    
+
 }
 
 .seat:hover{

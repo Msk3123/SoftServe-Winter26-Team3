@@ -40,12 +40,19 @@ namespace Cinema.API.Controllers
         }
         // GET: api/session/movie/{movieId}
         [HttpGet("movie/{movieId:int}")]
-        public async Task<IActionResult> GetByMovie(int movieId, [FromQuery] QueryParameters queryParameters, [FromQuery] SessionFilter sessionFilter)
+        public async Task<IActionResult> GetByMovie(int movieId,
+            [FromQuery] QueryParameters queryParameters, [FromQuery] SessionFilter sessionFilter)
         {
-            var results = await _sessionRepository.GetByMovieIdPagedAsync(movieId, queryParameters, sessionFilter);
+            var results = await _sessionRepository.GetByMovieIdPagedAsync(movieId, queryParameters,sessionFilter);
             return OkPaged<Session, SessionShortDto>(results, queryParameters);
         }
-        
+        [HttpGet("extended/{id}")]
+        public async Task<IActionResult> GetExtended(int id)
+        {
+            var session = await _sessionRepository.GetByIdExtendedAsync(id);
+            if (session == null) throw new KeyNotFoundException();
+            return Ok(_mapper.Map<SessionExtendedDto>(session));
+        }
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] SessionCreateDto dto)
         {

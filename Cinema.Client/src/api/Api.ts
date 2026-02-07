@@ -58,8 +58,8 @@ async function handleResponse<T>(response: Response,context?: ErrorContext): Pro
 export async function getPaginatedData<T extends BaseEntity>(
     path: string,
     { page = 1, pageSize = 20, sortBy = "id", order = "asc" }: FetchParams<T>,
-    extraParams: Record<string, any> = {} // Додаємо цей аргумент
-): Promise<PaginatedResponse<T>> {
+    extraParams: Record<string, any> = {} 
+    ): Promise<PaginatedResponse<T>> {
 
     const queryParams = new URLSearchParams({
         page: page.toString(),
@@ -77,8 +77,10 @@ export async function getPaginatedData<T extends BaseEntity>(
     });
 
     const url = `${baseUrl}${path}?${queryParams.toString()}`;
+
     const response = await fetch(url);
     return handleResponse<PaginatedResponse<T>>(response);
+
 }
 
 export async function getList<T extends BaseEntity>(

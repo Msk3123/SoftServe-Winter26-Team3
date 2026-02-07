@@ -30,6 +30,10 @@ namespace Cinema.Application.Mappings
             CreateMap<SessionPatchDto, Session>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) =>
                     srcMember != null && (srcMember is not int i || i != 0)));
+
+            CreateMap<Session, SessionExtendedDto>()
+            .ForMember(dest=> dest.Id, opt => opt.MapFrom(src => src.SessionId))
+            .ForMember(dest => dest.Seats, opt => opt.MapFrom(src => src.SessionSeats));
         }
     }
 }
