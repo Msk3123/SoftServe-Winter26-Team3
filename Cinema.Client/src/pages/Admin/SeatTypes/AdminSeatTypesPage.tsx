@@ -4,16 +4,17 @@ import type { ColumnDef } from "../../../types/common.types";
 import useQueryTable from "../../../hooks/useQueryTable/useQueryTable";
 import type { SeatType } from "../../../types/seatType.types";
 import { deleteSeatType, getAllSeatTypes } from "../../../api/seatTypeApi";
+import { useMemo } from "react";
 
 const AdminSeatTypesPage = ()=>{
 
     const {data,pagination,sortParams,status,actions} = useQueryTable<SeatType>(getAllSeatTypes);
     
-    const columns:ColumnDef<SeatType>[] = [
+    const columns:ColumnDef<SeatType>[] =useMemo(()=> [
         { key: "id", title: "№" },
         {key:"name",title:"Name"},
         {key:"basePrice",title:"Basic Price"}
-    ];
+    ],[]);
 
     return (<>
                 <AdminTablePage

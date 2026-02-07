@@ -187,6 +187,12 @@ export const router = createBrowserRouter([
             path: ":userId/details",
             element: <AdminModal title="User Orders"><UserDetails /></AdminModal>,
             loader: userDetailsLoader,
+            children:[
+              { path: ":orderId/details",
+              element: <AdminModal><OrderDetailsView/></AdminModal>,
+              loader: orderDetailsLoader,
+            }
+            ]
           }
         ],
       },

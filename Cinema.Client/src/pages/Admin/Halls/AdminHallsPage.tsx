@@ -4,17 +4,19 @@ import type { ColumnDef } from "../../../types/common.types";
 import type { HallShort } from "../../../types/hall.types";
 import { deleteHall, getAllHalls } from "../../../api/hallApi";
 import useQueryTable from "../../../hooks/useQueryTable/useQueryTable";
+import { useMemo } from "react";
 
 const AdminHallsPage = ()=>{
     const location = useLocation();
 
     const {data,pagination,sortParams,status,actions} = useQueryTable<HallShort>(getAllHalls);
 
-    const columns:ColumnDef<HallShort>[] =  [
-    { key: "id", title: "№" },
-    { key: "hallName", title: "Hall Name" },
-    { key: "capacity", title: "Capacity (Seats)" },
-];
+    const columns:ColumnDef<HallShort>[] =useMemo(()=>[
+        { key: "id", title: "№" },
+        { key: "hallName", title: "Hall Name" },
+        { key: "capacity", title: "Capacity (Seats)" },
+    ],[]);
+
     return( <>
                 <AdminTablePage
                 columns={columns}

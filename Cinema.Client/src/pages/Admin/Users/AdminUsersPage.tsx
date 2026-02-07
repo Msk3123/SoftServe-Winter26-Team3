@@ -6,7 +6,7 @@ import useQueryTable from "../../../hooks/useQueryTable/useQueryTable";
 import { getAllUsers, patchUser } from "../../../api/userApi";
 import type { User } from "../../../types/user.types";
 import Select from "../../../components/Form/Select/Select";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { handleError } from "../../../helpers/handleError";
 import { getAllRoles } from "../../../api/roleApi";
 import toast from "react-hot-toast";
@@ -25,7 +25,7 @@ const AdminUsersPage= ()=>{
                 });
         }, []);
     
-    const columns:ColumnDef<User>[] = [
+    const columns:ColumnDef<User>[] = useMemo(()=>[
     { key: "id", title: "№" },
     {key:"firstName",title:"First Name"},
     {key:"lastName",title:"Last Name"},
@@ -71,7 +71,8 @@ const AdminUsersPage= ()=>{
             </div>)
         }
 
-];
+    ],[roles,actions]);
+    
     return( <>
                 <AdminTablePage
                     columns={columns}
