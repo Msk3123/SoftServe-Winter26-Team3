@@ -7,7 +7,7 @@ import styles from "./AdminSessionsPage.module.css"
 import { dateToDayFirst } from "../../../helpers/textHelpers";
 import useQueryTable from "../../../hooks/useQueryTable/useQueryTable";
 
-const AdminMoviesPage : React.FC = ()=>{
+const AdminSessionsPage : React.FC = ()=>{
     const {data,pagination,sortParams,status,actions} = useQueryTable<SessionShort>(getAllSessions);
     
     const columns:ColumnDef<SessionShort>[] = [
@@ -30,4 +30,4 @@ const AdminMoviesPage : React.FC = ()=>{
             </>)
 };
 
-export default AdminMoviesPage;
+export default AdminSessionsPage;
