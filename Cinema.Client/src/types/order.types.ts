@@ -24,7 +24,7 @@ export interface OrderDetails {
     totalAmount: number;
     userId: number;
     sessionId: number;
-    orderStatus: OrderStatus;
+    orderStatuses: OrderStatus;
     tickets: TicketShort[];
 }
 
