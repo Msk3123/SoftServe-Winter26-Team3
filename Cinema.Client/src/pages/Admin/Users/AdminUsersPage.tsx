@@ -79,7 +79,7 @@ const AdminUsersPage= ()=>{
                     tableActions={actions}
                     isActions={false}
                 />
-                <Outlet/>
+                <Outlet  context={{createItem:actions.createItem,editItem:actions.editItem}}/>
             </>)
 };
 

@@ -8,7 +8,7 @@ const hallValidator: FieldValidator<HallCreate> = (name, value, allValues) => {
     switch (name) {
         case "hallName":
             if (typeof value === 'string' && !value.trim()) return "Required";
-            if (typeof value === 'string' && forbidden.test(value)) return "Required";
+            if (typeof value === 'string' && forbidden.test(value.trim().toLowerCase())) return "Required";
             break;
 
         case "rows":
