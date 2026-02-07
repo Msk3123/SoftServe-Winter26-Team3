@@ -43,6 +43,8 @@ import CreateSeatType from "../features/admin/seatType/CreateSeatType/CreateSeat
 import EditSeatTypeForm from "../features/admin/seatType/EditSeatType/EditSeatTypeForm";
 import AdminSeatTypesPage from "../pages/Admin/SeatTypes/AdminSeatTypesPage";
 import editSeatTypeFormLoader from "../features/admin/seatType/EditSeatType/editSeatTypeLoader";
+import orderDetailsLoader from "../features/admin/order/orderDetailsLoader";
+import OrderDetailsView from "../features/admin/order/OrderDetailsView";
 
 export const router = createBrowserRouter([
   {
@@ -188,8 +190,10 @@ export const router = createBrowserRouter([
         path: "orders",
         element: <AdminOrderPage />,
         children: [
-            { path: "create", element: <AdminModal>create order</AdminModal> },
-            { path: ":orderId/edit", element: <AdminModal>order view</AdminModal>}
+            { path: ":orderId/details", 
+              element: <AdminModal><OrderDetailsView/></AdminModal>,
+              loader: orderDetailsLoader,
+            }
         ]
       },
 

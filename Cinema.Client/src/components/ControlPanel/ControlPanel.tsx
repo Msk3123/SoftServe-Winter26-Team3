@@ -9,11 +9,12 @@ interface ControlPanelProps{
         total: number;
         pageSize: number;
     },
+    isCreate?:boolean;
     setPageSize:(page: number) => void;
     handlePageChange:(pageNumber: number) => void,
 }
 
-const ControlPanel =({pagination,setPageSize,handlePageChange}:ControlPanelProps)=>{
+const ControlPanel =({pagination,setPageSize,handlePageChange,isCreate=true}:ControlPanelProps)=>{
     const safeTotalPages = pagination.pageSize > 0
         ? Math.ceil(pagination.total / pagination.pageSize)
         : 1;
@@ -44,7 +45,7 @@ const ControlPanel =({pagination,setPageSize,handlePageChange}:ControlPanelProps
                 totalPages={safeTotalPages}
                 onPageChange={handlePageChange}
             />
-            <Button className={styles.createButton} to="./create">Create</Button>
+            {isCreate && <Button className={styles.createButton} to="./create">Create</Button>}
         </div>
     )
     
