@@ -6,8 +6,14 @@ import HallMap from "../../../components/HallMap/HallMap/HallMap";
 import Seat from "../../../components/HallMap/Seat/Seat";
 import { getSeatColor } from "../../../features/admin/halls/helpers/getSeatColor";
 import Error from "../../../components/Error/Error";
+import { useState } from "react";
+// Імпортуємо метод резервації
+import MovieDetailsSkeleton from "../MovieDetails/MovieDetailsPageSkeleton";
+import { reserveSessionSeat } from "../../../api/sessionSeatApi";
+import toast from "react-hot-toast";
 
 const SessionDetails = () => {
+  const [isReserving, setIsReserving] = useState(false);
   const { sessionId } = useParams<{ sessionId: string }>();
   const navigate = useNavigate();
   
@@ -20,12 +26,10 @@ const SessionDetails = () => {
     toggleSeat 
   } = useSessionHallMap(sessionId || "");
 
- const getDynamicLegend = () => {
+  const getDynamicLegend = () => {
     if (!seats || seats.length === 0) return [];
-
     const flatSeats = seats.flat();
     
-
     const uniqueTypeNames = Array.from(new Set(
       flatSeats.map(s => typeof s.type === 'object' ? s.type?.name : s.type).filter(Boolean)
     ));
@@ -44,10 +48,21 @@ const SessionDetails = () => {
       };
     }).sort((a, b) => a.price - b.price);
   };
-const handleProceed = () => {
-    if (selectedSeats.length === 0) return;
+const handleProceed = async () => {
+  if (selectedSeats.length === 0 || isReserving) return;
 
+  // Отримуємо актуальний userId (заміни на свій метод отримання юзера)
+  const userId = 1; 
 
+  try {
+    setIsReserving(true);
+
+    // Виконуємо запити з урахуванням userId
+    await Promise.all(
+      selectedSeats.map(seat => reserveSessionSeat(seat.id, userId))
+    );
+
+    // Якщо всі місця заброньовані успішно
     navigate("/checkout", {
       state: {
         sessionId: sessionId,
@@ -56,10 +71,19 @@ const handleProceed = () => {
         hallName: sessionData?.hall.hallName,
         totalPrice: totalPrice,
         sessionDate: sessionData?.sessionDate,
-        sessionTime: sessionData?.sessionTime
+        sessionTime: sessionData?.sessionTime,
+        userId: userId // передаємо далі на випадок створення ордеру
       }
     });
-  };
+  } catch (error) {
+    console.error("Reservation failed:", error);
+    toast("Unfortunately, some of the selected seats are already booked. Please refresh the page.");
+  } finally {
+    setIsReserving(false);
+  }
+};
+
+
   const legendItems = getDynamicLegend();
 
   const getDisplayColor = (seat: SessionSeat, isSelected: boolean): string => {
@@ -69,11 +93,14 @@ const handleProceed = () => {
     const typeName = typeof seat.type === 'object' ? seat.type?.name : seat.type;
     return getSeatColor(typeName || "");
   };
-    console.log("Seats data:", seats);
+
+  if (isReserving) return <MovieDetailsSkeleton />;
   if (isLoading || !sessionData) return <div className={styles.loader}>Loading...</div>;
-  if(sessionData.seats.length<1){
-    return<Error variant="client"></Error>
+  
+  if (sessionData.seats.length < 1) {
+    return <Error variant="client"></Error>;
   }
+
   return (
     <div className={styles.container}>
       <aside className={styles.movieDetails}>
@@ -105,9 +132,7 @@ const handleProceed = () => {
         </div>
       </aside>
 
-      {/* Center Content: Hall Map */}
       <main className={styles.hallSection}>
-        {/* ЛЕГЕНДА ТЕПЕР ТУТ І ВОНА ПРАЦЮЄ */}
         <div className={styles.legendTop}>
           {legendItems.map((item) => (
             <div key={item.id} className={styles.legendItem}>
