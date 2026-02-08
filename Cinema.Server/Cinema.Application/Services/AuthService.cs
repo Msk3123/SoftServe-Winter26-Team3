@@ -61,11 +61,9 @@ public class AuthService : IAuthService
         if (user == null || !_passwordHasher.VerifyPassword(dto.Password, user.PasswordHash))
             throw new Exception("Invalid credentials");
 
-        // ОНОВЛЕННЯ ДАНИХ ДЛЯ ІСНУЮЧОГО ЮЗЕРА
         user.RefreshToken = _tokenService.GenerateRefreshToken();
         user.ExpiresAt = DateTime.UtcNow.AddDays(7);
 
-        // EF Core автоматично відстежує зміни в 'user', треба лише зберегти
         await _unitOfWork.SaveChangesAsync();
 
         return new AuthResponseDto
@@ -96,7 +94,7 @@ public class AuthService : IAuthService
         var newRefreshToken = _tokenService.GenerateRefreshToken();
 
         user.RefreshToken = newRefreshToken;
-        user.ExpiresAt = DateTime.UtcNow.AddMinutes(15); 
+        user.ExpiresAt = DateTime.UtcNow.AddMinutes(1); 
 
         await _unitOfWork.SaveChangesAsync();
 
