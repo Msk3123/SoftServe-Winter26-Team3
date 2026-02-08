@@ -45,6 +45,10 @@ import AdminSeatTypesPage from "../pages/Admin/SeatTypes/AdminSeatTypesPage";
 import editSeatTypeFormLoader from "../features/admin/seatType/EditSeatType/editSeatTypeLoader";
 import orderDetailsLoader from "../features/admin/order/orderDetailsLoader";
 import OrderDetailsView from "../features/admin/order/OrderDetailsView";
+import userDetailsLoader from "../features/admin/user/UserDetails/userDetailsLoader";
+import UserDetails from "../features/admin/user/UserDetails/UserDetails";
+import CreateUser from "../features/admin/user/CreateUserForm/CreateUserForm";
+
 
 export const router = createBrowserRouter([
   {
@@ -178,11 +182,18 @@ export const router = createBrowserRouter([
         path: "users",
         element: <AdminUsersPage />,
         children: [
+          { path: "create", element: <AdminModal title="Create User"><CreateUser /></AdminModal> },
           {
-            path: ":userId/edit",
-            element: <AdminModal>User view</AdminModal>,
-          },
-          { path: "create", element: <AdminModal>create User</AdminModal> },
+            path: ":userId/details",
+            element: <AdminModal title="User Orders"><UserDetails /></AdminModal>,
+            loader: userDetailsLoader,
+            children:[
+              { path: ":orderId/details",
+              element: <AdminModal><OrderDetailsView/></AdminModal>,
+              loader: orderDetailsLoader,
+            }
+            ]
+          }
         ],
       },
       

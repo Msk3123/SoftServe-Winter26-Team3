@@ -8,11 +8,12 @@ import Button from "../../../components/Button/Button";
 import styles from "../../../features/admin/components/AdminTablePage/AdminTablePage.module.css"
 import OrderStatusBadge from "../../../components/OrderStatus/OrderStatusBadge";
 import { formatDate } from "../../../helpers/dateHelpers";
+import { useMemo } from "react";
 const AdminOrdersPage = ()=>{
 
     const {data,pagination,sortParams,status,actions} = useQueryTable<OrderShort>(getAllOrders);
     
-    const columns:ColumnDef<OrderShort>[] = [
+    const columns:ColumnDef<OrderShort>[] =useMemo(()=> [
         { key: "id", title: "№" },
         { key:"orderDate",title: "Date",  render: (item)=>formatDate(item.orderDate)},
         { key:"totalAmount",title: "Total amount" ,render:(item)=>`${item.totalAmount} UAH`,},
@@ -30,7 +31,7 @@ const AdminOrdersPage = ()=>{
                 </Button>
             </div>)
         }
-    ];
+    ],[]);
 
     return (<>
                 <AdminTablePage

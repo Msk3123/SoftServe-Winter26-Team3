@@ -1,0 +1,39 @@
+td:has(.select){
+    padding: 0;
+}
+/* use 2 selects for higher specifity and */
+.select.select{
+    width: 100%;
+    margin:0 ;
+    margin-bottom:0 ;
+}
+
+.select > div{
+    width: 100%;
+    margin:0 ;
+    padding: 0;
+}
+.select select{
+    padding: 1em 2em;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+
+}
+
+.actionCell{
+    display: flex;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+}
+
+.actionCell >button , .actionCell> a {
+    border-radius: 0;
+    width: 100%;
+    padding: 1em 2em;
+}
+
+td:has(.actionCell){
+    padding: 0;
+}

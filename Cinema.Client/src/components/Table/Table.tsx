@@ -5,7 +5,7 @@ import TableRow from "./TableRow/TableRow";
 import type { BaseEntity } from "../../types/api.types";
 import type { ColumnDef } from "../../types/common.types";
 
-interface TableProps<T> {
+interface TableProps<T extends BaseEntity> {
     data: readonly T[];
     columns:ColumnDef<T>[];
     handleSort:(key: keyof T)=>void;

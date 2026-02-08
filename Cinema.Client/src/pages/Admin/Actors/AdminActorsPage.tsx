@@ -5,17 +5,18 @@ import type { ActorShort } from "../../../types/actor.types";
 import type { ColumnDef } from "../../../types/common.types";
 import styles from "./AdminActorsPage.module.css";
 import useQueryTable from "../../../hooks/useQueryTable/useQueryTable";
+import { useMemo } from "react";
 
 const AdminActorsPage = ()=>{
     
     const {data,pagination,sortParams,status,actions} = useQueryTable<ActorShort>(getAllActors);
 
-    const columns: ColumnDef<ActorShort>[] = [
+    const columns: ColumnDef<ActorShort>[] = useMemo(()=>[
         {key:"id",title:"№"},
         {key:"photoUrl",title:"Photo",render:(item)=><img src={item.photoUrl} alt={`${item.firstName} ${item.lastName} photo`} className={styles.imageCell}/>},
         {key:"firstName",title:"First Name"},
         {key:"lastName",title:"Last Name"}
-    ]
+    ],[]);
 
     return(
         <>

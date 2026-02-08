@@ -16,12 +16,13 @@ namespace Cinema.Application.Mappings
         public OrderMapper()
         {
             CreateMap<Order, OrderShortDto>()
-                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.OrderId));
-
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.OrderId))
+                .ForMember(dest => dest.OrderStatuses, opt => opt.MapFrom(src => src.OrderStatus));
             CreateMap<Order, OrderDetailsDto>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.OrderId))
                 .ForMember(dest => dest.Tickets, opt => opt.MapFrom(src => src.Tickets))
-                .ForMember(dest => dest.TotalAmount, opt => opt.MapFrom(src => src.Tickets.Sum(t => t.Price)));
+                .ForMember(dest => dest.TotalAmount, opt => opt.MapFrom(src => src.Tickets.Sum(t => t.Price)))
+                .ForMember(dest => dest.OrderStatuses, opt => opt.MapFrom(src => src.OrderStatus));
 
             CreateMap<OrderCreateDto, Order>()
                 .ForMember(dest => dest.OrderDate, opt => opt.MapFrom(_ => DateTime.UtcNow));

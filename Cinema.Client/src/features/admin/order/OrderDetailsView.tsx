@@ -4,14 +4,14 @@ import styles from "./OrderDetailsView.module.css"
 import OrderStatusBadge from "../../../components/OrderStatus/OrderStatusBadge";
 import { formatDate } from "../../../helpers/dateHelpers";
 import type { Session } from "../../../types/session.types";
-import type { UserDetails } from "../../../types/user.types";
+import type { User } from "../../../types/user.types";
 import AdminSessionCard from "../../../components/AdminSessionCard/AdminSessionCard";
 import { getSeatColor } from "../halls/helpers/getSeatColor";
 
 interface LoaderResponse{
   order:OrderDetails;
   session:Session;
-  user:UserDetails;
+  user:User;
 }
 
 const OrderDetailsView = ()=>{

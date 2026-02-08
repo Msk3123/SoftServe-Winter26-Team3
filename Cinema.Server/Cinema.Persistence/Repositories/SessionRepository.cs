@@ -51,6 +51,7 @@ namespace Cinema.Persistence.Repositories
         public async Task<Session?> GetByIdWithFullDetailsAsync(int id)
         {
             return await _dbSet
+                .IgnoreQueryFilters()
                 .Include(s => s.Hall)
                 .Include(s => s.Movie)
                     .ThenInclude(m => m.ActorMovies)
