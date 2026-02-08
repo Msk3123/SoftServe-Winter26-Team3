@@ -3,24 +3,23 @@ using Cinema.Application.Common.Models;
 using Cinema.Application.DTOs.UserDtos;
 using Cinema.Application.Interfaces;
 using Cinema.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cinema.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize] // Тепер контролер захищений JWT
     public class UsersController : ApiBaseController
     {
         private readonly IUserRepository _userRepository;
-        private readonly IPasswordHasher _passwordHasher;
 
         public UsersController(
             IUserRepository userRepository,
-            IMapper mapper,
-            IPasswordHasher passwordHasher) : base(mapper)
+            IMapper mapper) : base(mapper)
         {
             _userRepository = userRepository;
-            _passwordHasher = passwordHasher;
         }
 
         [HttpGet]
@@ -39,23 +38,6 @@ namespace Cinema.API.Controllers
             return Ok(_mapper.Map<UserDto>(user));
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody] UserCreateDto dto)
-        {
-            var user = _mapper.Map<User>(dto);
-
-            // Хешуємо пароль через сервіс перед збереженням
-            user.PasswordHash = _passwordHasher.HashPassword(dto.Password);
-
-            await _userRepository.AddAsync(user);
-            await _userRepository.SaveAsync();
-            var userWithDetails = await _userRepository.GetByIdWithRoleAsync(user.UserId);
-            if(userWithDetails == null) return NotFound();
-
-            var response = _mapper.Map<UserDto>(user);
-            return CreatedAtAction(nameof(GetById), new { id = user.UserId }, response);
-        }
-
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] UserPatchDto dto)
         {
@@ -63,24 +45,13 @@ namespace Cinema.API.Controllers
             if (user == null) return NotFound();
 
             _mapper.Map(dto, user);
-
-            await _userRepository.SaveAsync();
-            return NoContent();
-        }
-
-        [HttpPatch("{id}")]
-        public async Task<IActionResult> Patch(int id, [FromBody] UserPatchDto dto)
-        {
-            var user = await _userRepository.GetByIdAsync(id);
-            if (user == null) return NotFound();
-
-            _mapper.Map(dto, user);
-
+            await _userRepository.UpdateAsync(user);
             await _userRepository.SaveAsync();
             return NoContent();
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")] // Тільки адмін може видаляти
         public async Task<IActionResult> Delete(int id)
         {
             var user = await _userRepository.GetByIdAsync(id);
@@ -88,7 +59,6 @@ namespace Cinema.API.Controllers
 
             await _userRepository.DeleteAsync(id);
             await _userRepository.SaveAsync();
-
             return NoContent();
         }
     }

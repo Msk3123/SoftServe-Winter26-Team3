@@ -10,5 +10,7 @@ namespace Cinema.Application.Interfaces
     {
         Task<(IEnumerable<User> Items, int TotalCount)> GetAllWithRolesPagedAsync(QueryParameters queryParameters);
         Task<User?> GetByIdWithRoleAsync(int id);
+        Task<User?> GetByEmailAsync(string email);
+        Task UpdateAsync(User user);
     }
 }
