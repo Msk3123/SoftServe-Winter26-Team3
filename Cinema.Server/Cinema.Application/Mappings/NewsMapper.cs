@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Cinema.Application.DTOs.NewsDtos;
 using Cinema.Domain.Entities;
+using Cinema.Application.Helpers;
 using System;
 
 namespace Cinema.Application.Mappings
@@ -14,7 +15,7 @@ namespace Cinema.Application.Mappings
                 .ForMember(dest => dest.ShortContent, opt => opt.MapFrom(src =>
                     string.IsNullOrWhiteSpace(src.NewsContent) || src.NewsContent.Length <= 150
                     ? src.NewsContent
-                    : src.NewsContent.Substring(0, src.NewsContent.LastIndexOf(' ', 150))));
+                    : StringHelper.GetSafeSubstring(src.NewsContent, 150)));
 
             CreateMap<News, NewsDetailsDto>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.NewsId))
