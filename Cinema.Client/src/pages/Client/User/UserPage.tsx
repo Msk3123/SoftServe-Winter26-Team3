@@ -44,7 +44,7 @@ const UserPage = () => {
             const userId = getUserIdFromToken();
             
             if (!userId) {
-                setTicketError("Користувач не ідентифікований");
+                setTicketError("User not identified");
                 return;
             }
 
@@ -57,7 +57,7 @@ const UserPage = () => {
                     setTickets(res.items);
                 })
                 .catch(() => {
-                    setTicketError("Не вдалося завантажити квитки");
+                    setTicketError("Failed to load tickets");
                 })
                 .finally(() => {
                     setLoading(false);
@@ -70,18 +70,18 @@ const UserPage = () => {
         setAuthMessage({ text: '', isError: false });
 
         if (passData.newPassword.length < 8) {
-            return setAuthMessage({ text: "Пароль має бути не менше 8 символів", isError: true });
+            return setAuthMessage({ text: "Password must be at least 8 characters long", isError: true });
         }
         if (passData.newPassword !== passData.confirmPassword) {
-            return setAuthMessage({ text: "Паролі не збігаються", isError: true });
+            return setAuthMessage({ text: "Passwords do not match", isError: true });
         }
 
         try {
             await postItem('auth/change-password', { newPassword: passData.newPassword });
-            setAuthMessage({ text: "Пароль успішно оновлено!", isError: false });
+            setAuthMessage({ text: "Password updated successfully!", isError: false });
             setPassData({ newPassword: '', confirmPassword: '' });
         } catch (err) {
-            setAuthMessage({ text: "Помилка при зміні пароля. Спробуйте пізніше", isError: true });
+            setAuthMessage({ text: "Error updating password. Please try again later.", isError: true });
         }
     };
 
@@ -97,7 +97,7 @@ const UserPage = () => {
                             setAuthMessage({text: '', isError: false}); 
                         }}
                     >
-                        🎫 Мої Квитки
+                        🎫 My Tickets
                     </button>
                     <button 
                         className={activeTab === 'security' ? styles.active : ''} 
@@ -106,43 +106,43 @@ const UserPage = () => {
                             setTicketError(''); 
                         }}
                     >
-                        🔒 Безпека
+                        🔒 Security
                     </button>
                 </nav>
                 <button className={styles.logoutBtn} onClick={() => {
                     localStorage.removeItem('accessToken');
                     localStorage.removeItem('refreshToken');
                     window.location.href = '/auth/login';
-                }}>Вийти</button>
+                }}>Logout</button>
             </aside>
 
             <main className={styles.content}>
                 {activeTab === 'tickets' ? (
                     <section className={styles.section}>
-                        <h2 className={styles.title}>Ваші квитки</h2>
+                        <h2 className={styles.title}>Your tickets</h2>
                         
                         {ticketError && <div className={styles.errorBanner}>{ticketError}</div>}
                         
-                        {loading ? <p className={styles.statusMsg}>Синхронізація з базою...</p> : (
+                        {loading ? <p className={styles.statusMsg}>Synchronizing with database...</p> : (
                             <div className={styles.ticketGrid}>
                                 {tickets && tickets.length > 0 ? tickets.map(t => (
                                     <div key={t.id} className={styles.ticketCard}>
                                         <div className={styles.ticketHeader}>
                                             <span className={styles.orderId}>#{t.id }</span>
-                                            <span className={styles.movieTitle}>{t.movieTitle || 'Фільм'}</span>      
+                                            <span className={styles.movieTitle}>{t.movieTitle || 'Movie'}</span>      
                                         </div>
                                         <div className={styles.ticketBody}>
-                                            <p>📅 {t.showtime? formatDate(t.showtime) : 'Дата не вказана'}</p>
-                                            <p>🎬 Зал: {t.hallName || '-'} | Ряд: {t.row || '-'} | Місце: {t.seatNo || '-'}</p>
+                                            <p>📅 {t.showtime? formatDate(t.showtime) : 'Date not specified'}</p>
+                                            <p>🎬 Hall: {t.hallName || '-'} | Row: {t.row || '-'} | Seat: {t.seatNo || '-'}</p>
                                         </div>
                                     </div>
-                                )) : !ticketError && <p className={styles.emptyMsg}>Квитків не знайдено.</p>}
+                                )) : !ticketError && <p className={styles.emptyMsg}>No tickets found.</p>}
                             </div>
                         )}
                     </section>
                 ) : (
                     <section className={styles.section}>
-                        <h2 className={styles.title}>Безпека акаунта</h2>
+                        <h2 className={styles.title}>Account Security</h2>
                         
                         {authMessage.text && (
                             <div className={authMessage.isError ? styles.errorBanner : styles.successBanner}>
@@ -152,7 +152,7 @@ const UserPage = () => {
                         
                         <form onSubmit={handlePasswordUpdate} className={styles.form}>
                             <div className={styles.inputGroup}>
-                                <label>Новий пароль</label>
+                                <label>New Password</label>
                                 <input 
                                     type="password" 
                                     value={passData.newPassword}
@@ -161,7 +161,7 @@ const UserPage = () => {
                                 />
                             </div>
                             <div className={styles.inputGroup}>
-                                <label>Підтвердіть пароль</label>
+                                <label>Confirm Password</label>
                                 <input 
                                     type="password" 
                                     value={passData.confirmPassword}
@@ -169,7 +169,7 @@ const UserPage = () => {
                                     placeholder="••••••••"
                                 />
                             </div>
-                            <button type="submit" className={styles.saveBtn}>Оновити пароль</button>
+                            <button type="submit" className={styles.saveBtn}>Update Password</button>
                         </form>
                     </section>
                 )}
