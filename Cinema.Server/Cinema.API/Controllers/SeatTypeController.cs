@@ -3,12 +3,14 @@ using Cinema.Application.Common.Models;
 using Cinema.Application.DTOs.SeatTypeDtos;
 using Cinema.Application.Interfaces;
 using Cinema.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cinema.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles = "Admin")]
     public class SeatTypesController : ApiBaseController
     {
         private readonly ISeatTypeRepository _seatTypeRepository;
@@ -20,6 +22,7 @@ namespace Cinema.API.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAll([FromQuery] QueryParameters queryParameters)
         {
             var results = await _seatTypeRepository.GetAllPagedAsync(queryParameters);
@@ -27,6 +30,7 @@ namespace Cinema.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<SeatTypeDto>> GetById(int id)
         {
             var seatType = await _seatTypeRepository.GetByIdAsync(id);

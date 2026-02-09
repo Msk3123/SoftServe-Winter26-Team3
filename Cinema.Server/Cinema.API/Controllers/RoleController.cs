@@ -3,12 +3,14 @@ using Cinema.Application.Common.Models;
 using Cinema.Application.DTOs.RoleDtos;
 using Cinema.Application.Interfaces;
 using Cinema.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cinema.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles = "Admin")]
     public class RolesController : ApiBaseController
     {
         private readonly IRoleRepository _roleRepository;

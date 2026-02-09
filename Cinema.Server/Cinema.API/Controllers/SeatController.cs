@@ -5,12 +5,14 @@ using Cinema.Application.Interfaces;
 using Cinema.Domain.Entities;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cinema.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles = "Admin")]
     public class SeatController : ApiBaseController
     {
         private readonly ISeatRepository _seatRepository;
@@ -22,6 +24,7 @@ namespace Cinema.API.Controllers
 
         // GET: api/seat
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAll([FromQuery] QueryParameters queryParameters)
         {
             var results = await _seatRepository.GetAllPagedAsync(queryParameters);
@@ -30,6 +33,7 @@ namespace Cinema.API.Controllers
 
         // GET: api/seat/{id}
         [HttpGet("{id:int}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetById(int id)
         {
             var seat = await _seatRepository.GetByIdWithDetailsAsync(id);
@@ -42,6 +46,7 @@ namespace Cinema.API.Controllers
 
         // GET: api/seat/hall/{hallId}
         [HttpGet("hall/{hallId:int}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetByHall(int hallId)
         {
             var results = await _seatRepository.GetByHallId(hallId);

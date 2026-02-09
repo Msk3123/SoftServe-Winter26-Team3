@@ -5,12 +5,14 @@ using Cinema.Application.DTOs.OrderDtos;
 using Cinema.Application.Interfaces;
 using Cinema.Application.Interfaces.Services;
 using Cinema.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cinema.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class OrderController : ApiBaseController
     {
         private readonly IOrderService _orderService;
@@ -39,11 +41,16 @@ namespace Cinema.API.Controllers
         }
 
         [HttpGet("user/{userId}")]
-        public async Task<IActionResult> GetHistory(int userId, [FromQuery]QueryParameters queryParameters)
+        [Authorize]
+        public async Task<IActionResult> GetHistory(int userId, [FromQuery] QueryParameters queryParameters)
         {
-            var history = await _orderRepository.GetByUserIdPagedAsync(userId,queryParameters);
-            
+            var currentUserId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (!User.IsInRole("Admin") && currentUserId != userId.ToString())
+            {
+                return Forbid();
+            }
 
+            var history = await _orderRepository.GetByUserIdPagedAsync(userId, queryParameters);
             return OkPaged<Order, OrderShortDto>(history, queryParameters);
         }
 

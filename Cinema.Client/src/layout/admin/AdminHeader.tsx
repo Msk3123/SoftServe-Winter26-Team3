@@ -1,13 +1,31 @@
-import { NavLink } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 import Logo from "../../components/ui/Logo";
-import styles from "./AdminHeader.module.css"
+import Button from "../../components/Button/Button"; 
+import styles from "./AdminHeader.module.css";
 
-const AdminHeader = ()=>{
-    return(
-        <header className={styles.header}>
-            <NavLink to="/home"><Logo size="small" sizeAuto={false}/></NavLink> 
+const AdminHeader = () => {
+    const navigate = useNavigate();
+
+
+    const handleLogout = () => {
+        localStorage.clear(); // Очищаємо токени (Access та Refresh)
+        navigate("/auth/login"); // Повертаємо на сторінку входу
+    };
+
+    return (
+        <header className={styles.Header}>
+            <NavLink to="/home">
+                <Logo size="small" sizeAuto={false}/>
+            </NavLink> 
+            
+
+            <div className={styles.Actions}>
+                <Button bgColor="var(--color-danger)" action={handleLogout}>
+                    Log out
+                </Button>
+            </div>
         </header>
-    )
+    );
 };
 
 export default AdminHeader;
