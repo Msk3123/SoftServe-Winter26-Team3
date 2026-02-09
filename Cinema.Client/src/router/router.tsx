@@ -56,38 +56,14 @@ export const router = createBrowserRouter([
     path: "/",
     element: <ClientPageLayout />,
     children: [
-      {
-        index: true,
-        element: <Navigate to="/home" replace />, 
-      },
-      {
-        path: "home",
-        element: <HomePage />,
-      },
-      {
-        path: "sessions",
-        element: <SessionsPage />, 
-      },
-      {
-        path: "sessions/:sessionId",
-        element: <SessionDetailsPage />,
-      },
-      {
-        path: "movie/:movieId",
-        element: <MovieDetailsPage />,
-      },
-      {
-        path: "news",
-        element:<NewsPage />,
-      },
-      {
-        path: "news/:newsId",
-        element: <NewsDetailsPage />,
-      },
-      {
-        path: "actor/:actorId",
-        element: <ActorPage />,
-      },
+      { index: true, element: <Navigate to="/home" replace /> },
+      { path: "home", element: <HomePage /> },
+      { path: "sessions", element: <SessionsPage /> },
+      { path: "sessions/:sessionId", element: <SessionDetailsPage /> },
+      { path: "movie/:movieId", element: <MovieDetailsPage /> },
+      { path: "news", element: <NewsPage /> },
+      { path: "news/:newsId", element: <NewsDetailsPage /> },
+      { path: "actor/:actorId", element: <ActorPage /> },
       {
         element: <ProtectedRoute />,
         children: [
@@ -96,27 +72,23 @@ export const router = createBrowserRouter([
           { path: "tickets/:userId", element: <TicketsPage /> },
         ]
       },
-      {
-        path: "*",
-        element: <PageNotFound />,
-      },
+      { path: "*", element: <PageNotFound /> },
     ],
   },
   {
     path: "auth",
     element: <AuthLayout />,
     children: [
-      { path: "login", element:<Login /> },
-      { path: "signup", element:<SignUp />},
+      { path: "login", element: <Login /> },
+      { path: "signup", element: <SignUp /> },
     ],
   },
-
   {
     path: "/admin",
-    element: <ProtectedRoute requiredRole="Admin" />, // Тільки для Admin
+    element: <ProtectedRoute requiredRole="Admin" />, 
     children: [
       {
-        element: <AdminPageLayout />, // Весь лейаут адмінки тепер під захистом
+        element: <AdminPageLayout />, 
         children: [
           { index: true, element: <Navigate to="movies" replace /> },
           {
@@ -155,84 +127,49 @@ export const router = createBrowserRouter([
             path: "users",
             element: <AdminUsersPage />,
             children: [
-              { path: ":userId/edit", element: <AdminModal>User view</AdminModal> },
-              { path: "create", element: <AdminModal>create User</AdminModal> },
+              { path: "create", element: <AdminModal title="Create User"><CreateUser /></AdminModal> },
+              {
+                path: ":userId/details",
+                element: <AdminModal title="User Details"><UserDetails /></AdminModal>,
+                loader: userDetailsLoader,
+                children:[
+                  { 
+                    path: "orders/:orderId/details",
+                    element: <AdminModal title="Order Details"><OrderDetailsView/></AdminModal>,
+                    loader: orderDetailsLoader,
+                  }
+                ]
+              }
             ],
           },
           {
             path: "orders",
             element: <AdminOrderPage />,
             children: [
-              { path: "create", element: <AdminModal>create order</AdminModal> },
-              { path: ":orderId/edit", element: <AdminModal>order view</AdminModal> }
+                { 
+                  path: ":orderId/details", 
+                  element: <AdminModal title="Order Details"><OrderDetailsView/></AdminModal>,
+                  loader: orderDetailsLoader,
+                }
             ]
           },
-        ],
-      },
-
-      {
-        path: "news",
-        element: <AdminNewsPage />,
-        children: [
-          { path: "create", element: <AdminModal title="Create News"><CreateNewsForm/></AdminModal> },
-          { path: ":newsId/edit",
-              element: <AdminModal title="Edit News"><EditNewsForm/></AdminModal>,
-              loader: editNewsFormLoader,
-            }
-        ],
-      },
-
-      {
-        path: "users",
-        element: <AdminUsersPage />,
-        children: [
-          { path: "create", element: <AdminModal title="Create User"><CreateUser /></AdminModal> },
           {
-            path: ":userId/details",
-            element: <AdminModal title="User Orders"><UserDetails /></AdminModal>,
-            loader: userDetailsLoader,
-            children:[
-              { path: ":orderId/details",
-              element: <AdminModal><OrderDetailsView/></AdminModal>,
-              loader: orderDetailsLoader,
-            }
+            path: "actors",
+            element: <AdminActorsPage />,
+            children: [
+                { path: "create", element: <AdminModal title="Create Actor"><CreateActorForm/></AdminModal> },
+                { path: ":actorId/edit", element: <AdminModal title="Edit Actor"><EditActorForm/></AdminModal>, loader: editActorFormLoader }
             ]
-          }
-        ],
-      },
-      
-      {
-        path: "orders",
-        element: <AdminOrderPage />,
-        children: [
-            { path: ":orderId/details", 
-              element: <AdminModal><OrderDetailsView/></AdminModal>,
-              loader: orderDetailsLoader,
-            }
-        ]
-      },
-
-      {
-        path: "actors",
-        element: <AdminActorsPage />,
-        children: [
-            { path: "create", element: <AdminModal title="Create Actor"><CreateActorForm/></AdminModal> },
-            { path: ":actorId/edit",
-              element: <AdminModal title="Edit Actor"><EditActorForm/></AdminModal>,
-              loader: editActorFormLoader,
-            }
-        ]
-      },
-
-      {
-        path: "seats",
-        element: <AdminSeatTypesPage />,
-        children: [
-          { path: "create", element: <AdminModal title="Create Seat Type"><CreateSeatType/></AdminModal> },
-          { path: ":seatId/edit",
-              element: <AdminModal title="Edit Seat Type"><EditSeatTypeForm /></AdminModal>,
-              loader: editSeatTypeFormLoader,
-            }
+          },
+          {
+            path: "seats",
+            element: <AdminSeatTypesPage />,
+            children: [
+              { path: "create", element: <AdminModal title="Create Seat Type"><CreateSeatType/></AdminModal> },
+              { path: ":seatId/edit", element: <AdminModal title="Edit Seat Type"><EditSeatTypeForm /></AdminModal>, loader: editSeatTypeFormLoader }
+            ],
+          },
+          { path: "*", element: <AdminPageNotFound /> },
         ],
       },
     ],
