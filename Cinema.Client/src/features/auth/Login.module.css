@@ -44,6 +44,16 @@
   box-shadow: 0 0 0 2px rgba(29, 231, 130, 0.25);
 }
 
+.inputError {
+    border-color: var(--color-danger);
+    box-shadow: 0 0 0 2px rgba(255, 0, 0, 0.25);
+}
+
+.errorText {
+    color: #ff4d4d; 
+    font-size: 0.8rem;
+}
+
 .button {
   margin-top: 4px;
   padding: 10px 12px;

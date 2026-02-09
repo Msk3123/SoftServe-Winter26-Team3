@@ -4,16 +4,45 @@ import styles from './Login.module.css';
 import { useAuthActions } from '../../hooks/useAuth/useAuthActions';
 
 export const Login = () => { 
-  const { login, isLoading, error } = useAuthActions();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const { login, isLoading, error: apiError } = useAuthActions();
+  const [formData, setFormData] = useState({ email: '', password: '' });
+  const [errors, setErrors] = useState<Partial<typeof formData>>({});
+  const [touched, setTouched] = useState<Partial<Record<keyof typeof formData, boolean>>>({});
+
+  const validate = (name: string, value: string) => {
+    if (name === 'email') {
+      if (!value) return 'Email is required';
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return 'Invalid email';
+    }
+    if (name === 'password' && !value) return 'Password is required';
+    return '';
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+    if (touched[name as keyof typeof formData]) {
+      setErrors(prev => ({ ...prev, [name]: validate(name, value) }));
+    }
+  };
+
+  const handleBlur = (name: keyof typeof formData) => {
+    setTouched(prev => ({ ...prev, [name]: true }));
+    setErrors(prev => ({ ...prev, [name]: validate(name, formData[name]) }));
+  };
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await login({ email, password });
+    const eError = validate('email', formData.email);
+    const pError = validate('password', formData.password);
+    
+    if (eError || pError) {
+      setErrors({ email: eError, password: pError });
+      setTouched({ email: true, password: true });
+      return;
+    }
+    await login(formData);
   };
-
-  const buttonContent = isLoading ? 'Signing in…' : 'Sign in';
 
   return (
     <div className={styles.container}>
@@ -22,30 +51,32 @@ export const Login = () => {
         <label className={styles.label}>
           Email
           <input
-            className={styles.input}
+            className={`${styles.input} ${touched.email && errors.email ? styles.inputError : ''}`}
+            name="email"
             type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={formData.email}
+            onChange={handleChange}
+            onBlur={() => handleBlur('email')}
             placeholder="you@example.com"
-            autoComplete="email"
-            required
           />
+          {touched.email && errors.email && <span className={styles.errorText}>{errors.email}</span>}
         </label>
         <label className={styles.label}>
           Password
           <input
-            className={styles.input}
+            className={`${styles.input} ${touched.password && errors.password ? styles.inputError : ''}`}
+            name="password"
             type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={formData.password}
+            onChange={handleChange}
+            onBlur={() => handleBlur('password')}
             placeholder="Enter your password"
-            autoComplete="current-password"
-            required
           />
+          {touched.password && errors.password && <span className={styles.errorText}>{errors.password}</span>}
         </label>
-        {error && <p className={styles.error}>{error}</p>}
+        {apiError && <p className={styles.error}>{apiError}</p>}
         <button className={styles.button} type="submit" disabled={isLoading}>
-          {buttonContent}
+          {isLoading ? 'Signing in…' : 'Sign in'}
         </button>
       </form>
       <p className={styles.footer}>
