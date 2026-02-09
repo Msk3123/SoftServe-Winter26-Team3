@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import { getList, postItem } from '../../../api/api';
 import styles from './UserPage.module.css';
+import type { PaginatedResponse } from '../../../types/api.types';
+import type { TicketShort } from '../../../types/ticket.types';
+import { formatDate } from '../../../helpers/dateHelpers';
 
 const UserPage = () => {
     const [activeTab, setActiveTab] = useState<'tickets' | 'security'>('tickets');
@@ -57,7 +60,8 @@ const UserPage = () => {
             // Запит до твого Ticket контролера
             getList(`Ticket/user/${userId}`)
                 .then((res: any) => {
-                    setTickets(res.data);
+                    console.log(res.items)
+                    setTickets(res.items);
                 })
                 .catch(() => {
                     setTicketError("Не вдалося завантажити квитки");
@@ -134,12 +138,12 @@ const UserPage = () => {
                                 {tickets && tickets.length > 0 ? tickets.map(t => (
                                     <div key={t.id} className={styles.ticketCard}>
                                         <div className={styles.ticketHeader}>
-                                            <span className={styles.movieTitle}>{t.movieTitle || 'Фільм'}</span>
-                                            <span className={styles.orderId}>#{t.id}</span>
+                                            <span className={styles.orderId}>#{t.id }</span>
+                                            <span className={styles.movieTitle}>{t.movieTitle || 'Фільм'}</span>      
                                         </div>
                                         <div className={styles.ticketBody}>
-                                            <p>📅 {t.sessionDate ? new Date(t.sessionDate).toLocaleDateString() : 'Дата не вказана'}</p>
-                                            <p>🎬 Зал: {t.hallName || '-'} | Місце: {t.seatNumber || '-'}</p>
+                                            <p>📅 {t.showtime? formatDate(t.showtime) : 'Дата не вказана'}</p>
+                                            <p>🎬 Зал: {t.hallName || '-'} | Ряд: {t.row || '-'} | Місце: {t.seatNo || '-'}</p>
                                         </div>
                                     </div>
                                 )) : !ticketError && <p className={styles.emptyMsg}>Квитків не знайдено.</p>}

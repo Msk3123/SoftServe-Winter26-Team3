@@ -154,3 +154,8 @@
     margin-bottom: 20px;
     border: 1px solid #00df82;
 }
+
+.orderId{
+    margin-right: 1em;
+    font-size: 1.05rem;
+}

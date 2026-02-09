@@ -29,7 +29,7 @@ namespace Cinema.WebAPI.Controllers
             if (!User.IsInRole("Admin") && currentUserId != userId.ToString()) return Forbid();
 
             var result = await _ticketRepository.GetTicketsByUserIdPagedAsync(userId, queryParameters);
-            return OkPaged<Ticket, TicketShortDto>(result, queryParameters);
+            return OkPaged<Ticket, TicketDetailsDto>(result, queryParameters);
         }
         [HttpGet("{id}")]
         public async Task<ActionResult<TicketDetailsDto>> GetTicketDetails(int id)
