@@ -50,8 +50,8 @@ namespace Cinema.API.Controllers
             var results = await _sessionRepository.GetByMovieIdPagedAsync(movieId, queryParameters,sessionFilter);
             return OkPaged<Session, SessionShortDto>(results, queryParameters);
         }
-        [HttpGet("extended/{id}")]
-        [Authorize]
+        [HttpGet("extended/{id}")] 
+        [AllowAnonymous]
         public async Task<IActionResult> GetExtended(int id)
         {
             var session = await _sessionRepository.GetByIdExtendedAsync(id);
