@@ -19,9 +19,8 @@ const useSessionHallMap = (sessionId: number | string) => {
             try {
                 setIsLoading(true);
                 const data = await getSessionExtended(sessionId);
-                console.log(data)
                 setSessionData(data);
-                setSeats(transformSeats(data.seats));
+                setSeats(transformSeats<SessionSeat>(data.seats));
             } catch (e) {
                 const err = e as ApiError;
                 setError(err.message || "Failed to load the hall map. Please try again later.");

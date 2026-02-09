@@ -3,10 +3,12 @@ import styles from "./CheckoutPage.module.css";
 import { createOrder } from "../../../features/admin/halls/api/createOrder";
 import { initializePayment, PaymentMethod, submitLiqPayForm } from "../../../features/admin/halls/api/createPayment";
 import toast from "react-hot-toast";
+import { useState } from "react";
 
 const CheckoutPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const [isProcessing, setIsProcessing] = useState(false);
   
   const { 
     selectedSeats = [], 
@@ -18,47 +20,66 @@ const CheckoutPage = () => {
     sessionId 
   } = location.state || {};
 
-
   const user = {
-    id: Number(localStorage.getItem("userId")) || 1,
-    name: "Ivan Hudko", 
-    email: "ivan.hudko@example.com",
-    phone: "+380 98 123 45 67"
+    id: Number(localStorage.getItem("userId")) || 1, 
+    name: localStorage.getItem("userName") || "Ivan Hudko", 
+    email: localStorage.getItem("userEmail") || "ivan.hudko@example.com",
+    phone: localStorage.getItem("userPhone") || "+380 98 123 45 67"
   };
 
-  const handlePayment = async () => {
-    try {
-      const order = await createOrder({
-        userId: user.id,
-        sessionId: Number(sessionId),
-        selectedTickets: selectedSeats.map((seat: any) => ({
-          sessionSeatId: seat.id,
-          ticketTypeId: seat.type?.id || 1 
-        }))
-      });
+const handlePayment = async () => {
+  if (isProcessing) return;
+  
+  const toastId = toast.loading("Preparing your order...");
 
-      const { value, signature } = await initializePayment(
-        order.id, 
-        PaymentMethod.Online
+  try {
+    setIsProcessing(true);
+
+    // 1. Створення ордера
+    const order = await createOrder({
+      userId: user.id,
+      sessionId: Number(sessionId),
+      selectedTickets: selectedSeats.map((seat: any) => ({
+        sessionSeatId: seat.id,
+        ticketTypeId: 1 
+      }))
+    });
+
+    toast.loading("Initializing payment...", { id: toastId });
+
+    // 2. Ініціалізація платежу (ВАЖЛИВО: два аргументи!)
+    // Якщо TS все одно свариться на типи, можна тимчасово додати 'as any' 
+    // до paymentData, але краще оновити інтерфейс PaymentResponse.
+    const paymentData = await initializePayment(order.id, PaymentMethod.Online) as any;
+
+    // 3. Відправка на LiqPay
+    if (paymentData.checkoutUrl && paymentData.externalTransactionId) {
+      
+      submitLiqPayForm(
+        paymentData.checkoutUrl, 
+        paymentData.externalTransactionId
       );
-
-      submitLiqPayForm(value, signature);
-
-    } catch (error) {
-      console.error("Payment failed:", error);
-      toast("Initializing payment soon. Please try again later.");
+    } else {
+      throw new Error("Payment data is incomplete");
     }
-  };
+
+  } catch (error: any) {
+    console.error("Payment error:", error);
+    toast.error(error.message || "Failed to process payment", { id: toastId });
+  } finally {
+    setIsProcessing(false);
+  }
+};
 
   return (
     <div className={styles.container}>
       <main className={styles.mainInfo}>
         <header className={styles.movieHeader}>
-          <h1 className={styles.movieTitle}>{movieTitle || "Inception"}</h1>
+          <h1 className={styles.movieTitle}>{movieTitle || "Movie Title"}</h1>
           <div className={styles.sessionBrief}>
-              <span>{hallName || "Hall 3"}</span> • 
-              <span>{sessionDate?.split('T')[0] || "2026-02-12"}</span> • 
-              <span>{sessionTime?.slice(0, 5) || "20:00"}</span>
+              <span>{hallName}</span> • 
+              <span>{sessionDate?.split('T')[0]}</span> • 
+              <span>{sessionTime?.slice(0, 5)}</span>
           </div>
         </header>
 
@@ -103,17 +124,15 @@ const CheckoutPage = () => {
       <aside className={styles.sidebar}>
         <h3 className={styles.sidebarTitle}>Tickets ({selectedSeats.length})</h3>
         <div className={styles.ticketList}>
-          {selectedSeats.length > 0 ? selectedSeats.map((seat: any) => (
+          {selectedSeats.map((seat: any) => (
             <div key={seat.id} className={styles.ticketItem}>
               <div>
                 <p className={styles.seatInfo}>Row {seat.row}, Seat {seat.number}</p>
-                <p className={styles.seatType}>{seat.type?.name || "Standard"}</p>
+                <p className={styles.seatType}>{seat.type || "Standard"}</p>
               </div>
               <span className={styles.priceTag}>{seat.price} UAH</span>
             </div>
-          )) : (
-              <p className={styles.emptyMsg}>No seats selected</p>
-          )}
+          ))}
         </div>
 
         <div className={styles.totalSection}>
@@ -124,9 +143,9 @@ const CheckoutPage = () => {
           <button 
             className={styles.payButton} 
             onClick={handlePayment}
-            disabled={selectedSeats.length === 0}
+            disabled={selectedSeats.length === 0 || isProcessing}
           >
-            PROCEED TO PAYMENT
+            {isProcessing ? "PROCESSING..." : "PROCEED TO PAYMENT"}
           </button>
         </div>
       </aside>

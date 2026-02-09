@@ -7,7 +7,6 @@ import Seat from "../../../components/HallMap/Seat/Seat";
 import { getSeatColor } from "../../../features/admin/halls/helpers/getSeatColor";
 import Error from "../../../components/Error/Error";
 import { useState } from "react";
-// Імпортуємо метод резервації
 import MovieDetailsSkeleton from "../MovieDetails/MovieDetailsPageSkeleton";
 import { reserveSessionSeat } from "../../../api/sessionSeatApi";
 import toast from "react-hot-toast";
@@ -50,19 +49,20 @@ const SessionDetails = () => {
   };
 const handleProceed = async () => {
   if (selectedSeats.length === 0 || isReserving) return;
-
-  // Отримуємо актуальний userId (заміни на свій метод отримання юзера)
+console.log("SENDING TO RESERVE:", selectedSeats.map(s => ({
+    id: s.id, // Має бути 1254, 1255 тощо
+    row: s.row,
+    num: s.number
+  })));
   const userId = 1; 
 
   try {
     setIsReserving(true);
 
-    // Виконуємо запити з урахуванням userId
     await Promise.all(
       selectedSeats.map(seat => reserveSessionSeat(seat.id, userId))
     );
 
-    // Якщо всі місця заброньовані успішно
     navigate("/checkout", {
       state: {
         sessionId: sessionId,
@@ -72,7 +72,7 @@ const handleProceed = async () => {
         totalPrice: totalPrice,
         sessionDate: sessionData?.sessionDate,
         sessionTime: sessionData?.sessionTime,
-        userId: userId // передаємо далі на випадок створення ордеру
+        userId: userId 
       }
     });
   } catch (error) {
@@ -87,12 +87,16 @@ const handleProceed = async () => {
   const legendItems = getDynamicLegend();
 
   const getDisplayColor = (seat: SessionSeat, isSelected: boolean): string => {
-    if (isSelected) return "var(--seat-selected)";
-    if (seat.status !== SeatStatus.Available) return "var(--seat-occupied)";
-    
-    const typeName = typeof seat.type === 'object' ? seat.type?.name : seat.type;
-    return getSeatColor(typeName || "");
-  };
+  if (isSelected) return "var(--seat-selected)";
+  
+  const status = String(seat.status).toLowerCase();
+  if (status !== "available") {
+    return "var(--seat-occupied)"; 
+  }
+  
+  const typeName = typeof seat.type === 'object' ? seat.type?.name : seat.type;
+  return getSeatColor(typeName || "");
+};
 
   if (isReserving) return <MovieDetailsSkeleton />;
   if (isLoading || !sessionData) return <div className={styles.loader}>Loading...</div>;

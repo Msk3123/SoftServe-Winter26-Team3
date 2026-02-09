@@ -25,12 +25,17 @@ namespace Cinema.Application.Common.Mappings
                 srcMember != null && (srcMember is not decimal d || d > 0)));
 
             CreateMap<SessionSeat, SessionSeatExtendedDto>()
-            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.SeatId))
-            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.SeatStatuses))
-            .ForMember(dest => dest.Row, opt => opt.MapFrom(src => src.Seat.Row))
-            .ForMember(dest => dest.Number, opt => opt.MapFrom(src => src.Seat.SeatNo))
-            .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Seat.SeatType.BasePrice))
-            .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Seat.SeatType.Name));
+    // 1. Мапимо ID конкретного місця в сесії (саме 1221, 1222 і т.д.)
+    .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.SessionSeatId))
+
+    // 2. Конвертуємо число з бази в рядок для фронтенда
+    .ForMember(dest => dest.Status, opt => opt.MapFrom(src =>
+    src.SeatStatuses == Domain.Enums.SeatStatus.Reserved ? "Reserved" : "Available"))
+
+    .ForMember(dest => dest.Row, opt => opt.MapFrom(src => src.Seat.Row))
+    .ForMember(dest => dest.Number, opt => opt.MapFrom(src => src.Seat.SeatNo))
+    .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Seat.SeatType.BasePrice))
+    .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Seat.SeatType.Name));
         }
     }
 }
