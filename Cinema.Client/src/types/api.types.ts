@@ -49,7 +49,7 @@ export type PatchFunction<T> = (
     data: Partial<T>
 )=>Promise<void>;
 
-export type DeleteFunction=(id: number|string)=>Promise<boolean | undefined>;
+export type DeleteFunction=(id: number|string)=>Promise<void>;
 
 export interface ValidationErrors {
     [key: string]: string[];

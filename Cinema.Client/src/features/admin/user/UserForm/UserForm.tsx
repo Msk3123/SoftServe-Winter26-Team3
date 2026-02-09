@@ -70,7 +70,6 @@ const UserForm = ({initialState,onSubmitAction,onClose}:UserFormProps)=>{
                     required
                 />
                 <hr></hr>
-                <span className={styles.message}>* enter at least one</span>
                 <BaseInput
                     value={formData.email}
                     error={errors.email}

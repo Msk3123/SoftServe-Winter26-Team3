@@ -14,16 +14,13 @@ export default function deleteItem({deleteAsync,deleteLocal}:DeleteItem) {
             if (!isConfirmed) return;
             
             try{
-                const success = await deleteAsync(Number(id));
-                
-                if(success){
-                    toast.success('Successfully deleted!')
-                    deleteLocal(Number(id))
-                }else{
-                    toast.error("This didn't work.")
-                }
+                await deleteAsync(Number(id));
+
+                toast.success('Successfully deleted!')
+                deleteLocal(Number(id))
+
             }catch(e){
-                handleError(e);
+                handleError(e,"Something went wrong");
         }
     }
 

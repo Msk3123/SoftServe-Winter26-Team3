@@ -141,18 +141,14 @@ export async function patchItem<T>(path: string, id: number | string, data: Part
     return handleResponse<void>(response, { path, id });
 }
 
-export async function deleteItem(path: string, id: number | string): Promise<boolean | undefined> {
-    const url = `${baseUrl}${path}/${id}`;
+export async function deleteItem(path:string,id:number|string):Promise<void> {
+    const url=`${baseUrl}${path}/${id}`;
+        
     const response = await fetch(url, {
         method: 'DELETE',
         headers: getHeaders(),
     });
 
-    try {
-        await handleResponse(response, { path, id });
-        return true;
-    } catch (error) {
-        console.error(error);
-        return false;
-    }
-}
+    await handleResponse(response,{path,id});
+
+};
