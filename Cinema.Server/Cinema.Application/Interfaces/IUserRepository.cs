@@ -12,5 +12,6 @@ namespace Cinema.Application.Interfaces
         Task<User?> GetByIdWithRoleAsync(int id);
         Task<User?> GetByEmailAsync(string email);
         Task UpdateAsync(User user);
+        Task<bool> SaveChangesAsync();
     }
 }

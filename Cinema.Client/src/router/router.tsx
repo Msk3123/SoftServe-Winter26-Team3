@@ -1,6 +1,11 @@
 import { createBrowserRouter, Navigate } from "react-router";
+
+// Layouts
 import ClientPageLayout from "../layout/client/ClientPageLayout";
 import AdminPageLayout from "../layout/admin/AdminPageLayout";
+import AuthLayout from "../layout/auth/AuthLayout";
+
+// Client Pages
 import HomePage from "../pages/Client/Home/HomePage";
 import SessionsPage from "../pages/Client/Sessions/SessionsPage";
 import SessionDetailsPage from "../pages/Client/SessionDetails/SessionDetailsPage";
@@ -10,48 +15,58 @@ import NewsDetailsPage from "../pages/Client/NewsDatails/NewsDetailsPage";
 import ActorPage from "../pages/Client/Actor/ActorPage";
 import OrderPage from "../pages/Client/Order/OrderPage";
 import CheckoutPage from "../pages/Client/Checkout/CheckoutPage";
-import AuthLayout from "../layout/auth/AuthLayout";
+import TicketsPage from "../pages/Client/Tickets/TicketsPage";
+import UserPage from "../pages/Client/User/UserPage";
+import PageNotFound from "../pages/Client/PageNotFound/PageNotFound";
+
+// Auth Features
 import Login from "../features/auth/Login";
 import SignUp from "../features/auth/SignUp";
+
+// Admin Pages & Features
 import AdminMoviesPage from "../pages/Admin/MoviesPage/AdminMoviesPage";
 import AdminSessionsPage from "../pages/Admin/SessionsPage/AdminSessionsPage";
 import AdminHallsPage from "../pages/Admin/Halls/AdminHallsPage";
 import AdminNewsPage from "../pages/Admin/News/AdminNewsPage";
 import AdminUsersPage from "../pages/Admin/Users/AdminUsersPage";
-import AdminModal from "../components/AdminModal/AdminModal";
 import AdminOrderPage from "../pages/Admin/Orders/AdminOrdersPage";
-import TicketsPage from "../pages/Client/Tickets/TicketsPage";
-import PageNotFound from "../pages/Client/PageNotFound/PageNotFound";
-import AdminPageNotFound from "../pages/Admin/PageNotFound/AdminPageNotFound";
 import AdminActorsPage from "../pages/Admin/Actors/AdminActorsPage";
+import AdminSeatTypesPage from "../pages/Admin/SeatTypes/AdminSeatTypesPage";
+import AdminPageNotFound from "../pages/Admin/PageNotFound/AdminPageNotFound";
+
+// Admin Modals/Forms
+import AdminModal from "../components/AdminModal/AdminModal";
 import CreateActorForm from "../features/admin/actors/CreateActor/CreateActorForm";
 import EditActorForm from "../features/admin/actors/EditActor/EditActorForm";
-import editActorFormLoader from "../features/admin/actors/EditActor/editActorFormLoader";
-import editNewsFormLoader from "../features/admin/news/EditNews/editNewsFormLoader";
 import EditNewsForm from "../features/admin/news/EditNews/EditNewsForm";
 import CreateNewsForm from "../features/admin/news/CreateNews/CreateNewsForm";
 import CreateMovieForm from "../features/admin/movies/CreateMovie/CreateMovie";
 import EditMovieForm from "../features/admin/movies/EditMovie/EditMovie";
-import editMovieFormLoader from "../features/admin/movies/EditMovie/editMovieFormLoader";
 import CreateSessionForm from "../features/admin/sessions/CreateSession/CreateSessionForm";
 import EditSessionForm from "../features/admin/sessions/EditSession/EditSessionForm";
-import editSessionFormLoader from "../features/admin/sessions/EditSession/editSessionFormLoader";
 import CreateHallForm from "../features/admin/halls/HallCreate/CreateHallForm";
 import EditHallForm from "../features/admin/halls/HallEdit/EditHallForm";
-import editHallFormLoader from "../features/admin/halls/HallEdit/editHallFormLoader";
 import CreateSeatType from "../features/admin/seatType/CreateSeatType/CreateSeatType";
 import EditSeatTypeForm from "../features/admin/seatType/EditSeatType/EditSeatTypeForm";
-import AdminSeatTypesPage from "../pages/Admin/SeatTypes/AdminSeatTypesPage";
-import editSeatTypeFormLoader from "../features/admin/seatType/EditSeatType/editSeatTypeLoader";
-import ProtectedRoute from "./ProtectedRoute";
-import orderDetailsLoader from "../features/admin/order/orderDetailsLoader";
 import OrderDetailsView from "../features/admin/order/OrderDetailsView";
-import userDetailsLoader from "../features/admin/user/UserDetails/userDetailsLoader";
 import UserDetails from "../features/admin/user/UserDetails/UserDetails";
 import CreateUser from "../features/admin/user/CreateUserForm/CreateUserForm";
 
+// Loaders
+import editActorFormLoader from "../features/admin/actors/EditActor/editActorFormLoader";
+import editNewsFormLoader from "../features/admin/news/EditNews/editNewsFormLoader";
+import editMovieFormLoader from "../features/admin/movies/EditMovie/editMovieFormLoader";
+import editSessionFormLoader from "../features/admin/sessions/EditSession/editSessionFormLoader";
+import editHallFormLoader from "../features/admin/halls/HallEdit/editHallFormLoader";
+import editSeatTypeFormLoader from "../features/admin/seatType/EditSeatType/editSeatTypeLoader";
+import orderDetailsLoader from "../features/admin/order/orderDetailsLoader";
+import userDetailsLoader from "../features/admin/user/UserDetails/userDetailsLoader";
+
+// Security
+import ProtectedRoute from "./ProtectedRoute";
 
 export const router = createBrowserRouter([
+  // --- КЛІЄНТСЬКА ЧАСТИНА (З Хедером/Фотером та фоном) ---
   {
     path: "/",
     element: <ClientPageLayout />,
@@ -64,25 +79,33 @@ export const router = createBrowserRouter([
       { path: "news", element: <NewsPage /> },
       { path: "news/:newsId", element: <NewsDetailsPage /> },
       { path: "actor/:actorId", element: <ActorPage /> },
+      
+      // Захищені клієнтські маршрути
       {
         element: <ProtectedRoute />,
         children: [
+          { path: "profile", element: <UserPage /> }, 
           { path: "order/:sessionId", element: <OrderPage /> },
           { path: "checkout", element: <CheckoutPage /> },
-          { path: "tickets/:userId", element: <TicketsPage /> },
         ]
       },
+      
+      // Клієнтська 404 (буде з фоном сайту)
       { path: "*", element: <PageNotFound /> },
     ],
   },
+
+  // --- АВТОРИЗАЦІЯ (Окремий фон) ---
   {
-    path: "auth",
+    path: "/auth",
     element: <AuthLayout />,
     children: [
       { path: "login", element: <Login /> },
       { path: "signup", element: <SignUp /> },
     ],
   },
+
+  // --- АДМІН-ПАНЕЛЬ (Тільки для Admin) ---
   {
     path: "/admin",
     element: <ProtectedRoute requiredRole="Admin" />, 
@@ -91,6 +114,7 @@ export const router = createBrowserRouter([
         element: <AdminPageLayout />, 
         children: [
           { index: true, element: <Navigate to="movies" replace /> },
+          
           {
             path: "movies",
             element: <AdminMoviesPage />,
@@ -99,6 +123,7 @@ export const router = createBrowserRouter([
               { path: ":movieId/edit", element: <AdminModal title="Edit Movie"><EditMovieForm /></AdminModal>, loader: editMovieFormLoader },
             ],
           },
+          
           {
             path: "sessions",
             element: <AdminSessionsPage />,
@@ -107,6 +132,7 @@ export const router = createBrowserRouter([
               { path: ":sessionId/edit", element: <AdminModal title="Edit Session"><EditSessionForm /></AdminModal>, loader: editSessionFormLoader },
             ],
           },
+
           {
             path: "halls",
             element: <AdminHallsPage />,
@@ -115,6 +141,7 @@ export const router = createBrowserRouter([
               { path: ":hallId/edit", element: <AdminModal title="Edit Hall"><EditHallForm /></AdminModal>, loader: editHallFormLoader },
             ],
           },
+
           {
             path: "news",
             element: <AdminNewsPage />,
@@ -123,6 +150,7 @@ export const router = createBrowserRouter([
               { path: ":newsId/edit", element: <AdminModal title="Edit News"><EditNewsForm /></AdminModal>, loader: editNewsFormLoader },
             ],
           },
+
           {
             path: "users",
             element: <AdminUsersPage />,
@@ -142,25 +170,24 @@ export const router = createBrowserRouter([
               }
             ],
           },
+
           {
             path: "orders",
             element: <AdminOrderPage />,
             children: [
-                { 
-                  path: ":orderId/details", 
-                  element: <AdminModal title="Order Details"><OrderDetailsView/></AdminModal>,
-                  loader: orderDetailsLoader,
-                }
+              { path: ":orderId/details", element: <AdminModal title="Order View"><OrderDetailsView/></AdminModal>, loader: orderDetailsLoader }
             ]
           },
+
           {
             path: "actors",
             element: <AdminActorsPage />,
             children: [
-                { path: "create", element: <AdminModal title="Create Actor"><CreateActorForm/></AdminModal> },
-                { path: ":actorId/edit", element: <AdminModal title="Edit Actor"><EditActorForm/></AdminModal>, loader: editActorFormLoader }
+              { path: "create", element: <AdminModal title="Create Actor"><CreateActorForm/></AdminModal> },
+              { path: ":actorId/edit", element: <AdminModal title="Edit Actor"><EditActorForm/></AdminModal>, loader: editActorFormLoader }
             ]
           },
+
           {
             path: "seats",
             element: <AdminSeatTypesPage />,
@@ -169,6 +196,8 @@ export const router = createBrowserRouter([
               { path: ":seatId/edit", element: <AdminModal title="Edit Seat Type"><EditSeatTypeForm /></AdminModal>, loader: editSeatTypeFormLoader }
             ],
           },
+
+          // Адмінська 404 (всередині адмін-інтерфейсу)
           { path: "*", element: <AdminPageNotFound /> },
         ],
       },

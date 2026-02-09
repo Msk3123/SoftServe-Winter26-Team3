@@ -37,4 +37,21 @@ public class AuthController : ControllerBase
         var result = await _authService.RefreshTokenAsync(dto);
         return Ok(result);
     }
+    [HttpPost("change-password")] // Шлях: api/Auth/change-password
+    [Authorize] // Потребує токен
+    public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto dto)
+    {
+        // Отримуємо ID (в токені це "nameid", що є ClaimTypes.NameIdentifier)
+        var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+        if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var userId))
+            return Unauthorized();
+
+        var result = await _authService.ChangePasswordAsync(userId, dto.NewPassword);
+
+        if (!result)
+            return BadRequest(new { message = "Не вдалося змінити пароль" });
+
+        return Ok(new { message = "Пароль змінено в базі" });
+    }
 }

@@ -38,7 +38,11 @@ namespace Cinema.Persistence.Repositories
         public async Task UpdateAsync(User user)
         {
             _dbSet.Update(user);
-            await Task.CompletedTask; // Оскільки метод Async, але Update в EF синхронний
+            await Task.CompletedTask;
+        }
+        public async Task<bool> SaveChangesAsync()
+        {
+            return await _context.SaveChangesAsync() > 0;
         }
     }
 }

@@ -93,27 +93,27 @@ const Header = () => {
                     <div className={styles.authButtons}>
                         {isLogged ? (
                             <>
-                                <li>
+                                {/* <li>
                                     <NavLink
                                         to={`/tickets/${user?.id}`}
                                         onClick={closeMenu}
                                         className={({ isActive }) => isActive ? `${styles.navlink} ${styles.active} ` : styles.navlink}
                                     >My Tickets</NavLink>
-                                </li>
+                                </li> */}
                                 
                                 {/* КНОПКА ПРОФІЛЮ */}
                                 <li className={styles.profileItem}>
-                                    <NavLink to={`/profile/${user?.id}`} className={styles.profileLink} onClick={closeMenu}>
+                                    <NavLink to={`/profile`} className={styles.profileLink} onClick={closeMenu}>
                                         <div className={styles.avatar}>{getInitials()}</div>
                                         <span className={styles.userName}>{user?.firstName} {user?.lastName}</span>
                                     </NavLink>
                                 </li>
 
-                                <li>
+                                {/* <li>
                                     <Button bgColor="var(--color-danger)" action={handleLogout}>
                                         Log out
                                     </Button>
-                                </li>
+                                </li> */}
                             </>
                         ) : (
                             <>
