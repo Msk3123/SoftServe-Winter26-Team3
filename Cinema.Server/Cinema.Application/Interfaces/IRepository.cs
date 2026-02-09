@@ -1,6 +1,7 @@
 ﻿using Cinema.Application.Common.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace Cinema.Application.Interfaces
@@ -14,5 +15,6 @@ namespace Cinema.Application.Interfaces
         Task DeleteAsync(int id);
         Task<(IEnumerable<T> Items, int TotalCount)> GetPagedAsync(QueryParameters queryParameters);
         void Remove(T entity);
+        Task<int> CountAsync(Expression<Func<T, bool>> predicate);
     }
 }

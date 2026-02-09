@@ -2,6 +2,7 @@ using AutoMapper;
 using Cinema.Application.Common.Models;
 using Cinema.Application.DTOs.SeatTypeDtos;
 using Cinema.Application.Interfaces;
+using Cinema.Application.Interfaces.Services;
 using Cinema.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,11 +15,13 @@ namespace Cinema.API.Controllers
     public class SeatTypesController : ApiBaseController
     {
         private readonly ISeatTypeRepository _seatTypeRepository;
+        private readonly ISeatTypeService _seatTypeService;
 
-        public SeatTypesController(ISeatTypeRepository repository, IMapper mapper)
+        public SeatTypesController(ISeatTypeRepository repository, IMapper mapper,ISeatTypeService seatTypeService)
              : base(mapper)
         {
             _seatTypeRepository = repository;
+            _seatTypeService = seatTypeService;
         }
 
         [HttpGet]
@@ -74,16 +77,34 @@ namespace Cinema.API.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        [HttpGet("{id}/usage")]
+        public async Task<IActionResult> GetUsage(int id)
         {
-            var seatType = await _seatTypeRepository.GetByIdAsync(id);
-            if (seatType == null) return NotFound();
+            var count = await _seatTypeService.GetUsageCountAsync(id);
+            return Ok(new { count });
+        }
 
-            await _seatTypeRepository.DeleteAsync(id);
-            await _seatTypeRepository.SaveAsync();
-
-            return NoContent();
+        // 2. Видалення з міграцією
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id, [FromQuery] int replacementId)
+        {
+            try
+            {
+                await _seatTypeService.DeleteAndMigrateSeatsAsync(id, replacementId);
+                return NoContent();
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
         }
     }
 }

@@ -63,5 +63,13 @@ namespace Cinema.Persistence.Repositories
                 .Where(s => s.HallId == hallId)
                 .ToListAsync();
         }
+
+        public async Task UpdateSeatTypesBulkAsync(int oldTypeId, int newTypeId)
+        {
+            await _dbSet
+                .Where(s => s.SeatTypeId == oldTypeId)
+                .ExecuteUpdateAsync(setters => setters
+                    .SetProperty(s => s.SeatTypeId, newTypeId));
+        }
     }
 }
