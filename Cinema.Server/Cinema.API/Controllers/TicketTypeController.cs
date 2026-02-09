@@ -1,16 +1,18 @@
 using AutoMapper;
+using Cinema.Application.Common.Models;
 using Cinema.Application.DTOs.TicketTypeDtos;
 using Cinema.Application.Interfaces;
 using Cinema.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Cinema.Application.Common.Models;
 
 
 namespace Cinema.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles = "Admin")]
     public class TicketTypesController : ApiBaseController
     {
         private readonly ITicketTypeRepository _ticketTypeRepository;
@@ -21,6 +23,7 @@ namespace Cinema.API.Controllers
             _ticketTypeRepository = repository;
         }
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAll([FromQuery] QueryParameters queryParameters)
         {
             var results = await _ticketTypeRepository.GetAllPagedAsync(queryParameters);
@@ -28,6 +31,7 @@ namespace Cinema.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<TicketTypeDto>> GetById(int id)
         {
             var ticketType = await _ticketTypeRepository.GetByIdAsync(id);

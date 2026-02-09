@@ -7,6 +7,7 @@ using Cinema.Application.Interfaces.Services;
 using Cinema.Domain.Entities;
 using Cinema.Persistence.Context;
 using Cinema.Persistence.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,6 +15,7 @@ namespace Cinema.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles = "Admin")]
     public class MovieController : ApiBaseController
     {
         private readonly IMovieRepository _movieRepository;
@@ -26,6 +28,7 @@ namespace Cinema.API.Controllers
         }
         // GET: api/movie?page=1&limit=10&sortBy=title&order=asc
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetMovies([FromQuery] QueryParameters queryParameters)
         {
             var result = await _movieRepository.GetMoviesPagedAsync(queryParameters);
@@ -34,6 +37,7 @@ namespace Cinema.API.Controllers
 
         // GET: api/movie/upcoming
         [HttpGet("upcoming")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetUpcoming([FromQuery] QueryParameters queryParameters)
         {
             var result = await _movieRepository.GetUpcomingMoviesPagedAsync(queryParameters);
@@ -42,6 +46,7 @@ namespace Cinema.API.Controllers
 
         // GET: api/movie/now-showing
         [HttpGet("now-showing")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetNowShowing([FromQuery] QueryParameters queryParameters)
         {
             var result = await _movieRepository.GetNowShowingMoviesPagedAsync(queryParameters);
@@ -49,6 +54,7 @@ namespace Cinema.API.Controllers
         }
         // GET: api/movie/genre/{genreId}
         [HttpGet("genre/{genreId:int}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetByGenre(int genreId, [FromQuery] QueryParameters queryParameters)
         {
             var result = await _movieRepository.GetByGenreIdPagedAsync(genreId, queryParameters);
@@ -57,6 +63,7 @@ namespace Cinema.API.Controllers
 
         // GET: api/movie/actor/{actorId}
         [HttpGet("actor/{actorId:int}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetByActor(int actorId, [FromQuery] QueryParameters queryParameters)
         {
             var result = await _movieRepository.GetByActorIdPagedAsync(actorId, queryParameters);
@@ -66,6 +73,7 @@ namespace Cinema.API.Controllers
 
         // GET: api/movie/{id}
         [HttpGet("{id:int}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetById(int id)
         {
             var movie = await _movieRepository.GetByIdWithDetailsAsync(id);
@@ -75,6 +83,7 @@ namespace Cinema.API.Controllers
             return Ok(response);
         }
         [HttpGet("search")]
+        [AllowAnonymous]
         public async Task<IActionResult> SearchMovies([FromQuery] string query, [FromQuery] QueryParameters queryParameters)
         {
             var result = await _movieService.SearchMoviesAsync(query, queryParameters);
@@ -97,6 +106,7 @@ namespace Cinema.API.Controllers
 
         // PUT: api/movie/{id}
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")] // Тільки для залогіненого адміна
         public async Task<IActionResult> Update(int id, [FromBody] MovieCreateDto movieDto)
         {
             var movie = await _movieRepository.GetByIdWithDetailsAsync(id);
@@ -110,6 +120,7 @@ namespace Cinema.API.Controllers
 
         // PATCH: api/movie/{id}
         [HttpPatch("{id}")]
+        [Authorize(Roles = "Admin")] // Тільки для залогіненого адміна
         public async Task<IActionResult> PatchMovie(int id, [FromBody] MoviePatchDto moviePatchDto)
         {
             await _movieRepository.UpdateMoviePatchAsync(id, moviePatchDto);

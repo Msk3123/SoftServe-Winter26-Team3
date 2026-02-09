@@ -50,6 +50,9 @@ namespace Cinema.Persistence.Repositories
                 .Include(t => t.Order)
                     .ThenInclude(o => o.Session)
                         .ThenInclude(s => s.Movie)
+                .Include(t => t.Order)
+                    .ThenInclude(o => o.Session)
+                        .ThenInclude(s => s.Hall)
                 .Where(t => t.Order.UserId == userId)
                 .OrderByDescending(t => t.Order.OrderDate)
                 .ToPagedResultAsync(queryParameters);

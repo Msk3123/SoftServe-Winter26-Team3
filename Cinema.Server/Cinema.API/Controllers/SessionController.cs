@@ -7,12 +7,14 @@ using Cinema.Application.Services;
 using Cinema.Domain.Entities;
 using Cinema.Domain.Enums;
 using Cinema.Persistence.Context;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cinema.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles = "Admin")]
     public class SessionController : ApiBaseController
     {
         private readonly ISessionService _sessionService; 
@@ -26,11 +28,13 @@ namespace Cinema.API.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAll([FromQuery] QueryParameters queryParameters,[FromQuery] SessionFilter sessionFilter) {
            var results = await _sessionRepository.GetAllWithDetailsPagedAsync(queryParameters, sessionFilter);
            return OkPaged<Session, SessionShortDto>(results, queryParameters);
         }
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetById(int id)
         {
             var session = await _sessionRepository.GetByIdWithFullDetailsAsync(id);
@@ -40,8 +44,8 @@ namespace Cinema.API.Controllers
         }
         // GET: api/session/movie/{movieId}
         [HttpGet("movie/{movieId:int}")]
-        public async Task<IActionResult> GetByMovie(int movieId,
-            [FromQuery] QueryParameters queryParameters, [FromQuery] SessionFilter sessionFilter)
+        [AllowAnonymous]
+        public async Task<IActionResult> GetByMovie(int movieId, [FromQuery] QueryParameters queryParameters, [FromQuery] SessionFilter sessionFilter)
         {
             var results = await _sessionRepository.GetByMovieIdPagedAsync(movieId, queryParameters,sessionFilter);
             return OkPaged<Session, SessionShortDto>(results, queryParameters);

@@ -3,12 +3,14 @@ using Cinema.Application.Common.Models;
 using Cinema.Application.DTOs.NewsDtos;
 using Cinema.Application.Interfaces;
 using Cinema.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cinema.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles = "Admin")]
     public class NewsController : ApiBaseController
     {
         private readonly INewsRepository _newsRepository;
@@ -20,6 +22,7 @@ namespace Cinema.API.Controllers
 
         // GET: api/news
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAll([FromQuery] QueryParameters queryParameters)
         {
             var results = await _newsRepository.GetAllWithDetailsPagedAsync(queryParameters);
@@ -28,6 +31,7 @@ namespace Cinema.API.Controllers
 
         // GET: api/news/active
         [HttpGet("active")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetActive([FromQuery] QueryParameters queryParameters)
         {
             var results = await _newsRepository.GetActiveNewsPagedAsync(queryParameters);
@@ -36,6 +40,7 @@ namespace Cinema.API.Controllers
 
         // GET: api/news/{id}
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetById(int id)
         {
             var newsItem = await _newsRepository.GetByIdWithDetailsAsync(id);

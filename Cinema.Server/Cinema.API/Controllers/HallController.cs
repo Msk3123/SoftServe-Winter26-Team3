@@ -4,12 +4,14 @@ using Cinema.Application.DTOs.HallDtos;
 using Cinema.Application.Interfaces;
 using Cinema.Application.Interfaces.Services;
 using Cinema.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cinema.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles = "Admin")]
     public class HallController : ApiBaseController
     {
         private readonly IHallRepository _hallRepository;
@@ -22,6 +24,7 @@ namespace Cinema.API.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAll([FromQuery] QueryParameters queryParameters)
         {
             var results = await _hallRepository.GetAllPagedAsync(queryParameters);
@@ -29,6 +32,7 @@ namespace Cinema.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetById(int id)
         {
             var hall = await _hallRepository.GetByIdAsync(id);

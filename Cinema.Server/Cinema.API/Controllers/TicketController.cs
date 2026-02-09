@@ -4,12 +4,14 @@ using Cinema.Application.Common.Models;
 using Cinema.Application.DTOs.TicketDtos;
 using Cinema.Application.Interfaces;
 using Cinema.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cinema.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class TicketController : ApiBaseController
     {
         private readonly ITicketRepository _ticketRepository;
@@ -20,12 +22,14 @@ namespace Cinema.WebAPI.Controllers
         }
 
         [HttpGet("user/{userId}")]
+        [Authorize]
         public async Task<IActionResult> GetUserTickets(int userId, [FromQuery] QueryParameters queryParameters)
         {
+            var currentUserId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (!User.IsInRole("Admin") && currentUserId != userId.ToString()) return Forbid();
+
             var result = await _ticketRepository.GetTicketsByUserIdPagedAsync(userId, queryParameters);
-            if (result.Items == null) throw new KeyNotFoundException($"No tickets found for user with id {userId}.");
-            
-            return OkPaged<Ticket, TicketShortDto>(result,queryParameters);
+            return OkPaged<Ticket, TicketDetailsDto>(result, queryParameters);
         }
         [HttpGet("{id}")]
         public async Task<ActionResult<TicketDetailsDto>> GetTicketDetails(int id)
