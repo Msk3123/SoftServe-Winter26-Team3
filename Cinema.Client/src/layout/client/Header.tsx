@@ -16,7 +16,6 @@ const Header = () => {
             try {
                 const decoded: any = jwtDecode(token);
                 setIsLogged(true);
-                // === ПІДХОПЛЮЄМО firstName ТА lastName З ТОКЕНА ===
                 setUser({
                     firstName: decoded.firstName || "User", 
                     lastName: decoded.lastName || "",
@@ -32,7 +31,6 @@ const Header = () => {
     const toggleMenu = () => setIsMenuOpen((prev) => !prev);
     const closeMenu = () => setIsMenuOpen(false);
 
-    // === ГЕНЕРАЦІЯ ІНІЦІАЛІВ ===
     const getInitials = () => {
         if (!user) return "?";
         const first = user.firstName?.charAt(0) || "";

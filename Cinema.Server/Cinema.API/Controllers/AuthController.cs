@@ -37,11 +37,11 @@ public class AuthController : ControllerBase
         var result = await _authService.RefreshTokenAsync(dto);
         return Ok(result);
     }
-    [HttpPost("change-password")] // Шлях: api/Auth/change-password
-    [Authorize] // Потребує токен
+    [HttpPost("change-password")] 
+    [Authorize] 
     public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto dto)
     {
-        // Отримуємо ID (в токені це "nameid", що є ClaimTypes.NameIdentifier)
+       
         var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
 
         if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var userId))

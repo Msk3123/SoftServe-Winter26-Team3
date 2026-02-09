@@ -108,16 +108,13 @@ public class AuthService : IAuthService
 
     public async Task<bool> ChangePasswordAsync(int userId, string newPassword)
     {
-        // Твій репозиторій з методом GetByIdWithRoleAsync
         var user = await _userRepository.GetByIdWithRoleAsync(userId);
         if (user == null) return false;
 
-        // Твій BCrypt-хешер (1 аргумент)
         user.PasswordHash = _passwordHasher.HashPassword(newPassword);
 
         await _userRepository.UpdateAsync(user);
 
-        // Переконайся, що в IUserRepository є цей метод!
         return await _userRepository.SaveChangesAsync();
     }
 }

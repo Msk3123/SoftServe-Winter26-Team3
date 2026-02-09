@@ -66,7 +66,6 @@ import userDetailsLoader from "../features/admin/user/UserDetails/userDetailsLoa
 import ProtectedRoute from "./ProtectedRoute";
 
 export const router = createBrowserRouter([
-  // --- КЛІЄНТСЬКА ЧАСТИНА (З Хедером/Фотером та фоном) ---
   {
     path: "/",
     element: <ClientPageLayout />,
@@ -80,7 +79,6 @@ export const router = createBrowserRouter([
       { path: "news/:newsId", element: <NewsDetailsPage /> },
       { path: "actor/:actorId", element: <ActorPage /> },
       
-      // Захищені клієнтські маршрути
       {
         element: <ProtectedRoute />,
         children: [
@@ -89,13 +87,11 @@ export const router = createBrowserRouter([
           { path: "checkout", element: <CheckoutPage /> },
         ]
       },
-      
-      // Клієнтська 404 (буде з фоном сайту)
+    
       { path: "*", element: <PageNotFound /> },
     ],
   },
 
-  // --- АВТОРИЗАЦІЯ (Окремий фон) ---
   {
     path: "/auth",
     element: <AuthLayout />,
@@ -105,7 +101,6 @@ export const router = createBrowserRouter([
     ],
   },
 
-  // --- АДМІН-ПАНЕЛЬ (Тільки для Admin) ---
   {
     path: "/admin",
     element: <ProtectedRoute requiredRole="Admin" />, 
@@ -197,7 +192,6 @@ export const router = createBrowserRouter([
             ],
           },
 
-          // Адмінська 404 (всередині адмін-інтерфейсу)
           { path: "*", element: <AdminPageNotFound /> },
         ],
       },
