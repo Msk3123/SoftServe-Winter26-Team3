@@ -10,7 +10,7 @@ namespace Cinema.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize] 
+    [Authorize(Roles = "Admin")] 
     public class UsersController : ApiBaseController
     {
         private readonly IUserRepository _userRepository;
@@ -51,7 +51,6 @@ namespace Cinema.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Admin")] 
         public async Task<IActionResult> Delete(int id)
         {
             var user = await _userRepository.GetByIdAsync(id);

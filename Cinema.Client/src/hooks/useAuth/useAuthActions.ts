@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 import { authApi } from "../../api/authApi";
 import type { LoginDto, RegisterDto } from "../../types/auth.types";
 
@@ -10,20 +11,26 @@ export const useAuthActions = () => {
 
   const login = async (dto: LoginDto) => {
     setIsLoading(true);
-    setError(null);
     try {
-      const data = await authApi.login(dto);
-      
-      localStorage.setItem("accessToken", data.accessToken);
-      localStorage.setItem("refreshToken", data.refreshToken);
-      
-      navigate("/home");
+        const data = await authApi.login(dto);
+        localStorage.setItem("accessToken", data.accessToken);
+        localStorage.setItem("refreshToken", data.refreshToken);
+
+        // === ДОДАНО: Логіка редиректу за роллю ===
+        const decoded: any = jwtDecode(data.accessToken);
+        const role = decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] || decoded.role;
+
+        if (role === "Admin") {
+        navigate("/admin/movies"); // Адміна шлемо в панель
+        } else {
+        navigate("/home"); // Юзера на головну
+        }
     } catch (err: any) {
-      setError(err.message);
+        setError(err.message);
     } finally {
-      setIsLoading(false);
+        setIsLoading(false);
     }
-  };
+    };
 
   const signup = async (dto: RegisterDto) => {
     setIsLoading(true);

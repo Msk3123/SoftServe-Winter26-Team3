@@ -94,7 +94,7 @@ public class AuthService : IAuthService
         var newRefreshToken = _tokenService.GenerateRefreshToken();
 
         user.RefreshToken = newRefreshToken;
-        user.ExpiresAt = DateTime.UtcNow.AddMinutes(1); 
+        user.ExpiresAt = DateTime.UtcNow.AddMinutes(15); 
 
         await _unitOfWork.SaveChangesAsync();
 

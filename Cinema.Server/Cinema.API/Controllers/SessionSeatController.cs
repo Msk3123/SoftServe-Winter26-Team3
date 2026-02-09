@@ -4,12 +4,14 @@ using Cinema.Application.DTOs.SessionSeatDtos;
 using Cinema.Application.Interfaces;
 using Cinema.Application.Interfaces.Services;
 using Cinema.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cinema.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles = "Admin")]
     public class SessionSeatController : ApiBaseController
     {
         private readonly ISessionSeatService _sessionSeatService;
@@ -25,6 +27,7 @@ namespace Cinema.API.Controllers
         }
 
         [HttpGet("session/{sessionId:int}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetBySession(int sessionId)
         {
             var seats = await _sessionSeatRepository.GetBySessionIdAsync(sessionId);
@@ -33,6 +36,7 @@ namespace Cinema.API.Controllers
         }
 
         [HttpPost("{id:int}/reserve")]
+        [Authorize]
         public async Task<IActionResult> Reserve(int id, [FromQuery] int userId)
         {
             var result = await _sessionSeatService.ReserveSeatAsync(id, userId);

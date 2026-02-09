@@ -43,6 +43,7 @@ import CreateSeatType from "../features/admin/seatType/CreateSeatType/CreateSeat
 import EditSeatTypeForm from "../features/admin/seatType/EditSeatType/EditSeatTypeForm";
 import AdminSeatTypesPage from "../pages/Admin/SeatTypes/AdminSeatTypesPage";
 import editSeatTypeFormLoader from "../features/admin/seatType/EditSeatType/editSeatTypeLoader";
+import ProtectedRoute from "./ProtectedRoute";
 
 export const router = createBrowserRouter([
   {
@@ -82,16 +83,12 @@ export const router = createBrowserRouter([
         element: <ActorPage />,
       },
       {
-        path: "order/:sessionId",
-        element:<OrderPage /> ,
-      },
-      {
-        path: "checkout",
-        element: <CheckoutPage />,
-      },
-      {
-        path: "tickets/:userId",
-        element: <TicketsPage />,
+        element: <ProtectedRoute />,
+        children: [
+          { path: "order/:sessionId", element: <OrderPage /> },
+          { path: "checkout", element: <CheckoutPage /> },
+          { path: "tickets/:userId", element: <TicketsPage /> },
+        ]
       },
       {
         path: "*",
@@ -110,116 +107,78 @@ export const router = createBrowserRouter([
 
   {
     path: "/admin",
-    element: <AdminPageLayout />,
+    element: <ProtectedRoute requiredRole="Admin" />, // Тільки для Admin
     children: [
       {
-        path: "movies",
-        element: <AdminMoviesPage />,
+        element: <AdminPageLayout />, // Весь лейаут адмінки тепер під захистом
         children: [
+          { index: true, element: <Navigate to="movies" replace /> },
           {
-            path: "create",
-            element: <AdminModal  title="Create Movie"><CreateMovieForm/></AdminModal>,
+            path: "movies",
+            element: <AdminMoviesPage />,
+            children: [
+              { path: "create", element: <AdminModal title="Create Movie"><CreateMovieForm /></AdminModal> },
+              { path: ":movieId/edit", element: <AdminModal title="Edit Movie"><EditMovieForm /></AdminModal>, loader: editMovieFormLoader },
+            ],
           },
           {
-            path: ":movieId/edit",
-            element: <AdminModal title="Edit Movie"><EditMovieForm/></AdminModal>,
-            loader: editMovieFormLoader,
+            path: "sessions",
+            element: <AdminSessionsPage />,
+            children: [
+              { path: "create", element: <AdminModal title="Create Session"><CreateSessionForm /></AdminModal> },
+              { path: ":sessionId/edit", element: <AdminModal title="Edit Session"><EditSessionForm /></AdminModal>, loader: editSessionFormLoader },
+            ],
           },
+          {
+            path: "halls",
+            element: <AdminHallsPage />,
+            children: [
+              { path: "create", element: <AdminModal title="Create Hall"><CreateHallForm /></AdminModal> },
+              { path: ":hallId/edit", element: <AdminModal title="Edit Hall"><EditHallForm /></AdminModal>, loader: editHallFormLoader },
+            ],
+          },
+          {
+            path: "news",
+            element: <AdminNewsPage />,
+            children: [
+              { path: "create", element: <AdminModal title="Create News"><CreateNewsForm /></AdminModal> },
+              { path: ":newsId/edit", element: <AdminModal title="Edit News"><EditNewsForm /></AdminModal>, loader: editNewsFormLoader },
+            ],
+          },
+          {
+            path: "users",
+            element: <AdminUsersPage />,
+            children: [
+              { path: ":userId/edit", element: <AdminModal>User view</AdminModal> },
+              { path: "create", element: <AdminModal>create User</AdminModal> },
+            ],
+          },
+          {
+            path: "orders",
+            element: <AdminOrderPage />,
+            children: [
+              { path: "create", element: <AdminModal>create order</AdminModal> },
+              { path: ":orderId/edit", element: <AdminModal>order view</AdminModal> }
+            ]
+          },
+          {
+            path: "actors",
+            element: <AdminActorsPage />,
+            children: [
+              { path: "create", element: <AdminModal title="Create Actor"><CreateActorForm /></AdminModal> },
+              { path: ":actorId/edit", element: <AdminModal title="Edit Actor"><EditActorForm /></AdminModal>, loader: editActorFormLoader }
+            ]
+          },
+          {
+            path: "seats",
+            element: <AdminSeatTypesPage />,
+            children: [
+              { path: "create", element: <AdminModal title="Create Seat Type"><CreateSeatType /></AdminModal> },
+              { path: ":seatId/edit", element: <AdminModal title="Edit Seat Type"><EditSeatTypeForm /></AdminModal>, loader: editSeatTypeFormLoader }
+            ],
+          },
+          { path: "*", element: <AdminPageNotFound /> },
         ],
-      },
-
-      {
-        path: "sessions",
-        element: <AdminSessionsPage />,
-        children: [
-          {
-            path: "create",
-            element: <AdminModal  title="Create Session"><CreateSessionForm /></AdminModal>,
-          },
-          {
-            path: ":sessionId/edit",
-            element: <AdminModal title="Edit Session"><EditSessionForm /></AdminModal>,
-            loader : editSessionFormLoader,
-          },
-        ],
-      },
-
-      {
-        path: "halls",
-        element: <AdminHallsPage />,
-        children: [
-          {
-            path: "create",
-            element: <AdminModal title="Create Hall"><CreateHallForm/></AdminModal>,
-          },
-          {
-            path: ":hallId/edit",
-            element: <AdminModal title="Edit Hall"><EditHallForm/></AdminModal>,
-            loader:editHallFormLoader,
-          },
-        ],
-      },
-
-      {
-        path: "news",
-        element: <AdminNewsPage />,
-        children: [
-          { path: "create", element: <AdminModal title="Create News"><CreateNewsForm/></AdminModal> },
-          { path: ":newsId/edit",
-              element: <AdminModal title="Edit News"><EditNewsForm/></AdminModal>,
-              loader: editNewsFormLoader,
-            }
-        ],
-      },
-
-      {
-        path: "users",
-        element: <AdminUsersPage />,
-        children: [
-          {
-            path: ":userId/edit",
-            element: <AdminModal>User view</AdminModal>,
-          },
-          { path: "create", element: <AdminModal>create User</AdminModal> },
-        ],
-      },
-      
-      {
-        path: "orders",
-        element: <AdminOrderPage />,
-        children: [
-            { path: "create", element: <AdminModal>create order</AdminModal> },
-            { path: ":orderId/edit", element: <AdminModal>order view</AdminModal>}
-        ]
-      },
-
-      {
-        path: "actors",
-        element: <AdminActorsPage />,
-        children: [
-            { path: "create", element: <AdminModal title="Create Actor"><CreateActorForm/></AdminModal> },
-            { path: ":actorId/edit",
-              element: <AdminModal title="Edit Actor"><EditActorForm/></AdminModal>,
-              loader: editActorFormLoader,
-            }
-        ]
-      },
-
-      {
-        path: "seats",
-        element: <AdminSeatTypesPage />,
-        children: [
-          { path: "create", element: <AdminModal title="Create Seat Type"><CreateSeatType/></AdminModal> },
-          { path: ":seatId/edit",
-              element: <AdminModal title="Edit Seat Type"><EditSeatTypeForm /></AdminModal>,
-              loader: editSeatTypeFormLoader,
-            }
-        ],
-      },
-
-      {
-        path: "*",
-        element: <AdminPageNotFound />,
       },
     ],
   },

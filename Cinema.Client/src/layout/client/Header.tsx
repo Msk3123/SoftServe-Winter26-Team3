@@ -8,7 +8,6 @@ import { jwtDecode } from "jwt-decode";
 const Header = () => {
     const [isLogged, setIsLogged] = useState<boolean>(false);
     const [user, setUser] = useState<{ firstName: string; lastName: string; id: string } | null>(null);
-    
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
     useEffect(() => {
@@ -17,8 +16,9 @@ const Header = () => {
             try {
                 const decoded: any = jwtDecode(token);
                 setIsLogged(true);
+                // === ПІДХОПЛЮЄМО firstName ТА lastName З ТОКЕНА ===
                 setUser({
-                    firstName: decoded.firstName || "User",
+                    firstName: decoded.firstName || "User", 
                     lastName: decoded.lastName || "",
                     id: decoded.nameid
                 });
@@ -32,9 +32,12 @@ const Header = () => {
     const toggleMenu = () => setIsMenuOpen((prev) => !prev);
     const closeMenu = () => setIsMenuOpen(false);
 
+    // === ГЕНЕРАЦІЯ ІНІЦІАЛІВ ===
     const getInitials = () => {
         if (!user) return "?";
-        return `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`.toUpperCase();
+        const first = user.firstName?.charAt(0) || "";
+        const last = user.lastName?.charAt(0) || "";
+        return (first + last).toUpperCase() || "?";
     };
 
     const handleLogout = () => {
@@ -98,8 +101,9 @@ const Header = () => {
                                     >My Tickets</NavLink>
                                 </li>
                                 
+                                {/* КНОПКА ПРОФІЛЮ */}
                                 <li className={styles.profileItem}>
-                                    <NavLink to="/profile" className={styles.profileLink} onClick={closeMenu}>
+                                    <NavLink to={`/profile/${user?.id}`} className={styles.profileLink} onClick={closeMenu}>
                                         <div className={styles.avatar}>{getInitials()}</div>
                                         <span className={styles.userName}>{user?.firstName} {user?.lastName}</span>
                                     </NavLink>

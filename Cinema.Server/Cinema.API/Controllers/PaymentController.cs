@@ -2,6 +2,7 @@
 using Cinema.Application.DTOs.PaymentDtos;
 using Cinema.Application.Interfaces;
 using Cinema.Application.Interfaces.PaymentGateway;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text;
 
@@ -9,6 +10,7 @@ namespace Cinema.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class PaymentController : ApiBaseController
     {
         private readonly IPaymentService _paymentService;
@@ -27,6 +29,7 @@ namespace Cinema.API.Controllers
 
         [HttpPost("callback")]
         [Consumes("application/x-www-form-urlencoded")]
+        [AllowAnonymous]
         public async Task<IActionResult> PaymentCallback([FromForm] string data, [FromForm] string signature)
         {
             Console.WriteLine("-----------------------------");
