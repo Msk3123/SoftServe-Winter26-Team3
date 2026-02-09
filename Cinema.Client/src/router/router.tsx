@@ -48,6 +48,7 @@ import OrderDetailsView from "../features/admin/order/OrderDetailsView";
 import userDetailsLoader from "../features/admin/user/UserDetails/userDetailsLoader";
 import UserDetails from "../features/admin/user/UserDetails/UserDetails";
 import CreateUser from "../features/admin/user/CreateUserForm/CreateUserForm";
+import DeleteMovie from "../features/admin/movies/DeleteMovie/DeleteMovie";
 
 
 export const router = createBrowserRouter([
@@ -130,6 +131,17 @@ export const router = createBrowserRouter([
             path: ":movieId/edit",
             element: <AdminModal title="Edit Movie"><EditMovieForm/></AdminModal>,
             loader: editMovieFormLoader,
+          },
+          {
+            path: ":movieId/delete",
+            element: <AdminModal  title="Delete Movie"><DeleteMovie/></AdminModal>,
+            children :[
+              {
+                path: ":sessionId/edit",
+                element: <AdminModal title="Edit Session"><EditSessionForm /></AdminModal>,
+                loader : editSessionFormLoader,
+          },
+            ]
           },
         ],
       },

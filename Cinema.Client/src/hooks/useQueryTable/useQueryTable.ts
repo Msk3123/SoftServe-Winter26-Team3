@@ -41,6 +41,24 @@ export default function useQueryTable<T extends BaseEntity>(
         fetchMovies();
     }, [state.currentPage, state.pageSize, state.sortBy, state.order,fetchFn,state.refreshTrigger]);
 
+    useEffect(() => {
+    if (state.loading) return;
+
+    const currentCount = state.data?.length || 0;
+    
+    if (currentCount === 0 && state.currentPage > 1) {
+        dispatch({ type: "set_page", payload: state.currentPage - 1 });
+        return;
+    }
+
+    const canFetchMore = state.totalCount > currentCount;
+    const isPageUnderfilled = currentCount < state.pageSize;
+
+    if (isPageUnderfilled && canFetchMore) {
+        dispatch({ type: "refresh" });
+    }
+}, [state.data?.length, state.pageSize, state.totalCount, state.loading, state.currentPage]);
+
     const actions = useMemo(() => ({
         setPage: (page: number) =>
             dispatch({ type: "set_page", payload: page }),

@@ -163,7 +163,7 @@ export async function patchItem<T>(
 
 }
 
-export async function deleteItem(path:string,id:number|string):Promise<boolean | undefined> {
+export async function deleteItem(path:string,id:number|string):Promise<void> {
     const url=`${baseUrl}${path}/${id}`;
         
     const response = await fetch(url, {
@@ -173,11 +173,6 @@ export async function deleteItem(path:string,id:number|string):Promise<boolean |
             },
         });
 
-    try {
-        await handleResponse(response,{path,id});
-        return true;
-    }catch(error){
-        console.error(error);
-        return false;
-    }
+    await handleResponse(response,{path,id});
+
 };
