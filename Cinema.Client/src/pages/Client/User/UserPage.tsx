@@ -11,13 +11,10 @@ const UserPage = () => {
     const [passData, setPassData] = useState({ newPassword: '', confirmPassword: '' });
     const [loading, setLoading] = useState(false);
     
-    // Окремі стани для повідомлень, щоб вони не перетиналися між вкладками
     const [ticketError, setTicketError] = useState('');
     const [authMessage, setAuthMessage] = useState({ text: '', isError: false });
 
-    // Функція для парсингу ID з токена (nameid)
     const getUserIdFromToken = () => {
-        // ВИПРАВЛЕНО: Використовуємо правильний ключ 'accessToken'
         const token = localStorage.getItem('accessToken'); 
         
         if (!token) {
@@ -29,14 +26,12 @@ const UserPage = () => {
             const base64Url = token.split('.')[1];
             const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
             
-            // Безпечне декодування (підтримує кирилицю)
             const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
                 return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
             }).join(''));
 
             const payload = JSON.parse(jsonPayload);
             
-            // Повертаємо nameid (у твоєму токені це "10")
             return payload.nameid; 
         } catch (e) {
             console.error("DEBUG: Помилка парсингу токена:", e);
@@ -44,7 +39,6 @@ const UserPage = () => {
         }
     };
 
-    // 1. ЗАВАНТАЖЕННЯ КВИТКІВ
     useEffect(() => {
         if (activeTab === 'tickets') {
             const userId = getUserIdFromToken();
@@ -57,7 +51,6 @@ const UserPage = () => {
             setLoading(true);
             setTicketError(''); 
             
-            // Запит до твого Ticket контролера
             getList(`Ticket/user/${userId}`)
                 .then((res: any) => {
                     console.log(res.items)
@@ -72,7 +65,6 @@ const UserPage = () => {
         }
     }, [activeTab]);
 
-    // 2. ЗМІНА ПАРОЛЯ
     const handlePasswordUpdate = async (e: React.FormEvent) => {
         e.preventDefault();
         setAuthMessage({ text: '', isError: false });
@@ -85,7 +77,6 @@ const UserPage = () => {
         }
 
         try {
-            // Виклик твого AuthService через AuthController
             await postItem('auth/change-password', { newPassword: passData.newPassword });
             setAuthMessage({ text: "Пароль успішно оновлено!", isError: false });
             setPassData({ newPassword: '', confirmPassword: '' });
@@ -103,7 +94,7 @@ const UserPage = () => {
                         className={activeTab === 'tickets' ? styles.active : ''} 
                         onClick={() => { 
                             setActiveTab('tickets'); 
-                            setAuthMessage({text: '', isError: false}); // Очищуємо повідомлення при зміні таба
+                            setAuthMessage({text: '', isError: false}); 
                         }}
                     >
                         🎫 Мої Квитки
@@ -112,7 +103,7 @@ const UserPage = () => {
                         className={activeTab === 'security' ? styles.active : ''} 
                         onClick={() => { 
                             setActiveTab('security'); 
-                            setTicketError(''); // Очищуємо помилки квитків
+                            setTicketError(''); 
                         }}
                     >
                         🔒 Безпека
@@ -130,7 +121,6 @@ const UserPage = () => {
                     <section className={styles.section}>
                         <h2 className={styles.title}>Ваші квитки</h2>
                         
-                        {/* Повідомлення про помилку завантаження */}
                         {ticketError && <div className={styles.errorBanner}>{ticketError}</div>}
                         
                         {loading ? <p className={styles.statusMsg}>Синхронізація з базою...</p> : (
@@ -154,7 +144,6 @@ const UserPage = () => {
                     <section className={styles.section}>
                         <h2 className={styles.title}>Безпека акаунта</h2>
                         
-                        {/* Повідомлення про успіх/помилку пароля */}
                         {authMessage.text && (
                             <div className={authMessage.isError ? styles.errorBanner : styles.successBanner}>
                                 {authMessage.text}
