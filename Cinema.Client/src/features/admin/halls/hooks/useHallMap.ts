@@ -18,7 +18,6 @@ const useHallMap = (
                 setIsLoading(true)
                 const data = await getSeatsByHall(id);
                 const seatsDividedByRow = transformSeats(data);
-                
                 if(setRows) setRows(seatsDividedByRow.length)
                 
                     setSeats(seatsDividedByRow);
