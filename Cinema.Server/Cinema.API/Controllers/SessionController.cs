@@ -14,7 +14,7 @@ namespace Cinema.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public class SessionController : ApiBaseController
     {
         private readonly ISessionService _sessionService; 
@@ -51,6 +51,7 @@ namespace Cinema.API.Controllers
             return OkPaged<Session, SessionShortDto>(results, queryParameters);
         }
         [HttpGet("extended/{id}")]
+        [Authorize]
         public async Task<IActionResult> GetExtended(int id)
         {
             var session = await _sessionRepository.GetByIdExtendedAsync(id);
@@ -58,6 +59,7 @@ namespace Cinema.API.Controllers
             return Ok(_mapper.Map<SessionExtendedDto>(session));
         }
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([FromBody] SessionCreateDto dto)
         {
             var result = await _sessionService.CreateSessionAsync(dto);
@@ -66,12 +68,14 @@ namespace Cinema.API.Controllers
             return CreatedAtAction(nameof(GetById), new { id = response.Id }, response);
         }
         [HttpPost("batch")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateBatch([FromBody] CreateSessionsBatchDto dto)
         {
             await _sessionService.CreateSessionsBatchAsync(dto);
             return Ok(new { message = "Schedule created successfully" });
         }
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Update(int id, [FromBody] SessionCreateDto dto)
         {
             var session = await _sessionRepository.GetByIdAsync(id);
@@ -84,6 +88,7 @@ namespace Cinema.API.Controllers
             return NoContent();
         }
         [HttpPatch("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Patch(int id, [FromBody] SessionPatchDto dto)
         {
             var session = await _sessionRepository.GetByIdAsync(id);
@@ -97,6 +102,7 @@ namespace Cinema.API.Controllers
             return NoContent();
         }
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             await _sessionService.DeleteSessionAsync(id);
