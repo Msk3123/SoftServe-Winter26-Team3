@@ -14,6 +14,7 @@ interface AdminTablePageProps<T extends BaseEntity>{
     columns: ColumnDef<T>[];
     deleteFn?: DeleteFunction;
     isActions?:boolean;
+    isCreate?:boolean;
     tableData:{
         data: readonly T[] | undefined;
         pagination: {
@@ -41,7 +42,7 @@ interface AdminTablePageProps<T extends BaseEntity>{
     };
 }
 
-const AdminTablePage = <T extends BaseEntity>({columns,deleteFn,isActions=true,tableData,tableActions}:AdminTablePageProps<T>)=>{
+const AdminTablePage = <T extends BaseEntity>({columns,deleteFn,isActions=true,tableData,tableActions,isCreate=true}:AdminTablePageProps<T>)=>{
     
     const {data,pagination,sortParams,status} = tableData;
 
@@ -108,6 +109,7 @@ const AdminTablePage = <T extends BaseEntity>({columns,deleteFn,isActions=true,t
                 pagination={pagination}
                 setPageSize={tableActions.setPageSize}
                 handlePageChange={tableActions.setPage}
+                isCreate={isCreate}
             />
             <Table
                 data={data}

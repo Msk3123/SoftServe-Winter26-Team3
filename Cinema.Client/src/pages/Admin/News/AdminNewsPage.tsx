@@ -6,18 +6,19 @@ import { deleteNews, getAllNews } from "../../../api/newsApi";
 import { dateToDayFirst } from "../../../helpers/textHelpers";
 import styles from "./AdminNewsPage.module.css";
 import useQueryTable from "../../../hooks/useQueryTable/useQueryTable";
+import { useMemo } from "react";
 
 const AdminNewsPage = ()=>{
 
     const {data,pagination,sortParams,status,actions} = useQueryTable<NewsShort>(getAllNews);
     
-    const columns:ColumnDef<NewsShort>[] = [
+    const columns:ColumnDef<NewsShort>[] = useMemo(()=> [
         { key: "id", title: "№" },
         {key:"imageUrl",title:"Image",render:(item)=><img src={item.imageUrl} alt={`${item.title} image`} className={styles.imageCell}/>},
         {key:"title",title:"Title"},
         {key:"shortContent",title:"Content"},
         { key: "publishedDate", title: "Date" , render:(item)=>dateToDayFirst(new Date(item.publishedDate))}
-    ];
+    ],[]);
 
     return (<>
                 <AdminTablePage

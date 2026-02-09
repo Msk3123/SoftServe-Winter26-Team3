@@ -23,6 +23,14 @@ namespace Cinema.Application.Common.Mappings
             CreateMap<SessionSeatPatchDto, SessionSeat>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) =>
                 srcMember != null && (srcMember is not decimal d || d > 0)));
+
+            CreateMap<SessionSeat, SessionSeatExtendedDto>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.SeatId))
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.SeatStatuses))
+            .ForMember(dest => dest.Row, opt => opt.MapFrom(src => src.Seat.Row))
+            .ForMember(dest => dest.Number, opt => opt.MapFrom(src => src.Seat.SeatNo))
+            .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Seat.SeatType.BasePrice))
+            .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Seat.SeatType.Name));
         }
     }
 }

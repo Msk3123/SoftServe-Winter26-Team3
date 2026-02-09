@@ -5,6 +5,7 @@ const navItems = [
         { label: "Movies", path: "/admin/movies" },
         { label: "Sessions", path: "/admin/sessions" },
         { label: "Halls", path: "/admin/halls" },
+        {label:"Users",path:"/admin/users"},
         { label: "News", path: "/admin/news" },
         { label: "Orders", path: "/admin/orders" },
         { label: "Actors", path: "/admin/actors" },

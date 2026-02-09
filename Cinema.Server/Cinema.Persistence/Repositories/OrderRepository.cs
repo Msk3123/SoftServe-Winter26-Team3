@@ -17,6 +17,21 @@ namespace Cinema.Persistence.Repositories
 
         public OrderRepository(AppDbContext context) : base(context) { }
 
+        public async Task<(IEnumerable<Order> Items, int TotalCount)> GetAllPagedAsync(QueryParameters queryParameters)
+        {
+            return await _context.Orders
+                .Include(o => o.Tickets)
+                    .ThenInclude(t => t.SessionSeat)
+                        .ThenInclude(ss => ss.Seat)
+                            .ThenInclude(s => s.SeatType) 
+                .Include(o => o.Tickets)
+                    .ThenInclude(t => t.TicketType)   
+                .Include(o => o.Session)
+                    .ThenInclude(s => s.Movie)
+                .AsNoTracking()
+                .ToPagedResultAsync(queryParameters);
+        }
+
         public override async Task<Order?> GetByIdAsync(int id)
         {
             return await _context.Orders
@@ -35,15 +50,11 @@ namespace Cinema.Persistence.Repositories
         public  async Task<(IEnumerable<Order> Items, int TotalCount)> GetByUserIdPagedAsync(int userId, QueryParameters queryParameters)
         {
             return await _context.Orders
+                .IgnoreQueryFilters()
                 .Where(o => o.UserId == userId)
                 .Include(o => o.Session)
                     .ThenInclude(s => s.Movie)
                 .Include(o => o.Tickets)
-                    .ThenInclude(t => t.SessionSeat)
-                        .ThenInclude(ss => ss.Seat)
-                            .ThenInclude(s => s.SeatType) 
-                .Include(o => o.Tickets)
-                    .ThenInclude(t => t.TicketType)    
                 .OrderByDescending(o => o.OrderDate)
                 .AsNoTracking()
                 .ToPagedResultAsync(queryParameters);

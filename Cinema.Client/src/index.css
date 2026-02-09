@@ -34,6 +34,12 @@
   --fw-medium: 500;
   --fw-bold: 700;
   --fw-heavy: 900;
+  --seat-selected: #0bee0b;      
+  --seat-occupied: #262626;      
+  --seat-vip: #FFD700;           
+  --seat-loveseats: #FF69B4;     
+  --seat-premium: #C0C0C0;       
+  --seat-broken: #333333;
 }
 
 body{

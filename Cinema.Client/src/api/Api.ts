@@ -90,6 +90,7 @@ export async function getPaginatedData<T extends BaseEntity>(
     const url = `${baseUrl}${path}?${queryParams.toString()}`;
     const response = await fetch(url, { headers: getHeaders() });
     return handleResponse<PaginatedResponse<T>>(response);
+
 }
 
 export async function getList<T extends BaseEntity>(path: string): Promise<T[]> {

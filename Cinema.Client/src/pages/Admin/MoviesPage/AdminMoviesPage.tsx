@@ -6,17 +6,18 @@ import type { ColumnDef } from "../../../types/common.types";
 import styles from "./AdminMoviesPage.module.css"
 import { dateToDayFirst } from "../../../helpers/textHelpers";
 import useQueryTable from "../../../hooks/useQueryTable/useQueryTable";
+import { useMemo } from "react";
 
 const AdminMoviesPage = ()=>{
     
     const {data,pagination,sortParams,status,actions} = useQueryTable<MovieShort>(getAllMovies);
 
-    const columns: ColumnDef<MovieShort>[] = [
+    const columns: ColumnDef<MovieShort>[] = useMemo(()=> [
         {key:"id",title:"№"},
         {key:"posterUrl",title:"Poster",render:(item)=><img src={item.posterUrl} alt={`${item.title} poster`} className={styles.imageCell}/>},
         {key:"title",title:"Title"},
         {key:"releaseDate",title:"Release Date",render:(item)=>dateToDayFirst(new Date(item.releaseDate))}
-    ]
+    ],[])
 
     return(
         <>

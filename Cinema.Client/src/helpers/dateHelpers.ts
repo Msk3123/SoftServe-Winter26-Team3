@@ -25,3 +25,14 @@ export const generateDateOptions = (count: number = 7): DateOption[] => {
         };
     });
 };
+
+export const formatDate = (iso: string) => {
+  const d = new Date(iso);
+  return d.toLocaleString("uk-UA", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+};

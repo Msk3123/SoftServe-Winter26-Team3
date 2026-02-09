@@ -44,6 +44,12 @@ import EditSeatTypeForm from "../features/admin/seatType/EditSeatType/EditSeatTy
 import AdminSeatTypesPage from "../pages/Admin/SeatTypes/AdminSeatTypesPage";
 import editSeatTypeFormLoader from "../features/admin/seatType/EditSeatType/editSeatTypeLoader";
 import ProtectedRoute from "./ProtectedRoute";
+import orderDetailsLoader from "../features/admin/order/orderDetailsLoader";
+import OrderDetailsView from "../features/admin/order/OrderDetailsView";
+import userDetailsLoader from "../features/admin/user/UserDetails/userDetailsLoader";
+import UserDetails from "../features/admin/user/UserDetails/UserDetails";
+import CreateUser from "../features/admin/user/CreateUserForm/CreateUserForm";
+
 
 export const router = createBrowserRouter([
   {
@@ -161,23 +167,72 @@ export const router = createBrowserRouter([
               { path: ":orderId/edit", element: <AdminModal>order view</AdminModal> }
             ]
           },
+        ],
+      },
+
+      {
+        path: "news",
+        element: <AdminNewsPage />,
+        children: [
+          { path: "create", element: <AdminModal title="Create News"><CreateNewsForm/></AdminModal> },
+          { path: ":newsId/edit",
+              element: <AdminModal title="Edit News"><EditNewsForm/></AdminModal>,
+              loader: editNewsFormLoader,
+            }
+        ],
+      },
+
+      {
+        path: "users",
+        element: <AdminUsersPage />,
+        children: [
+          { path: "create", element: <AdminModal title="Create User"><CreateUser /></AdminModal> },
           {
-            path: "actors",
-            element: <AdminActorsPage />,
-            children: [
-              { path: "create", element: <AdminModal title="Create Actor"><CreateActorForm /></AdminModal> },
-              { path: ":actorId/edit", element: <AdminModal title="Edit Actor"><EditActorForm /></AdminModal>, loader: editActorFormLoader }
+            path: ":userId/details",
+            element: <AdminModal title="User Orders"><UserDetails /></AdminModal>,
+            loader: userDetailsLoader,
+            children:[
+              { path: ":orderId/details",
+              element: <AdminModal><OrderDetailsView/></AdminModal>,
+              loader: orderDetailsLoader,
+            }
             ]
-          },
-          {
-            path: "seats",
-            element: <AdminSeatTypesPage />,
-            children: [
-              { path: "create", element: <AdminModal title="Create Seat Type"><CreateSeatType /></AdminModal> },
-              { path: ":seatId/edit", element: <AdminModal title="Edit Seat Type"><EditSeatTypeForm /></AdminModal>, loader: editSeatTypeFormLoader }
-            ],
-          },
-          { path: "*", element: <AdminPageNotFound /> },
+          }
+        ],
+      },
+      
+      {
+        path: "orders",
+        element: <AdminOrderPage />,
+        children: [
+            { path: ":orderId/details", 
+              element: <AdminModal><OrderDetailsView/></AdminModal>,
+              loader: orderDetailsLoader,
+            }
+        ]
+      },
+
+      {
+        path: "actors",
+        element: <AdminActorsPage />,
+        children: [
+            { path: "create", element: <AdminModal title="Create Actor"><CreateActorForm/></AdminModal> },
+            { path: ":actorId/edit",
+              element: <AdminModal title="Edit Actor"><EditActorForm/></AdminModal>,
+              loader: editActorFormLoader,
+            }
+        ]
+      },
+
+      {
+        path: "seats",
+        element: <AdminSeatTypesPage />,
+        children: [
+          { path: "create", element: <AdminModal title="Create Seat Type"><CreateSeatType/></AdminModal> },
+          { path: ":seatId/edit",
+              element: <AdminModal title="Edit Seat Type"><EditSeatTypeForm /></AdminModal>,
+              loader: editSeatTypeFormLoader,
+            }
         ],
       },
     ],

@@ -24,6 +24,14 @@ namespace Cinema.API.Controllers
             _orderRepository = orderRepository;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetAll([FromQuery] QueryParameters queryParameters)
+        {
+            var orders = await _orderRepository.GetAllPagedAsync(queryParameters);
+            
+            return OkPaged<Order, OrderShortDto>(orders, queryParameters);
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateOrder([FromBody] OrderCreateDto dto)
         {

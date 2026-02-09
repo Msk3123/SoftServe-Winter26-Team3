@@ -1,0 +1,44 @@
+.card {
+  display: flex;
+  gap: 1rem;
+  padding: 1.429rem 0.714rem;
+  border-bottom: 0.071rem solid var(--ui-border);
+  border-top: 0.071rem solid var(--ui-border);
+  background: var(--bg-main);
+}
+
+.poster {
+  width: 8.571rem;
+  height: 12.857rem;
+  object-fit: cover;
+  border-radius: 0.429rem;
+  flex-shrink: 0;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.714rem;
+  flex: 1;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title {
+  font-size: 1rem;
+  font-weight: var(--fw-medium);
+}
+
+.release {
+  font-size: 0.857rem;
+  color: var(--text-secondary);
+}
+
+.meta {
+  font-size: 0.857rem;
+  color: var(--text-main-dark);
+}
