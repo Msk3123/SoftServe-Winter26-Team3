@@ -11,7 +11,7 @@ namespace Cinema.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public class SessionSeatController : ApiBaseController
     {
         private readonly ISessionSeatService _sessionSeatService;
@@ -50,6 +50,7 @@ namespace Cinema.API.Controllers
         }
 
         [HttpPut("{id:int}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Update(int id, [FromBody] SessionSeatCreateDto dto)
         {
             var seat = await _sessionSeatRepository.GetByIdAsync(id);
@@ -62,6 +63,7 @@ namespace Cinema.API.Controllers
         }
 
         [HttpPatch("{id:int}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Patch(int id, [FromBody] SessionSeatPatchDto dto)
         {
             var seat = await _sessionSeatRepository.GetByIdAsync(id);
@@ -74,6 +76,7 @@ namespace Cinema.API.Controllers
         }
 
         [HttpDelete("{id:int}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             var seat = await _sessionSeatRepository.GetByIdAsync(id);
