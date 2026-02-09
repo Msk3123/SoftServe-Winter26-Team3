@@ -16,7 +16,6 @@ import NewsDetailsPage from "../pages/Client/NewsDatails/NewsDetailsPage";
 import ActorPage from "../pages/Client/Actor/ActorPage";
 import OrderPage from "../pages/Client/Order/OrderPage";
 import CheckoutPage from "../pages/Client/Checkout/CheckoutPage";
-import TicketsPage from "../pages/Client/Tickets/TicketsPage";
 import UserPage from "../pages/Client/User/UserPage";
 import PageNotFound from "../pages/Client/PageNotFound/PageNotFound";
 
@@ -79,12 +78,16 @@ import userDetailsLoader from "../features/admin/user/UserDetails/userDetailsLoa
 
 // Security
 import ProtectedRoute from "./ProtectedRoute";
+import Error from "../components/Error/Error";
+import RouteError from "./RouteError";
+
 
 export const router = createBrowserRouter([
   // --- КЛІЄНТСЬКА ЧАСТИНА (З Хедером/Фотером та фоном) ---
   {
     path: "/",
     element: <ClientPageLayout />,
+    errorElement: <RouteError variant="client"/>,
     children: [
       { index: true, element: <Navigate to="/home" replace /> },
       { path: "home", element: <HomePage /> },
@@ -124,7 +127,8 @@ export const router = createBrowserRouter([
   // --- АДМІН-ПАНЕЛЬ (Тільки для Admin) ---
   {
     path: "/admin",
-    element: <ProtectedRoute requiredRole="Admin" />, 
+    element: <ProtectedRoute requiredRole="Admin" />,
+    errorElement: <RouteError variant="client"/>,
     children: [
       {
         element: <AdminPageLayout />, 
@@ -137,6 +141,16 @@ export const router = createBrowserRouter([
             children: [
               { path: "create", element: <AdminModal title="Create Movie"><CreateMovieForm /></AdminModal> },
               { path: ":movieId/edit", element: <AdminModal title="Edit Movie"><EditMovieForm /></AdminModal>, loader: editMovieFormLoader },
+              { path: ":movieId/delete",
+                element: <AdminModal  title="Delete Movie"><DeleteMovie/></AdminModal>,
+                children :[
+                  {
+                    path: ":sessionId/edit",
+                    element: <AdminModal title="Edit Session"><EditSessionForm /></AdminModal>,
+                    loader : editSessionFormLoader,
+                  },
+                ]
+              },
             ],
           },
           
@@ -178,7 +192,7 @@ export const router = createBrowserRouter([
                 loader: userDetailsLoader,
                 children:[
                   { 
-                    path: "orders/:orderId/details",
+                    path: ":orderId/details",
                     element: <AdminModal title="Order Details"><OrderDetailsView/></AdminModal>,
                     loader: orderDetailsLoader,
                   }

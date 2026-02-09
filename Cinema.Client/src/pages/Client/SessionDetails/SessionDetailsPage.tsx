@@ -22,7 +22,8 @@ const SessionDetails = () => {
     selectedSeats, 
     totalPrice, 
     isLoading, 
-    toggleSeat 
+    toggleSeat,
+    error 
   } = useSessionHallMap(sessionId || "");
 
   const getDynamicLegend = () => {
@@ -87,22 +88,21 @@ console.log("SENDING TO RESERVE:", selectedSeats.map(s => ({
   const legendItems = getDynamicLegend();
 
   const getDisplayColor = (seat: SessionSeat, isSelected: boolean): string => {
-  if (isSelected) return "var(--seat-selected)";
+    if (isSelected) return "var(--seat-selected)";
+    if (seat.status !== SeatStatus.Available) return "var(--seat-occupied)";
+    
+    const typeName = typeof seat.type === 'object' ? seat.type?.name : seat.type;
+    return getSeatColor(typeName || "");
+  };
+    console.log("Seats data:", seats);
+  if (isLoading) return <div className={styles.loader}>Loading...</div>;
   
-  const status = String(seat.status).toLowerCase();
-  if (status !== "available") {
-    return "var(--seat-occupied)"; 
+  if(error){
+    return<Error variant="client" message={error}/>
   }
   
-  const typeName = typeof seat.type === 'object' ? seat.type?.name : seat.type;
-  return getSeatColor(typeName || "");
-};
-
-  if (isReserving) return <MovieDetailsSkeleton />;
-  if (isLoading || !sessionData) return <div className={styles.loader}>Loading...</div>;
-  
-  if (sessionData.seats.length < 1) {
-    return <Error variant="client"></Error>;
+  if(!sessionData || sessionData.seats.length<1){
+    return<Error variant="client"></Error>
   }
 
   return (
