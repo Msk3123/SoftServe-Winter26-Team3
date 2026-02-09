@@ -17,7 +17,8 @@ const SessionDetails = () => {
     selectedSeats, 
     totalPrice, 
     isLoading, 
-    toggleSeat 
+    toggleSeat,
+    error 
   } = useSessionHallMap(sessionId || "");
 
  const getDynamicLegend = () => {
@@ -70,10 +71,16 @@ const handleProceed = () => {
     return getSeatColor(typeName || "");
   };
     console.log("Seats data:", seats);
-  if (isLoading || !sessionData) return <div className={styles.loader}>Loading...</div>;
-  if(sessionData.seats.length<1){
+  if (isLoading) return <div className={styles.loader}>Loading...</div>;
+  
+  if(error){
+    return<Error variant="client" message={error}/>
+  }
+  
+  if(!sessionData || sessionData.seats.length<1){
     return<Error variant="client"></Error>
   }
+
   return (
     <div className={styles.container}>
       <aside className={styles.movieDetails}>

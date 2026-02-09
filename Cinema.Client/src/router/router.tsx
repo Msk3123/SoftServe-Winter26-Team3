@@ -64,12 +64,15 @@ import userDetailsLoader from "../features/admin/user/UserDetails/userDetailsLoa
 
 // Security
 import ProtectedRoute from "./ProtectedRoute";
+import Error from "../components/Error/Error";
+import RouteError from "./RouteError";
 
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <ClientPageLayout />,
+    errorElement: <RouteError variant="client"/>,
     children: [
       { index: true, element: <Navigate to="/home" replace /> },
       { path: "home", element: <HomePage /> },
@@ -104,7 +107,8 @@ export const router = createBrowserRouter([
 
   {
     path: "/admin",
-    element: <ProtectedRoute requiredRole="Admin" />, 
+    element: <ProtectedRoute requiredRole="Admin" />,
+    errorElement: <RouteError variant="client"/>,
     children: [
       {
         element: <AdminPageLayout />, 
