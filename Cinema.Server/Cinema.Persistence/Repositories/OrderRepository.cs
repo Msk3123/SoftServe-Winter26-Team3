@@ -29,6 +29,8 @@ namespace Cinema.Persistence.Repositories
                 .Include(o => o.Session)
                     .ThenInclude(s => s.Movie)
                 .AsNoTracking()
+                .AsSplitQuery()
+                .OrderByDescending(o => o.OrderDate)
                 .ToPagedResultAsync(queryParameters);
         }
 
