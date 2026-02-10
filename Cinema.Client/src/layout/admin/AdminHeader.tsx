@@ -8,8 +8,8 @@ const AdminHeader = () => {
 
 
     const handleLogout = () => {
-        localStorage.clear(); // Очищаємо токени (Access та Refresh)
-        navigate("/auth/login"); // Повертаємо на сторінку входу
+        localStorage.clear();
+        navigate("/auth/login");
     };
 
     return (
