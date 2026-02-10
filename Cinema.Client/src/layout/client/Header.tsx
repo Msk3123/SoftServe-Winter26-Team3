@@ -9,24 +9,36 @@ const Header = () => {
     const [isLogged, setIsLogged] = useState<boolean>(false);
     const [user, setUser] = useState<{ firstName: string; lastName: string; id: string } | null>(null);
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+    const [isAdmin,setIsAdmin] = useState<boolean>(false)
 
     useEffect(() => {
-        const token = localStorage.getItem("accessToken");
-        if (token) {
-            try {
-                const decoded: any = jwtDecode(token);
-                setIsLogged(true);
-                setUser({
-                    firstName: decoded.firstName || "User", 
-                    lastName: decoded.lastName || "",
-                    id: decoded.nameid
-                });
-            } catch (e) {
-                console.error("Invalid token");
-                setIsLogged(false);
-            }
+    const token = localStorage.getItem("accessToken");
+    if (!token) return;
+
+    try {
+        const decoded: any = jwtDecode(token);
+        
+        if (decoded.exp && decoded.exp < Date.now() / 1000) {
+            throw new Error("Token expired");
         }
-    }, []);
+
+        const role = decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] || decoded.role;
+        
+        setIsAdmin(role === "Admin");
+        setIsLogged(true);
+        setUser({
+            firstName: decoded.firstName || "User", 
+            lastName: decoded.lastName || "",
+            id: decoded.nameid
+        });
+
+    } catch (e) {
+        console.error("Session invalid:", e);
+        localStorage.removeItem("accessToken"); // Clean up
+        setIsLogged(false);
+        setUser(null);
+    }
+}, []);
 
     const toggleMenu = () => setIsMenuOpen((prev) => !prev);
     const closeMenu = () => setIsMenuOpen(false);
@@ -87,6 +99,15 @@ const Header = () => {
                             News
                         </NavLink>
                     </li>
+                    {isAdmin &&
+                    <li>
+                        <NavLink
+                            to="/admin"
+                            onClick={closeMenu}
+                            className={({ isActive }) => isActive ? `${styles.navlink} ${styles.active}` : styles.navlink}>
+                            Admin
+                        </NavLink>
+                    </li>}
                     
                     <div className={styles.authButtons}>
                         {isLogged ? (

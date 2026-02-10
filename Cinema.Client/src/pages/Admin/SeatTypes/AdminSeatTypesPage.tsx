@@ -13,7 +13,7 @@ const AdminSeatTypesPage = ()=>{
 
     const {data,pagination,sortParams,status,actions} = useQueryTable<SeatType>(getAllSeatTypes);
     
-    const columns:ColumnDef<SeatType>[] =useMemo(()=> [
+    const columns:ColumnDef<SeatType>[] = useMemo(()=> [
         { key: "id", title: "№" },
         {key:"name",title:"Name"},
         {key:"basePrice",title:"Basic Price"}
