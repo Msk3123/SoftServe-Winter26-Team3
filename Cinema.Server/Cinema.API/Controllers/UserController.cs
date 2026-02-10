@@ -10,7 +10,7 @@ namespace Cinema.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "Admin")] 
+    [Authorize] 
     public class UsersController : ApiBaseController
     {
         private readonly IUserRepository _userRepository;
@@ -37,7 +37,7 @@ namespace Cinema.API.Controllers
 
             return Ok(_mapper.Map<UserDto>(user));
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] UserPatchDto dto)
         {
@@ -49,7 +49,7 @@ namespace Cinema.API.Controllers
             await _userRepository.SaveAsync();
             return NoContent();
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

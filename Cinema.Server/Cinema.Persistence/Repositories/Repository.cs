@@ -38,6 +38,10 @@ namespace Cinema.Persistence.Repositories
                 
             }
         }
+        public  virtual async Task RemoveRange(IEnumerable<T> entities)
+        {
+            _dbSet.RemoveRange(entities);
+        }
         public virtual async Task<(IEnumerable<T> Items, int TotalCount)> GetPagedAsync(QueryParameters queryParameters)
         {
             return await _dbSet.AsNoTracking().ToPagedResultAsync(queryParameters);

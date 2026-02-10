@@ -14,5 +14,6 @@ namespace Cinema.Application.Interfaces
         Task DeleteAsync(int id);
         Task<(IEnumerable<T> Items, int TotalCount)> GetPagedAsync(QueryParameters queryParameters);
         void Remove(T entity);
+        Task RemoveRange(IEnumerable<T> entities);
     }
 }

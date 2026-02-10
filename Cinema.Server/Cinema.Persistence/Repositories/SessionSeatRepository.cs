@@ -44,6 +44,11 @@ namespace Cinema.Persistence.Repositories
                           && ss.LockExpiration < now)
                 .ToListAsync();
         }
-        
+        public async Task<IEnumerable<SessionSeat>> GetByIdsAsync(IEnumerable<int> ids)
+        {
+            return await _context.SessionSeats
+                .Where(s => ids.Contains(s.SessionSeatId))
+                .ToListAsync();
+        }
     }
 }

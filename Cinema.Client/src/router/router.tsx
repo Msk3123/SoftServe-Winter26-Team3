@@ -81,6 +81,8 @@ import userDetailsLoader from "../features/admin/user/UserDetails/userDetailsLoa
 import ProtectedRoute from "./ProtectedRoute";
 import Error from "../components/Error/Error";
 import RouteError from "./RouteError";
+import DeleteMovie from "../features/admin/movies/DeleteMovie/DeleteMovie";
+import PaymentSuccessPage from "../pages/Client/PaymentSuccess/PaymentSuccessPage";
 
 
 export const router = createBrowserRouter([
@@ -98,7 +100,8 @@ export const router = createBrowserRouter([
       { path: "news", element: <NewsPage /> },
       { path: "news/:newsId", element: <NewsDetailsPage /> },
       { path: "actor/:actorId", element: <ActorPage /> },
-      
+      { path: "order/:sessionId", element: <OrderPage /> },
+      { path: "payment-success", element: <PaymentSuccessPage /> },
       // Захищені клієнтські маршрути
       {
         element: <ProtectedRoute />,

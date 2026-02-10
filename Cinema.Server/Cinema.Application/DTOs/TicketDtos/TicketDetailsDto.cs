@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cinema.Domain.Enums;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -19,6 +20,6 @@ namespace Cinema.Application.DTOs.TicketDtos
 
         public string TicketTypeName { get; set; }
         public decimal Price { get; set; }
-
+        public TicketStatus TicketStatus { get; set; }
     }
 }
