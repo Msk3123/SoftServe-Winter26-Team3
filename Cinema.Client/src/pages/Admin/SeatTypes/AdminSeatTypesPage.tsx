@@ -6,7 +6,6 @@ import type { SeatType } from "../../../types/seatType.types";
 import { deleteSeatType, getAllSeatTypes,getSeatTypeUsage } from "../../../api/seatTypeApi";
 import { useCallback, useMemo } from "react";
 import { ApiError, type DeleteFunction } from "../../../types/api.types";
-import { handleError } from "../../../helpers/handleError";
 
 const AdminSeatTypesPage = ()=>{
 
@@ -21,18 +20,15 @@ const AdminSeatTypesPage = ()=>{
     ],[]);
 
     const handleDelete:DeleteFunction = useCallback(async (id) => {
-        try{
-            const response = await getSeatTypeUsage(id);
-            console.log(response.count)
-    
-            if (response.count > 0) {
-                navigate(`${id}/delete`);
-                //throw new ApiError(`Can't delete:${response} seats of this type have been identified`,409)
-            } else {
-                await deleteSeatType(id);
-            }
-        }catch(e){
-            handleError(e,"Could not delete this seatType")
+
+        const response = await getSeatTypeUsage(id);
+        console.log(response.count)
+
+        if (response.count > 0) {
+            navigate(`${id}/delete`);
+            throw new ApiError(`Can't delete: ${response.count} seats of this type have been identified`,409)
+        } else {
+            await deleteSeatType(id);
         }
     }, [navigate]);
 

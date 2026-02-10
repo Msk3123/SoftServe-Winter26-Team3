@@ -1,4 +1,6 @@
-﻿using Cinema.Application.Interfaces;
+﻿using Cinema.Application.Common.Constants;
+using Cinema.Application.Common.Exceptions;
+using Cinema.Application.Interfaces;
 using Cinema.Application.Interfaces.Services;
 
 namespace Cinema.Application.Services
@@ -27,7 +29,24 @@ namespace Cinema.Application.Services
         public async Task DeleteAndMigrateSeatsAsync(int typeIdToDelete, int newTypeId)
         {
             if (typeIdToDelete == newTypeId)
-                throw new ArgumentException("The ID type for deletion and replacement cannot match.");
+                throw new BusinessException("The source seat type ID and destination seat type ID cannot be the same.");
+
+
+            if ((typeIdToDelete == SeatTypeConstants.DefaultSeatTypeId))
+                throw new ProtectedEntityException("SeatType", typeIdToDelete);
+
+            var targetExists = await _seatTypeRepository.ExistsAsync(newTypeId);
+            if (!targetExists)
+            {
+                throw new EntityNotFoundException("SeatType", newTypeId);
+            }
+
+
+            var sourceExists = await _seatTypeRepository.ExistsAsync(typeIdToDelete);
+            if (!sourceExists)
+            {
+                throw new EntityNotFoundException("SeatType",typeIdToDelete);
+            }
 
             await _unitOfWork.BeginTransactionAsync();
             try{

@@ -36,7 +36,7 @@ namespace Cinema.Persistence.Repositories
             if (entity != null)
             {
                 _dbSet.Remove(entity);
-                
+
             }
         }
         public virtual async Task<(IEnumerable<T> Items, int TotalCount)> GetPagedAsync(QueryParameters queryParameters)
@@ -51,6 +51,11 @@ namespace Cinema.Persistence.Repositories
         public virtual async Task<int> CountAsync(Expression<Func<T, bool>> predicate)
         {
             return await _dbSet.CountAsync(predicate);
+        }
+        public virtual async Task<bool> ExistsAsync(int id)
+        {
+            var entity = await GetByIdAsync(id);
+            return entity != null;
         }
     }
 }

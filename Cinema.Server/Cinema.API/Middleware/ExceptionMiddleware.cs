@@ -54,14 +54,20 @@ namespace Cinema.API.Middleware
                         ))
                     }),
 
+                BusinessException or
                 SessionMismatchException or
                 SeatNotReservedException or
                 ReservationExpiredException or
                 InvalidBatchPeriodException => 
                     (HttpStatusCode.BadRequest, CreateError(400, exception.Message)),
+                
+                ProtectedEntityException =>
+                    (HttpStatusCode.Forbidden, CreateError(403, exception.Message)),
 
                 // 404 
-                KeyNotFoundException => (HttpStatusCode.NotFound, CreateError(404, exception.Message)),
+                EntityNotFoundException or
+                KeyNotFoundException => 
+                    (HttpStatusCode.NotFound, CreateError(404, exception.Message)),
 
                 // 409 
                 SeatsAlreadyTakenException or
