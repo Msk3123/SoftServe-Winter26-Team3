@@ -50,11 +50,14 @@ namespace Cinema.Persistence.Repositories
             var thresholdTime = threshold.TimeOfDay;
 
             return await _context.SessionSeats
-                .IgnoreQueryFilters() 
+                .IgnoreQueryFilters()
                 .Include(ss => ss.Session)
                 .Where(ss => (ss.Session.SessionDate < thresholdDate ||
                              (ss.Session.SessionDate == thresholdDate && ss.Session.SessionTime < thresholdTime)) &&
                              ss.SeatStatuses != SeatStatus.Blocked)
+                .ToListAsync();
+
+        }
         public async Task<IEnumerable<SessionSeat>> GetByIdsAsync(IEnumerable<int> ids)
         {
             return await _context.SessionSeats
