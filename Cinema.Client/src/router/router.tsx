@@ -81,7 +81,6 @@ import userDetailsLoader from "../features/admin/user/UserDetails/userDetailsLoa
 import ProtectedRoute from "./ProtectedRoute";
 import Error from "../components/Error/Error";
 import RouteError from "./RouteError";
-import DeleteMovie from "../features/admin/movies/DeleteMovie/DeleteMovie";
 import PaymentSuccessPage from "../pages/Client/PaymentSuccess/PaymentSuccessPage";
 
 
