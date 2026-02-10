@@ -48,6 +48,7 @@ import EditNewsForm from "../features/admin/news/EditNews/EditNewsForm";
 import CreateNewsForm from "../features/admin/news/CreateNews/CreateNewsForm";
 import CreateMovieForm from "../features/admin/movies/CreateMovie/CreateMovie";
 import EditMovieForm from "../features/admin/movies/EditMovie/EditMovie";
+import DeleteMovie from '../features/admin/movies/DeleteMovie/DeleteMovie';
 
 import CreateSessionForm from "../features/admin/sessions/CreateSession/CreateSessionForm";
 import EditSessionForm from "../features/admin/sessions/EditSession/EditSessionForm";
