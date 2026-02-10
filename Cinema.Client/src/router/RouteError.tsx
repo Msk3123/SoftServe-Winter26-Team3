@@ -4,7 +4,6 @@ import Error from "../components/Error/Error";
 
 const RouteError = ({variant} : { variant: "admin" | "client"}) => {
     const error = useRouteError();
-    console.error(error);
     if (isRouteErrorResponse(error)) {
         return (
             <Error
@@ -20,6 +19,7 @@ const RouteError = ({variant} : { variant: "admin" | "client"}) => {
     <Error
       title="Unexpected error"
       message="Something went wrong"
+      variant={variant}
     />
   );
 };

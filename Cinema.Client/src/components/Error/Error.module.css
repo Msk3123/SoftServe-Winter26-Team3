@@ -18,6 +18,8 @@
     color: var(--main-text-color);
     font-family: var(--font-main);
     text-align: center;
+    background-color: transparent;
+    
 }
 
 .errorCode {
