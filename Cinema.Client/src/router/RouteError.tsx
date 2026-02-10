@@ -4,7 +4,7 @@ import Error from "../components/Error/Error";
 
 const RouteError = ({variant} : { variant: "admin" | "client"}) => {
     const error = useRouteError();
-
+    console.error(error);
     if (isRouteErrorResponse(error)) {
         return (
             <Error

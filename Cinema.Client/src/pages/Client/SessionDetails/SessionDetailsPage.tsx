@@ -98,6 +98,7 @@ console.log("SENDING TO RESERVE:", selectedSeats.map(s => ({
   if (isLoading) return <div className={styles.loader}>Loading...</div>;
   
   if(error){
+    console.error(error)
     return<Error variant="client" message={error}/>
   }
   

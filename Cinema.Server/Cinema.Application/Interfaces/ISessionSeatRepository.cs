@@ -13,5 +13,7 @@ namespace Cinema.Application.Interfaces
 
         Task AddRangeAsync(IEnumerable<SessionSeat> sessionSeats);
         Task<List<SessionSeat>> GetExpiredOrphanedSeatsAsync(DateTime now);
+
+        Task<List<SessionSeat>> GetFinishedSessionSeatsAsync(DateTime threshold);
     }
 }

@@ -4,6 +4,7 @@ using Cinema.Application.Interfaces;
 using Cinema.Application.Interfaces.Services;
 using Cinema.Domain.Entities;
 using Cinema.Domain.Enums;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -58,5 +59,23 @@ namespace Cinema.Application.Services
             seat.LockExpiration = null;
             seat.LockedByUserId = null;
         }
+        public async Task ArchiveFinishedSessionsSeatsAsync()
+        {
+            var threshold = DateTime.UtcNow.AddHours(-_settings.MaxSessionDurationMinutes/60);
+
+            var pastSeats = await _unitOfWork.SessionSeats.GetFinishedSessionSeatsAsync(threshold);
+
+            if (!pastSeats.Any()) return;
+
+            foreach (var seat in pastSeats)
+            {
+                seat.SeatStatuses = SeatStatus.Blocked;
+                seat.LockExpiration = null;
+                seat.LockedByUserId = null;
+            }
+
+            await _unitOfWork.SaveChangesAsync();
+        }
     }
+
 }
