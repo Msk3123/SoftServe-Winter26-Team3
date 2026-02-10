@@ -4,9 +4,8 @@ using System.Text;
 
 namespace Cinema.Application.Common.Constants
 {
-    public static class UserRoles
+    public static class SeatTypeConstants
     {
-        public const string Admin = "Admin";
-        public const string User = "User";
+        public const int DefaultSeatTypeId = 1;
     }
 }

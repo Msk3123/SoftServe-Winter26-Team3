@@ -58,4 +58,5 @@ a {
 }
 .admin{
   color: var(--text-main-dark);
+  font-weight: var(--fw-regular);
 }

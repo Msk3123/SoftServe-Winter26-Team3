@@ -19,5 +19,11 @@ namespace Cinema.Persistence.Repositories
                 .AsNoTracking()
                 .ToPagedResultAsync(queryParameters);
         }
+        public async Task DeleteBulkAsync(int typeId)
+        {
+            await _dbSet
+                .Where(t => t.SeatTypeId == typeId)
+                .ExecuteDeleteAsync();
+        }
     }
 }

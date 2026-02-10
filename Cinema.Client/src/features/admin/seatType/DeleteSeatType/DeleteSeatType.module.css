@@ -1,0 +1,14 @@
+.wrapper{
+    padding: 2em 0;
+}
+.actions{
+    display: flex;
+    justify-content: end;
+    gap:2em;
+    margin-top: 2em;
+}
+
+.title{
+    font-size: 1.4em;
+    font-weight: var(--fw-bold);
+}

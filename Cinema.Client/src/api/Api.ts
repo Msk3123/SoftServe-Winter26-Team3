@@ -15,6 +15,26 @@ interface ErrorContext {
     id?: number | string;
 }
 
+const buildUrl = (path: string, id?: number | string, params?: Record<string, unknown>): string => {
+    let url = `${baseUrl}${path}${id ? `/${id}` : ''}`;
+    
+    if (params) {
+        const queryParams = new URLSearchParams();
+        Object.entries(params).forEach(([key, value]) => {
+            if (value !== undefined && value !== null) {
+                queryParams.append(key, String(value));
+            }
+        });
+        
+        const queryString = queryParams.toString();
+        if (queryString) {
+            url += url.includes('?') ? `&${queryString}` : `?${queryString}`;
+        }
+    }
+    
+    return url;
+};
+
 const getHeaders = (): HeadersInit => {
     const token = localStorage.getItem("accessToken");
     return {
@@ -68,51 +88,75 @@ async function handleResponse<T>(response: Response, context?: ErrorContext): Pr
     );
 }
 
+export async function fetchSingle<T>(
+    path: string,
+    params?: Record<string, unknown>
+): Promise<SingleResponse<T>> {
+    const url = buildUrl(path, undefined, params);
+    const response = await fetch(url, { headers: getHeaders() });
+    
+    return handleResponse<SingleResponse<T>>(response);
+}
+
 export async function getPaginatedData<T extends BaseEntity>(
     path: string,
     { page = 1, pageSize = 20, sortBy = "id", order = "asc" }: FetchParams<T>,
-    extraParams: Record<string, any> = {}
+    extraParams: Record<string, unknown> = {}
 ): Promise<PaginatedResponse<T>> {
-    const queryParams = new URLSearchParams({
+    const queryParams = {
         page: page.toString(),
         limit: pageSize.toString(),
         sortBy: String(sortBy),
         order,
         ...extraParams
-    });
+    };
 
-    Object.keys(extraParams).forEach(key => {
-        if (extraParams[key] === undefined || extraParams[key] === null) {
-            queryParams.delete(key);
-        }
-    });
-
-    const url = `${baseUrl}${path}?${queryParams.toString()}`;
+    const url = buildUrl(path, undefined, queryParams);
     const response = await fetch(url, { headers: getHeaders() });
+    
     return handleResponse<PaginatedResponse<T>>(response);
 
 }
 
-export async function getList<T extends BaseEntity>(path: string): Promise<T[]> {
-    const url = `${baseUrl}${path}`;
+export async function getList<T extends BaseEntity>(
+    path: string,
+    params?: Record<string, unknown>
+): Promise<T[]> {
+    const url = buildUrl(path, undefined, params);
     const response = await fetch(url, { headers: getHeaders() });
+    
     return handleResponse<T[]>(response);
 }
 
-export async function getListById<T extends BaseEntity>(path: string, id: number | string): Promise<T[]> {
-    const url = `${baseUrl}${path}/${id}`;
+export async function getListById<T extends BaseEntity>(
+    path: string,
+    id: number | string,
+    params?: Record<string, unknown>
+): Promise<T[]> {
+    const url = buildUrl(path, id, params);
     const response = await fetch(url, { headers: getHeaders() });
+    
     return handleResponse<T[]>(response);
 }
 
-export async function getItem<T extends BaseEntity>(path: string, id: number | string): Promise<SingleResponse<T>> {
-    const url = `${baseUrl}${path}/${id}`;
+export async function getItem<T extends BaseEntity>(
+    path: string, 
+    id: number | string,
+    params?: Record<string, unknown>
+): Promise<SingleResponse<T>> {
+    const url = buildUrl(path, id, params);
     const response = await fetch(url, { headers: getHeaders() });
+    
     return handleResponse<SingleResponse<T>>(response, { path, id });
 }
 
-export async function postItem<TData, TResponse>(path: string, data: TData): Promise<SingleResponse<TResponse>> {
-    const url = `${baseUrl}${path}`;
+export async function postItem<TData, TResponse>(
+    path: string, 
+    data: TData, 
+    params?: 
+    Record<string, unknown>
+): Promise<SingleResponse<TResponse>> {
+    const url = buildUrl(path, undefined ,params);
     const response = await fetch(url, {
         method: 'POST',
         headers: getHeaders(), 
@@ -121,8 +165,13 @@ export async function postItem<TData, TResponse>(path: string, data: TData): Pro
     return handleResponse<SingleResponse<TResponse>>(response);
 }
 
-export async function putItem<T>(path: string, id: number | string, data: T): Promise<void> {
-    const url = `${baseUrl}${path}/${id}`;
+export async function putItem<T>(
+    path: string, 
+    id: number | string, 
+    data: T,
+    params?: Record<string, unknown>
+): Promise<void> {
+    const url = buildUrl(path, id, params);
     const response = await fetch(url, {
         method: 'PUT',
         headers: getHeaders(),
@@ -131,8 +180,13 @@ export async function putItem<T>(path: string, id: number | string, data: T): Pr
     return handleResponse<void>(response, { path, id });
 }
 
-export async function patchItem<T>(path: string, id: number | string, data: Partial<T>): Promise<void> {
-    const url = `${baseUrl}${path}/${id}`;
+export async function patchItem<T>(
+    path: string, 
+    id: number | string, 
+    data: Partial<T>,
+    params?: Record<string, unknown>
+): Promise<void> {
+    const url = buildUrl(path, id, params);
     const response = await fetch(url, {
         method: 'PATCH',
         headers: getHeaders(),
@@ -141,8 +195,11 @@ export async function patchItem<T>(path: string, id: number | string, data: Part
     return handleResponse<void>(response, { path, id });
 }
 
-export async function deleteItem(path:string,id:number|string):Promise<void> {
-    const url=`${baseUrl}${path}/${id}`;
+export async function deleteItem(
+    path:string,id:number|string,
+    params?: Record<string, unknown>
+):Promise<void> {
+    const url = buildUrl(path, id, params);
         
     const response = await fetch(url, {
         method: 'DELETE',
