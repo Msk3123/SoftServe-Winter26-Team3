@@ -17,11 +17,13 @@ namespace Cinema.Application.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IBackgroundJobClient _backgroundJobs;
         private readonly CinemaSettings _settings;
-        public SessionSeatService(IUnitOfWork unitOfWork, IBackgroundJobClient backgroundJobs, IOptions<CinemaSettings> options)
+        private readonly IOrderService _orderService;
+        public SessionSeatService(IUnitOfWork unitOfWork, IBackgroundJobClient backgroundJobs, IOptions<CinemaSettings> options, IOrderService orderService)
         {
             _unitOfWork = unitOfWork;
             _backgroundJobs = backgroundJobs;
             _settings = options.Value;
+            _orderService = orderService;
         }
 
         public async Task<bool> ReserveSeatAsync(int seatId, int userId)
@@ -43,18 +45,19 @@ namespace Cinema.Application.Services
             return true;
         }
 
-  
+
 
         public async Task<bool> UnreserveMultipleSeatsAsync(IEnumerable<int> seatIds, int userId)
         {
             if (seatIds == null || !seatIds.Any()) return false;
 
-           await _unitOfWork.BeginTransactionAsync();
+            await _unitOfWork.BeginTransactionAsync();
 
             try
             {
-                var seats = await _unitOfWork.SessionSeats.GetByIdsAsync(seatIds);
+                await _orderService.CancelPendingOrdersBySeatsAsync(userId, seatIds);
 
+                var seats = await _unitOfWork.SessionSeats.GetByIdsAsync(seatIds);
 
                 if (!seats.Any())
                     throw new KeyNotFoundException("None of the specified seats were found.");
@@ -75,18 +78,16 @@ namespace Cinema.Application.Services
                 }
 
 
-                var result = await _unitOfWork.SaveChangesAsync();
+                await _unitOfWork.SaveChangesAsync();
 
                 await _unitOfWork.CommitAsync();
 
-                return result > 0;
+                return true;
             }
             catch (Exception ex)
             {
-
                 await _unitOfWork.RollbackAsync();
-
-                throw new ApplicationException($"Failed to unreserve seats: {ex.Message}", ex);
+                throw new ApplicationException($"Failed to fully unreserve and cleanup: {ex.Message}", ex);
             }
         }
     }

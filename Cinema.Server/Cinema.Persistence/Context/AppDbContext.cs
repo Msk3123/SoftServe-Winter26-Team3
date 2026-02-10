@@ -103,6 +103,10 @@ namespace Cinema.Persistence.Context
                 .HasForeignKey<Ticket>(t => t.SessionSeatId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<Ticket>()
+                .HasIndex(t => t.SessionSeatId)
+                .IsUnique()
+                .HasFilter("[TicketStatus] IN (1, 2)");
             // Order <-> Ticket
             modelBuilder.Entity<Ticket>()
                 .HasOne(t => t.Order)

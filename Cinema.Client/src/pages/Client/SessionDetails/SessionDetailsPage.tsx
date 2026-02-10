@@ -34,81 +34,71 @@ const SessionDetails = () => {
     toggleSeat
   } = useSessionHallMap(sessionId || "");
 
+  // Перевірка на існуючі резерви користувача
+  useEffect(() => {
+    if (!isAuthenticated || !storedUserId || !seats || seats.length === 0 || isCancelling) return;
 
-useEffect(() => {
+    const flatSeats = seats.flat();
+    const currentUserId = String(storedUserId);
 
-  if (!isAuthenticated || !storedUserId || !seats || seats.length === 0 || isCancelling) return;
+    const myReservedSeats = flatSeats.filter((seat: any) => {
+      const status = String(seat.status).toLowerCase();
+      const seatUserId = String(seat.lockedByUserId || "");
+      // Статус 3 або "reserved"
+      return (status === "reserved" || status === "3") && seatUserId === currentUserId;
+    });
 
-  const flatSeats = seats.flat();
-  const currentUserId = String(storedUserId);
-
-  const myReservedSeats = flatSeats.filter((seat: any) => {
-    const status = String(seat.status).toLowerCase();
-    const seatUserId = String(seat.lockedByUserId || "");
-    return (status === "reserved" || status === "3") && seatUserId === currentUserId;
-  });
-
-
-  if (myReservedSeats.length > 0 && !pendingOrder && !isCancelling) {
-    setPendingOrder({ seats: myReservedSeats });
-    setShowModal(true);
-  }
-}, [seats, isAuthenticated, storedUserId, pendingOrder, isCancelling]);
+    if (myReservedSeats.length > 0 && !pendingOrder && !isCancelling) {
+      setPendingOrder({ seats: myReservedSeats });
+      setShowModal(true);
+    }
+  }, [seats, isAuthenticated, storedUserId, pendingOrder, isCancelling]);
 
   const handleGoToCheckout = () => {
-    const userId = Number(storedUserId);
     navigate("/checkout", {
       state: {
         sessionId,
         selectedSeats: pendingOrder.seats,
         totalPrice: pendingOrder.seats.reduce((sum: number, s: any) => sum + s.price, 0),
-        userId,
+        userId: Number(storedUserId),
         movieTitle: sessionData?.movie.title,
         hallName: sessionData?.hall.hallName,
         sessionDate: sessionData?.sessionDate,
         sessionTime: sessionData?.sessionTime,
+        isResume: true 
       }
     });
   };
 
-
-const handleStartNew = async () => {
-  if (!pendingOrder) return;
-  
-  try {
-    setIsCancelling(true);
-    setShowModal(false); 
+  const handleStartNew = async () => {
+    if (!pendingOrder) return;
     
-    const ids = pendingOrder.seats.map((s: any) => s.id);
-    
+    try {
+      setIsCancelling(true);
+      setShowModal(false); 
+      
+      const ids = pendingOrder.seats.map((s: any) => s.id);
+      setPendingOrder(null);
 
-    setPendingOrder(null);
+      // Викликаємо API для зняття броні
+      await postItem(`SessionSeat/unreserve`, ids); 
+      
+      toast.success("Seats released");
+      setTimeout(() => {
+        window.location.reload(); 
+      }, 500);
 
-
-    await postItem(`SessionSeat/unreserve`, ids); 
-    
-    toast.success("Seats released");
-
-
-    setTimeout(() => {
-      window.location.reload(); 
-    }, 1000);
-
-  } catch (e) {
-
-    if (e instanceof SyntaxError && e.message.includes('JSON')) {
-       toast.success("Seats released");
-       setTimeout(() => window.location.reload(), 1000);
-       return;
+    } catch (e) {
+      if (e instanceof SyntaxError && e.message.includes('JSON')) {
+         toast.success("Seats released");
+         setTimeout(() => window.location.reload(), 500);
+         return;
+      }
+      console.error("Unreserve error:", e);
+      toast.error("Failed to release seats");
+      setIsCancelling(false);
     }
-
-    console.error("Unreserve error:", e);
-    toast.error("Failed to release seats");
-    setIsCancelling(false);
-
-
-  }
-};
+  };
 
   const handleProceed = async () => {
     if (selectedSeats.length === 0 || isReserving) return;
@@ -122,6 +112,7 @@ const handleStartNew = async () => {
       setIsReserving(true);
       const userId = Number(storedUserId);
       
+      // Бронюємо тільки ті місця, які ще не закріплені за нами в БД
       const seatsToReserve = selectedSeats.filter((s: any) => String(s.lockedByUserId) !== String(userId));
       
       if (seatsToReserve.length > 0) {
@@ -191,9 +182,14 @@ const handleStartNew = async () => {
               const seatUserId = String(seatAny.lockedByUserId || ""); 
               const currentUserId = String(storedUserId);
 
+              // Визначаємо статуси
               const isAvailable = status === "available" || status === "1";
-              const isMine = (status === "reserved" || status === "3") && seatUserId === currentUserId;
-              const isOccupiedByOthers = !isAvailable && !isMine;
+              const isReserved = status === "reserved" || status === "3";
+              const isSold = status === "sold" || status === "2";
+              
+              const isMine = isReserved && seatUserId === currentUserId;
+              // Зайнято іншими: або чужий резерв, або вже куплено
+              const isOccupiedByOthers = (isReserved && !isMine) || isSold;
               const isSelected = selectedSeats.some(s => s.id === seat.id);
 
               return (
@@ -202,9 +198,11 @@ const handleStartNew = async () => {
                   color={
                     isSelected || isMine
                       ? "var(--seat-selected)" 
-                      : isOccupiedByOthers 
-                        ? "var(--seat-occupied)" 
-                        : getSeatColor(typeof seat.type === 'object' ? seat.type?.name : seat.type || "")
+                      : isSold 
+                        ? "#333333" // Колір для проданих місць
+                        : isOccupiedByOthers 
+                          ? "var(--seat-occupied)" 
+                          : getSeatColor(typeof seat.type === 'object' ? seat.type?.name : seat.type || "")
                   }
                   onClick={() => !isOccupiedByOthers && toggleSeat(seat)}
                   className={isOccupiedByOthers ? styles.seatDisabled : ""}
