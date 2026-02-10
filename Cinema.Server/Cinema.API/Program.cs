@@ -89,6 +89,7 @@ builder.Services.AddScoped<IBookingCleanupService, BookingCleanupService>();
 builder.Services.AddScoped<IHallService, HallService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<ISeatTypeService, SeatTypeService>();
 
 builder.Services.Configure<CinemaSettings>(builder.Configuration.GetSection("CinemaSettings"));
 builder.Services.AddControllers()
