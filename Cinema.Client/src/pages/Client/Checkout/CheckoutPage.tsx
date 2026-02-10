@@ -103,7 +103,11 @@ const CheckoutPage = () => {
           <h3 className={styles.sectionTitle}>Ticket Recipient</h3>
           <div className={styles.userBadge}>
             <div className={styles.userInfo}>
-              <strong>{user?.fullName || "Name not set"}</strong>
+              <strong>
+                {user?.firstName 
+                  ? `${user.firstName} ${user.lastName || ""}` 
+                  : "Name not set"}
+              </strong>
               <span>{user?.email}</span>
             </div>
             <button className={styles.editBtn} onClick={() => navigate("/profile")}>Edit Profile</button>
@@ -111,15 +115,24 @@ const CheckoutPage = () => {
         </section>
 
         <section className={styles.section}>
-          <h3 className={styles.sectionTitle}>Payment Method</h3>
-          <div className={styles.methodsGrid}>
-            <div className={`${styles.methodCard} ${styles.active}`}>
-              <div className={styles.methodContent}>
-                <span className={styles.methodName}>LiqPay</span>
-              </div>
-            </div>
-          </div>
-        </section>
+  <h3 className={styles.sectionTitle}>Payment Method</h3>
+  <div className={styles.methodsGrid}>
+    {/* Активний метод LiqPay */}
+    <div className={`${styles.methodCard} ${styles.active}`}>
+      <div className={styles.methodContent}>
+        <span className={styles.methodName}>LiqPay</span>
+      </div>
+    </div>
+
+    {/* Нова кнопка PayPal (Coming Soon) */}
+    <div className={`${styles.methodCard} ${styles.disabledCard}`}>
+      <div className={styles.methodContent}>
+        <span className={styles.methodName}>PayPal</span>
+        <span className={styles.comingSoonBadge}>Coming Soon</span>
+      </div>
+    </div>
+  </div>
+</section>
       </main>
 
       <aside className={styles.sidebar}>
