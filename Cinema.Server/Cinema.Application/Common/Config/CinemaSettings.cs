@@ -14,5 +14,8 @@ using System.Text;
             public int RefundDeadlineMinutes { get; set; }
             public int StopSalesBeforeSessionMinutes { get; set; }
             public int defaultSeatTypeToCreate { get; set; }
-        }
+            public int MaxSessionDurationMinutes{ get; set; }
+            public string BookingCleanupCron { get; set; } = "* * * * *"; // every minute
+            public string SessionArchiveCron { get; set; } = "0 * * * *"; // every hour
+    }
     }

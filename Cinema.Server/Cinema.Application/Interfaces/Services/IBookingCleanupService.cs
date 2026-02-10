@@ -7,5 +7,6 @@ namespace Cinema.Application.Interfaces.Services
     public interface IBookingCleanupService
     {
         Task CleanupExpiredBookingsAsync();
+        Task ArchiveFinishedSessionsSeatsAsync();
     }
 }
