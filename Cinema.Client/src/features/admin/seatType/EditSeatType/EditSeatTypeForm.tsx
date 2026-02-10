@@ -35,11 +35,11 @@ const EditSeatTypeForm = ({onClose}:EditSeatTypeFormProps)=>{
                         ...formData
                     });
                 
-                toast.success("News succesfully updated!")
+                toast.success("Seat type succesfully updated!")
                 handleClose();
 
             }catch(e){
-                handleError(e,"Can`t edit this news");
+                handleError(e,"Can`t edit this seat type");
             }
         }
 

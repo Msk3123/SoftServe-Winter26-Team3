@@ -1,0 +1,18 @@
+.optionContainer{
+    padding: 1em 2em ;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    gap: 0.2em;
+}
+
+.optionContainer:hover{
+    background-color: var(--color-primary-weak);
+    scale: 1.01;
+}
+
+.price{
+    font-size: smaller;
+}

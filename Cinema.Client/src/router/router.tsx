@@ -65,6 +65,8 @@ import userDetailsLoader from "../features/admin/user/UserDetails/userDetailsLoa
 import ProtectedRoute from "./ProtectedRoute";
 import RouteError from "./RouteError";
 import DeleteMovie from "../features/admin/movies/DeleteMovie/DeleteMovie";
+import DeleteSeatType from "../features/admin/seatType/DeleteSeatType/DeleteSeatType";
+import deleteSeatTypeLoader from "../features/admin/seatType/DeleteSeatType/deleteSeatTypeLoader";
 
 
 export const router = createBrowserRouter([
@@ -202,7 +204,14 @@ export const router = createBrowserRouter([
             element: <AdminSeatTypesPage />,
             children: [
               { path: "create", element: <AdminModal title="Create Seat Type"><CreateSeatType/></AdminModal> },
-              { path: ":seatId/edit", element: <AdminModal title="Edit Seat Type"><EditSeatTypeForm /></AdminModal>, loader: editSeatTypeFormLoader }
+              { path: ":seatId/edit", 
+                element: <AdminModal title="Edit Seat Type"><EditSeatTypeForm /></AdminModal>, 
+                loader: editSeatTypeFormLoader 
+              },
+              { path: ":seatId/delete",
+                element: <AdminModal  title="Delete SeatType"><DeleteSeatType/></AdminModal>,
+                loader: deleteSeatTypeLoader
+              },
             ],
           },
 

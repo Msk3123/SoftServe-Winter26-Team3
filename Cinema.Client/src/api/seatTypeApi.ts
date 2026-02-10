@@ -30,5 +30,5 @@ export const deleteSeatType = async (id: number | string, replaceId?: number | s
 };
 
 export const getSeatTypeUsage = async (id: number | string )=> {
-    return await fetchSingle<number>(`seat-types/${id}/usage`)
+    return await fetchSingle<{count:number}>(`seatTypes/${id}/usage`)
 } 
