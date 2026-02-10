@@ -17,5 +17,6 @@ namespace Cinema.Application.Interfaces
         void Remove(T entity);
         Task<int> CountAsync(Expression<Func<T, bool>> predicate);
         Task<bool> ExistsAsync(int typeIdToDelete);
+        Task RemoveRange(IEnumerable<T> entities);
     }
 }

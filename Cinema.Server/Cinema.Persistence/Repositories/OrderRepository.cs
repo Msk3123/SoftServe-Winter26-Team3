@@ -81,5 +81,15 @@ namespace Cinema.Persistence.Repositories
             return await _context.Orders
                 .AnyAsync(o => o.SessionId == sessionId);
         }
+        public async Task<IEnumerable<Order>> GetPendingOrdersBySeatsAsync(int userId, IEnumerable<int> seatIds)
+        {
+            return await _context.Orders
+                .Include(o => o.Tickets)
+                .Include(o => o.Payment) 
+                .Where(o => o.UserId == userId &&
+                            o.OrderStatus == OrderStatus.Created && 
+                            o.Tickets.Any(t => seatIds.Contains(t.SessionSeatId)))
+                .ToListAsync();
+        }
     }
 }

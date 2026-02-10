@@ -48,6 +48,16 @@ namespace Cinema.API.Controllers
 
             return Ok(new { Message = "Seat successfully reserved for 15 minutes." });
         }
+        [HttpPost("unreserve")]
+        [Authorize]
+        public async Task<IActionResult> UnreserveMultiple ([FromBody]List<int> ids)
+        {
+            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized();
+            await _sessionSeatService.UnreserveMultipleSeatsAsync(ids, int.Parse(userId));
+            return Ok();
+        }    
 
         [HttpPut("{id:int}")]
         [Authorize(Roles = "Admin")]

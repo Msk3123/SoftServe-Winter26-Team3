@@ -121,10 +121,20 @@ using (var scope = app.Services.CreateScope())
 {
     var recurringJobManager = scope.ServiceProvider.GetRequiredService<IRecurringJobManager>();
 
+    // Дістаємо налаштування
+    var settings = builder.Configuration.GetSection("CinemaSettings").Get<CinemaSettings>();
+
+    // Реєструємо джоби, використовуючи значення з конфігу
     recurringJobManager.AddOrUpdate<IBookingCleanupService>(
         "cleanup-bookings",
         service => service.CleanupExpiredBookingsAsync(),
-        Cron.Minutely
+        settings?.BookingCleanupCron
+    );
+
+    recurringJobManager.AddOrUpdate<IBookingCleanupService>(
+        "archive-finished-sessions",
+        service => service.ArchiveFinishedSessionsSeatsAsync(),
+        settings?.SessionArchiveCron
     );
 }
 // Configure the HTTP request pipeline.

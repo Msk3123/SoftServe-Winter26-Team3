@@ -25,6 +25,7 @@ namespace Cinema.API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAll([FromQuery] QueryParameters queryParameters)
         {
             var orders = await _orderRepository.GetAllPagedAsync(queryParameters);
@@ -55,6 +56,7 @@ namespace Cinema.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetById(int id)
         {
             var order = await _orderRepository.GetByIdAsync(id);

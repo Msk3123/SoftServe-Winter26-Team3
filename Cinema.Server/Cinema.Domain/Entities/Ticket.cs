@@ -28,5 +28,7 @@ namespace Cinema.Domain.Entities
         public int SessionSeatId { get; set; }
         [ForeignKey("SessionSeatId")]
         public virtual SessionSeat SessionSeat { get; set; }
+
+        public TicketStatus TicketStatus { get; set; } = TicketStatus.Pending;
     }
 }
