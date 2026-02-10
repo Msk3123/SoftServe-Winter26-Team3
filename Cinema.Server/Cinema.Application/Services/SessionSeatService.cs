@@ -43,5 +43,51 @@ namespace Cinema.Application.Services
             return true;
         }
 
+  
+
+        public async Task<bool> UnreserveMultipleSeatsAsync(IEnumerable<int> seatIds, int userId)
+        {
+            if (seatIds == null || !seatIds.Any()) return false;
+
+           await _unitOfWork.BeginTransactionAsync();
+
+            try
+            {
+                var seats = await _unitOfWork.SessionSeats.GetByIdsAsync(seatIds);
+
+
+                if (!seats.Any())
+                    throw new KeyNotFoundException("None of the specified seats were found.");
+
+                foreach (var seat in seats)
+                {
+                    if (seat.LockedByUserId != null && seat.LockedByUserId != userId)
+                    {
+                        throw new UnauthorizedAccessException($"Seat {seat.SeatId} is reserved by another user.");
+                    }
+
+                    if (seat.SeatStatuses != SeatStatus.Available)
+                    {
+                        seat.LockedByUserId = null;
+                        seat.SeatStatuses = SeatStatus.Available;
+                        seat.LockExpiration = null;
+                    }
+                }
+
+
+                var result = await _unitOfWork.SaveChangesAsync();
+
+                await _unitOfWork.CommitAsync();
+
+                return result > 0;
+            }
+            catch (Exception ex)
+            {
+
+                await _unitOfWork.RollbackAsync();
+
+                throw new ApplicationException($"Failed to unreserve seats: {ex.Message}", ex);
+            }
+        }
     }
 }

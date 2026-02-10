@@ -5,7 +5,6 @@ import { initializePayment, PaymentMethod, submitLiqPayForm } from "../../../fea
 import toast from "react-hot-toast";
 import { useState } from "react";
 import { useUser } from "../../../hooks/useUser/useUser";
-// Припускаю, що цей хук повертає дані про поточного юзера
 
 const CheckoutPage = () => {
   const location = useLocation();
