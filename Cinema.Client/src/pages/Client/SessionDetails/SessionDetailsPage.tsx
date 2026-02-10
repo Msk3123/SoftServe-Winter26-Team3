@@ -1,212 +1,245 @@
-import { useParams, useNavigate } from "react-router-dom"; 
+import { useParams, useNavigate } from "react-router-dom";
 import styles from "./SessionDetailsPage.module.css";
 import useSessionHallMap from "../../../hooks/useSessionHallMap/useSessionHallMap";
-import { SeatStatus, type SessionSeat } from "../../../types/sessionSeat.types";
 import HallMap from "../../../components/HallMap/HallMap/HallMap";
 import Seat from "../../../components/HallMap/Seat/Seat";
 import { getSeatColor } from "../../../features/admin/halls/helpers/getSeatColor";
 import Error from "../../../components/Error/Error";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import MovieDetailsSkeleton from "../MovieDetails/MovieDetailsPageSkeleton";
 import { reserveSessionSeat } from "../../../api/sessionSeatApi";
+import { postItem } from "../../../api/api"; 
 import toast from "react-hot-toast";
+import { getUserIdFromToken } from "../../../helpers/authHelper";
 
 const SessionDetails = () => {
   const [isReserving, setIsReserving] = useState(false);
+  const [isCancelling, setIsCancelling] = useState(false);
+  const [pendingOrder, setPendingOrder] = useState<any>(null);
+  const [showModal, setShowModal] = useState(false);
+  
   const { sessionId } = useParams<{ sessionId: string }>();
   const navigate = useNavigate();
-  
-  const { 
-    sessionData, 
-    seats, 
-    selectedSeats, 
-    totalPrice, 
-    isLoading, 
-    toggleSeat,
-    error 
+
+  const token = localStorage.getItem("accessToken");
+  const storedUserId = getUserIdFromToken();
+  const isAuthenticated = !!(token && storedUserId);
+
+  const {
+    sessionData,
+    seats,
+    selectedSeats,
+    totalPrice,
+    isLoading,
+    toggleSeat
   } = useSessionHallMap(sessionId || "");
 
-  const getDynamicLegend = () => {
-    if (!seats || seats.length === 0) return [];
+  // Перевірка на існуючі резерви користувача
+  useEffect(() => {
+    if (!isAuthenticated || !storedUserId || !seats || seats.length === 0 || isCancelling) return;
+
     const flatSeats = seats.flat();
-    
-    const uniqueTypeNames = Array.from(new Set(
-      flatSeats.map(s => typeof s.type === 'object' ? s.type?.name : s.type).filter(Boolean)
-    ));
+    const currentUserId = String(storedUserId);
 
-    return uniqueTypeNames.map(name => {
-      const typeName = name as string;
-      const seatSample = flatSeats.find(s => 
-        (typeof s.type === 'object' ? s.type?.name : s.type) === typeName
-      );
-      
-      return {
-        id: (typeof seatSample?.type === 'object' ? seatSample.type.id : typeName) || typeName,
-        name: typeName,
-        price: seatSample?.price || 0,
-        color: getSeatColor(typeName) 
-      };
-    }).sort((a, b) => a.price - b.price);
-  };
-const handleProceed = async () => {
-  if (selectedSeats.length === 0 || isReserving) return;
-console.log("SENDING TO RESERVE:", selectedSeats.map(s => ({
-    id: s.id, // Має бути 1254, 1255 тощо
-    row: s.row,
-    num: s.number
-  })));
-  const userId = 1; 
+    const myReservedSeats = flatSeats.filter((seat: any) => {
+      const status = String(seat.status).toLowerCase();
+      const seatUserId = String(seat.lockedByUserId || "");
+      // Статус 3 або "reserved"
+      return (status === "reserved" || status === "3") && seatUserId === currentUserId;
+    });
 
-  try {
-    setIsReserving(true);
+    if (myReservedSeats.length > 0 && !pendingOrder && !isCancelling) {
+      setPendingOrder({ seats: myReservedSeats });
+      setShowModal(true);
+    }
+  }, [seats, isAuthenticated, storedUserId, pendingOrder, isCancelling]);
 
-    await Promise.all(
-      selectedSeats.map(seat => reserveSessionSeat(seat.id, userId))
-    );
-
+  const handleGoToCheckout = () => {
     navigate("/checkout", {
       state: {
-        sessionId: sessionId,
-        selectedSeats: selectedSeats,
+        sessionId,
+        selectedSeats: pendingOrder.seats,
+        totalPrice: pendingOrder.seats.reduce((sum: number, s: any) => sum + s.price, 0),
+        userId: Number(storedUserId),
         movieTitle: sessionData?.movie.title,
         hallName: sessionData?.hall.hallName,
-        totalPrice: totalPrice,
         sessionDate: sessionData?.sessionDate,
         sessionTime: sessionData?.sessionTime,
-        userId: userId 
+        isResume: true 
       }
     });
-  } catch (error) {
-    console.error("Reservation failed:", error);
-    toast("Unfortunately, some of the selected seats are already booked. Please refresh the page.");
-  } finally {
-    setIsReserving(false);
-  }
-};
-
-
-  const legendItems = getDynamicLegend();
-
-  const getDisplayColor = (seat: SessionSeat, isSelected: boolean): string => {
-    if (isSelected) return "var(--seat-selected)";
-    if (seat.status !== SeatStatus.Available) return "var(--seat-occupied)";
-    
-    const typeName = typeof seat.type === 'object' ? seat.type?.name : seat.type;
-    return getSeatColor(typeName || "");
   };
-    console.log("Seats data:", seats);
-  if (isLoading) return <div className={styles.loader}>Loading...</div>;
-  
-  if(error){
-    console.error(error)
-    return<Error variant="client" message={error}/>
-  }
-  
-  if(!sessionData || sessionData.seats.length<1){
-    return<Error variant="client"></Error>
-  }
+
+  const handleStartNew = async () => {
+    if (!pendingOrder) return;
+    
+    try {
+      setIsCancelling(true);
+      setShowModal(false); 
+      
+      const ids = pendingOrder.seats.map((s: any) => s.id);
+      setPendingOrder(null);
+
+      // Викликаємо API для зняття броні
+      await postItem(`SessionSeat/unreserve`, ids); 
+      
+      toast.success("Seats released");
+      setTimeout(() => {
+        window.location.reload(); 
+      }, 500);
+
+    } catch (e) {
+      if (e instanceof SyntaxError && e.message.includes('JSON')) {
+         toast.success("Seats released");
+         setTimeout(() => window.location.reload(), 500);
+         return;
+      }
+      console.error("Unreserve error:", e);
+      toast.error("Failed to release seats");
+      setIsCancelling(false);
+    }
+  };
+
+  const handleProceed = async () => {
+    if (selectedSeats.length === 0 || isReserving) return;
+
+    if (!isAuthenticated) {
+      navigate("/auth/login", { state: { from: `/sessions/${sessionId}` } });
+      return;
+    }
+
+    try {
+      setIsReserving(true);
+      const userId = Number(storedUserId);
+      
+      // Бронюємо тільки ті місця, які ще не закріплені за нами в БД
+      const seatsToReserve = selectedSeats.filter((s: any) => String(s.lockedByUserId) !== String(userId));
+      
+      if (seatsToReserve.length > 0) {
+        await Promise.all(seatsToReserve.map(seat => reserveSessionSeat(seat.id, userId)));
+      }
+
+      navigate("/checkout", {
+        state: {
+          sessionId, selectedSeats, totalPrice, userId,
+          movieTitle: sessionData?.movie.title,
+          hallName: sessionData?.hall.hallName,
+          sessionDate: sessionData?.sessionDate,
+          sessionTime: sessionData?.sessionTime,
+        }
+      });
+    } catch (error) {
+      toast.error("Error during reservation");
+    } finally {
+      setIsReserving(false);
+    }
+  };
+
+  if (isReserving || (isLoading && !sessionData)) return <MovieDetailsSkeleton />;
+  if (!sessionData) return <div className={styles.errorContainer}><Error variant="client" /></div>;
 
   return (
     <div className={styles.container}>
+      {showModal && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.modal}>
+            <div className={styles.modalIcon}>💳</div>
+            <h2>Unpaid reservation found</h2>
+            <p>You have {pendingOrder.seats.length} seats reserved. Pay for them or start fresh?</p>
+            <div className={styles.modalActions}>
+              <button onClick={handleGoToCheckout} className={styles.resumeBtn}>
+                PAY FOR RESERVED
+              </button>
+              <button onClick={handleStartNew} className={styles.cancelBtn} disabled={isCancelling}>
+                {isCancelling ? "CLEARING..." : "START NEW"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <aside className={styles.movieDetails}>
-        <img 
-          src={sessionData.movie.posterUrl} 
-          alt={sessionData.movie.title} 
-          className={styles.mainPoster} 
-        />
+        <div className={styles.posterContainer}>
+          <img src={sessionData.movie.posterUrl} alt={sessionData.movie.title} className={styles.mainPoster} />
+        </div>
         <div className={styles.movieText}>
           <h1 className={styles.movieTitle}>{sessionData.movie.title}</h1>
           <div className={styles.infoGrid}>
-            <div className={styles.infoItem}>
-              <span className={styles.label}>Hall</span>
-              <p className={styles.infoValue}>{sessionData.hall.hallName}</p>
-            </div>
-            <div className={styles.infoItem}>
-              <span className={styles.label}>Date</span>
-              <p className={styles.infoValue}>
-                {sessionData.sessionDate ? sessionData.sessionDate.split('T')[0] : "—"}
-              </p>
-            </div>
-            <div className={styles.infoItem}>
-              <span className={styles.label}>Time</span>
-              <p className={styles.infoValue}>
-                {sessionData.sessionTime?.slice(0, 5) || "10:00"}
-              </p>
-            </div>
+            <div className={styles.infoItem}><span className={styles.label}>Hall</span><p className={styles.infoValue}>{sessionData.hall.hallName}</p></div>
+            <div className={styles.infoItem}><span className={styles.label}>Date</span><p className={styles.infoValue}>{sessionData.sessionDate?.split('T')[0]}</p></div>
+            <div className={styles.infoItem}><span className={styles.label}>Time</span><p className={styles.infoValue}>{sessionData.sessionTime?.slice(0, 5)}</p></div>
           </div>
         </div>
       </aside>
 
       <main className={styles.hallSection}>
-        <div className={styles.legendTop}>
-          {legendItems.map((item) => (
-            <div key={item.id} className={styles.legendItem}>
-              <span 
-                className={styles.box} 
-                style={{ background: item.color }}
-              ></span> 
-              <span className={styles.legendText}>
-                {item.name.toUpperCase()} - {item.price} UAH
-              </span>
-            </div>
-          ))}
-        </div>
-
-        <div className={styles.screenWrapper}>
-          <div className={styles.screenLine}></div>
-          <span className={styles.screenText}>SCREEN</span>
-        </div>
-        
         <div className={styles.mapContainer}>
           <HallMap
             seats={seats}
-            renderSeat={(seat) => (
-              <Seat
-                id={seat.id}
-                color={getDisplayColor(seat, selectedSeats.some(s => s.id === seat.id))}
-                onClick={() => seat.status === SeatStatus.Available && toggleSeat(seat)}
-                className={seat.status !== SeatStatus.Available ? styles.seatDisabled : ""}
-              />
-            )}
+            renderSeat={(seat) => {
+              const seatAny = seat as any;
+              const status = String(seatAny.status).toLowerCase();
+              const seatUserId = String(seatAny.lockedByUserId || ""); 
+              const currentUserId = String(storedUserId);
+
+              // Визначаємо статуси
+              const isAvailable = status === "available" || status === "1";
+              const isReserved = status === "reserved" || status === "3";
+              const isSold = status === "sold" || status === "2";
+              
+              const isMine = isReserved && seatUserId === currentUserId;
+              // Зайнято іншими: або чужий резерв, або вже куплено
+              const isOccupiedByOthers = (isReserved && !isMine) || isSold;
+              const isSelected = selectedSeats.some(s => s.id === seat.id);
+
+              return (
+                <Seat
+                  id={seat.id}
+                  color={
+                    isSelected || isMine
+                      ? "var(--seat-selected)" 
+                      : isSold 
+                        ? "#333333" // Колір для проданих місць
+                        : isOccupiedByOthers 
+                          ? "var(--seat-occupied)" 
+                          : getSeatColor(typeof seat.type === 'object' ? seat.type?.name : seat.type || "")
+                  }
+                  onClick={() => !isOccupiedByOthers && toggleSeat(seat)}
+                  className={isOccupiedByOthers ? styles.seatDisabled : ""}
+                />
+              );
+            }}
           />
         </div>
       </main>
 
       <aside className={styles.checkoutSidebar}>
         <div className={styles.sidebarContent}>
-          <h3 className={styles.sidebarTitle}>Your Tickets</h3>
+          <h3 className={styles.sidebarTitle}>Your Selection</h3>
           <div className={styles.ticketsList}>
-            {selectedSeats.length > 0 ? (
-              selectedSeats.map(s => (
-                <div key={s.id} className={styles.ticketCard}>
-                   <div className={styles.ticketInfo}>
-                     Row {s.row}, Seat {s.number}
-                   </div>
-                   <div className={styles.ticketPrice}>{s.price} UAH</div>
-                </div>
-              ))
-            ) : (
-              <div className={styles.emptyState}>
-                <p>
-                  Pick your seats on the map.<br/>
-                  Direct entry with online ticket!
-                </p>
+            {selectedSeats.length > 0 ? selectedSeats.map(s => (
+              <div key={s.id} className={styles.ticketCard}>
+                <div className={styles.ticketInfo}>Row {s.row}, Seat {s.number}</div>
+                <div className={styles.ticketPrice}>{s.price} UAH</div>
+                <button className={styles.removeBtn} onClick={() => toggleSeat(s)}>×</button>
               </div>
+            )) : (
+              <div className={styles.emptyState}><p>Pick seats on the map</p></div>
             )}
           </div>
         </div>
 
         <div className={styles.footer}>
           <div className={styles.totalBox}>
-            <span>Total to pay:</span>
+            <span>Total:</span>
             <span className={styles.totalPrice}>{totalPrice} UAH</span>
           </div>
-          <button 
+          <button
             className={styles.payButton}
-            disabled={selectedSeats.length === 0}
-            onClick={handleProceed} 
+            disabled={selectedSeats.length === 0 || isReserving}
+            onClick={handleProceed}
           >
-            PROCEED TO PAY
+            {isAuthenticated ? "PROCEED TO PAY" : "LOGIN TO RESERVE"}
           </button>
         </div>
       </aside>

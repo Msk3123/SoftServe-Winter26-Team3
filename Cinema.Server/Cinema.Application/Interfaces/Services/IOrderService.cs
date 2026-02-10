@@ -9,5 +9,6 @@ namespace Cinema.Application.Interfaces.Services
     {
 
         Task<OrderDetailsDto> PlaceOrderAsync(OrderCreateDto dto);
+        Task CancelPendingOrdersBySeatsAsync(int userId, IEnumerable<int> seatIds);
     }
 }

@@ -55,6 +55,10 @@ namespace Cinema.Persistence.Repositories
                 .Where(ss => (ss.Session.SessionDate < thresholdDate ||
                              (ss.Session.SessionDate == thresholdDate && ss.Session.SessionTime < thresholdTime)) &&
                              ss.SeatStatuses != SeatStatus.Blocked)
+        public async Task<IEnumerable<SessionSeat>> GetByIdsAsync(IEnumerable<int> ids)
+        {
+            return await _context.SessionSeats
+                .Where(s => ids.Contains(s.SessionSeatId))
                 .ToListAsync();
         }
     }

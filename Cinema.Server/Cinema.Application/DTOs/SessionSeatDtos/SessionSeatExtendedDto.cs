@@ -11,6 +11,7 @@ namespace Cinema.Application.DTOs.SessionSeatDtos
         public int Row { get; set; }
         public int Number { get; set; }
         public decimal Price { get; set; }
+        public int LockedByUserId { get; set; }
         public SeatStatus Status { get; set; } 
         public string Type { get; set; } 
     }

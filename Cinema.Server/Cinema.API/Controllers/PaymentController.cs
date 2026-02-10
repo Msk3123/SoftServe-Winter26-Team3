@@ -32,12 +32,12 @@ namespace Cinema.API.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> PaymentCallback([FromForm] string data, [FromForm] string signature)
         {
-            Console.WriteLine("-----------------------------");
             var result = await _paymentService.HandlePaymentCallbackAsync(data, signature);
 
             return Ok(result);
         }
         [HttpGet("order/{orderId}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetByOrderId(int orderId)
         {
             var result = await _paymentService.GetPaymentByOrderIdAsync(orderId);

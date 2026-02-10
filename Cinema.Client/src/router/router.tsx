@@ -48,6 +48,7 @@ import EditNewsForm from "../features/admin/news/EditNews/EditNewsForm";
 import CreateNewsForm from "../features/admin/news/CreateNews/CreateNewsForm";
 import CreateMovieForm from "../features/admin/movies/CreateMovie/CreateMovie";
 import EditMovieForm from "../features/admin/movies/EditMovie/EditMovie";
+import DeleteMovie from '../features/admin/movies/DeleteMovie/DeleteMovie';
 
 import CreateSessionForm from "../features/admin/sessions/CreateSession/CreateSessionForm";
 import EditSessionForm from "../features/admin/sessions/EditSession/EditSessionForm";
@@ -81,6 +82,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import Error from "../components/Error/Error";
 import RouteError from "./RouteError";
 import DeleteMovie from "../features/admin/movies/DeleteMovie/DeleteMovie";
+import PaymentSuccessPage from "../pages/Client/PaymentSuccess/PaymentSuccessPage";
 
 
 export const router = createBrowserRouter([
@@ -98,7 +100,8 @@ export const router = createBrowserRouter([
       { path: "news", element: <NewsPage /> },
       { path: "news/:newsId", element: <NewsDetailsPage /> },
       { path: "actor/:actorId", element: <ActorPage /> },
-      
+      { path: "order/:sessionId", element: <OrderPage /> },
+      { path: "payment-success", element: <PaymentSuccessPage /> },
       // Захищені клієнтські маршрути
       {
         element: <ProtectedRoute />,

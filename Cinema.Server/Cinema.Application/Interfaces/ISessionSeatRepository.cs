@@ -15,5 +15,6 @@ namespace Cinema.Application.Interfaces
         Task<List<SessionSeat>> GetExpiredOrphanedSeatsAsync(DateTime now);
 
         Task<List<SessionSeat>> GetFinishedSessionSeatsAsync(DateTime threshold);
+        Task<IEnumerable<SessionSeat>> GetByIdsAsync(IEnumerable<int> ids);
     }
 }

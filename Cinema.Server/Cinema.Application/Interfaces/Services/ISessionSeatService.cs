@@ -8,6 +8,6 @@ namespace Cinema.Application.Interfaces.Services
     public interface ISessionSeatService
     {
     Task<bool> ReserveSeatAsync(int seatId, int userId);
-    
+        Task<bool> UnreserveMultipleSeatsAsync(IEnumerable<int> seatIds, int userId);
     }
 }
