@@ -16,7 +16,8 @@ import PasswordConfirmModal from "../../../features/admin/confirmPassword/Passwo
 const AdminUsersPage= ()=>{
     const {data,pagination,sortParams,status,actions} = useQueryTable<User>(getAllUsers);
     const [roles,setRoles] = useState<{value:number|string, label: string}[]>([])
-    const [isConfirmOpen,setIsConfirmOpen] = useState<boolean>(false)
+    const [isConfirmOpen,setIsConfirmOpen] = useState<boolean>(false);
+    const [pendingAction, setPendingAction] = useState<{ item: User, roleId: string } | null>(null);
     
     useEffect(() => {
             getAllRoles()
@@ -38,18 +39,10 @@ const AdminUsersPage= ()=>{
     
     const selectedRole = roles.find(v=>v.label===item.roleName);
 
-    const handleChange = async (v:string)=>{
-        try{
-            toast.loading("Changing role",{id:v})
-            await patchUser(item.id,{roleId:Number(v)})
-            actions.editItem({...item,roleName:v})
-
-        }catch(e){
-            handleError(e,"Can't change role for this user")
-        }finally{
-            toast.remove(v)
-        }
-    }
+    const handleChange = (roleId: string) => {
+        setPendingAction({ item, roleId });
+        setIsConfirmOpen(true);
+    };
     
     return <Select
                 options={roles}
@@ -74,7 +67,30 @@ const AdminUsersPage= ()=>{
             </div>)
         }
 
-    ],[roles,actions]);
+    ],[roles]);
+
+    const handleConfirmRoleChange = async () => {
+        if (!pendingAction) return;
+
+        const { item, roleId } = pendingAction;
+        const toastId = `role-${item.id}`;
+
+        try {
+            toast.loading("Changing role...", { id: toastId });
+        
+            await patchUser(item.id, { roleId: Number(roleId) });
+        
+            const newRoleName = roles.find(r => r.value.toString() === roleId)?.label || "";
+            actions.editItem({ ...item, roleName: newRoleName });
+        
+            toast.success("Role updated successfully!");
+        } catch (e) {
+            handleError(e, "Can't change role for this user");
+        } finally {
+            toast.dismiss(toastId)
+            setPendingAction(null);
+        }
+    };
     
     return( <>
                 <AdminTablePage
@@ -84,10 +100,10 @@ const AdminUsersPage= ()=>{
                     isActions={false}
                 />
                 <Outlet  context={{createItem:actions.createItem,editItem:actions.editItem}}/>
-                <PasswordConfirmModal 
+                <PasswordConfirmModal
                     isOpen={isConfirmOpen}
                     onClose={() => setIsConfirmOpen(false)}
-                    onConfirm={handleFinalDelete}
+                    onConfirm={handleConfirmRoleChange}
                 />
             </>)
 };

@@ -20,6 +20,8 @@ const PasswordConfirmModal = ({ isOpen, onClose, onConfirm }:PasswordConfirmModa
             await authApi.verifyPassword(password);
             onConfirm();
             onClose();
+            setPassword("");
+            setError("");
         } catch (e) {
             
             const err = e as ApiError
@@ -31,10 +33,16 @@ const PasswordConfirmModal = ({ isOpen, onClose, onConfirm }:PasswordConfirmModa
         }
     };
 
+    const handleClose=()=>{
+        setPassword("");
+        setError("");
+        onClose()
+    }
+
     if (!isOpen) return null;
 
     return (
-        <AdminModal onClose={onClose}>
+        <AdminModal onClose={handleClose}>
             <h3>Confirm action</h3>
             <p>Enter your password to continue</p>
             <BaseInput
