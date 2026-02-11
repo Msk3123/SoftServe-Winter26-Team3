@@ -93,5 +93,28 @@ namespace Cinema.Persistence.Repositories
                             o.Tickets.Any(t => seatIds.Contains(t.SessionSeatId)))
                 .ToListAsync();
         }
+        public async Task<Order?> GetExistingOrderAsync(int userId, int sessionId, List<int> seatIds)
+        {
+            return await _context.Orders
+                .Include(o => o.Tickets)
+                .Where(o => o.UserId == userId &&
+                            o.SessionId == sessionId &&
+                            o.OrderStatus == OrderStatus.Created)
+                .OrderByDescending(o => o.OrderDate) 
+                .FirstOrDefaultAsync(o =>
+                    o.Tickets.Count == seatIds.Count &&
+                    o.Tickets.All(t => seatIds.Contains(t.SessionSeatId)));
+        }
+        public async Task<Order?> GetLatestActiveOrderAsync(int userId)
+        {
+            return await _context.Orders
+                .Include(o => o.Tickets)
+                    .ThenInclude(t => t.SessionSeat)
+                        .ThenInclude(ss => ss.Seat)
+                .Where(o => o.UserId == userId &&
+                           (o.OrderStatus == OrderStatus.Created || o.OrderStatus == OrderStatus.Reserved)) // Зміни Confirmed на Pending
+                .OrderByDescending(o => o.OrderDate)
+                .FirstOrDefaultAsync();
+        }
     }
 }

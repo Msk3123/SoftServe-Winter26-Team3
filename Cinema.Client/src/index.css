@@ -40,6 +40,7 @@
   --seat-loveseats: #FF69B4;     
   --seat-premium: #C0C0C0;       
   --seat-broken: #333333;
+  --cell-size: 30px;
 }
 
 body{
@@ -59,4 +60,16 @@ a {
 .admin{
   color: var(--text-main-dark);
   font-weight: var(--fw-regular);
+}
+
+@media (max-width: 800px) {
+    :root{
+        --cell-size: 28px;
+    }
+}
+
+@media (max-width: 600px) {
+    :root{
+        --cell-size: 22px;
+    }
 }

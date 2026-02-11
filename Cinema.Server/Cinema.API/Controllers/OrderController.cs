@@ -5,6 +5,8 @@ using Cinema.Application.DTOs.OrderDtos;
 using Cinema.Application.Interfaces;
 using Cinema.Application.Interfaces.Services;
 using Cinema.Domain.Entities;
+using Cinema.Domain.Enums;
+using Cinema.Persistence;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -54,7 +56,21 @@ namespace Cinema.API.Controllers
             var history = await _orderRepository.GetByUserIdPagedAsync(userId, queryParameters);
             return OkPaged<Order, OrderShortDto>(history, queryParameters);
         }
+        [HttpGet("active/{userId}")]
+        [Authorize]
+        public async Task<IActionResult> GetActiveOrder(int userId)
+        {
+            var currentUserId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (currentUserId != userId.ToString() && !User.IsInRole("Admin"))
+                return Forbid();
 
+            var order = await _orderRepository.GetLatestActiveOrderAsync(userId);
+
+            if (order == null)
+                return NotFound(new { message = "No active order found for this user." });
+
+            return Ok(_mapper.Map<OrderDetailsDto>(order));
+        }
         [HttpGet("{id}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetById(int id)

@@ -68,7 +68,7 @@ import DeleteMovie from "../features/admin/movies/DeleteMovie/DeleteMovie";
 import DeleteSeatType from "../features/admin/seatType/DeleteSeatType/DeleteSeatType";
 import deleteSeatTypeLoader from "../features/admin/seatType/DeleteSeatType/deleteSeatTypeLoader";
 import PaymentSuccessPage from "../pages/Client/PaymentSuccess/PaymentSuccessPage";
-
+import SecureTicketView from "../pages/Client/PublicTicketView/PublicTicketView";
 
 export const router = createBrowserRouter([
   {
@@ -93,6 +93,7 @@ export const router = createBrowserRouter([
             element: <ProtectedRoute />,
             children: [
               { path: "profile", element: <UserPage /> }, 
+              { path: "ticket/view/:id", element: <SecureTicketView /> },
               { path: "order/:sessionId", element: <OrderPage /> },
               { path: "checkout", element: <CheckoutPage /> },
               ]
