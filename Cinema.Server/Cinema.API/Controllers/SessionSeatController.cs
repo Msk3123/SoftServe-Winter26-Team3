@@ -56,7 +56,7 @@ namespace Cinema.API.Controllers
             if (string.IsNullOrEmpty(userId))
                 return Unauthorized();
             await _sessionSeatService.UnreserveMultipleSeatsAsync(ids, int.Parse(userId));
-            return Ok();
+            return Ok(new { success = true });
         }    
 
         [HttpPut("{id:int}")]

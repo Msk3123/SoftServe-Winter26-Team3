@@ -38,38 +38,31 @@ const CheckoutPage = () => {
   setIsProcessing(true);
   let orderId;
 
-  if (isResume) {
-    // 1. Отримуємо історію замовлень юзера
-    // В API це: api/Order/user/{userId}
-    const historyResponse: any = await getItem("Order/user", userId); 
-    
-    // historyResponse зазвичай містить { items: [...] } через OkPaged
-    const orders = historyResponse.items || historyResponse;
-
-    // 2. Шукаємо замовлення для цієї сесії, яке ще не оплачене
-    // Перевір, який ID статусу відповідає "Очікує оплати" (наприклад, 1 або 0)
-    const existingOrder = orders.find((o: any) => 
-      Number(o.sessionId) === Number(sessionId) && 
-      (o.orderStatus === "Pending" || o.orderStatus === 1) 
-    );
-
-    if (!existingOrder) {
-      throw new Error("Active order not found. Please try creating a new one.");
-    }
-    
+ if (isResume) {
+  try {
+    // Намагаємось знайти існуючий активний ордер
+    const response: any = await getItem("Order/active", userId); 
+    const existingOrder = response.data || response;
     orderId = existingOrder.id;
-  } else {
-    // Створення нового замовлення (твій старий код)
-    const order = await createOrder({
-      userId: Number(userId),
-      sessionId: Number(sessionId),
-      selectedTickets: selectedSeats.map((seat: any) => ({
-        sessionSeatId: seat.id,
-        ticketTypeId: 1 
-      }))
-    });
-    orderId = order.id;
+  } catch (error: any) {
+    // ЯКЩО 404 (ордер скасовано клінапом), СТВОРЮЄМО НОВИЙ
+    if (error.response?.status === 404 || error.message.includes("not found")) {
+      console.log("Active order expired, creating a new one for existing reserved seats...");
+      
+      const newOrder = await createOrder({
+        userId: Number(userId),
+        sessionId: Number(sessionId),
+        selectedTickets: selectedSeats.map((seat: any) => ({
+          sessionSeatId: seat.id,
+          ticketTypeId: 1 
+        }))
+      });
+      orderId = newOrder.id;
+    } else {
+      throw error; // Інші помилки прокидаємо далі
+    }
   }
+}
 
   // 3. Ініціалізуємо платіж
   const paymentData = await initializePayment(orderId, PaymentMethod.Online);
@@ -115,9 +108,9 @@ const CheckoutPage = () => {
         </section>
 
         <section className={styles.section}>
-  <h3 className={styles.sectionTitle}>Payment Method</h3>
+  <h3 className={styles.sectionTitle}>Payment Method</h3> 
   <div className={styles.methodsGrid}>
-    {/* Активний метод LiqPay */}
+    {/* Активний метод LiqPay */} 
     <div className={`${styles.methodCard} ${styles.active}`}>
       <div className={styles.methodContent}>
         <span className={styles.methodName}>LiqPay</span>

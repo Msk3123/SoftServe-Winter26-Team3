@@ -5,7 +5,7 @@ import HallMap from "../../../components/HallMap/HallMap/HallMap";
 import Seat from "../../../components/HallMap/Seat/Seat";
 import { getSeatColor } from "../../../features/admin/halls/helpers/getSeatColor";
 import Error from "../../../components/Error/Error";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import MovieDetailsSkeleton from "../MovieDetails/MovieDetailsPageSkeleton";
 import { reserveSessionSeat } from "../../../api/sessionSeatApi";
 import { postItem } from "../../../api/api"; 
@@ -34,7 +34,7 @@ const SessionDetails = () => {
     toggleSeat
   } = useSessionHallMap(sessionId || "");
 
-  // Динамічна легенда: витягуємо унікальні типи крім стандартних
+  // Динамічна легенда типів крісел
   const dynamicLegendTypes = useMemo(() => {
     if (!seats) return [];
     const flatSeats = seats.flat();
@@ -50,23 +50,29 @@ const SessionDetails = () => {
     return Array.from(types);
   }, [seats]);
 
+  // Перевірка на наявність незавершених бронювань
   useEffect(() => {
-    if (!isAuthenticated || !storedUserId || !seats || seats.length === 0 || isCancelling) return;
+    if (!isAuthenticated || !storedUserId || !seats || seats.length === 0 || isCancelling || showModal) return;
+    
     const flatSeats = seats.flat();
     const currentUserId = String(storedUserId);
+    
     const myReservedSeats = flatSeats.filter((seat: any) => {
       const status = String(seat.status).toLowerCase();
       const seatUserId = String(seat.lockedByUserId || "");
+      // "3" або "reserved" — статус активного бронювання
       return (status === "reserved" || status === "3") && seatUserId === currentUserId;
     });
 
-    if (myReservedSeats.length > 0 && !pendingOrder && !isCancelling) {
+    if (myReservedSeats.length > 0 && !pendingOrder) {
       setPendingOrder({ seats: myReservedSeats });
       setShowModal(true);
     }
-  }, [seats, isAuthenticated, storedUserId, pendingOrder, isCancelling]);
+  }, [seats, isAuthenticated, storedUserId, isCancelling, showModal, pendingOrder]);
 
-  const handleGoToCheckout = () => {
+  // ПЕРЕХІД ДО ОПЛАТИ
+  const handleGoToCheckout = useCallback(() => {
+    if (!pendingOrder) return;
     navigate("/checkout", {
       state: {
         sessionId,
@@ -80,20 +86,32 @@ const SessionDetails = () => {
         isResume: true 
       }
     });
-  };
+  }, [pendingOrder, sessionId, storedUserId, sessionData, navigate]);
 
+  // СКАСУВАННЯ ТА ОЧИЩЕННЯ (Виправлено для уникнення помилки Failed to release)
   const handleStartNew = async () => {
-    if (!pendingOrder) return;
+    if (!pendingOrder || isCancelling) return;
+    
+    const toastId = toast.loading("Releasing your seats...");
     try {
       setIsCancelling(true);
-      setShowModal(false); 
       const ids = pendingOrder.seats.map((s: any) => s.id);
-      setPendingOrder(null);
+      
+      setShowModal(false);
+      
+      // Намагаємось очистити місця через бекенд
+      // Переконайся, що SessionSeat/unreserve приймає масив ID
       await postItem(`SessionSeat/unreserve`, ids); 
-      toast.success("Seats released");
-      setTimeout(() => window.location.reload(), 500);
+        
+      
+      setPendingOrder(null);
+      toast.success("Seats are now available", { id: toastId });
+
+      // Форсуємо оновлення мапи після очищення
+      window.location.reload(); 
     } catch (e) {
-      toast.error("Failed to release seats");
+      console.error("Unreserve error:", e);
+      toast.error("Could not release seats. They might be tied to an order.", { id: toastId });
       setIsCancelling(false);
     }
   };
@@ -104,24 +122,39 @@ const SessionDetails = () => {
       navigate("/auth/login", { state: { from: `/sessions/${sessionId}` } });
       return;
     }
+
     try {
       setIsReserving(true);
       const userId = Number(storedUserId);
-      const seatsToReserve = selectedSeats.filter((s: any) => String(s.lockedByUserId) !== String(userId));
+
+      // Бронюємо лише ті, які ще не мають статусу Reserved для нас
+      const seatsToReserve = selectedSeats.filter((s: any) => {
+        const status = String(s.status).toLowerCase();
+        const isAlreadyMine = (status === "reserved" || status === "3") && String(s.lockedByUserId) === String(userId);
+        return !isAlreadyMine;
+      });
+
       if (seatsToReserve.length > 0) {
         await Promise.all(seatsToReserve.map(seat => reserveSessionSeat(seat.id, userId)));
       }
+
       navigate("/checkout", {
         state: {
-          sessionId, selectedSeats, totalPrice, userId,
+          sessionId,
+          selectedSeats,
+          totalPrice,
+          userId,
           movieTitle: sessionData?.movie.title,
           hallName: sessionData?.hall.hallName,
           sessionDate: sessionData?.sessionDate,
           sessionTime: sessionData?.sessionTime,
+          isResume: false 
         }
       });
     } catch (error) {
-      toast.error("Error during reservation");
+      console.error("Reservation error:", error);
+      toast.error("Some seats were already taken. Refreshing...");
+      window.location.reload();
     } finally {
       setIsReserving(false);
     }
@@ -132,15 +165,22 @@ const SessionDetails = () => {
 
   return (
     <div className={styles.container}>
-      {showModal && (
+      {/* Modal for pending reservations */}
+      {showModal && pendingOrder && (
         <div className={styles.modalOverlay}>
           <div className={styles.modal}>
             <div className={styles.modalIcon}>💳</div>
             <h2>Unpaid reservation found</h2>
             <p>You have {pendingOrder.seats.length} seats reserved. Pay for them or start fresh?</p>
             <div className={styles.modalActions}>
-              <button onClick={handleGoToCheckout} className={styles.resumeBtn}>PAY FOR RESERVED</button>
-              <button onClick={handleStartNew} className={styles.cancelBtn} disabled={isCancelling}>
+              <button onClick={handleGoToCheckout} className={styles.resumeBtn}>
+                PAY FOR RESERVED
+              </button>
+              <button 
+                onClick={handleStartNew} 
+                className={styles.cancelBtn} 
+                disabled={isCancelling}
+              >
                 {isCancelling ? "CLEARING..." : "START NEW"}
               </button>
             </div>
@@ -164,20 +204,16 @@ const SessionDetails = () => {
 
       <main className={styles.hallSection}>
         <div className={styles.legendTop}>
-         
-
-          {/* Всі інші типи, що є на цій конкретній сесії */}
           {dynamicLegendTypes.map(type => (
             <div key={type} className={styles.legendItem}>
-              <span 
-                className={styles.box} 
-                style={{ backgroundColor: getSeatColor(type) }}
-              ></span>
+              <span className={styles.box} style={{ backgroundColor: getSeatColor(type) }}></span>
               <span>{type}</span>
             </div>
           ))}
-
-          
+          <div className={styles.legendItem}>
+            <span className={styles.box} style={{ backgroundColor: "#333333" }}></span>
+            <span>Occupied</span>
+          </div>
         </div>
 
         <div className={styles.screenWrapper}>
@@ -191,10 +227,11 @@ const SessionDetails = () => {
             renderSeat={(seat) => {
               const seatAny = seat as any;
               const status = String(seatAny.status).toLowerCase();
+              
               const isMine = (status === "reserved" || status === "3") && String(seatAny.lockedByUserId) === String(storedUserId);
-              const isOccupied = (status === "reserved" && !isMine) || status === "sold" || status === "2";
+              const isOccupied = (status === "reserved" && !isMine) || (status === "3" && !isMine) || status === "sold" || status === "2";
               const isSelected = selectedSeats.some(s => s.id === seat.id);
-              const typeName = typeof seat.type === 'object' ? seat.type?.name : seat.type || "Standard";
+              const typeName = typeof seat.type === 'object' ? seat.type?.name : (seat.type || "Standard");
 
               return (
                 <Seat
@@ -232,8 +269,12 @@ const SessionDetails = () => {
             <span>Total:</span>
             <span className={styles.totalPrice}>{totalPrice} UAH</span>
           </div>
-          <button className={styles.payButton} disabled={selectedSeats.length === 0 || isReserving} onClick={handleProceed}>
-            {isAuthenticated ? "PROCEED TO PAY" : "LOGIN TO RESERVE"}
+          <button 
+            className={styles.payButton} 
+            disabled={selectedSeats.length === 0 || isReserving} 
+            onClick={handleProceed}
+          >
+            {!isAuthenticated ? "LOGIN TO RESERVE" : isReserving ? "RESERVING..." : "PROCEED TO PAY"}
           </button>
         </div>
       </aside>
