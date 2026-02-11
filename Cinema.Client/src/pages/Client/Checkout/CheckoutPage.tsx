@@ -25,57 +25,55 @@ const CheckoutPage = () => {
     isResume = false // <--- Отримуємо прапорець з SessionDetails
   } = location.state || {};
 
-  const handlePayment = async () => {
-    if (!userId) {
-      toast.error("Please log in to continue");
-      return;
+ const handlePayment = async () => {
+  if (!userId) {
+    toast.error("Please log in to continue");
+    return;
+  }
+
+  if (isProcessing) return;
+  const toastId = toast.loading(isResume ? "Resuming payment..." : "Processing order...");
+
+  try {
+    setIsProcessing(true);
+    let orderId;
+
+    if (isResume) {
+      // СЦЕНАРІЙ А: Продовження оплати
+      try {
+        const response: any = await getItem("Order/active", userId);
+        const existingOrder = response.data || response;
+        orderId = existingOrder.id;
+      } catch (error: any) {
+        // Якщо 404, не зупиняємось, створимо новий нижче
+        console.log("Active order not found, will create a new one.");
+      }
     }
 
-    if (isProcessing) return;
-    const toastId = toast.loading(isResume ? "Resuming payment..." : "Processing order...");
-
-   try {
-  setIsProcessing(true);
-  let orderId;
-
- if (isResume) {
-  try {
-    // Намагаємось знайти існуючий активний ордер
-    const response: any = await getItem("Order/active", userId); 
-    const existingOrder = response.data || response;
-    orderId = existingOrder.id;
-  } catch (error: any) {
-    // ЯКЩО 404 (ордер скасовано клінапом), СТВОРЮЄМО НОВИЙ
-    if (error.response?.status === 404 || error.message.includes("not found")) {
-      console.log("Active order expired, creating a new one for existing reserved seats...");
-      
+    // СЦЕНАРІЙ Б: Якщо це НЕ продовження АБО продовження не знайшло старий ордер
+    if (!orderId) {
       const newOrder = await createOrder({
         userId: Number(userId),
         sessionId: Number(sessionId),
         selectedTickets: selectedSeats.map((seat: any) => ({
           sessionSeatId: seat.id,
-          ticketTypeId: 1 
+          ticketTypeId: 1
         }))
       });
       orderId = newOrder.id;
-    } else {
-      throw error; // Інші помилки прокидаємо далі
     }
+
+    // ТЕПЕР orderId точно є
+    const paymentData = await initializePayment(orderId, PaymentMethod.Online);
+    toast.success("Redirecting to payment...", { id: toastId });
+    submitLiqPayForm(paymentData);
+
+  } catch (error: any) {
+    toast.error(error.message || "Payment failed", { id: toastId });
+  } finally {
+    setIsProcessing(false);
   }
-}
-
-  // 3. Ініціалізуємо платіж
-  const paymentData = await initializePayment(orderId, PaymentMethod.Online);
-  toast.success("Redirecting to payment...", { id: toastId });
-  submitLiqPayForm(paymentData);
-
-    } catch (error: any) {
-      // Якщо помилка "Order already paid", можна редиректити на квитки
-      toast.error(error.message || "Payment failed", { id: toastId });
-    } finally {
-      setIsProcessing(false);
-    }
-  };
+};
 
   if (isLoading) return <div className={styles.loading}>Loading user data...</div>;
   if (!sessionId) return <div className={styles.error}>Error: Session not found.</div>;
