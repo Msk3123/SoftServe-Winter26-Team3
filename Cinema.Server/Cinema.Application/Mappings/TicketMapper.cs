@@ -30,7 +30,8 @@ namespace Cinema.Application.Mappings
                 .ForMember(d => d.TicketTypeName, opt => opt.MapFrom(src => src.TicketType.Name))
                 .ForMember(d => d.OrderId, opt => opt.MapFrom(src => src.OrderId))
                 .ForMember(d => d.SessionSeatId, opt => opt.MapFrom(src => src.SessionSeatId))
-                .ForMember(d => d.Price, opt => opt.MapFrom(src => src.Price));
+                .ForMember(d => d.Price, opt => opt.MapFrom(src => src.Price))
+                .ForMember(dest => dest.OrderStatus, opt => opt.MapFrom(src => (int)src.Order.OrderStatus));
         }
     }
 }
