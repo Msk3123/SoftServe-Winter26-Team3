@@ -10,12 +10,10 @@ const SecureTicketView = () => {
     const [error, setError] = useState('');
 
     useEffect(() => {
-        // Викликаємо захищений ендпоїнт, який ми створили на бекенді
         getList(`Ticket/my-ticket/${id}`)
             .then((ticket: any) => {
                 const doc = new jsPDF();
                 
-                // Дизайн ідентичний Ticket_54_Inception.pdf
                 doc.setFillColor(18, 18, 18);
                 doc.rect(0, 0, 210, 297, 'F');
                 
@@ -35,14 +33,11 @@ const SecureTicketView = () => {
                 doc.line(20, 110, 190, 110);
                 doc.text(`Ticket ID: #${ticket.id}`, 20, 120);
 
-                // Відкриваємо PDF
                 const blob = doc.output('bloburl');
                 window.location.replace(blob); 
             })
             .catch((err) => {
-                // Якщо 403 (Forbid) — значить квиток не належить юзеру
                 setError("Access Denied: You are not the owner of this ticket.");
-                // Через 3 секунди повертаємо в профіль
                 setTimeout(() => navigate('/profile'), 3000);
             });
     }, [id, navigate]);

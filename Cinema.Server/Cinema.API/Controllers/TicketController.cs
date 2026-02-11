@@ -61,8 +61,7 @@ namespace Cinema.WebAPI.Controllers
             {
                 return NotFound("Ticket not found or access denied.");
             }
-
-            // 3. Мапимо у DTO (AutoMapper підхопить включені сутності)
+            
             var result = _mapper.Map<TicketDetailsDto>(ticket);
 
             return Ok(result);

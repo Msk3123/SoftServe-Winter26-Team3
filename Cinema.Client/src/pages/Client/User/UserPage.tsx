@@ -46,11 +46,9 @@ const UserPage = () => {
     }
 
     try {
-        // Виклик твого API
         await postItem('auth/change-password', { newPassword: passData.newPassword });
         setAuthMessage({ text: "Password updated successfully!", isError: false });
         
-        // Очищення полів
         setPassData({ newPassword: '', confirmPassword: '' });
     } catch (err) {
         setAuthMessage({ 
@@ -90,20 +88,16 @@ const UserPage = () => {
         if (activeTab === 'tickets') fetchTickets();
     }, [activeTab, currentPage]);
 
-    // ФУНКЦІЯ ГЕНЕРАЦІЇ PDF (Синхронізована з дизайном)
     const generateTicketPDF = (ticket: any) => {
         const doc = new jsPDF();
         
-        // Малюємо чорний фон (RGB 18, 18, 18)
         doc.setFillColor(18, 18, 18);
         doc.rect(0, 0, 210, 297, 'F');
         
-        // Заголовок (Зелений: 0, 223, 130)
         doc.setTextColor(0, 223, 130);
         doc.setFontSize(28);
         doc.text('CINEMAS TICKET', 20, 40);
         
-        // Основні дані (Білий: 255, 255, 255)
         doc.setTextColor(255, 255, 255);
         doc.setFontSize(16);
         doc.text(`Movie: ${ticket.movieTitle}`, 20, 65);
@@ -114,12 +108,10 @@ const UserPage = () => {
         const price = ticket.price?.parsedValue || ticket.price;
         doc.text(`Price: ${price} UAH`, 20, 125);
         
-        // Розділювальна лінія
         doc.setDrawColor(0, 223, 130);
         doc.setLineWidth(0.5);
         doc.line(20, 140, 190, 140);
         
-        // Футер з ID
         doc.setFontSize(12);
         doc.text(`Ticket ID: #${ticket.id}`, 20, 155);
         doc.text('Please show this PDF or QR code at the entrance.', 20, 175);
@@ -205,7 +197,6 @@ const UserPage = () => {
                         <h3 className={styles.movieTitle}>{selectedTicket.movieTitle}</h3>
                         
                         <div className={styles.qrContainer}>
-                            {/* ТЕПЕР КАРТИНКА - ЦЕ ПОСИЛАННЯ */}
                             <a href={ticketUrl} target="_blank" rel="noreferrer" title="Click to open ticket view">
                                 <QRCodeSVG value={ticketUrl} size={200} fgColor="#00df82" bgColor="#1e1e1e" />
                             </a>
