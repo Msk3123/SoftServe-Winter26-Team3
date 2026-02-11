@@ -12,7 +12,8 @@ export default function useQueryTable<T extends BaseEntity>(
     const [state, dispatch] = useReducer(reducer<T>, initialState);
 
     useEffect(() => {
-        const fetchMovies = async() => {
+        console.log("efect")
+        const fetchData = async() => {
             dispatch({ type: "fetch_start" });
 
             try {
@@ -38,25 +39,27 @@ export default function useQueryTable<T extends BaseEntity>(
         }
     };
 
-        fetchMovies();
+        fetchData();
     }, [state.currentPage, state.pageSize, state.sortBy, state.order,fetchFn,state.refreshTrigger]);
 
     useEffect(() => {
     if (state.loading) return;
 
     const currentCount = state.data?.length || 0;
+
     
     if (currentCount === 0 && state.currentPage > 1) {
         dispatch({ type: "set_page", payload: state.currentPage - 1 });
         return;
     }
 
-    const canFetchMore = state.totalCount > currentCount;
-    const isPageUnderfilled = currentCount < state.pageSize;
+    const isLastPage = state.currentPage >= Math.ceil(state.totalCount / state.pageSize);
 
-    if (isPageUnderfilled && canFetchMore) {
-        dispatch({ type: "refresh" });
-    }
+        const isPageUnderfilled = currentCount < state.pageSize;
+
+        if (isPageUnderfilled && !isLastPage && state.totalCount > 0) {
+            dispatch({ type: "refresh" });
+        }
 }, [state.data?.length, state.pageSize, state.totalCount, state.loading, state.currentPage]);
 
     const actions = useMemo(() => ({

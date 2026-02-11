@@ -76,28 +76,32 @@ export const router = createBrowserRouter([
     element: <ClientPageLayout />,
     errorElement: <RouteError variant="client"/>,
     children: [
-      { index: true, element: <Navigate to="/home" replace /> },
-      { path: "home", element: <HomePage /> },
-      { path: "sessions", element: <SessionsPage /> },
-      { path: "sessions/:sessionId", element: <SessionDetailsPage /> },
-      { path: "movie/:movieId", element: <MovieDetailsPage /> },
-      { path: "news", element: <NewsPage /> },
-      { path: "news/:newsId", element: <NewsDetailsPage /> },
-      { path: "actor/:actorId", element: <ActorPage /> },
-      { path: "order/:sessionId", element: <OrderPage /> },
-      { path: "payment-success", element: <PaymentSuccessPage /> },
-      // Захищені клієнтські маршрути
-      {
-        element: <ProtectedRoute />,
-        children: [
-          { path: "profile", element: <UserPage /> }, 
-          { path: "ticket/view/:id", element: <SecureTicketView /> },
+      { errorElement: <RouteError variant="client"/>,
+        children:[
+          { index: true, element: <Navigate to="/home" replace /> },
+          { path: "home", element: <HomePage /> },
+          { path: "sessions", element: <SessionsPage /> },
+          { path: "sessions/:sessionId", element: <SessionDetailsPage /> },
+          { path: "movie/:movieId", element: <MovieDetailsPage /> },
+          { path: "news", element: <NewsPage /> },
+          { path: "news/:newsId", element: <NewsDetailsPage /> },
+          { path: "actor/:actorId", element: <ActorPage /> },
           { path: "order/:sessionId", element: <OrderPage /> },
-          { path: "checkout", element: <CheckoutPage /> },
-        ]
-      },
+          { path: "payment-success", element: <PaymentSuccessPage /> },
+          
+          {
+            element: <ProtectedRoute />,
+            children: [
+              { path: "profile", element: <UserPage /> }, 
+              { path: "ticket/view/:id", element: <SecureTicketView /> },
+              { path: "order/:sessionId", element: <OrderPage /> },
+              { path: "checkout", element: <CheckoutPage /> },
+              ]
+            },
     
-      { path: "*", element: <PageNotFound /> },
+          { path: "*", element: <PageNotFound /> },
+        ]
+      }
     ],
   },
 
@@ -113,7 +117,7 @@ export const router = createBrowserRouter([
   {
     path: "/admin",
     element: <ProtectedRoute requiredRole="Admin" />,
-    errorElement: <RouteError variant="client"/>,
+    errorElement: <RouteError variant="admin"/>,
     children: [
       {
         element: <AdminPageLayout />, 
