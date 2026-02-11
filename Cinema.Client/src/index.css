@@ -8,6 +8,7 @@
   --bg-main: #FFFFFF;
   --bg-dark: #020700;
   --bg-news: #1A1A1A;
+  --bg-filmography: #111;
   --poster-bg-hover: #2ECC7166;
   --text-main: #FFFFFF;
   --text-main-dark: #101012;
@@ -24,6 +25,8 @@
   --button-inactive: #A1D9BE;
   --button-disabled: #D5E5F0;
   --button-all-news: #2ecc71;
+  --card-active: #008550;
+  --card-divider: #333;
   --font-main: 'Poppins', sans-serif;
   --font-secondary: 'Roboto', sans-serif;
   --fw-light: 300;
@@ -31,6 +34,13 @@
   --fw-medium: 500;
   --fw-bold: 700;
   --fw-heavy: 900;
+  --seat-selected: #0bee0b;      
+  --seat-occupied: #262626;      
+  --seat-vip: #FFD700;           
+  --seat-loveseats: #FF69B4;     
+  --seat-premium: #C0C0C0;       
+  --seat-broken: #333333;
+  --cell-size: 30px;
 }
 
 body{
@@ -49,4 +59,17 @@ a {
 }
 .admin{
   color: var(--text-main-dark);
+  font-weight: var(--fw-regular);
+}
+
+@media (max-width: 800px) {
+    :root{
+        --cell-size: 28px;
+    }
+}
+
+@media (max-width: 600px) {
+    :root{
+        --cell-size: 22px;
+    }
 }

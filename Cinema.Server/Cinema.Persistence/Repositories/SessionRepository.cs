@@ -2,6 +2,7 @@
 using Cinema.Application.Helpers;
 using Cinema.Application.Interfaces;
 using Cinema.Domain.Entities;
+using Cinema.Domain.Enums;
 using Cinema.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -14,31 +15,43 @@ namespace Cinema.Persistence.Repositories
     {
         public SessionRepository(AppDbContext context) : base(context) { }
 
-        public async Task<(IEnumerable<Session> Items, int TotalCount)> GetAllWithDetailsPagedAsync(QueryParameters queryParameters)
+        public async Task<(IEnumerable<Session> Items, int TotalCount)> GetAllWithDetailsPagedAsync(
+            QueryParameters queryParameters,
+            SessionFilter timeFilter)
         {
             return await _dbSet
                 .Include(s => s.Hall)
-                .Include(s => s.Movie)
-                    .ThenInclude(m => m.ActorMovies)
-                        .ThenInclude(am => am.Actor)
-                .Include(s => s.Movie)
-                    .ThenInclude(m => m.GenreMovies)
-                        .ThenInclude(gm => gm.Genre)
+                .Include(s => s.Movie).ThenInclude(m => m.ActorMovies).ThenInclude(am => am.Actor)
+                .Include(s => s.Movie).ThenInclude(m => m.GenreMovies).ThenInclude(gm => gm.Genre)
                 .AsNoTracking()
-                .ToPagedResultAsync(queryParameters); 
+                .ApplyTimeFilter(timeFilter) 
+                .ToPagedResultAsync(queryParameters);
         }
 
-        public async Task<(IEnumerable<Session> Items, int TotalCount)> GetByMovieIdPagedAsync(int movieId, QueryParameters queryParameters)
+        public async Task<(IEnumerable<Session> Items, int TotalCount)> GetByMovieIdPagedAsync(
+            int movieId, QueryParameters queryParameters, SessionFilter sessionFilter)
         {
             return await _dbSet
                 .Where(s => s.MovieId == movieId)
                 .Include(s => s.Hall)
                 .AsNoTracking()
+                .ApplyTimeFilter(sessionFilter)
                 .ToPagedResultAsync(queryParameters);
+        }
+        public async Task<Session?> GetByIdExtendedAsync(int id)
+        {
+            return await _context.Sessions
+                .Include(s => s.Movie)
+                .Include(s => s.Hall)
+                .Include(s => s.SessionSeats)
+                .ThenInclude(ss => ss.Seat)
+                .ThenInclude(seat => seat.SeatType)
+                .FirstOrDefaultAsync(s => s.SessionId == id);
         }
         public async Task<Session?> GetByIdWithFullDetailsAsync(int id)
         {
             return await _dbSet
+                .IgnoreQueryFilters()
                 .Include(s => s.Hall)
                 .Include(s => s.Movie)
                     .ThenInclude(m => m.ActorMovies)
@@ -55,6 +68,45 @@ namespace Cinema.Persistence.Repositories
                 .Include(s => s.Movie)
                 .Include(s => s.Hall)
                 .FirstOrDefaultAsync(s => s.SessionId == id);
+        }
+        public async Task DeleteAsync(int sessionId)
+        {
+            var seats = await _context.SessionSeats
+                .Where(s => s.SessionId == sessionId)
+                .ToListAsync();
+
+            if (seats.Any())
+            {
+                _context.SessionSeats.RemoveRange(seats);
+            }
+
+            var session = await _context.Sessions.FindAsync(sessionId);
+            if (session != null)
+            {
+                _context.Sessions.Remove(session);
+            }
+            await _context.SaveChangesAsync();
+        }
+        public async Task<IEnumerable<Session>> GetSessionsByDateRangeAsync(int hallId, DateTime startDate, DateTime endDate)
+        {
+            return await _context.Sessions
+                .Include(s => s.Movie)
+                .AsNoTracking()
+                .Where(s => s.HallId == hallId &&
+                            s.SessionDate.Date >= startDate.Date &&
+                            s.SessionDate.Date <= endDate.Date)
+                .ToListAsync();
+        }
+        public async Task<bool> AnyByHallIdAsync(int hallId)
+        {
+            return await _context.Sessions
+                .AnyAsync(s => s.HallId == hallId);
+        }
+        public async Task<IEnumerable<Session>> GetByMovieId(int movieId)
+        {
+            return await _dbSet
+                .Where(s => s.MovieId == movieId)
+                .ToListAsync();
         }
     }
 }

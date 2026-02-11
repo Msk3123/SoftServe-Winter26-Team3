@@ -34,6 +34,28 @@ namespace Cinema.Persistence.Context
         {
             base.OnModelCreating(modelBuilder);
 
+
+
+            modelBuilder.Entity<Seat>()
+                .HasIndex(s => new { s.HallId, s.Row, s.SeatNo })
+                .IsUnique()
+                .HasDatabaseName("IX_Seat_HallId_Row_Number_Unique");
+
+            modelBuilder.Entity<Movie>().HasQueryFilter(m => !m.IsDeleted);
+            modelBuilder.Entity<Session>().HasQueryFilter(s => !s.IsDeleted);
+
+            // Movie <-> News
+            modelBuilder.Entity<News>()
+            .HasOne(n => n.Movie)
+                .WithMany(m => m.News)
+                .HasForeignKey(n => n.MovieId)
+                .OnDelete(DeleteBehavior.SetNull);
+            // News <-> Actor
+            modelBuilder.Entity<News>()
+                .HasOne(n => n.Actor)
+                .WithMany(a => a.News)
+                .HasForeignKey(n => n.ActorId)
+                .OnDelete(DeleteBehavior.SetNull);
             // --- Налаштування зв'язків Many-to-Many
 
             // Movie <-> Genre
@@ -65,14 +87,14 @@ namespace Cinema.Persistence.Context
                 .HasOne(ss => ss.Session)
                 .WithMany(s => s.SessionSeats)
                 .HasForeignKey(ss => ss.SessionId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
 
             modelBuilder.Entity<SessionSeat>()
                 .HasOne(ss => ss.User)
                 .WithMany()
                 .HasForeignKey(ss => ss.LockedByUserId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Cascade);
 
             // Ticket <-> SessionSeat (One-to-One)
             modelBuilder.Entity<Ticket>()
@@ -81,6 +103,10 @@ namespace Cinema.Persistence.Context
                 .HasForeignKey<Ticket>(t => t.SessionSeatId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<Ticket>()
+                .HasIndex(t => t.SessionSeatId)
+                .IsUnique()
+                .HasFilter("[TicketStatus] IN (1, 2)");
             // Order <-> Ticket
             modelBuilder.Entity<Ticket>()
                 .HasOne(t => t.Order)
@@ -94,7 +120,11 @@ namespace Cinema.Persistence.Context
                 .WithMany(u => u.Orders)
                 .HasForeignKey(o => o.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
-
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.Payment)
+                .WithOne(p => p.Order)
+                .HasForeignKey<Payment>(p => p.OrderId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

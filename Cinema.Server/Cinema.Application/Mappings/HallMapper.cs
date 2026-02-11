@@ -13,7 +13,7 @@ namespace Cinema.Application.Mappings
     {
         public HallMapper()
         {
-            CreateMap<Hall, HallDto>()
+            CreateMap<Hall, HallShortDto>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.HallId));
 
             CreateMap<HallCreateDto, Hall>();

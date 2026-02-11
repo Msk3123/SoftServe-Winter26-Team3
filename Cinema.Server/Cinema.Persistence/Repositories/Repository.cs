@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq.Dynamic.Core;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace Cinema.Persistence.Repositories
@@ -35,12 +36,30 @@ namespace Cinema.Persistence.Repositories
             if (entity != null)
             {
                 _dbSet.Remove(entity);
-                
+
             }
+        }
+        public  virtual async Task RemoveRange(IEnumerable<T> entities)
+        {
+            _dbSet.RemoveRange(entities);
         }
         public virtual async Task<(IEnumerable<T> Items, int TotalCount)> GetPagedAsync(QueryParameters queryParameters)
         {
             return await _dbSet.AsNoTracking().ToPagedResultAsync(queryParameters);
+        }
+        public void Remove(T entity)
+        {
+            _dbSet.Remove(entity);
+        }
+
+        public virtual async Task<int> CountAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await _dbSet.CountAsync(predicate);
+        }
+        public virtual async Task<bool> ExistsAsync(int id)
+        {
+            var entity = await GetByIdAsync(id);
+            return entity != null;
         }
     }
 }

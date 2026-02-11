@@ -4,12 +4,14 @@ using Cinema.Application.DTOs;
 using Cinema.Application.DTOs.GenreDtos;
 using Cinema.Application.Interfaces;
 using Cinema.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cinema.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles = "Admin")]
     public class GenresController : ApiBaseController
     {
         private readonly IGenreRepository _genreRepository;
@@ -20,6 +22,7 @@ namespace Cinema.API.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAll([FromQuery] QueryParameters queryParameters)
         {
             var results = await _genreRepository.GetAllPagedAsync(queryParameters);
@@ -27,12 +30,20 @@ namespace Cinema.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetById(int id)
         {
             var genre = await _genreRepository.GetByIdAsync(id);
             if (genre == null) return NotFound();
 
             return Ok(_mapper.Map<GenreDto>(genre));
+        }
+        [HttpGet("search")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Search([FromQuery] string genreName, [FromQuery]QueryParameters queryParameters)
+        {
+            var genres = await _genreRepository.GetByNameAsync(genreName, queryParameters);
+            return OkPaged<Genre, GenreDto>(genres, queryParameters);
         }
 
         [HttpPost]

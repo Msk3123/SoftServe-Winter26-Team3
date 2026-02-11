@@ -28,5 +28,21 @@ namespace Cinema.Persistence.Repositories
                 .Include(u => u.Role)
                 .FirstOrDefaultAsync(u => u.UserId == id);
         }
+        public async Task<User?> GetByEmailAsync(string email)
+        {
+            return await _dbSet
+                .Include(u => u.Role)
+                .FirstOrDefaultAsync(u => u.Email == email);
+        }
+
+        public async Task UpdateAsync(User user)
+        {
+            _dbSet.Update(user);
+            await Task.CompletedTask;
+        }
+        public async Task<bool> SaveChangesAsync()
+        {
+            return await _context.SaveChangesAsync() > 0;
+        }
     }
 }

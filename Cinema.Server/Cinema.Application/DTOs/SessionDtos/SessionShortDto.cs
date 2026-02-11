@@ -6,9 +6,9 @@ namespace Cinema.Application.DTOs.SessionDtos
 {
     public record SessionShortDto
     {
-        public int SessionId { get; set; }
+        public int Id { get; set; }
         public DateTime SessionDate { get; set; }
-
+        public int MovieId { get; set; }
         public TimeSpan SessionTime { get; set; }
         public string MovieTitle { get; set; }
         public string HallName { get; set; }

@@ -1,0 +1,18 @@
+.seat {
+    flex: 0 0 var(--cell-size);
+    width: var(--cell-size);
+    height: var(--cell-size);
+
+    border-radius: 0.2em;
+    background: var(--bg-main);
+    border: 2px var(--color-primary) solid;
+    box-sizing: border-box;
+    transition: all ease-in-out 100ms;
+    border-radius: 40% 40%  0.2em 0.2em;
+
+}
+
+.seat:hover{
+    background-color: var(--color-primary-weak);
+}
+

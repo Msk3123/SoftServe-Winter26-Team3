@@ -1,0 +1,6 @@
+.saveButton{
+    width: 100%;
+}
+.saveButton:disabled{
+    background-color: var(--button-disabled);
+}

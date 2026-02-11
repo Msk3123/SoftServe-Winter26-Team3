@@ -22,5 +22,6 @@ namespace Cinema.Domain.Entities
         [ForeignKey("LockedByUserId")]
         public virtual User User { get; set; }
         public SeatStatus SeatStatuses { get; set; }
+        public DateTime? LockExpiration { get; set; }
     }
 }

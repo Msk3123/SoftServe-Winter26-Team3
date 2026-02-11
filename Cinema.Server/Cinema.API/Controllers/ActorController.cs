@@ -4,12 +4,14 @@ using Cinema.Application.DTOs;
 using Cinema.Application.DTOs.ActorDtos;
 using Cinema.Application.Interfaces;
 using Cinema.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cinema.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles = "Admin")]
     public class ActorsController : ApiBaseController
     {
         private readonly IActorRepository _actorRepository;
@@ -20,6 +22,7 @@ namespace Cinema.API.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAll([FromQuery] QueryParameters queryParameters)
         {
             var results = await _actorRepository.GetAllPagedAsync(queryParameters);
@@ -27,12 +30,20 @@ namespace Cinema.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetById(int id)
         {
             var actor = await _actorRepository.GetByIdWithMoviesAsync(id);
             if (actor == null) return NotFound();
 
             return Ok(_mapper.Map<ActorDetailsDto>(actor));
+        }
+        [HttpGet("search")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Search([FromQuery] string query, [FromQuery] QueryParameters queryParameters)
+        {
+            var results = await _actorRepository.getByNameAsync(query, queryParameters);
+            return OkPaged<Actor, ActorShortDto>(results, queryParameters);
         }
 
         [HttpPost]

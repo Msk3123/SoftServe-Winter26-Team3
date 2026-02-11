@@ -2,84 +2,81 @@
 using Cinema.Application.Common.Models;
 using Cinema.Application.DTOs.HallDtos;
 using Cinema.Application.Interfaces;
+using Cinema.Application.Interfaces.Services;
 using Cinema.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cinema.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles = "Admin")]
     public class HallController : ApiBaseController
     {
         private readonly IHallRepository _hallRepository;
+        private readonly IHallService _hallService;
 
-        public HallController(IHallRepository hallRepository, IMapper mapper) : base(mapper)
+        public HallController(IHallRepository hallRepository, IMapper mapper, IHallService hallService) : base(mapper)
         {
             _hallRepository = hallRepository;
+            _hallService = hallService;
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAll([FromQuery] QueryParameters queryParameters)
         {
             var results = await _hallRepository.GetAllPagedAsync(queryParameters);
-            return OkPaged<Hall, HallDto>(results, queryParameters);
+            return OkPaged<Hall, HallShortDto>(results, queryParameters);
         }
 
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetById(int id)
         {
             var hall = await _hallRepository.GetByIdAsync(id);
             if (hall == null) return NotFound();
 
-            return Ok(_mapper.Map<HallDto>(hall));
+            return Ok(_mapper.Map<HallShortDto>(hall));
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] HallCreateDto dto)
+        public async Task<IActionResult> Create(HallCreateDto dto)
         {
-            var hall = _mapper.Map<Hall>(dto);
-            await _hallRepository.AddAsync(hall);
-            await _hallRepository.SaveAsync();
-
-            var response = _mapper.Map<HallDto>(hall);
-            return CreatedAtAction(nameof(GetById), new { id = hall.HallId }, response);
+            var hall = await _hallService.CreateHallAsync(dto);
+            var response = _mapper.Map<HallShortDto>(hall);
+            
+            return Ok(response); 
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] HallCreateDto dto)
         {
-            var hall = await _hallRepository.GetByIdAsync(id);
-            if (hall == null) return NotFound();
-
-            _mapper.Map(dto, hall);
-            await _hallRepository.SaveAsync();
-
+            await _hallService.UpdateHallAsync(id, dto);
             return NoContent();
         }
 
-        [HttpPatch("{id}")]
-        public async Task<IActionResult> Patch(int id, [FromBody] HallPatchDto dto)
-        {
-            Console.WriteLine($"Incoming Capacity: {dto.Capacity?.ToString() ?? "NULL"}");
-            var hall = await _hallRepository.GetByIdAsync(id);
-            if (hall == null) return NotFound();
+        //[HttpPatch("{id}")]
+        //public async Task<IActionResult> Patch(int id, [FromBody] HallPatchDto dto)
+        //{
+        //    Console.WriteLine($"Incoming Capacity: {dto.Capacity?.ToString() ?? "NULL"}");
+        //    var hall = await _hallRepository.GetByIdAsync(id);
+        //    if (hall == null) return NotFound();
 
-            _mapper.Map(dto, hall);
-            await _hallRepository.SaveAsync();
+        //    _mapper.Map(dto, hall);
+        //    await _hallRepository.SaveAsync();
 
-            return NoContent();
-        }
+        //    return NoContent();
+        //}
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var hall = await _hallRepository.GetByIdAsync(id);
-            if (hall == null) return NotFound();
-
-            await _hallRepository.DeleteAsync(id);
-            await _hallRepository.SaveAsync();
-
+ 
+            await _hallService.DeleteHallAsync(id);
             return NoContent();
         }
+
     }
 }

@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './Button.module.css';
 import { NavLink } from 'react-router';
 
-interface Props {
+interface ButtonProps {
     children: React.ReactNode;
     variant?: "fill" | "outline" | "text-only";
     action?: (() => void) | ((e: React.MouseEvent<HTMLElement>) => void);
@@ -12,9 +12,10 @@ interface Props {
     borderColor?: string;
     htmlType?: 'button' | 'submit' | 'reset';
     to?: string;
+    disabled?:boolean;
 }
 
-const Button: React.FC<Props> = ({
+const Button = ({
     children,
     variant = "fill",
     action,
@@ -23,8 +24,9 @@ const Button: React.FC<Props> = ({
     className = "",
     borderColor,
     htmlType = 'button',
-    to
-}) => {
+    to,
+    disabled = false,
+}:ButtonProps) => {
 
     let variantClass = styles.fill;
 
@@ -74,6 +76,7 @@ const Button: React.FC<Props> = ({
             onClick={action}
             className={combinedClasses}
             style={dynamicStyles}
+            disabled={disabled}
         >
             {children}
         </button>

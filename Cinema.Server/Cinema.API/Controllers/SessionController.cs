@@ -2,29 +2,39 @@
 using Cinema.Application.Common.Models;
 using Cinema.Application.DTOs.SessionDtos;
 using Cinema.Application.Interfaces;
+using Cinema.Application.Interfaces.Services;
+using Cinema.Application.Services;
 using Cinema.Domain.Entities;
+using Cinema.Domain.Enums;
 using Cinema.Persistence.Context;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cinema.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class SessionController : ApiBaseController
     {
-        private readonly ISessionRepository _sessionRepository;
+        private readonly ISessionService _sessionService; 
+        private readonly ISessionRepository _sessionRepository; 
 
-        public SessionController(ISessionRepository sessionRepository, IMapper mapper):base(mapper)
+        public SessionController(ISessionService sessionService, ISessionRepository sessionRepository, IMapper mapper)
+            : base(mapper)
         {
+            _sessionService = sessionService;
             _sessionRepository = sessionRepository;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] QueryParameters queryParameters) {
-           var results = await _sessionRepository.GetAllWithDetailsPagedAsync(queryParameters);
+        [AllowAnonymous]
+        public async Task<IActionResult> GetAll([FromQuery] QueryParameters queryParameters,[FromQuery] SessionFilter sessionFilter) {
+           var results = await _sessionRepository.GetAllWithDetailsPagedAsync(queryParameters, sessionFilter);
            return OkPaged<Session, SessionShortDto>(results, queryParameters);
         }
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetById(int id)
         {
             var session = await _sessionRepository.GetByIdWithFullDetailsAsync(id);
@@ -34,23 +44,38 @@ namespace Cinema.API.Controllers
         }
         // GET: api/session/movie/{movieId}
         [HttpGet("movie/{movieId:int}")]
-        public async Task<IActionResult> GetByMovie(int movieId, [FromQuery] QueryParameters queryParameters)
+        [AllowAnonymous]
+        public async Task<IActionResult> GetByMovie(int movieId, [FromQuery] QueryParameters queryParameters, [FromQuery] SessionFilter sessionFilter)
         {
-            var results = await _sessionRepository.GetByMovieIdPagedAsync(movieId, queryParameters);
+            var results = await _sessionRepository.GetByMovieIdPagedAsync(movieId, queryParameters,sessionFilter);
             return OkPaged<Session, SessionShortDto>(results, queryParameters);
         }
+        [HttpGet("extended/{id}")] 
+        [AllowAnonymous]
+        public async Task<IActionResult> GetExtended(int id)
+        {
+            var session = await _sessionRepository.GetByIdExtendedAsync(id);
+            if (session == null) throw new KeyNotFoundException();
+            return Ok(_mapper.Map<SessionExtendedDto>(session));
+        }
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([FromBody] SessionCreateDto dto)
         {
-            var session = _mapper.Map<Session>(dto);
-
-            await _sessionRepository.AddAsync(session);
-            await _sessionRepository.SaveAsync();
-            var sessionWithDetails = await _sessionRepository.GetWithDetailsAsync(session.SessionId);
-            var result = _mapper.Map<SessionShortDto>(sessionWithDetails);
-            return CreatedAtAction(nameof(GetById), new { id = session.SessionId }, result);
+            var result = await _sessionService.CreateSessionAsync(dto);
+            var entity = await _sessionRepository.GetByIdWithFullDetailsAsync(result.Id);
+            var response = _mapper.Map<SessionShortDto>(entity);
+            return CreatedAtAction(nameof(GetById), new { id = response.Id }, response);
+        }
+        [HttpPost("batch")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> CreateBatch([FromBody] CreateSessionsBatchDto dto)
+        {
+            await _sessionService.CreateSessionsBatchAsync(dto);
+            return Ok(new { message = "Schedule created successfully" });
         }
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Update(int id, [FromBody] SessionCreateDto dto)
         {
             var session = await _sessionRepository.GetByIdAsync(id);
@@ -63,6 +88,7 @@ namespace Cinema.API.Controllers
             return NoContent();
         }
         [HttpPatch("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Patch(int id, [FromBody] SessionPatchDto dto)
         {
             var session = await _sessionRepository.GetByIdAsync(id);
@@ -76,14 +102,10 @@ namespace Cinema.API.Controllers
             return NoContent();
         }
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
-            var session = await _sessionRepository.GetByIdAsync(id);
-            if (session == null) throw new KeyNotFoundException($"Session with id {id} not found");
-
-            await _sessionRepository.DeleteAsync(id);
-            await _sessionRepository.SaveAsync();
-
+            await _sessionService.DeleteSessionAsync(id);
             return NoContent();
         }
     }

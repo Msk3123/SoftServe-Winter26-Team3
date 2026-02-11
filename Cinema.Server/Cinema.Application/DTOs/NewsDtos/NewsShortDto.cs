@@ -6,7 +6,7 @@ namespace Cinema.Application.DTOs.NewsDtos
 {
     public record NewsShortDto
     {
-        public int NewsId { get; set; }
+        public int Id { get; set; }
         public string Title { get; set; }
         public string ShortContent { get; set; } // Обрізаний контент для прев'ю
         public string ImageUrl { get; set; }

@@ -1,0 +1,21 @@
+﻿using Cinema.Application.Common.Models;
+using Cinema.Domain.Entities;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Cinema.Application.Interfaces
+{
+    public interface IOrderRepository : IRepository<Order>
+    {
+        Task<(IEnumerable<Order> Items, int TotalCount)> GetByUserIdPagedAsync(int userId, QueryParameters queryParameters);
+
+        Task<(IEnumerable<Order> Items, int TotalCount)> GetAllPagedAsync(QueryParameters queryParameters);
+        Task<Order> GetOrderWithTicketsAsync(int orderId);
+        Task<List<Order>> GetExpiredConfirmedOrdersAsync(DateTime now);
+        Task<bool> AnyBySessionIdAsync(int sessionId);
+        Task<IEnumerable<Order>> GetPendingOrdersBySeatsAsync(int userId, IEnumerable<int> seatIds);
+        Task<Order?> GetExistingOrderAsync(int userId, int sessionId, List<int> seatIds);
+        Task<Order?> GetLatestActiveOrderAsync(int userId);
+    }
+}

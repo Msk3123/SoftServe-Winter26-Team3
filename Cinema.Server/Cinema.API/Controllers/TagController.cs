@@ -3,12 +3,14 @@ using Cinema.Application.Common.Models;
 using Cinema.Application.DTOs.TagDtos;
 using Cinema.Application.Interfaces;
 using Cinema.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cinema.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles = "Admin")]
     public class TagsController : ApiBaseController
     {
         private readonly ITagRepository _tagRepository;
@@ -19,6 +21,7 @@ namespace Cinema.API.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAll([FromQuery] QueryParameters queryParameters)
         {
             var results = await _tagRepository.GetAllPagedAsync(queryParameters);
@@ -26,6 +29,7 @@ namespace Cinema.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetById(int id)
         {
             var tag = await _tagRepository.GetByIdAsync(id);

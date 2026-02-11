@@ -1,7 +1,9 @@
-﻿using System.Net;
-using System.Text.Json;
+﻿using Cinema.Application.Common.Exceptions;
 using Cinema.Application.Common.Models;
-
+using FluentValidation;
+using Microsoft.EntityFrameworkCore;
+using System.Net;
+using System.Text.Json;
 namespace Cinema.API.Middleware
 {
     public class ExceptionMiddleware
@@ -35,32 +37,79 @@ namespace Cinema.API.Middleware
         {
             context.Response.ContentType = "application/json";
 
-            var statusCode = HttpStatusCode.InternalServerError;
-            var message = "An unexpected error occurred.";
-
-            switch (exception)
+            var (statusCode, response) = exception switch
             {
-                case Microsoft.EntityFrameworkCore.DbUpdateException:
-                    statusCode = HttpStatusCode.BadRequest;
-                    message = "Database integrity error: check if related IDs exist.";
-                    break;
+                // 400 
+                ValidationException ex => (
+                    HttpStatusCode.BadRequest,
+                    new ErrorResponse
+                    {
+                        StatusCode = 400,
+                        Message = "Validation failed",
+                        Details = JsonSerializer.Serialize(ex.Errors
+                            .GroupBy(e => e.PropertyName)
+                            .ToDictionary(
+                                g => g.Key,
+                                g => g.Select(x => x.ErrorMessage).ToArray()
+                        ))
+                    }),
 
-                case KeyNotFoundException: 
-                    statusCode = HttpStatusCode.NotFound;
-                    message = "The requested resource was not found.";
-                    break;
-            }
+                BusinessException or
+                SessionMismatchException or
+                SeatNotReservedException or
+                ReservationExpiredException or
+                InvalidBatchPeriodException => 
+                    (HttpStatusCode.BadRequest, CreateError(400, exception.Message)),
+                
+                ProtectedEntityException =>
+                    (HttpStatusCode.Forbidden, CreateError(403, exception.Message)),
+
+                // 404 
+                EntityNotFoundException or
+                KeyNotFoundException => 
+                    (HttpStatusCode.NotFound, CreateError(404, exception.Message)),
+
+                // 409 
+                SeatsAlreadyTakenException or
+                SeatAlreadySoldException or
+                SessionOverlapException or
+                UnavailableOperationException => 
+                    (HttpStatusCode.Conflict, CreateError(409, exception.Message)),
+
+                DbUpdateException dbEx => HandleDbUpdateException(dbEx),
+
+                _ => (HttpStatusCode.InternalServerError, new ErrorResponse
+                {
+                    StatusCode = 500,
+                    Message = _env.IsDevelopment() ? $"Server Error: {exception.Message}" : "An unexpected error occurred.",
+                    Details = _env.IsDevelopment() ? exception.InnerException?.Message : null
+                })
+            };
 
             context.Response.StatusCode = (int)statusCode;
 
-            var response = new ErrorResponse
-            {
-                StatusCode = (int)statusCode,
-                Message = message,
-            };
-
             var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
             await context.Response.WriteAsync(JsonSerializer.Serialize(response, options));
+        }
+
+        private static ErrorResponse CreateError(int code, string message) =>
+            new() { StatusCode = code, Message = message };
+
+        private (HttpStatusCode, object) HandleDbUpdateException(DbUpdateException ex)
+        {
+            var message = "A database conflict occurred.";
+
+            if (ex.InnerException is Microsoft.Data.SqlClient.SqlException sqlEx)
+            {
+                message = sqlEx.Number switch
+                {
+                    2601 or 2627 => "This seat is already booked or being processed.",
+                    547 => "Invalid data reference (User, Seat, or Session not found).",
+                    _ => "Database operation failed."
+                };
+            }
+
+            return (HttpStatusCode.Conflict, CreateError(409, message));
         }
     }
 }

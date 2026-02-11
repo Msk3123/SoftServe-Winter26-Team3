@@ -1,0 +1,181 @@
+.wrapper {
+    min-height: 100vh;
+    padding: 2rem 4rem;
+    color: var(--text-main);
+}
+.description {
+    margin-top: 2rem;
+    line-height: 1.7;         
+    font-size: 1.2rem;        
+    color: var(--text-main);
+    max-width: 900px;        
+}
+.container {
+    max-width: 1600px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 300px 1fr 400px;
+    gap: 3rem;
+}
+.selectWrapper {
+    position: relative;
+    margin-bottom: 1.5rem;
+}
+.selectWrapper::after {
+    content: '▼';
+    font-size: 0.8rem;
+    color: var(--color-primary);
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+/* Колонки */
+.posterWrapper{
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+}
+
+.poster {
+    width: 100%;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+    object-fit: cover;
+}
+.trailerBtn{
+    display: flex;
+    gap:1em;
+    font-size: larger;
+    font-weight: var(--fw-bold);
+    padding: 1em;
+}
+.trailerBtn:hover{
+    color: var(--bg-primary-weak);
+}
+.title {
+    font-size: 3rem;
+    font-weight: var(--fw-bold);
+    margin-bottom: 2rem;
+}
+
+.detailsGrid {
+    display: grid;
+    grid-template-columns: 160px 1fr; /* Трохи розширили ліву колонку */
+    gap: 1.2rem 2rem;
+    margin-bottom: 2.5rem;
+    font-size: 1.1rem;
+}
+.label { color: var(--text-secondary); }
+.rating { color: var(--color-primary); font-weight: var(--fw-bold); }
+
+/* --- СЕКЦІЯ СЕАНСІВ --- */
+.sessionsContainer {
+    background-color: var(--bg-news);
+    padding: 1.5rem;
+    border-radius: 1rem;
+    border: 1px solid var(--card-divider);
+}
+
+.sessionsTitle {
+    color: var(--color-primary);
+    text-transform: uppercase;
+    font-size: 1.125rem;
+    margin-bottom: 1.5rem;
+    letter-spacing: 1px;
+}
+
+/* Наша нова випадашка */
+.dateSelect {
+    appearance: none;
+    width: 100%;
+    padding: 1rem; /* трохи більше відступів */
+    background-color: var(--bg-dark);
+    border: 1px solid var(--card-divider);
+    border-radius: 0.5rem;
+    color: var(--text-main);
+
+    font-size: 1.1rem;     
+    font-weight: 500;       
+    font-family: inherit;  
+    
+    cursor: pointer;
+    outline: none;
+}
+.dateSelect:focus {
+    border-color: var(--color-primary);
+}
+.loadingText, .emptyText {
+    text-align: center;
+    color: var(--text-secondary);
+    padding: 2rem 0;
+}
+.sessionsList {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.sessionCard {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--bg-dark);
+    padding: 1.25rem;
+    border-radius: 0.75rem;
+    border: 1px solid var(--card-divider);
+    transition: all 0.2s ease;
+}
+
+.sessionCard:hover {
+    border-color: var(--color-primary);
+    transform: translateY(-2px);
+}
+
+.time {
+    font-size: 1.5rem;
+    font-weight: var(--fw-heavy);
+    color: var(--text-main);
+    display: block;
+}
+
+.hall {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+.label {
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.value {
+    color: var(--text-main);
+}
+/* Адаптивність */
+@media (max-width: 1100px) {
+    .container { grid-template-columns: 1fr 1fr; }
+    .rightCol { grid-column: span 2; }
+}
+
+@media (max-width: 768px) {
+    .container { grid-template-columns: 1fr; }
+    .title { font-size: 2rem; }
+}
+
+.actorLink {
+    color: var(--color-primary); 
+    text-decoration: none;
+    transition: all 0.3s ease;
+    padding-bottom: 0.0625rem;
+    display: inline-block;
+}
+
+.actorLink:hover {
+    text-decoration: underline;
+    text-decoration-color: var(--color-primary);
+    text-underline-offset: 0.1875rem;
+    text-shadow: 0 0 0.625rem rgba(0, 224, 84, 1); 
+    transform: scale(1.05);
+    cursor: pointer;
+}

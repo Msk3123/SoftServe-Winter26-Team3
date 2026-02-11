@@ -1,4 +1,6 @@
 ﻿using Cinema.Application.Common.Models;
+using Cinema.Domain.Entities;
+using Cinema.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -14,10 +16,9 @@ namespace Cinema.Application.Helpers
             this IQueryable<T> query,
             QueryParameters queryParams)
         {
-            // 1. Валідація SortBy (через рефлексію)
             string sortBy = PropertyExists<T>(queryParams.SortBy)
                             ? queryParams.SortBy
-                            : "Id"; // Або логіка з MovieId
+                            : "Id"; 
             if (!PropertyExists<T>(sortBy))
             {
                 string defaultId = typeof(T).Name + "Id"; 
@@ -25,13 +26,10 @@ namespace Cinema.Application.Helpers
             }
             string sortDirection = queryParams.Order.ToLower() == "desc" ? "descending" : "ascending";
 
-            // 2. Сортування
             query = query.OrderBy($"{sortBy} {sortDirection}");
 
-            // 3. Рахуємо загальну кількість
             var totalCount = await query.CountAsync();
 
-            // 4. Пагінація
             var items = await query
                 .Skip((queryParams.Page - 1) * queryParams.Limit)
                 .Take(queryParams.Limit)
@@ -45,6 +43,21 @@ namespace Cinema.Application.Helpers
             if (string.IsNullOrWhiteSpace(propertyName)) return false;
             return typeof(T).GetProperty(propertyName,
                 BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance) != null;
+        }
+        public static IQueryable<Session> ApplyTimeFilter(this IQueryable<Session> query, SessionFilter filter)
+        {
+            var now = DateTime.UtcNow;
+            var nowDate = now.Date;
+            var nowTime = now.TimeOfDay;
+            return filter switch
+            {
+                SessionFilter.Active => query.Where(s => s.SessionDate.Date > nowDate ||
+                                                       (s.SessionDate.Date == nowDate && s.SessionTime > nowTime)),
+
+                SessionFilter.Past => query.Where(s => s.SessionDate.Date < nowDate ||
+                                                     (s.SessionDate.Date == nowDate && s.SessionTime <= nowTime)),
+                _ => query
+            };
         }
     }
 }

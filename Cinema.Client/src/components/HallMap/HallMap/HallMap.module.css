@@ -1,0 +1,60 @@
+.wrapper {
+    width: 100%;
+    max-width: 80vw;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 10px;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 10px;
+    
+    width: max-content; 
+    min-width: 100%;
+    margin: 0 auto; 
+    box-sizing: border-box;
+    align-items: center;
+}
+
+.row {
+    display: flex;
+    gap: 4px;
+    flex-wrap: nowrap;
+
+    justify-content: center;
+}
+
+.cell {
+    flex: 0 0 var(--cell-size); 
+    width: var(--cell-size);
+    height: var(--cell-size);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+}
+
+.rowNumber, .colNumber {
+    flex: 0 0 var(--cell-size);
+    width: var(--cell-size);
+    height: var(--cell-size);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    font-weight: bold;
+    color: var(--text-secondary);
+}
+
+.rowDiff {
+    display: flex;
+    gap: 4px;
+    width: auto; 
+
+    justify-content: center;
+}

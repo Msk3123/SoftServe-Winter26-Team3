@@ -29,6 +29,7 @@ namespace Cinema.Domain.Entities
         public DateOnly EndDate { get; set; }
 
         public string Description { get; set; }
+        public bool IsDeleted { get; set; } = false;
         public virtual ICollection<Session> Sessions { get; set; }
         public virtual ICollection<GenreMovie> GenreMovies { get; set; }
         public virtual ICollection<ActorMovie> ActorMovies { get; set; }

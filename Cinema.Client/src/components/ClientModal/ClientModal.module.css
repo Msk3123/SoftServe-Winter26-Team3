@@ -1,0 +1,65 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  overflow-y: auto;
+  padding: 4em 2em;
+  box-sizing: border-box;
+  z-index: 1000;
+}
+.content {
+  background-color: var(--bg-news);
+  padding: 1.5rem;
+  border-radius: 1rem;
+  position: relative;
+  width: 90%;
+  max-width: 55rem;
+  flex-shrink: 0;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.header {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+  color: var(--text-main);
+}
+.header:has(h2) {
+  justify-content: space-between;
+}
+.header:not(:has(h2)) {
+  justify-content: end;
+}
+.header h2 {
+  padding: 0;
+  margin: 0;
+  font-weight: var(--fw-regular);
+}
+.closeBtn {
+  margin-left: 1em;
+  font-size: 2.5em;
+  padding: 0;
+  transition: transform 70ms;
+}
+.closeBtn:hover {
+  transform: scale(1.2);
+}
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}

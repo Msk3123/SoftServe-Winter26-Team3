@@ -20,5 +20,10 @@ namespace Cinema.Persistence.Repositories
                 .AsNoTracking()
                 .ToPagedResultAsync(queryParameters);
         }
+        public async Task<Role?> GetByNameAsync(string name)
+        {
+            return await _context.Roles
+                .FirstOrDefaultAsync(r => r.RoleName == name);
+        }
     }
 }

@@ -1,0 +1,93 @@
+.container {
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 1em 0;
+}
+
+.label{
+  font-weight: var(--fw-medium);
+  font-family: var(--font-main);
+  font-size: 1.125em;
+  margin: 0 0 0.6em 0.25em ;
+}
+.errorMessage{
+    color: var(--color-danger);
+    font-weight: var(--fw-light);
+    margin-top: 0.2em;
+}
+
+.inputWrapper {
+  margin-top: 1em;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fff;
+  min-height: 42px;
+  cursor: text;
+}
+
+.inputWrapper:focus-within {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 1px var(--color-primary);
+}
+
+.chip {
+  display: flex;
+  align-items: center;
+  background: var(--color-primary-weak);
+  color: var(--color-primary);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.9em;
+  font-weight: 500;
+}
+
+.chip button {
+  margin-left: 6px;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: inherit;
+  font-weight: bold;
+}
+
+.input {
+  border: none;
+  outline: none;
+  flex: 1;
+  min-width: 120px;
+  padding: 4px;
+}
+
+.dropdown {
+  position: absolute;
+  top: 105%;
+  left: 0;
+  width: 100%;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  z-index: 1000;
+  max-height: 250px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.createOption {
+  padding: 1em;
+  border-top: 1px solid #eee;
+  color: var(--color-primary);
+  cursor: pointer;
+  font-weight: 600;
+  text-align: center;
+}
+
+.createOption:hover {
+  background: #f0fdf4;
+  background: var(--color-primary-weak);
+}
