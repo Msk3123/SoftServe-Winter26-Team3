@@ -58,6 +58,7 @@ namespace Cinema.API.Middleware
                 SessionMismatchException or
                 SeatNotReservedException or
                 ReservationExpiredException or
+                BadRequestException or
                 InvalidBatchPeriodException => 
                     (HttpStatusCode.BadRequest, CreateError(400, exception.Message)),
                 

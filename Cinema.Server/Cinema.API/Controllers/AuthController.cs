@@ -60,16 +60,14 @@ public class AuthController : ControllerBase
     public async Task<IActionResult> VerifyCurrentPassword([FromBody] VerifyPasswordDto dto)
     {
         var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        
         if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var userId))
+        {
             return Unauthorized();
-        try
-        {
-            await _authService.VerifyCurrentPasswordAsync(userId, dto.Password);
-            return Ok(new { message = "Password is correct" });
         }
-        catch (Exception ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
+            
+        await _authService.VerifyCurrentPasswordAsync(userId, dto.Password);
+        return Ok(new { message = "Password is correct" });
+        
     }
 }

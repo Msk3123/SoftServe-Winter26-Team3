@@ -11,11 +11,11 @@ namespace Cinema.API.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Authorize] 
-    public class UsersController : ApiBaseController
+    public class UserController : ApiBaseController
     {
         private readonly IUserRepository _userRepository;
 
-        public UsersController(
+        public UserController(
             IUserRepository userRepository,
             IMapper mapper) : base(mapper)
         {
