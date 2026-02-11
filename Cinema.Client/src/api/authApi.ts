@@ -1,6 +1,6 @@
 import type { LoginDto, RegisterDto, AuthResponseDto } from "../types/auth.types";
 
-const API_URL = "https://localhost:7249/api/auth";
+const API_URL = "/api/auth";
 
 export const authApi = {
   login: async (dto: LoginDto): Promise<AuthResponseDto> => {

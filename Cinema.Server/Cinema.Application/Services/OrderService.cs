@@ -31,6 +31,13 @@ namespace Cinema.Application.Services
             {
                 var selectedSeatIds = dto.SelectedTickets.Select(st => st.SessionSeatId).ToList();
 
+                var existingOrder = await _unitOfWork.Orders.GetExistingOrderAsync(dto.UserId, dto.SessionId, selectedSeatIds);
+
+                if (existingOrder != null)
+                {
+                    await _unitOfWork.CommitAsync();
+                    return _mapper.Map<OrderDetailsDto>(existingOrder);
+                }
 
                 await CancelPendingOrdersBySeatsAsync(dto.UserId, selectedSeatIds);
                 await _unitOfWork.SaveChangesAsync();
@@ -115,6 +122,10 @@ namespace Cinema.Application.Services
         {
             var pendingOrders = await _unitOfWork.Orders.GetPendingOrdersBySeatsAsync(userId, seatIds);
 
+            if (pendingOrders == null || !pendingOrders.Any())
+            {
+                return; 
+            }
             foreach (var order in pendingOrders)
             {
                 foreach (var ticket in order.Tickets)

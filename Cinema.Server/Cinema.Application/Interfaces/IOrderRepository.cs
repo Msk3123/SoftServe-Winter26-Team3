@@ -15,5 +15,7 @@ namespace Cinema.Application.Interfaces
         Task<List<Order>> GetExpiredConfirmedOrdersAsync(DateTime now);
         Task<bool> AnyBySessionIdAsync(int sessionId);
         Task<IEnumerable<Order>> GetPendingOrdersBySeatsAsync(int userId, IEnumerable<int> seatIds);
+        Task<Order?> GetExistingOrderAsync(int userId, int sessionId, List<int> seatIds);
+        Task<Order?> GetLatestActiveOrderAsync(int userId);
     }
 }

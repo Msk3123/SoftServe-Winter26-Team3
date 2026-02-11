@@ -11,11 +11,11 @@ namespace Cinema.API.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Authorize] 
-    public class UsersController : ApiBaseController
+    public class UserController : ApiBaseController
     {
         private readonly IUserRepository _userRepository;
 
-        public UsersController(
+        public UserController(
             IUserRepository userRepository,
             IMapper mapper) : base(mapper)
         {
@@ -37,8 +37,9 @@ namespace Cinema.API.Controllers
 
             return Ok(_mapper.Map<UserDto>(user));
         }
-        [Authorize(Roles = "Admin")]
+        
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Update(int id, [FromBody] UserPatchDto dto)
         {
             var user = await _userRepository.GetByIdAsync(id);

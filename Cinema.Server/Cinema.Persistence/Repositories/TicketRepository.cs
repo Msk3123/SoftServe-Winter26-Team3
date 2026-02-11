@@ -67,5 +67,19 @@ namespace Cinema.Persistence.Repositories
             return await _context.Tickets
                 .AnyAsync(t => t.SessionSeat.Session.HallId == hallId);
         }
+        public async Task<Ticket?> GetTicketByIdAndUserIdAsync(int ticketId, string userId)
+        {
+            return await _context.Tickets
+                .Include(t => t.Order)
+                .Include(t => t.SessionSeat)
+                    .ThenInclude(ss => ss.Seat)
+                .Include(t => t.SessionSeat)
+                    .ThenInclude(ss => ss.Session)
+                        .ThenInclude(s => s.Hall)
+                .Include(t => t.SessionSeat)
+                    .ThenInclude(ss => ss.Session)
+                        .ThenInclude(s => s.Movie)
+                .FirstOrDefaultAsync(t => t.TicketId == ticketId && t.Order.UserId.ToString() == userId);
+        }
     }
 }
