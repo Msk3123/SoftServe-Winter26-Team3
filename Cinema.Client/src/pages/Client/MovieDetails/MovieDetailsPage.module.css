@@ -179,3 +179,87 @@
     transform: scale(1.05);
     cursor: pointer;
 }
+@media (max-width: 1100px) {
+    .wrapper {
+        padding: 2rem 2rem;
+    }
+    
+    .container {
+        grid-template-columns: 300px 1fr; 
+    }
+
+    .sessionsContainer {
+        grid-column: 1 / -1; 
+        margin-top: 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .wrapper {
+        padding: 1rem 1rem; 
+    }
+
+    .container {
+        display: flex;
+        flex-direction: column; 
+        gap: 1.5rem;
+    }
+
+    .posterWrapper {
+        align-items: center;
+        width: 100%;
+    }
+
+    .poster {
+        width: 100%;
+        max-width: 280px;
+        height: auto;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+    }
+    
+    .trailerBtn {
+        width: 100%;
+        justify-content: center;
+        background-color: var(--bg-news);
+        border-radius: 0.5rem;
+        margin-top: 1rem;
+    }
+
+    .title {
+        font-size: 2rem;
+        text-align: center;
+        margin-bottom: 1.5rem;
+        line-height: 1.2;
+    }
+
+    .detailsGrid {
+        grid-template-columns: 110px 1fr;
+        gap: 0.8rem;
+        font-size: 1rem;
+    }
+
+    .description {
+        font-size: 1rem;
+        text-align: left;
+    }
+
+    .sessionsContainer {
+        padding: 1rem;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .sessionCard {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+        padding: 1rem;
+    }
+    
+    .sessionCard > div {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+}

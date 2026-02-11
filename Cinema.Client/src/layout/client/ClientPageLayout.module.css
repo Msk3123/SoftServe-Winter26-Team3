@@ -20,3 +20,26 @@
     padding: 1em 4em;
     flex-grow: 1;
 }
+/* АДАПТИВ ДЛЯ МОБІЛЬНИХ */
+/* ClientPageLayout.module.css */
+
+@media (max-width: 48rem) {
+  .contentWrapper {
+    /* 1. Прибираємо зовнішні відступи */
+    padding:0;
+    
+    /* 2. ВАЖЛИВО: Використовуємо 100% замість 100vw, щоб уникнути проблем зі скролбаром */
+    width: 100%;
+    max-width: 100%;
+    max-height: none;
+    height: auto;
+    /* 3. МАГІЯ ЦЕНТРУВАННЯ:
+       Робимо цей блок флекс-контейнером і наказуємо йому 
+       тримати все, що всередині (ваш HomePage), строго по центру. */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Центрує по горизонталі */
+    
+    /* overflow-x: hidden;\ */
+  }
+}
