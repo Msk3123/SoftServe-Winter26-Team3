@@ -1,6 +1,7 @@
 import type { LoginDto, RegisterDto, AuthResponseDto } from "../types/auth.types";
+import { baseUrl, postItem } from "./api";
 
-const API_URL = "https://localhost:7249/api/auth";
+const API_URL = baseUrl ? `${baseUrl}auth`: "https://localhost:7249/api/auth";
 
 export const authApi = {
   login: async (dto: LoginDto): Promise<AuthResponseDto> => {
@@ -30,5 +31,9 @@ export const authApi = {
       body: JSON.stringify(dto),
     });
     return response.json();
+  },
+
+  verifyPassword: async (password:string):Promise<void> =>{
+    return postItem<{password: string},void>(`${API_URL}/verify-password`,{password: password});
   }
 };

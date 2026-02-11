@@ -11,10 +11,13 @@ import { handleError } from "../../../helpers/handleError";
 import { getAllRoles } from "../../../api/roleApi";
 import toast from "react-hot-toast";
 import Button from "../../../components/Button/Button";
+import PasswordConfirmModal from "../../../features/admin/confirmPassword/PasswordConfirmModal";
 
 const AdminUsersPage= ()=>{
     const {data,pagination,sortParams,status,actions} = useQueryTable<User>(getAllUsers);
     const [roles,setRoles] = useState<{value:number|string, label: string}[]>([])
+    const [isConfirmOpen,setIsConfirmOpen] = useState<boolean>(false)
+    
     useEffect(() => {
             getAllRoles()
                 .then((response)=>response.items)
@@ -81,6 +84,11 @@ const AdminUsersPage= ()=>{
                     isActions={false}
                 />
                 <Outlet  context={{createItem:actions.createItem,editItem:actions.editItem}}/>
+                <PasswordConfirmModal 
+                    isOpen={isConfirmOpen}
+                    onClose={() => setIsConfirmOpen(false)}
+                    onConfirm={handleFinalDelete}
+                />
             </>)
 };
 
