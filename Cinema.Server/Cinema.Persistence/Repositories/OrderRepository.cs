@@ -110,7 +110,7 @@ namespace Cinema.Persistence.Repositories
                     .ThenInclude(t => t.SessionSeat)
                         .ThenInclude(ss => ss.Seat)
                 .Where(o => o.UserId == userId &&
-                           (o.OrderStatus == OrderStatus.Created || o.OrderStatus == OrderStatus.)) // Зміни Confirmed на Pending
+                           (o.OrderStatus == OrderStatus.Created || o.OrderStatus == OrderStatus.Reserved)) // Зміни Confirmed на Pending
                 .OrderByDescending(o => o.OrderDate)
                 .FirstOrDefaultAsync();
         }
