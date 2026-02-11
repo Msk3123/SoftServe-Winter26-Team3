@@ -50,8 +50,26 @@ public class AuthController : ControllerBase
         var result = await _authService.ChangePasswordAsync(userId, dto.NewPassword);
 
         if (!result)
-            return BadRequest(new { message = "Не вдалося змінити пароль" });
+            return BadRequest(new { message = "Failed to change password" });
 
-        return Ok(new { message = "Пароль змінено в базі" });
+        return Ok(new { message = "Password changed in the database" });
+    }
+
+    [HttpPost("verify-password")]
+    [Authorize]
+    public async Task<IActionResult> VerifyCurrentPassword([FromBody] VerifyPasswordDto dto)
+    {
+        var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var userId))
+            return Unauthorized();
+        try
+        {
+            await _authService.VerifyCurrentPasswordAsync(userId, dto.Password);
+            return Ok(new { message = "Password is correct" });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
     }
 }
