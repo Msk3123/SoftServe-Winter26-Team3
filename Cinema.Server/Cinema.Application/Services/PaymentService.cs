@@ -91,6 +91,7 @@ namespace Cinema.Application.Services
                 order.OrderStatus = OrderStatus.Completed;
                 foreach (var ticket in order.Tickets)
                 {
+                    ticket.TicketStatus = TicketStatus.Active;
                     if (ticket.SessionSeat != null)
                     {
                         ticket.SessionSeat.SeatStatuses = SeatStatus.Sold;

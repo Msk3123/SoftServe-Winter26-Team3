@@ -12,5 +12,9 @@ namespace Cinema.Application.DTOs.TicketDtos
         public int SessionSeatId { get; set; }
         public string TicketTypeName { get; set; } 
         public decimal Price { get; set; }
+
+        public int OrderStatus { get; set; }
+        public string MovieTitle { get; set; } = string.Empty;
+        public DateTime Showtime { get; set; }
     }
 }
