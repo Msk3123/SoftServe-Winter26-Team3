@@ -10,19 +10,15 @@ import AdminTablePage from "../../components/AdminTablePage/AdminTablePage";
 import { dateToDayFirst } from "../../../../helpers/textHelpers";
 import Button from "../../../../components/Button/Button";
 import { deleteMovie } from "../../../../api/movieApi";
-import type { AdminAdminModalContext } from "../../../../types/admin.types";
+import type { AdminModalContextWithDelete } from "../../../../types/admin.types";
 import type { MovieShort } from "../../../../types/movie.types";
 import { handleError } from "../../../../helpers/handleError";
-
-type WithDelete<T> = T & {
-    deleteItem: (id: number|string) => void;
-};
 
 const DeleteMovie = ()=>{
     const {movieId} = useParams();
     
     const navigate = useNavigate();
-    const {deleteItem} = useOutletContext<WithDelete<AdminAdminModalContext<MovieShort>>>();
+    const {deleteItem} = useOutletContext<AdminModalContextWithDelete<MovieShort>>();
 
     const fetchSessions = useCallback(
         (params: FetchParams<SessionShort>|undefined) => getSessionByMovieId(String(movieId),params),

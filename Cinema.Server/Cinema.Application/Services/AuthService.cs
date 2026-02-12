@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Cinema.Application.Common.Exceptions;
 using Cinema.Application.DTOs.AuthDtos;
 using Cinema.Application.Interfaces;
 using Cinema.Application.Interfaces.Services;
@@ -116,5 +117,17 @@ public class AuthService : IAuthService
         await _userRepository.UpdateAsync(user);
 
         return await _userRepository.SaveChangesAsync();
+    }
+
+    public async Task VerifyCurrentPasswordAsync(int userId, string password)
+    {
+        var user = await _userRepository.GetByIdWithRoleAsync(userId);
+
+        if (user == null)
+            throw new UserNotFoundException();
+
+        if (!_passwordHasher.VerifyPassword(password, user.PasswordHash))
+            throw new InvalidPasswordException();
+
     }
 }

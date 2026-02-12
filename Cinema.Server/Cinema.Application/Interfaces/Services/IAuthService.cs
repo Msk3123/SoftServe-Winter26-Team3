@@ -11,5 +11,6 @@ namespace Cinema.Application.Interfaces.Services
         Task<AuthResponseDto> LoginAsync(LoginDto dto);
         Task<AuthResponseDto> RefreshTokenAsync(AuthResponseDto dto);
         Task<bool> ChangePasswordAsync(int userId, string newPassword);
+        Task VerifyCurrentPasswordAsync(int userId, string password);
     }
 }

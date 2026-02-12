@@ -58,13 +58,16 @@ namespace Cinema.API.Middleware
                 SessionMismatchException or
                 SeatNotReservedException or
                 ReservationExpiredException or
+                BadRequestException or
                 InvalidBatchPeriodException => 
                     (HttpStatusCode.BadRequest, CreateError(400, exception.Message)),
                 
+                InvalidPasswordException or
                 ProtectedEntityException =>
                     (HttpStatusCode.Forbidden, CreateError(403, exception.Message)),
 
                 // 404 
+                UserNotFoundException or
                 EntityNotFoundException or
                 KeyNotFoundException => 
                     (HttpStatusCode.NotFound, CreateError(404, exception.Message)),

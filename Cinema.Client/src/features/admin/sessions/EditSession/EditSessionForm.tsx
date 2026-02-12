@@ -4,6 +4,7 @@ import { getSession, putSession } from "../../../../api/sessionApi";
 import { mapSessionToCreate, mapSessionToShort, type Session, type SessionCreate, type SessionShort } from "../../../../types/session.types";
 import SingleSessionForm from "../SingleSessionForm/SingleSessionForm";
 import { handleError } from "../../../../helpers/handleError";
+import type { AdminModalContextWithRefresh } from "../../../../types/admin.types";
 
 interface EditSessionFormProps {
     onClose?:()=>void;
@@ -15,7 +16,7 @@ const EditSessionForm = ({onClose}:EditSessionFormProps)=>{
 
     console.log(initialState);
 
-    const {editItem} = useOutletContext<{refresh:()=>void,editItem:(item: SessionShort) => void;}>();
+    const {editItem} = useOutletContext<AdminModalContextWithRefresh<SessionShort>>();
     const navigate = useNavigate();
     
         

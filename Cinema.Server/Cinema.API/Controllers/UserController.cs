@@ -50,6 +50,21 @@ namespace Cinema.API.Controllers
             await _userRepository.SaveAsync();
             return NoContent();
         }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> Patch(int id, [FromBody] UserPatchDto dto)
+        {
+            var user = await _userRepository.GetByIdAsync(id);
+            if (user == null) return NotFound();
+
+            _mapper.Map(dto, user);
+
+            await _userRepository.SaveAsync();
+            return NoContent();
+        }
+
+
         [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)

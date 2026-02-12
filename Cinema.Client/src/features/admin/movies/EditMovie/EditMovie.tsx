@@ -1,5 +1,5 @@
 import { useLoaderData, useNavigate, useOutletContext } from "react-router";
-import type { AdminAdminModalContext } from "../../../../types/admin.types";
+import type {AdminModalContext } from "../../../../types/admin.types";
 import { mapMovieToCreate, type Movie, type MovieCreate, type MovieShort } from "../../../../types/movie.types";
 import toast from "react-hot-toast";
 import MovieForm from "../MovieForm/MovieForm";
@@ -14,7 +14,7 @@ const EditMovieForm = ({onClose}:EditMovieFormProps)=>{
 
     const initialState = useLoaderData() as Movie;
 
-    const {editItem} = useOutletContext<AdminAdminModalContext<MovieShort>>();
+    const {editItem} = useOutletContext<AdminModalContext<MovieShort>>();
     const navigate = useNavigate();
     
         

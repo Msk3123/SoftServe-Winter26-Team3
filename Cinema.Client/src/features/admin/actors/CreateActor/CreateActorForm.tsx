@@ -2,7 +2,7 @@ import { useNavigate, useOutletContext } from "react-router";
 import { postActor } from "../../../../api/actorApi";
 import ActorForm from "../ActorForm/ActorForm";
 import type { ActorCreate, ActorShort } from "../../../../types/actor.types";
-import type { AdminAdminModalContext } from "../../../../types/admin.types";
+import type {AdminModalContext } from "../../../../types/admin.types";
 import { handleError } from "../../../../helpers/handleError";
 import toast from "react-hot-toast";
 interface CreateActorFormProps {onClose?:()=>void}

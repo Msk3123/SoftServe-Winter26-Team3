@@ -8,18 +8,17 @@ import BaseInput from "../../../../components/Form/BaseInput/BaseInput";
 import TextArea from "../../../../components/Form/TextArea/TextArea";
 import ImageInput from "../../../../components/Form/ImageInput/ImageInput";
 import { Checkbox } from "../../../../components/Form/CheckBox/CheckBox";
-import Select from "../../../../components/Form/Select/Select";
 import { getAllMovies } from "../../../../api/movieApi";
 import type { MovieShort } from "../../../../types/movie.types";
 import type { ActorShort } from "../../../../types/actor.types";
-import { getAllTags } from "../../../../api/tagApi";
+import { getAllTags, postTag } from "../../../../api/tagApi";
 import { SelectableInput } from "../../../../components/Form/SelectableInput/SelectableInput";
 import MovieOption from "../../movies/MovieOption/MovieOption";
 import { getAllActors } from "../../../../api/actorApi";
 import ActorOption from "../../actors/ActorOption/ActorOption";
 import { dateToYearFirst } from "../../../../helpers/textHelpers";
 import { handleError } from "../../../../helpers/handleError";
-
+import type { Tag } from "../../../../types/tags.types";
 
 const initialData = {
     title: "",
@@ -42,15 +41,13 @@ const NewsForm = ({initialState,onSubmitAction,onClose}:NewsFormProps)=>{
     const {formData,errors,isSubmitting,handleChange,handleSubmit} = useForm<NewsCreate>(initialState??initialData,newsValidator);
     const [isPending, setIsPending] = useState(false);
 
-    const [tags, setTags] = useState<{value:number|string , label:string}[]>([]);
+    const [tags, setTags] = useState<Tag[]>([]);
     const [movies, setMovies] = useState<MovieShort[]>([]);
     const [actors, setActors] = useState<ActorShort[]>([]);
 
     useEffect(() => {
         getAllTags()
-            .then((response)=>response.items)
-            .then(items=>
-                setTags(items.map((v)=>({value:v.id, label: v.tagName}))))
+            .then((response)=>setTags(response.items))
             .catch(err =>{
                 handleError(err,"Tags error")
             });
@@ -78,6 +75,16 @@ const NewsForm = ({initialState,onSubmitAction,onClose}:NewsFormProps)=>{
         setIsPending(true);
         await handleSubmit(onSubmitAction)
         setIsPending(false);
+    }
+
+    const createTag = async (q:string)=>{
+        try{
+            const newTag = await postTag({tagName:q});
+            handleChange("tagId",newTag.id);
+            setTags(tags=>[...tags,newTag]);
+        }catch(e){
+            handleError(e,"Couldn't create new tag")
+        }
     }
 
     return(
@@ -125,37 +132,39 @@ const NewsForm = ({initialState,onSubmitAction,onClose}:NewsFormProps)=>{
                     error={errors.isActive}
                 />
 
-                <Select
-                    value={formData.tagId}
-                    options={tags}
+                <SelectableInput
+                    title="Tag"
                     error={errors.tagId}
-                    onChange={(v)=>handleChange("tagId",Number(v))}
-                    label="Tag"
-                    required
+                    items={tags}
+                    selectedIds={formData.tagId?[formData.tagId]:[]}
+                    onSelect={(item)=>handleChange("tagId",item.id)}
+                    onRemove={()=>handleChange("tagId",GENERAL_TAG_ID)}
+                    getLabel={(item)=>item.tagName}
+                    renderOption={(item)=> <div key={item.id} className={styles.tagOption}>{item.tagName}</div>}
+                    onCreateNew={createTag}
+                    multiple={false}
                 />
 
                 <SelectableInput
                     title="Movie (optional)"
                     error={errors.movieId}
                     items={movies}
-                    selectedIds={formData.movieId?[formData.movieId]:[]}
+                    selectedIds={formData.movieId? [formData.movieId] : []}
                     onSelect={(item)=>handleChange("movieId",item.id)}
                     onRemove={()=>handleChange("movieId",undefined)}
                     getLabel={(item)=>item.title}
                     renderOption={(item)=><MovieOption item={item} />}
-                    multiple={false}
                 />
 
                 <SelectableInput
                     title="Actor (optional)"
                     error={errors.actorId}
                     items={actors}
-                    selectedIds={formData.actorId?[formData.actorId]:[]}
+                    selectedIds={formData.actorId ? [formData.actorId] :[]}
                     onSelect={(item)=>handleChange("actorId",item.id)}
                     onRemove={()=>handleChange("actorId",undefined)}
                     getLabel={(item)=>`${item.firstName} ${item.lastName}`}
                     renderOption={(item)=><ActorOption item={item} />}
-                    multiple={false}
                 />
 
 

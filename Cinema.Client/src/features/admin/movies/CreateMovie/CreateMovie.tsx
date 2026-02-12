@@ -1,5 +1,5 @@
 import { useNavigate, useOutletContext } from "react-router";
-import type { AdminAdminModalContext } from "../../../../types/admin.types";
+import type {AdminModalContext } from "../../../../types/admin.types";
 import type { MovieCreate, MovieShort } from "../../../../types/movie.types";
 import toast from "react-hot-toast";
 import MovieForm from "../MovieForm/MovieForm";
