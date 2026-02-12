@@ -20,3 +20,16 @@
     padding: 1em 4em;
     flex-grow: 1;
 }
+
+@media (max-width: 48rem) {
+  .contentWrapper {
+    padding:0;
+    width: 100%;
+    max-width: 100%;
+    max-height: none;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}

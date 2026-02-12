@@ -6,6 +6,7 @@ using Cinema.Application.Interfaces;
 using Cinema.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Cinema.WebAPI.Controllers
 {
@@ -46,6 +47,24 @@ namespace Cinema.WebAPI.Controllers
              if (result == null || !result.Any()) throw new KeyNotFoundException($"No tickets found for order with id {orderId} .");
             var response = _mapper.Map<List<TicketShortDto>>(result);
             return Ok(response);
+        }
+        [HttpGet("my-ticket/{id}")]
+        [Authorize]
+        public async Task<IActionResult> GetSecureTicket(int id)
+        {
+            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userIdClaim)) return Unauthorized();
+
+            var ticket = await _ticketRepository.GetTicketByIdAndUserIdAsync(id, userIdClaim);
+
+            if (ticket == null)
+            {
+                return NotFound("Ticket not found or access denied.");
+            }
+            
+            var result = _mapper.Map<TicketDetailsDto>(ticket);
+
+            return Ok(result);
         }
     }
 }

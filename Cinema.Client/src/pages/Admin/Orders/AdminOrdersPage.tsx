@@ -18,7 +18,7 @@ const AdminOrdersPage = ()=>{
         { key:"orderDate",title: "Date",  render: (item)=>formatDate(item.orderDate)},
         { key:"totalAmount",title: "Total amount" ,render:(item)=>`${item.totalAmount} UAH`,},
         { key:"orderStatuses",title: "Status", render: (item) => <OrderStatusBadge orderStatus={item.orderStatuses}/>},
-        {key:"actions",title:"",render:(item)=>(
+        { key:"actions",title:"",render:(item)=>(
             
             <div className={styles.actionCell}>
                 <Button
@@ -41,7 +41,7 @@ const AdminOrdersPage = ()=>{
                     isActions={false}
                     isCreate={false}
                 />
-                <Outlet context={{createItem:actions.createItem,editItem:actions.editItem}}/>
+                <Outlet context={{createItem:actions.createItem, editItem:actions.editItem}}/>
             </>)
 };
 

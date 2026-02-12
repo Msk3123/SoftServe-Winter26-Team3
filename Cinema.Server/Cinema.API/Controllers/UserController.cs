@@ -37,8 +37,9 @@ namespace Cinema.API.Controllers
 
             return Ok(_mapper.Map<UserDto>(user));
         }
-        [Authorize(Roles = "Admin")]
+        
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Update(int id, [FromBody] UserPatchDto dto)
         {
             var user = await _userRepository.GetByIdAsync(id);
