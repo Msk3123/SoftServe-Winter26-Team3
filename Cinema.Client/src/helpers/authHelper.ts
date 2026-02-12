@@ -1,6 +1,6 @@
 import { jwtDecode } from "jwt-decode";
 
-interface JwtPayload {
+export interface JwtPayload {
   nameid: string;
   role: string;
   exp: number;

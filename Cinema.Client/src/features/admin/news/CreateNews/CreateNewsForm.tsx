@@ -1,6 +1,6 @@
 import { useNavigate, useOutletContext } from "react-router";
 import toast from "react-hot-toast";
-import type { AdminAdminModalContext } from "../../../../types/admin.types";
+import type {AdminModalContext } from "../../../../types/admin.types";
 import type { NewsCreate, NewsShort } from "../../../../types/news.types";
 import { postNews } from "../../../../api/newsApi";
 import NewsForm from "../NewsForm/NewsForm";

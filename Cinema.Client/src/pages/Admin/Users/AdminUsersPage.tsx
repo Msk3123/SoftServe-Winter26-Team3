@@ -11,7 +11,7 @@ import { handleError } from "../../../helpers/handleError";
 import { getAllRoles } from "../../../api/roleApi";
 import toast from "react-hot-toast";
 import Button from "../../../components/Button/Button";
-import PasswordConfirmModal from "../../../features/admin/confirmPassword/PasswordConfirmModal";
+import PasswordConfirmModal from "../../../features/admin/components/confirmPassword/PasswordConfirmModal";
 
 const AdminUsersPage= ()=>{
     const {data,pagination,sortParams,status,actions} = useQueryTable<User>(getAllUsers);
@@ -99,7 +99,7 @@ const AdminUsersPage= ()=>{
                     tableActions={actions}
                     isActions={false}
                 />
-                <Outlet  context={{createItem:actions.createItem,editItem:actions.editItem}}/>
+                <Outlet  context={{createItem:actions.createItem,editItem:actions.editItem,refresh:actions.refresh}}/>
                 <PasswordConfirmModal
                     isOpen={isConfirmOpen}
                     onClose={() => setIsConfirmOpen(false)}

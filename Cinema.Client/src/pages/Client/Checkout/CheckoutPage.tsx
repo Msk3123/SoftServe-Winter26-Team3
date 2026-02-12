@@ -3,7 +3,7 @@ import styles from "./CheckoutPage.module.css"; // Переконайся, що 
 import { createOrder } from "../../../features/admin/halls/api/createOrder";
 import { initializePayment, PaymentMethod, submitLiqPayForm } from "../../../features/admin/halls/api/createPayment";
 import toast from "react-hot-toast";
-import { useState, useEffect } from "react";
+import { useState} from "react";
 import { useUser } from "../../../hooks/useUser/useUser";
 import { getItem } from "../../../api/api"; 
 

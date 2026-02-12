@@ -5,32 +5,23 @@ const API_URL = baseUrl ? `auth`: "https://localhost:7249/api/auth";
 
 export const authApi = {
   login: async (dto: LoginDto): Promise<AuthResponseDto> => {
-    const response = await fetch(`${API_URL}/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(dto),
-    });
-    if (!response.ok) throw new Error("Invalid email or password");
-    return response.json();
+    try{
+      return postItem<LoginDto,AuthResponseDto>(`${API_URL}/login`,dto)
+    }catch{
+      throw new Error("Invalid email or password");
+    }
   },
 
   register: async (dto: RegisterDto): Promise<AuthResponseDto> => {
-    const response = await fetch(`${API_URL}/register`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(dto),
-    });
-    if (!response.ok) throw new Error("Registration failed");
-    return response.json();
+    try{
+      return postItem<RegisterDto,AuthResponseDto>(`${API_URL}/register`,dto)
+    }catch{
+      throw new Error("Registration failed");
+    }
   },
 
   refresh: async (dto: AuthResponseDto): Promise<AuthResponseDto> => {
-    const response = await fetch(`${API_URL}/refresh-token`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(dto),
-    });
-    return response.json();
+    return postItem<AuthResponseDto,AuthResponseDto>(`${API_URL}/refresh-token`,dto)
   },
 
   verifyPassword: async (password:string):Promise<void> =>{

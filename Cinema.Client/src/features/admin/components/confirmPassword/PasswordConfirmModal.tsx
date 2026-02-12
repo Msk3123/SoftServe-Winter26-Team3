@@ -1,9 +1,9 @@
-import { useState } from "react";
-import AdminModal from "../../../components/AdminModal/AdminModal";
-import { authApi } from "../../../api/authApi";
-import type { ApiError } from "../../../types/api.types";
-import Button from "../../../components/Button/Button";
-import BaseInput from "../../../components/Form/BaseInput/BaseInput";
+import { useState, type FormEvent } from "react";
+import AdminModal from "../../../../components/AdminModal/AdminModal";
+import { authApi } from "../../../../api/authApi";
+import type { ApiError } from "../../../../types/api.types";
+import Button from "../../../../components/Button/Button";
+import BaseInput from "../../../../components/Form/BaseInput/BaseInput";
 import { useNavigate } from "react-router";
 interface PasswordConfirmModalProps{
     isOpen:boolean;
@@ -15,7 +15,9 @@ const PasswordConfirmModal = ({ isOpen, onClose, onConfirm }:PasswordConfirmModa
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
 
-    const handleVerify = async () => {
+    const handleVerify = async (e:FormEvent) => {
+        e.preventDefault();
+        
         try {
             await authApi.verifyPassword(password);
             onConfirm();
@@ -43,6 +45,7 @@ const PasswordConfirmModal = ({ isOpen, onClose, onConfirm }:PasswordConfirmModa
 
     return (
         <AdminModal onClose={handleClose}>
+            <form onSubmit={handleVerify}>
             <h3>Confirm action</h3>
             <p>Enter your password to continue</p>
             <BaseInput
@@ -51,7 +54,8 @@ const PasswordConfirmModal = ({ isOpen, onClose, onConfirm }:PasswordConfirmModa
                 onChange={(e) => setPassword(e.target.value)}
                 error={error}
             />
-            <Button action={handleVerify}>Submit</Button>
+            <Button htmlType="submit">Submit</Button>
+            </form>
             </AdminModal>
     );
 };

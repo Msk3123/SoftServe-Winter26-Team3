@@ -4,7 +4,7 @@ import HallForm from "../HallForm/HallForm";
 import type { HallCreate, HallShort } from "../../../../types/hall.types";
 import { deleteHall, postHall } from "../../../../api/hallApi";
 import { useState } from "react";
-import type { AdminAdminModalContext } from "../../../../types/admin.types";
+import type {AdminModalContextWithDelete } from "../../../../types/admin.types";
 import HallMapSceleton from "../../../../components/HallMap/HallMapSceleton/HallMapSceleton";
 import HallMapEdit from "../HallMapEdit/HallMapEdit";
 import { saveHallMap } from "../api/saveHallMap";
@@ -16,9 +16,7 @@ import { handleCloseAttempt } from "./handleCloseAttempt";
 interface CreateHallFormProps {
     onClose?:()=>void;
 }
-type WithDelete<T> = T & {
-    deleteItem: (id: number|string) => void;
-};
+
 const CreateHallForm = ({onClose}:CreateHallFormProps)=>{
 
     const navigate = useNavigate();
@@ -27,7 +25,7 @@ const CreateHallForm = ({onClose}:CreateHallFormProps)=>{
     const [isPending,setIsPending] = useState<boolean>(false);
     const [canSave, setCanSave] = useState(false);
     
-    const {createItem,deleteItem} = useOutletContext<WithDelete<AdminAdminModalContext<HallShort>>>();
+    const {createItem,deleteItem} = useOutletContext<AdminModalContextWithDelete<HallShort>>();
     
     const handleClose = ()=>{
         if(onClose){
