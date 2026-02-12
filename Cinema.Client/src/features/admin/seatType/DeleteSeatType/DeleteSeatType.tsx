@@ -1,5 +1,5 @@
 import { useLoaderData, useNavigate, useOutletContext, useParams } from "react-router";
-import type { AdminAdminModalContext } from "../../../../types/admin.types";
+import type {AdminModalContextWithRefresh } from "../../../../types/admin.types";
 import type { SeatType, SeatTypeCreate } from "../../../../types/seatType.types";
 import { useState, type FormEvent } from "react";
 import { deleteSeatType, postSeatType } from "../../../../api/seatTypeApi";
@@ -13,9 +13,6 @@ import AdminModal from "../../../../components/AdminModal/AdminModal";
 import SeatTypeForm from "../SeatTypeForm/SeatTypeForm";
 import toast from "react-hot-toast";
 
-type WithRefresh<T> = T & {
-    refresh:()=>void,
-};
 
 interface LoaderResponse{
     usage: number,
@@ -27,7 +24,7 @@ const DeleteSeatType = ()=>{
     const { usage, seatTypes :  loaderSeatTypes} = useLoaderData() as LoaderResponse;
     
     const navigate = useNavigate();
-    const {refresh,createItem} = useOutletContext<WithRefresh<AdminAdminModalContext<SeatType>>>();
+    const {refresh,createItem} = useOutletContext<AdminModalContextWithRefresh<SeatType>>();
 
     const [replacementId,setReplacementId] = useState<string | number|undefined>();
     const [isPending,setisPending] = useState<boolean>(false);

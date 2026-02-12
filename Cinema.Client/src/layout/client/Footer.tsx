@@ -6,7 +6,7 @@ const Footer = ()=>{
         <div className={styles.footerContainer}>
             <div className={styles.footerColumn}>
                 <h3>Cinemas App</h3>
-                <p>Your best cimena experience</p>
+                <p>Your best cinema experience</p>
                 <p className={styles.copyright}>© 2026 All rights reserved.</p>
             </div>
 

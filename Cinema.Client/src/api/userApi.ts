@@ -4,7 +4,8 @@ import { defaultParams, deleteItem, getItem, getPaginatedData, patchItem, postIt
 
 export const getAllUsers :FetchPaginatedListFunction<User> = async (params=defaultParams)=>{
     return await getPaginatedData("user",params)
-}
+};
+
 export const getUser: FetchOneFunction<User> = async (id) => {
     return await getItem("user", id);
 };

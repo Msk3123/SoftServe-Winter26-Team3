@@ -1,6 +1,6 @@
 import { useLoaderData, useNavigate, useOutletContext} from "react-router";
 import toast from "react-hot-toast";
-import type { AdminAdminModalContext } from "../../../../types/admin.types";
+import type {AdminModalContext } from "../../../../types/admin.types";
 import { handleError } from "../../../../helpers/handleError";
 import type { SeatType, SeatTypeCreate } from "../../../../types/seatType.types";
 import { putSeatType } from "../../../../api/seatTypeApi";

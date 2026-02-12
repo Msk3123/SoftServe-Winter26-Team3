@@ -4,6 +4,7 @@ import { createSessionBatch } from "../../../../api/sessionApi";
 import toast from "react-hot-toast";
 import SessionForm from "../SessionForm/SessionForm";
 import { handleError } from "../../../../helpers/handleError";
+import type { AdminModalContextWithRefresh } from "../../../../types/admin.types";
 
 interface CreateSessionFormProps {
     onClose?:()=>void;
@@ -13,7 +14,7 @@ const CreateSessionForm = ({onClose}:CreateSessionFormProps)=>{
 
     const navigate = useNavigate();
     
-    const {refresh} = useOutletContext<{refresh:()=>void,editItem:(item: SessionShort) => void;}>();
+    const {refresh} = useOutletContext<AdminModalContextWithRefresh<SessionShort>>();
     const handleClose = ()=>{
         if(onClose){
             onClose();

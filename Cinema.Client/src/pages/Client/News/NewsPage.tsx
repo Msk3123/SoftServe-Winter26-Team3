@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { getRecentNews, getNews } from "../../../api/newsApi";
 import type { NewsShort, News } from "../../../types/news.types";
 import Modal from "../../../components/ClientModal/ClientModal";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Button from "../../../components/Button/Button";
 
 const NewsPage = () => {
@@ -110,21 +110,25 @@ const NewsPage = () => {
               </p>
 
               <div className={styles.newsActionsModal}>
-                {fullNews?.movie && (
+                {fullNews?.movie &&
+                fullNews.movie.map(movie=>(
                   <Link
-                    to={`/movie/${fullNews.movie.id}`}
+                    to={`/movie/${movie.id}`}
                     className={styles.modalLinkBtn}
                   >
-                    About film
+                    {movie.title}
                   </Link>
-                )}
-                {fullNews?.actor && (
+                ))
+                }
+                {fullNews?.actor &&
+                fullNews.actor.map(actor=> (
                   <Link
-                    to={`/actor/${fullNews.actor.id}`}
+                    to={`/actor/${actor.id}`}
                     className={styles.modalLinkBtn}
                   >
-                    About actor
+                    {actor.firstName} {actor.lastName}
                   </Link>
+                )
                 )}
               </div>
 
