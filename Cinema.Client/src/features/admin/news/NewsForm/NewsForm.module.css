@@ -9,3 +9,14 @@
     gap:2em;
     margin-top: 1em;
 }
+
+.tagOption{
+    padding: 1em 2em ;
+    display: flex;
+    gap: 0.2em;
+}
+
+.tagOption:hover{
+    background-color: var(--color-primary-weak);
+    scale: 1.01;
+}
