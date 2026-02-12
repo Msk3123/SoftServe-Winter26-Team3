@@ -10,6 +10,8 @@ import { jwtDecode} from "jwt-decode";
 import type { JwtPayload } from "../../../../helpers/authHelper";
 import { USER_ROLE_ID } from "../../../../types/role.types";
 import { ApiError } from "../../../../types/api.types";
+import PasswordConfirmModal from "../../components/confirmPassword/PasswordConfirmModal";
+import { useState } from "react";
 
 interface CreateUserProps {
     onClose?:()=>void;
@@ -19,7 +21,8 @@ const CreateUser = ({onClose}:CreateUserProps)=>{
 
     const {refresh} = useOutletContext<AdminModalContextWithRefresh<User>>();
     const navigate = useNavigate();
-    
+    const [isConfirmOpen,setIsConfirmOpen] = useState<boolean>(false);
+    const [formData,setFormData] = useState<UserCreate|undefined>();
         
     const handleClose = ()=>{
         if(onClose){
@@ -30,9 +33,13 @@ const CreateUser = ({onClose}:CreateUserProps)=>{
         
     }
     
-    
+    const onSubmit = (formData:UserCreate)=>{
+        setFormData(formData);
+        setIsConfirmOpen(true);
+    }
 
-    const onSubmit = async (formData:UserCreate)=>{
+    const onCreate = async ()=>{
+        if(!formData) return;
         try{
             const response = await authApi.register({...formData,confirmPassword:formData.password});
             
@@ -55,7 +62,14 @@ const CreateUser = ({onClose}:CreateUserProps)=>{
         }
     }
 
-    return <UserForm onSubmitAction={onSubmit} onClose={handleClose}/>
+    return <>
+    <UserForm onSubmitAction={onSubmit} onClose={handleClose}/>
+        <PasswordConfirmModal
+            isOpen={isConfirmOpen}
+            onClose={() => setIsConfirmOpen(false)}
+            onConfirm={onCreate}
+        />
+    </>
 }
 
 export default CreateUser;

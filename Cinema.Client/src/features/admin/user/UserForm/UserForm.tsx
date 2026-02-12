@@ -23,7 +23,7 @@ const initialData = {
 
 interface UserFormProps{
     initialState?:UserCreate;
-    onSubmitAction:(data: UserCreate) => Promise<void>;
+    onSubmitAction:(data: UserCreate) => void;
     onClose:()=>void;
 }
 const UserForm = ({initialState,onSubmitAction,onClose}:UserFormProps)=>{
