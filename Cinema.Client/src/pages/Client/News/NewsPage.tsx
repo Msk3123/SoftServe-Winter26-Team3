@@ -110,25 +110,22 @@ const NewsPage = () => {
               </p>
 
               <div className={styles.newsActionsModal}>
-                {fullNews?.movie &&
-                fullNews.movie.map(movie=>(
+                {fullNews?.movie && (
                   <Link
-                    to={`/movie/${movie.id}`}
+                    to={`/movie/${fullNews.movie.id}`}
                     className={styles.modalLinkBtn}
                   >
-                    {movie.title}
+                    {fullNews.movie.title}
                   </Link>
-                ))
-                }
-                {fullNews?.actor &&
-                fullNews.actor.map(actor=> (
+                )}
+
+                {fullNews?.actor &&(
                   <Link
-                    to={`/actor/${actor.id}`}
+                    to={`/actor/${fullNews.actor.id}`}
                     className={styles.modalLinkBtn}
                   >
-                    {actor.firstName} {actor.lastName}
+                    {fullNews.actor.firstName} {fullNews.actor.lastName}
                   </Link>
-                )
                 )}
               </div>
 

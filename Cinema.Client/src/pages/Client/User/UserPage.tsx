@@ -4,6 +4,7 @@ import { jsPDF } from 'jspdf';
 import { getList, postItem } from '../../../api/api';
 import styles from './UserPage.module.css';
 import { formatDate } from '../../../helpers/dateHelpers';
+import { jwtDecode } from "jwt-decode"; // Переконайтеся, що бібліотека встановлена
 
 const statusLabels: Record<string | number, string> = {
     0: 'Created', 1: 'Reserved', 2: 'Confirmed', 3: 'Cancelled', 4: 'Completed', 5: 'Refunded',
@@ -18,6 +19,9 @@ const UserPage = () => {
     const [totalCount, setTotalCount] = useState(0);
     const pageSize = 6; 
 
+    // Додаємо стейт для даних користувача
+    const [userData, setUserData] = useState<{ firstName: string; lastName: string } | null>(null);
+
     const [selectedTicket, setSelectedTicket] = useState<any | null>(null);
     const [passData, setPassData] = useState({ newPassword: '', confirmPassword: '' });
     const [ticketError, setTicketError] = useState('');
@@ -25,47 +29,66 @@ const UserPage = () => {
 
     const currentOrigin = window.location.origin;
 
+    // Ефект для отримання даних користувача з токена при завантаженні
+    useEffect(() => {
+        const token = localStorage.getItem('accessToken');
+        if (token) {
+            try {
+                const decoded: any = jwtDecode(token);
+                setUserData({
+                    firstName: decoded.firstName || "",
+                    lastName: decoded.lastName || ""
+                });
+            } catch (e) {
+                console.error("Error decoding token", e);
+            }
+        }
+    }, []);
+
+    // Функція для формування ініціалів
+    const getInitials = () => {
+        if (!userData) return "??";
+        const first = userData.firstName?.charAt(0) || "";
+        const last = userData.lastName?.charAt(0) || "";
+        return (first + last).toUpperCase() || "?";
+    };
+
     const handlePasswordUpdate = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setAuthMessage({ text: '', isError: false });
+        e.preventDefault();
+        setAuthMessage({ text: '', isError: false });
 
-    // Валідація довжини
-    if (passData.newPassword.length < 8) {
-        return setAuthMessage({ 
-            text: "Password must be at least 8 characters long", 
-            isError: true 
-        });
-    }
+        if (passData.newPassword.length < 8) {
+            return setAuthMessage({ 
+                text: "Password must be at least 8 characters long", 
+                isError: true 
+            });
+        }
 
-    // Перевірка збігу паролів
-    if (passData.newPassword !== passData.confirmPassword) {
-        return setAuthMessage({ 
-            text: "Passwords do not match", 
-            isError: true 
-        });
-    }
+        if (passData.newPassword !== passData.confirmPassword) {
+            return setAuthMessage({ 
+                text: "Passwords do not match", 
+                isError: true 
+            });
+        }
 
-    try {
-        await postItem('auth/change-password', { newPassword: passData.newPassword });
-        setAuthMessage({ text: "Password updated successfully!", isError: false });
-        
-        setPassData({ newPassword: '', confirmPassword: '' });
-    } catch (err) {
-        setAuthMessage({ 
-            text: "Error updating password. Try again later.", 
-            isError: true 
-        });
-    }
-};
+        try {
+            await postItem('auth/change-password', { newPassword: passData.newPassword });
+            setAuthMessage({ text: "Password updated successfully!", isError: false });
+            setPassData({ newPassword: '', confirmPassword: '' });
+        } catch (err) {
+            setAuthMessage({ 
+                text: "Error updating password. Try again later.", 
+                isError: true 
+            });
+        }
+    };
 
     const getUserIdFromToken = () => {
         const token = localStorage.getItem('accessToken');
         if (!token) return null;
         try {
-            const base64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
-            const payload = JSON.parse(decodeURIComponent(window.atob(base64).split('').map(c => 
-                '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join('')));
-            return payload.nameid;
+            const decoded: any = jwtDecode(token);
+            return decoded.nameid;
         } catch (e) { return null; }
     };
 
@@ -90,32 +113,25 @@ const UserPage = () => {
 
     const generateTicketPDF = (ticket: any) => {
         const doc = new jsPDF();
-        
         doc.setFillColor(18, 18, 18);
         doc.rect(0, 0, 210, 297, 'F');
-        
         doc.setTextColor(0, 223, 130);
         doc.setFontSize(28);
         doc.text('CINEMAS TICKET', 20, 40);
-        
         doc.setTextColor(255, 255, 255);
         doc.setFontSize(16);
         doc.text(`Movie: ${ticket.movieTitle}`, 20, 65);
         doc.text(`Date: ${formatDate(ticket.showtime)}`, 20, 80);
         doc.text(`Hall: ${ticket.hallName}`, 20, 95);
         doc.text(`Row: ${ticket.row} | Seat: ${ticket.seatNo}`, 20, 110);
-        
         const price = ticket.price?.parsedValue || ticket.price;
         doc.text(`Price: ${price} UAH`, 20, 125);
-        
         doc.setDrawColor(0, 223, 130);
         doc.setLineWidth(0.5);
         doc.line(20, 140, 190, 140);
-        
         doc.setFontSize(12);
         doc.text(`Ticket ID: #${ticket.id}`, 20, 155);
         doc.text('Please show this PDF or QR code at the entrance.', 20, 175);
-
         doc.save(`Ticket_${ticket.id}.pdf`);
     };
 
@@ -125,7 +141,14 @@ const UserPage = () => {
     return (
         <div className={styles.container}>
             <aside className={styles.sidebar}>
-                <div className={styles.profileIcon}>SS</div>
+                {/* ЗАМІНЕНО: тепер тут динамічні ініціали та ім'я */}
+                <div className={styles.profileSection}>
+                    <div className={styles.profileIcon}>{getInitials()}</div>
+                    <p className={styles.userFullName}>
+                        {userData ? `${userData.firstName} ${userData.lastName}` : 'Loading...'}
+                    </p>
+                </div>
+
                 <nav className={styles.nav}>
                     <button className={activeTab === 'tickets' ? styles.active : ''} onClick={() => setActiveTab('tickets')}>🎫 My Tickets</button>
                     <button className={activeTab === 'security' ? styles.active : ''} onClick={() => setActiveTab('security')}>🔒 Security</button>
@@ -195,14 +218,12 @@ const UserPage = () => {
                     <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
                         <button className={styles.closeModal} onClick={() => setSelectedTicket(null)}>×</button>
                         <h3 className={styles.movieTitle}>{selectedTicket.movieTitle}</h3>
-                        
                         <div className={styles.qrContainer}>
                             <a href={ticketUrl} target="_blank" rel="noreferrer" title="Click to open ticket view">
                                 <QRCodeSVG value={ticketUrl} size={200} fgColor="#00df82" bgColor="#1e1e1e" />
                             </a>
                             <p className={styles.qrFooterText}>Scan or click to view PDF</p>
                         </div>
-
                         <button className={styles.saveBtn} onClick={() => generateTicketPDF(selectedTicket)}>
                             Download PDF Ticket
                         </button>
