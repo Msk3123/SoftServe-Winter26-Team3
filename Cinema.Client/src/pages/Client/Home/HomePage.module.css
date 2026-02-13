@@ -117,6 +117,7 @@
   padding: 1.5rem 1.875rem;
   height: 100%;
   min-width: 11.25rem;
+  box-sizing: border-box;
 }
 .newsButton {
   background-color: var(--color-primary);
@@ -128,6 +129,8 @@
   padding: 0.625rem 0.9375rem;
   cursor: pointer;
   margin: 6.25rem 0;
+  margin-top: auto;
+  margin-bottom: auto;
 }
 .newsButton:hover {
   background-color: var(--button-hover);
@@ -137,6 +140,7 @@
   font-size: 1.5rem;
   font-weight: var(--fw-light);
   margin-top: -1.25rem;
+  margin-top: 0;
 }
 .activeHeader {
   font-size: 4rem;
